@@ -80,7 +80,7 @@ The browser-only preview is `npm run dev` from `apps/desktop`; select **Explore 
 ## Retrieval evals
 
 `evals/` holds an offline harness for the open-memory chunking and retrieval: invented pages and AX
-fixtures, a 61-question gold set, `open-memory eval`, and a committed baseline with ablations. See
+fixtures, a 122-question gold set, `open-memory eval`, and a committed baseline with ablations. See
 [evals/README.md](evals/README.md); `evals/CAPTURE.md` explains how to replace the hand-authored AX trees
 with real captures. It uses temp state directories only and never enables capture.
 

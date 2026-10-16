@@ -1,0 +1,28 @@
+{
+ "stem": "article-speaker-notes-01",
+ "html": "article-speaker-notes-01.html",
+ "observed_at": "2026-10-07T18:20:00Z",
+ "also_observed_at": [],
+ "logical": {
+  "app_id": "com.apple.Safari",
+  "title": "Writing Speaker Notes - Slide Craft",
+  "url": "https://slidecraft.example.org/guide/speaker-notes",
+  "source_type": "browser"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "article",
+  "filter_trap"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "Keep speaker notes under 120 words per slide"
+  }
+ ],
+ "noise_strings": [
+  "We use cookies to improve your experience.",
+  "Accept all cookies",
+  "© 2026 Slide Craft."
+ ]
+}

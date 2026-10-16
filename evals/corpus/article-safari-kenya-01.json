@@ -1,0 +1,514 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.Safari",
+ "title": "Planning a Kenya Safari - Travelwise",
+ "url": "https://travelwise.example.org/kenya/safari",
+ "source_type": "browser",
+ "observed_ms": 1791190800000,
+ "also_observed_ms": [],
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://travelwise.example.org/kenya/safari",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Planning a Kenya Safari - Travelwise",
+   "value": "Planning a Kenya Safari - Travelwise",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Cookie consent",
+   "value": "We use cookies to improve your experience.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / Accept all cookies",
+   "value": "Accept all cookies",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / Manage preferences",
+   "value": "Manage preferences",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site header / Travelwise",
+   "value": "Travelwise",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Africa",
+   "value": "Africa",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Asia",
+   "value": "Asia",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Europe",
+   "value": "Europe",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Tips",
+   "value": "Tips",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Planning a Kenya Safari - Travelwise",
+   "value": "Planning a Kenya safari",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kenya Safari - Travelwise",
+   "value": "By Wanjiru Kamau · 29 September 2026 · 7 min read",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kenya Safari - Travelwise",
+   "value": "Kenya offers some of the best game viewing on the continent, from the Maasai Mara to Amboseli.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kenya Safari - Travelwise",
+   "value": "The best months for a safari in Kenya are July to October, when the wildebeest cross the Mara River and the grass is short.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kenya Safari - Travelwise",
+   "value": "Park fees are $70 per person per day in most reserves, with higher rates in the Mara during peak season.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site footer",
+   "value": "© 2026 Travelwise.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / About",
+   "value": "About",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / Contact",
+   "value": "Contact",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kenya Safari - Travelwise"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

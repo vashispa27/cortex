@@ -1,0 +1,653 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.mail",
+ "title": "Roof repair quote 2209 - Alder & Finch",
+ "url": null,
+ "source_type": "app",
+ "observed_ms": 1791453600000,
+ "also_observed_ms": [],
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXHeading",
+   "name": "Sidebar",
+   "value": "Mailboxes",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Inbox",
+   "value": "Inbox",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / VIP",
+   "value": "VIP",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Flagged",
+   "value": "Flagged",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Drafts",
+   "value": "Drafts",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Sent",
+   "value": "Sent",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Junk",
+   "value": "Junk",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Trash",
+   "value": "Trash",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Harbor Print Billing",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Invoice 4471",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Please find invoice 4471 attached.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Campus Library",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Your hold is ready",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "The book you requested is waiting at the desk.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Orbit Bank",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Monthly statement",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Your October statement is available online.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message toolbar / Archive",
+   "value": "Archive",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message toolbar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message toolbar / Delete",
+   "value": "Delete",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message toolbar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message toolbar / Reply",
+   "value": "Reply",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message toolbar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message toolbar / Reply All",
+   "value": "Reply All",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message toolbar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message toolbar / Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message toolbar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Message content",
+   "value": "Roof repair quote 2209 - Alder & Finch",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message header",
+   "value": "From: Alder & Finch Roofing <quotes@alderfinch.example.com>",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message header"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message header",
+   "value": "To: You",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message header"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message header",
+   "value": "Date: 8 October 2026 at 9:41 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message header"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message content",
+   "value": "Dear customer, thank you for inviting us to inspect your roof.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message content",
+   "value": "Quote 2209 covers replacing 38 damaged tiles, repairing the ridge and sealing the chimney flashing.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message content",
+   "value": "Total: €4,800.00. This quote is valid until 31 October 2026.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message content",
+   "value": "To accept, reply to this email or call our office on weekday mornings.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Roof repair quote 2209 - Alder & Finch"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

@@ -1,7 +1,12 @@
 # Capturing the corpus pages on your Mac
 
-The 24 pages in `evals/pages/` are invented. Until you capture them, `evals/corpus/*.json` holds
-**hand-authored** AX trees (`"provenance": "hand_authored"`) built from the same page definitions.
+The 36 pages in `evals/pages/` are invented. 24 of them already have real captures; the 12 added with the
+larger gold set (`chatgpt-macros-table-01`, `email-quote-roofing-v1/v2`, `email-gym-membership-01`,
+`article-marathon-training-01`, `article-climbing-slack-01`, `article-chrome-plating-01`,
+`article-safari-kenya-01`, `article-airport-terminal-01`, `article-speaker-notes-01`,
+`article-error-messages-01`, `article-kitchen-reno-01`) still hold **hand-authored** AX trees
+(`"provenance": "hand_authored"`) built from the same page definitions. `article-hindi-dal-01` should also be
+re-captured: its page is now compact because the first capture lost the paragraphs below the fold.
 This procedure replaces them with **real Accessibility captures** of the same pages
 (`"provenance": "real_capture_invented_content"`). It needs Accessibility permission and a few
 minutes. Nothing here uses your normal state directory.
@@ -44,7 +49,7 @@ Manual alternative per page: `open -a Safari evals/pages/<stem>.html`, then wait
 text was already stored. `navigation_only` is expected for `nav-only-newtab-01` (it imitates a new
 tab page and must not become searchable).
 
-When every page has printed `new #N` (24 pages, 23 `new` plus 1 `navigation_only`), press Ctrl-C in tab 1.
+When every page has printed `new #N` (36 pages, 35 `new` plus 1 `navigation_only`), press Ctrl-C in tab 1.
 
 Only text that is **on screen** is captured. Keep the Safari window large (full screen is best) and do not
 resize it mid-run; long pages use a compact layout so they fit. The export step in 5 fails loudly if a gold

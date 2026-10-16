@@ -390,7 +390,7 @@ add(article_page(
     "दाल तड़का बनाने की आसान विधि", "लेखिका: मीना जोशी · 8 अक्टूबर 2026", _HI_PARAS,
     ["© 2026 रसोई। सर्वाधिकार सुरक्षित।", ("गोपनीयता",), ("संपर्क करें",)],
     lang="hi", cookie_text="हम कुकीज़ का उपयोग करते हैं।",
-    cookie_buttons=("सभी स्वीकार करें", "प्राथमिकताएँ")),
+    cookie_buttons=("सभी स्वीकार करें", "प्राथमिकताएँ"), compact=True),
     "2026-10-12T07:30:00Z",
     ["दाल को 25 मिनट तक उबालें", "एक छोटी कड़ाही में 2 चम्मच घी गरम करें।", "आधा चम्मच जीरा"],
     ["हम कुकीज़ का उपयोग करते हैं।", "सभी स्वीकार करें", "© 2026 रसोई। सर्वाधिकार सुरक्षित।", "संपर्क करें"],
@@ -570,3 +570,237 @@ add(notes_page("notes-groceries-01", "Groceries and errands", _GROC, "Personal",
 add(newtab_page("nav-only-newtab-01"),
     "2026-10-16T22:00:00Z", [],
     ["Gmail", "Calendar", "Customize Chrome", "Most visited"], searchable=False, tags=["navigation_only"])
+
+
+# ================================================================== Fix 0 additions
+# Hand-authored (provenance hand_authored) until the user runs evals/CAPTURE.md for them.
+
+def _simulate_chunks(lines, target=1600):
+    """Mirror of cleaner::chunks for a single-message body: returns [(start, end)] byte spans."""
+    units, pos = [], 0
+    for line in lines:
+        n = len(line.encode()) + 1
+        units.append((pos, pos + n))
+        pos += n
+    chunks, start = [], 0
+    for u_start, nxt in units:
+        if u_start > start and nxt - start > target:
+            chunks.append((start, u_start))
+            start = u_start
+    chunks.append((start, pos))
+    return chunks
+
+
+# ---- macros table: the answer chunk does not contain the query word "macros"
+add(chatgpt_page(
+    "chatgpt-macros-table-01", "Daily macros plan - ChatGPT", "Daily macros plan",
+    [("user", "Can you set up my daily macros? I weigh 74 kg and eat about 2,000 kcal a day."),
+     ("assistant", [("p", "Sure. I will set your macros from 2 g of protein per kilogram of body weight, about 35 g of fat, and the rest as carbohydrate. Tell me when you want the table.")]),
+     ("user", "Great, show me the table."),
+     ("assistant", [("p", "Protein 137 g | Fat 35 g | Carbs 185 g")])],
+    url="https://chatgpt.com/c/a41d77c0-macros"),
+    "2026-10-16T19:10:00Z",
+    ["Protein 137 g | Fat 35 g | Carbs 185 g"], CHATGPT_NOISE, tags=["chatgpt", "macros_table"])
+
+# ---- roofing quote, revised: same title and app, the amount and validity change
+for _ver, _total, _valid, _when in (
+        ("v1", "Total: €4,800.00. This quote is valid until 31 October 2026.", None, "2026-10-08T10:00:00Z"),
+        ("v2", "Revised total: €5,350.00 after the additional flashing work. This revised quote is valid until 15 November 2026.", None, "2026-10-12T10:00:00Z")):
+    add(email_page(
+        "email-quote-roofing-%s" % _ver, "Roof repair quote 2209 - Alder & Finch",
+        "Alder & Finch Roofing <quotes@alderfinch.example.com>", "You",
+        "8 October 2026 at 9:41 AM" if _ver == "v1" else "12 October 2026 at 9:12 AM",
+        ["Dear customer, thank you for inviting us to inspect your roof.",
+         "Quote 2209 covers replacing 38 damaged tiles, repairing the ridge and sealing the chimney flashing.",
+         _total,
+         "To accept, reply to this email or call our office on weekday mornings."],
+        _OTHER_MAIL),
+        _when,
+        [_total.split(". ")[0] + "."],
+        ["Archive", "Reply All", "Mailboxes", "Your hold is ready", "Monthly statement"],
+        tags=["email", "near_duplicate"])
+
+# ---- September pages for "last month"
+add(article_page(
+    "article-marathon-training-01", "Runner's Weekly", "A 16-Week Marathon Plan - Runner's Weekly",
+    "https://runnersweekly.example.org/plans/marathon-16-week",
+    ["Plans", "Gear", "Nutrition", "Races"],
+    "A 16-Week Marathon Plan", "By Gita Menon · 15 September 2026 · 8 min read",
+    [("p", "This plan builds from 30 km a week to a 60 km peak over sixteen weeks, with one rest day and one cross-training day each week."),
+     ("h", "The weekly shape"),
+     ("ul", ["Tuesday: intervals on a track or flat road.", "Thursday: tempo run of 8 to 12 km.",
+             "Sunday long run: 28 km at easy pace in peak weeks."]),
+     ("p", "Taper starts three weeks before race day. Cut the weekly distance by about 20 percent each week and keep the intensity of the Thursday tempo."),
+     ("p", "Practice your race-day breakfast on every long run so nothing is new on the morning.")],
+    ["© 2026 Runner's Weekly.", ("Advertise",), ("Contact",)]),
+    "2026-09-18T07:00:00Z",
+    ["Sunday long run: 28 km at easy pace", "Taper starts three weeks before race day"],
+    ["We use cookies to improve your experience.", "Accept all cookies", "© 2026 Runner's Weekly.", "Advertise"],
+    tags=["article", "september"])
+
+add(email_page(
+    "email-gym-membership-01", "Your membership renewal - Northside Gym",
+    "Northside Gym <hello@northsidegym.example.com>", "You", "25 September 2026 at 8:15 AM",
+    ["Hi, this is a reminder from Northside Gym.",
+     "Your membership renews on 14 October 2026 at €39.90 per month.",
+     "To pause or cancel, visit the front desk at least seven days before the renewal date.",
+     "Thank you for training with us."],
+    _OTHER_MAIL),
+    "2026-09-25T09:00:00Z",
+    ["Your membership renews on 14 October 2026 at €39.90 per month."],
+    ["Archive", "Reply All", "Mailboxes", "Your hold is ready", "Monthly statement"],
+    tags=["email", "september"])
+
+# ---- ordinary-word pages: the title or body uses an app word as plain English
+_SMALL_FOOT = lambda site: ["© 2026 %s." % site, ("About",), ("Contact",)]
+
+
+def _small_article(stem, site, title, url, nav, headline, byline, blocks, observed, facts, tags, app="com.apple.Safari"):
+    add(article_page(stem, site, title, url, nav, headline, byline, blocks, _SMALL_FOOT(site), app_id=app),
+        observed, facts,
+        ["We use cookies to improve your experience.", "Accept all cookies", "© 2026 %s." % site],
+        tags=["article", "filter_trap"] + tags)
+
+
+_small_article(
+    "article-climbing-slack-01", "Climb Hub", "Rope Management for Beginners - Climb Hub",
+    "https://climbhub.example.org/skills/rope-management", ["Skills", "Gear", "Gyms", "Forum"],
+    "Rope management for beginners", "By Tomas Alvarez · 6 October 2026 · 5 min read",
+    [("p", "A tidy rope keeps both partners safe. Flake the rope on a tarp before every pitch so it feeds without tangles."),
+     ("h", "Slack"),
+     ("p", "When belaying a leader, leave about 1 m of slack in the rope between climber and belayer so a clip never gets pulled tight. Take in slack as soon as the climber stops moving."),
+     ("p", "A belayer who stands too far from the wall adds slack to the system and lengthens any fall.")],
+    "2026-10-10T11:00:00Z", ["leave about 1 m of slack in the rope between climber and belayer"], [])
+_small_article(
+    "article-chrome-plating-01", "Finishing Today", "How Chrome Plating Works - Finishing Today",
+    "https://finishingtoday.example.com/processes/chrome-plating", ["Processes", "Coatings", "Safety", "Suppliers"],
+    "How chrome plating works", "By Ravi Shetty · 1 October 2026 · 6 min read",
+    [("p", "Decorative chrome plating is a thin layer of chromium over a nickel base. The shine comes from the nickel, not the chromium."),
+     ("p", "Chrome plating needs a 25 micron nickel layer before the chromium is applied, and the part must be degreased and activated first."),
+     ("p", "Hexavalent chromium baths are hazardous; work only with fume extraction and the protective equipment required locally.")],
+    "2026-10-09T14:30:00Z", ["Chrome plating needs a 25 micron nickel layer before the chromium is applied"], [])
+_small_article(
+    "article-safari-kenya-01", "Travelwise", "Planning a Kenya Safari - Travelwise",
+    "https://travelwise.example.org/kenya/safari", ["Africa", "Asia", "Europe", "Tips"],
+    "Planning a Kenya safari", "By Wanjiru Kamau · 29 September 2026 · 7 min read",
+    [("p", "Kenya offers some of the best game viewing on the continent, from the Maasai Mara to Amboseli."),
+     ("p", "The best months for a safari in Kenya are July to October, when the wildebeest cross the Mara River and the grass is short."),
+     ("p", "Park fees are $70 per person per day in most reserves, with higher rates in the Mara during peak season.")],
+    "2026-10-05T09:00:00Z", ["The best months for a safari in Kenya are July to October"], [])
+_small_article(
+    "article-airport-terminal-01", "Flight Facts", "Lisbon Airport Guide - Flight Facts",
+    "https://flightfacts.example.org/lisbon/airport", ["Airports", "Airlines", "Lounges", "Parking"],
+    "Lisbon airport guide", "By Flight Facts staff · updated 12 October 2026",
+    [("p", "Lisbon airport has two passenger buildings and a short walkway between them."),
+     ("p", "Meridian Air departures use Terminal 2. Check-in desks open three hours before departure and close 60 minutes before."),
+     ("p", "The metro station is a five-minute walk from arrivals and runs every ten minutes until the early morning.")],
+    "2026-10-12T16:45:00Z", ["Meridian Air departures use Terminal 2"], [])
+_small_article(
+    "article-speaker-notes-01", "Slide Craft", "Writing Speaker Notes - Slide Craft",
+    "https://slidecraft.example.org/guide/speaker-notes", ["Guides", "Templates", "Examples", "Blog"],
+    "Writing speaker notes", "By Hana Ito · 3 October 2026 · 4 min read",
+    [("p", "Speaker notes are a prompt for you, not a script to read aloud. Write the point of the slide, one example and the transition."),
+     ("p", "Keep speaker notes under 120 words per slide so you can scan them in a glance while presenting."),
+     ("p", "Rehearse once with the notes hidden to check you can carry the talk without them.")],
+    "2026-10-07T18:20:00Z", ["Keep speaker notes under 120 words per slide"], [])
+_small_article(
+    "article-error-messages-01", "UX Writing", "Writing Good Error Messages - UX Writing",
+    "https://uxwriting.example.org/patterns/error-messages", ["Patterns", "Voice", "Checklists", "Podcast"],
+    "Writing good error messages", "By Chidi Okoro · 8 October 2026 · 5 min read",
+    [("p", "An error message should say what happened, why, and what the person can do next, in plain language."),
+     ("p", "Error messages should be under 80 characters and say how to fix the problem. Avoid codes without a sentence beside them."),
+     ("p", "Place the message next to the field that caused it, and keep the person's input in place.")],
+    "2026-10-08T10:30:00Z", ["Error messages should be under 80 characters and say how to fix the problem."], [])
+
+# ---- long article with two label/value straddles (tuned so each boundary falls between label and value)
+_REN_SITE = "Home Projects"
+_REN_NAV = ["Kitchens", "Bathrooms", "Budgets", "Tools"]
+_REN_PRE = ["We use cookies to improve your experience.", _REN_SITE] + _REN_NAV + [
+    "Planning a kitchen renovation", "By Elena Petrov · 12 October 2026 · 9 min read"]
+_REN_SENT = [
+    " Leave a contingency of about ten percent for surprises behind the walls.",
+    " Take photographs of every wall before demolition so the services can be located later.",
+    " Order long-lead items first and confirm delivery dates in writing.",
+    " Keep a single folder for receipts, warranties and the electrician's certificate.",
+    " Measure twice, then ask the installer to measure once more before anything is cut.",
+    " Protect the floors with hardboard rather than thin sheeting, because tools get dropped.",
+    " Agree the daily working hours with the neighbours in advance.",
+    " Check the water shut-off valve works before the plumber arrives.",
+]
+
+
+_REN_MID = [
+    "Once the carcasses are in, the worktop is templated. Measure after the cabinets are fixed, never before, because even a small shift in a base unit changes the overhang.",
+    "Plan the splashback at the same time as the worktop. Tiles, glass and upstands each need a different gap at the wall, and the supplier will ask for the finished thickness.",
+    "Appliance cut-outs must be confirmed against the manufacturer's drawings, not the brochure. An integrated oven needs ventilation behind the housing, and a hob needs clearance below for the cables.",
+    "Schedule the electrician for first fix before the plasterer and for second fix after the painter. Sockets set too early are the most common cause of chipped paint and repeated call-outs.",
+]
+
+
+def _ren_blocks(pad1, pad2):
+    return [
+        ("p", "A kitchen renovation is mostly planning. The order of trades matters more than the choice of tiles, and a good schedule saves weeks." + pad1),
+        ("h", "Cabinet install checklist:"),
+        ("ul", ["Level the base units to within 2 mm across the run.",
+                "Fix the wall units to studs, not only to plasterboard.",
+                "Leave a 3 mm gap at the wall for scribing.",
+                "Fit the plinth last so it can be adjusted."]),
+    ] + [("p", t) for t in _REN_MID[:-1]] + [
+        ("p", _REN_MID[-1] + pad2),
+        ("p", "Countertop lead time:"),
+        ("p", "6 weeks for stone or 2 weeks for laminate."),
+        ("p", "Order the sink and tap at the same time so the cut-outs match."),
+    ]
+
+
+def _ren_lines(blocks):
+    lines = list(_REN_PRE)
+    for kind, val in blocks:
+        lines.extend(val if kind == "ul" else [val])
+    return lines
+
+
+def _cut_lines(blocks):
+    lines = _ren_lines(blocks)
+    ends, pos = {}, 0
+    for l in lines:
+        pos += len(l.encode()) + 1
+        ends[pos] = l
+    return [ends.get(e) for (_, e) in _simulate_chunks(lines)[:-1]]
+
+
+_REN_WORDS = ("keep the site tidy and label every box so the right parts reach the right room on the "
+              "right day without anyone opening them twice").split()
+
+
+def _fill(make_blocks, which, want):
+    """Append words to one pad until the `which`-th cut lands after the wanted line."""
+    pad, i = "", 0
+    while i < 400:
+        blocks = make_blocks(pad)
+        cuts = _cut_lines(blocks)
+        if len(cuts) > which and cuts[which] == want:
+            return pad
+        trial = pad + " " + _REN_WORDS[i % len(_REN_WORDS)]
+        # stop growing once the label has moved past the cut (cut came earlier than wanted)
+        pad, i = trial, i + 1
+    raise AssertionError("could not tune the renovation page")
+
+
+def _tune_renovation():
+    pad1 = _fill(lambda p: _ren_blocks(p, ""), 0, "Cabinet install checklist:")
+    pad2 = _fill(lambda p: _ren_blocks(pad1, p), 1, "Countertop lead time:")
+    return _ren_blocks(pad1, pad2)
+
+
+_REN_BLOCKS = _tune_renovation()
+add(article_page(
+    "article-kitchen-reno-01", _REN_SITE, "Planning a Kitchen Renovation - Home Projects",
+    "https://homeprojects.example.org/kitchens/renovation-planning", _REN_NAV,
+    "Planning a kitchen renovation", "By Elena Petrov · 12 October 2026 · 9 min read",
+    _REN_BLOCKS, ["© 2026 Home Projects.", ("About",), ("Contact",)], compact=True),
+    "2026-10-13T14:00:00Z",
+    ["Cabinet install checklist:", "Level the base units to within 2 mm across the run.",
+     "Countertop lead time:", "6 weeks for stone or 2 weeks for laminate."],
+    ["We use cookies to improve your experience.", "Accept all cookies", "© 2026 Home Projects.", "Bathrooms"],
+    tags=["article", "long", "boundary"])

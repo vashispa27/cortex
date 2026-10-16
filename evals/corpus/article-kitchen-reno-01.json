@@ -1,0 +1,816 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.Safari",
+ "title": "Planning a Kitchen Renovation - Home Projects",
+ "url": "https://homeprojects.example.org/kitchens/renovation-planning",
+ "source_type": "browser",
+ "observed_ms": 1791900000000,
+ "also_observed_ms": [],
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://homeprojects.example.org/kitchens/renovation-planning",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Planning a Kitchen Renovation - Home Projects",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Cookie consent",
+   "value": "We use cookies to improve your experience.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / Accept all cookies",
+   "value": "Accept all cookies",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / Manage preferences",
+   "value": "Manage preferences",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site header / Home Projects",
+   "value": "Home Projects",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Kitchens",
+   "value": "Kitchens",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Bathrooms",
+   "value": "Bathrooms",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Budgets",
+   "value": "Budgets",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Tools",
+   "value": "Tools",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Planning a kitchen renovation",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "By Elena Petrov · 12 October 2026 · 9 min read",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "A kitchen renovation is mostly planning. The order of trades matters more than the choice of tiles, and a good schedule saves weeks. keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Cabinet install checklist:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Level the base units to within 2 mm across the run.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Fix the wall units to studs, not only to plasterboard.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Leave a 3 mm gap at the wall for scribing.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Fit the plinth last so it can be adjusted.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Once the carcasses are in, the worktop is templated. Measure after the cabinets are fixed, never before, because even a small shift in a base unit changes the overhang.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Plan the splashback at the same time as the worktop. Tiles, glass and upstands each need a different gap at the wall, and the supplier will ask for the finished thickness.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Appliance cut-outs must be confirmed against the manufacturer's drawings, not the brochure. An integrated oven needs ventilation behind the housing, and a hob needs clearance below for the cables.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Schedule the electrician for first fix before the plasterer and for second fix after the painter. Sockets set too early are the most common cause of chipped paint and repeated call-outs. keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right parts reach the right room on the right day without anyone opening them twice keep the site tidy and label every box so the right parts reach the right room on the right day without",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Countertop lead time:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "6 weeks for stone or 2 weeks for laminate.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Planning a Kitchen Renovation - Home Projects",
+   "value": "Order the sink and tap at the same time so the cut-outs match.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site footer",
+   "value": "© 2026 Home Projects.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / About",
+   "value": "About",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / Contact",
+   "value": "Contact",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Planning a Kitchen Renovation - Home Projects"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

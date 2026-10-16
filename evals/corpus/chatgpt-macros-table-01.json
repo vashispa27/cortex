@@ -1,0 +1,1145 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.google.Chrome",
+ "title": "Daily macros plan - ChatGPT",
+ "url": "https://chatgpt.com/c/a41d77c0-macros",
+ "source_type": "browser",
+ "observed_ms": 1792177800000,
+ "also_observed_ms": [],
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://chatgpt.com/c/a41d77c0-macros",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Daily macros plan - ChatGPT",
+   "value": "Daily macros plan - ChatGPT",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Sidebar / New chat",
+   "value": "New chat",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Search chats",
+   "value": "Search chats",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Weekly meal prep ideas",
+   "value": "Weekly meal prep ideas",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Python decorators explained",
+   "value": "Python decorators explained",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Cover letter feedback",
+   "value": "Cover letter feedback",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Weekend hike packing list",
+   "value": "Weekend hike packing list",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Daily macros plan",
+   "value": "Daily macros plan",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Daily macros plan - ChatGPT / ChatGPT",
+   "value": "ChatGPT",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Daily macros plan - ChatGPT / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Can you set up my daily macros? I weigh 74 kg and eat about 2,000 kcal a day.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Sure. I will set your macros from 2 g of protein per kilogram of body weight, about 35 g of fat, and the rest as carbohydrate. Tell me when you want the table.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Great, show me the table.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Protein 137 g | Fat 35 g | Carbs 185 g",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Add files and more",
+   "value": "Add files and more",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Dictate",
+   "value": "Dictate",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Send",
+   "value": "Send",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Daily macros plan - ChatGPT",
+   "value": "ChatGPT can make mistakes. Check important info.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Daily macros plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+{
+ "stem": "email-quote-roofing-v1",
+ "html": "email-quote-roofing-v1.html",
+ "observed_at": "2026-10-08T10:00:00Z",
+ "also_observed_at": [],
+ "logical": {
+  "app_id": "com.apple.mail",
+  "title": "Roof repair quote 2209 - Alder & Finch",
+  "url": null,
+  "source_type": "app"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "email",
+  "near_duplicate"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "Total: €4,800.00."
+  }
+ ],
+ "noise_strings": [
+  "Archive",
+  "Reply All",
+  "Mailboxes",
+  "Your hold is ready",
+  "Monthly statement"
+ ]
+}

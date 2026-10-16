@@ -1,0 +1,541 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.Safari",
+ "title": "Rope Management for Beginners - Climb Hub",
+ "url": "https://climbhub.example.org/skills/rope-management",
+ "source_type": "browser",
+ "observed_ms": 1791630000000,
+ "also_observed_ms": [],
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://climbhub.example.org/skills/rope-management",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Rope Management for Beginners - Climb Hub",
+   "value": "Rope Management for Beginners - Climb Hub",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Cookie consent",
+   "value": "We use cookies to improve your experience.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / Accept all cookies",
+   "value": "Accept all cookies",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / Manage preferences",
+   "value": "Manage preferences",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site header / Climb Hub",
+   "value": "Climb Hub",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Skills",
+   "value": "Skills",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Gear",
+   "value": "Gear",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Gyms",
+   "value": "Gyms",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Forum",
+   "value": "Forum",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Rope Management for Beginners - Climb Hub",
+   "value": "Rope management for beginners",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Rope Management for Beginners - Climb Hub",
+   "value": "By Tomas Alvarez · 6 October 2026 · 5 min read",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Rope Management for Beginners - Climb Hub",
+   "value": "A tidy rope keeps both partners safe. Flake the rope on a tarp before every pitch so it feeds without tangles.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Rope Management for Beginners - Climb Hub",
+   "value": "Slack",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Rope Management for Beginners - Climb Hub",
+   "value": "When belaying a leader, leave about 1 m of slack in the rope between climber and belayer so a clip never gets pulled tight. Take in slack as soon as the climber stops moving.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Rope Management for Beginners - Climb Hub",
+   "value": "A belayer who stands too far from the wall adds slack to the system and lengthens any fall.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site footer",
+   "value": "© 2026 Climb Hub.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / About",
+   "value": "About",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / Contact",
+   "value": "Contact",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rope Management for Beginners - Climb Hub"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

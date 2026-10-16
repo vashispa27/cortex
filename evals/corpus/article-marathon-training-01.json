@@ -1,0 +1,646 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.Safari",
+ "title": "A 16-Week Marathon Plan - Runner's Weekly",
+ "url": "https://runnersweekly.example.org/plans/marathon-16-week",
+ "source_type": "browser",
+ "observed_ms": 1789714800000,
+ "also_observed_ms": [],
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://runnersweekly.example.org/plans/marathon-16-week",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "A 16-Week Marathon Plan - Runner's Weekly",
+   "value": "A 16-Week Marathon Plan - Runner's Weekly",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Cookie consent",
+   "value": "We use cookies to improve your experience.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / Accept all cookies",
+   "value": "Accept all cookies",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / Manage preferences",
+   "value": "Manage preferences",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site header / Runner's Weekly",
+   "value": "Runner's Weekly",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Plans",
+   "value": "Plans",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Gear",
+   "value": "Gear",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Nutrition",
+   "value": "Nutrition",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Races",
+   "value": "Races",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "A 16-Week Marathon Plan - Runner's Weekly",
+   "value": "A 16-Week Marathon Plan",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "A 16-Week Marathon Plan - Runner's Weekly",
+   "value": "By Gita Menon · 15 September 2026 · 8 min read",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "A 16-Week Marathon Plan - Runner's Weekly",
+   "value": "This plan builds from 30 km a week to a 60 km peak over sixteen weeks, with one rest day and one cross-training day each week.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "A 16-Week Marathon Plan - Runner's Weekly",
+   "value": "The weekly shape",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "A 16-Week Marathon Plan - Runner's Weekly",
+   "value": "Tuesday: intervals on a track or flat road.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "A 16-Week Marathon Plan - Runner's Weekly",
+   "value": "Thursday: tempo run of 8 to 12 km.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "A 16-Week Marathon Plan - Runner's Weekly",
+   "value": "Sunday long run: 28 km at easy pace in peak weeks.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "A 16-Week Marathon Plan - Runner's Weekly",
+   "value": "Taper starts three weeks before race day. Cut the weekly distance by about 20 percent each week and keep the intensity of the Thursday tempo.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "A 16-Week Marathon Plan - Runner's Weekly",
+   "value": "Practice your race-day breakfast on every long run so nothing is new on the morning.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site footer",
+   "value": "© 2026 Runner's Weekly.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / Advertise",
+   "value": "Advertise",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / Contact",
+   "value": "Contact",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "A 16-Week Marathon Plan - Runner's Weekly"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

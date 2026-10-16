@@ -1,0 +1,28 @@
+{
+ "stem": "article-chrome-plating-01",
+ "html": "article-chrome-plating-01.html",
+ "observed_at": "2026-10-09T14:30:00Z",
+ "also_observed_at": [],
+ "logical": {
+  "app_id": "com.apple.Safari",
+  "title": "How Chrome Plating Works - Finishing Today",
+  "url": "https://finishingtoday.example.com/processes/chrome-plating",
+  "source_type": "browser"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "article",
+  "filter_trap"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "Chrome plating needs a 25 micron nickel layer before the chromium is applied"
+  }
+ ],
+ "noise_strings": [
+  "We use cookies to improve your experience.",
+  "Accept all cookies",
+  "© 2026 Finishing Today."
+ ]
+}
