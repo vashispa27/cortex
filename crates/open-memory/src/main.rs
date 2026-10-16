@@ -1032,6 +1032,9 @@ struct Params {
     app_filter: AppFilter,
     app_fallback: AppFallback,
     app_fallback_ratio: f64,
+    /// Chunks of one snapshot shown and sent as evidence for its result. 1 reproduces the
+    /// original single-chunk behaviour (including the whole-body snippet).
+    chunks_per_result: usize,
 }
 
 impl Default for Params {
@@ -1049,6 +1052,7 @@ impl Default for Params {
             app_filter: AppFilter::Phrase,
             app_fallback: AppFallback::Empty,
             app_fallback_ratio: 0.75,
+            chunks_per_result: 3,
         }
     }
 }
@@ -1070,9 +1074,19 @@ struct RankedPoint {
     passed_time_check: bool,
 }
 
+/// A retrieved chunk of a result's snapshot.
+#[derive(Clone, Debug, Serialize)]
+struct EvidenceChunk {
+    chunk_id: i64,
+    text: String,
+    score: f32,
+}
+
 struct Hit {
     source: Source,
     best_chunk_id: Option<i64>,
+    /// Up to `chunks_per_result` retrieved chunks, best first when selected, shown in document order.
+    chunks: Vec<EvidenceChunk>,
 }
 
 struct Retrieval {
@@ -1179,7 +1193,7 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
     });
     // Insertion-ordered so equal scores resolve by Qdrant rank, not by hash order.
     let mut index_by_evidence = std::collections::HashMap::<String, usize>::new();
-    let mut collapsed: Vec<(Source, Option<i64>)> = Vec::new();
+    let mut collapsed: Vec<(Source, Option<i64>, Vec<EvidenceChunk>)> = Vec::new();
     let mut ranked = Vec::with_capacity(points.len());
     let mut observation_dropped = 0_usize;
     for (rank, point) in points.into_iter().enumerate() {
@@ -1243,17 +1257,24 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
                     &source.source_type,
                     &source.body,
                 );
+                let evidence_chunk = hit_chunk.zip(source.hit_text.clone()).map(|(chunk_id, text)| EvidenceChunk { chunk_id, text, score: point.score });
                 match index_by_evidence.entry(evidence) {
                     std::collections::hash_map::Entry::Vacant(entry) => {
                         entry.insert(collapsed.len());
-                        collapsed.push((source, hit_chunk));
+                        collapsed.push((source, hit_chunk, evidence_chunk.into_iter().collect()));
                     }
                     std::collections::hash_map::Entry::Occupied(entry) => {
                         let existing = &mut collapsed[*entry.get()];
+                        if let Some(chunk) = evidence_chunk {
+                            if !existing.2.iter().any(|c| c.chunk_id == chunk.chunk_id || c.text == chunk.text) {
+                                existing.2.push(chunk);
+                            }
+                        }
                         if source.score > existing.0.score || (source.score == existing.0.score && source.last_seen_ms > existing.0.last_seen_ms) {
                             let mut newer = source;
                             newer.score = newer.score.max(existing.0.score);
-                            *existing = (newer, hit_chunk);
+                            existing.0 = newer;
+                            existing.1 = hit_chunk;
                         }
                     }
                 }
@@ -1272,7 +1293,7 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
         });
     }
     let collapsed_count = collapsed.len();
-    let mut keyed: Vec<(f32, (Source, Option<i64>))> = if params.use_rerank_bonus {
+    let mut keyed: Vec<(f32, (Source, Option<i64>, Vec<EvidenceChunk>))> = if params.use_rerank_bonus {
         let terms = content_terms(question);
         collapsed
             .into_iter()
@@ -1302,9 +1323,44 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
         observation_dropped,
         hits: keyed
             .into_iter()
-            .map(|(_, (source, best_chunk_id))| Hit { source, best_chunk_id })
+            .map(|(_, (source, best_chunk_id, mut chunks))| {
+                // The best chunk always stays; the rest are the highest-scoring others. Shown in
+                // document order so adjacent chunks read as the page does.
+                chunks.sort_by(|a, b| {
+                    (Some(b.chunk_id) == best_chunk_id).cmp(&(Some(a.chunk_id) == best_chunk_id))
+                        .then_with(|| b.score.total_cmp(&a.score))
+                });
+                chunks.truncate(params.chunks_per_result.max(1));
+                chunks.sort_by_key(|c| c.chunk_id);
+                Hit { source, best_chunk_id, chunks }
+            })
             .collect(),
     })
+}
+
+/// What a result tells the reader: a snippet taken from the retrieved chunks when there is more
+/// than one allowed, falling back to the whole page when the chunks hold none of the query terms.
+fn evidence_snippet(hit: &Hit, question: &str, chunks_per_result: usize) -> String {
+    if chunks_per_result > 1 && !hit.chunks.is_empty() {
+        let scope = hit.chunks.iter().map(|c| c.text.as_str()).collect::<Vec<_>>().join("\n");
+        let lower = scope.to_lowercase();
+        if content_terms(question).iter().any(|t| lower.contains(t.as_str())) {
+            return snippet(&scope, question);
+        }
+    }
+    snippet(&hit.source.body, question)
+}
+
+/// Total characters of retrieved-chunk evidence sent to the LLM per source.
+const EVIDENCE_CHAR_CAP: usize = 2_500;
+
+/// The retrieved chunks of one result as one block (the first 2,500 characters of the page when a
+/// derived point, not a chunk, matched).
+fn evidence_text(hit: &Hit) -> String {
+    if hit.chunks.is_empty() {
+        return hit.source.body.chars().take(EVIDENCE_CHAR_CAP).collect();
+    }
+    hit.chunks.iter().map(|c| c.text.as_str()).collect::<Vec<_>>().join("\n…\n").chars().take(EVIDENCE_CHAR_CAP).collect()
 }
 
 fn answer(runtime: &mut Runtime, question: &str) -> Result<String> {
@@ -1328,18 +1384,16 @@ fn answer(runtime: &mut Runtime, question: &str) -> Result<String> {
         }
         return Ok("No earlier conversation evidence is available in this state directory. Ask about the conversation first.".into());
     }
-    let sources: Vec<Source> = retrieve(runtime, question, &Params::default())?
-        .hits
-        .into_iter()
-        .map(|hit| hit.source)
-        .collect();
+    let params = Params::default();
+    let hits: Vec<Hit> = retrieve(runtime, question, &params)?.hits;
+    let sources: Vec<&Source> = hits.iter().map(|hit| &hit.source).collect();
     if sources.is_empty() {
         return Ok("No matching captured evidence yet. Capture may be incomplete if the app did not expose text through Accessibility.".into());
     }
     runtime.db.execute("INSERT INTO index_meta(key,value) VALUES('last_answer_snapshot',?1) ON CONFLICT(key) DO UPDATE SET value=excluded.value",[sources[0].id.to_string()])?;
     let mut output = String::new();
     if env::var("OPEN_MEMORY_LLM_URL").is_ok() {
-        match llm_answer(question, &sources) {
+        match llm_answer(question, &hits, params.chunks_per_result) {
             Ok(response) => {
                 output.push_str(&response);
                 output.push_str("\n\n");
@@ -1353,17 +1407,27 @@ fn answer(runtime: &mut Runtime, question: &str) -> Result<String> {
     } else {
         output.push_str("Ranked evidence (no LLM configured):\n\n");
     }
-    for (rank, source) in sources.iter().enumerate() {
-        let snippet = snippet(&source.body, question);
+    for (rank, hit) in hits.iter().enumerate() {
+        let source = &hit.source;
+        let snippet = evidence_snippet(hit, question, params.chunks_per_result);
         output.push_str(&format!("{}. [{}] {} — {}\n   Observed: {} (last seen {}; {} sightings)\n   Source: {}\n   {}\n",
             rank+1,source.id,source.app_id,source.title,time_string(source.first_seen_ms),time_string(source.last_seen_ms),source.sightings,
             source.url.as_deref().unwrap_or("No URL exposed by Accessibility"),snippet));
+        // Retrieved chunks the snippet does not already show.
+        let shown = norm_space(&snippet);
+        for chunk in hit.chunks.iter().filter(|c| hit.chunks.len() > 1 && !shown.contains(&norm_space(&c.text.lines().next().unwrap_or("")))).take(2) {
+            output.push_str(&format!("   Also retrieved: {}\n", chunk.text.split_whitespace().collect::<Vec<_>>().join(" ").chars().take(200).collect::<String>()));
+        }
         if source.limitations != "[]" {
             output.push_str(&format!("   Capture limitations: {}\n", source.limitations));
         }
     }
     output.push_str("Displayed message times, if present, are in the captured text; observed times above are capture times.");
     Ok(output)
+}
+
+fn norm_space(s: &str) -> String {
+    s.split_whitespace().collect::<Vec<_>>().join(" ")
 }
 
 fn snippet(body: &str, question: &str) -> String {
@@ -1463,7 +1527,7 @@ fn redact_cloud(text: &str) -> Result<String> {
     Ok(value)
 }
 
-fn llm_answer(question: &str, sources: &[Source]) -> Result<String> {
+fn llm_answer(question: &str, hits: &[Hit], chunks_per_result: usize) -> Result<String> {
     let endpoint = env::var("OPEN_MEMORY_LLM_URL")?;
     let parsed = url::Url::parse(&endpoint)?;
     if parsed.scheme() != "https"
@@ -1474,19 +1538,20 @@ fn llm_answer(question: &str, sources: &[Source]) -> Result<String> {
     }
     let model = env::var("OPEN_MEMORY_LLM_MODEL").context("OPEN_MEMORY_LLM_MODEL is required")?;
     let key = env::var("OPEN_MEMORY_LLM_API_KEY").ok();
-    let context = sources
+    let context = hits
         .iter()
         .take(6)
-        .map(|s| {
+        .map(|h| {
+            let s = &h.source;
             format!(
-                "Source #{} app={} observed={} title={} URL={}\nRelevant excerpt: {}\nRetrieved chunk: {}",
+                "Source #{} app={} observed={} title={} URL={}\nRelevant excerpt: {}\nRetrieved chunks: {}",
                 s.id,
                 s.app_id,
                 time_string(s.first_seen_ms),
                 s.title,
                 s.url.as_deref().unwrap_or(""),
-                snippet(&s.body, question),
-                s.hit_text.as_deref().unwrap_or(&s.body).chars().take(2_500).collect::<String>()
+                evidence_snippet(h, question, chunks_per_result),
+                evidence_text(h)
             )
         })
         .collect::<Vec<_>>()
@@ -1558,6 +1623,42 @@ mod tests {
         assert_eq!(time_bounds("what did I do yesterday", Some(now)).unwrap(), Some((at(16, 0), at(17, 0))));
         assert_eq!(time_bounds("notes from 2026-10-14", Some(now)).unwrap(), Some((at(14, 0), at(15, 0))));
         assert_eq!(time_bounds("no date here", Some(now)).unwrap(), None);
+    }
+
+    fn hit_with(body: &str, chunks: &[&str]) -> Hit {
+        let source = Source {
+            id: 1, app_id: "app".into(), title: "t".into(), url: None, domain: None, source_type: "app".into(),
+            body: body.into(), first_seen_ms: 0, last_seen_ms: 0, sightings: 1, limitations: "[]".into(),
+            cleaner_quality: "main_content".into(), hit_text: chunks.first().map(|c| c.to_string()), score: 0.0,
+        };
+        Hit {
+            source,
+            best_chunk_id: Some(1),
+            chunks: chunks.iter().enumerate().map(|(i, c)| EvidenceChunk { chunk_id: i as i64 + 1, text: (*c).into(), score: 0.0 }).collect(),
+        }
+    }
+
+    #[test]
+    fn snippet_comes_from_retrieved_chunks_first() {
+        let body = "Daily macros plan\nProtein 137 g | Fat 35 g | Carbs 185 g\nmacros overview line\nmacros appendix";
+        let hit = hit_with(body, &["Protein 137 g | Fat 35 g | Carbs 185 g"]);
+        // The question word "macros" matches other lines of the page, but not the retrieved chunk.
+        assert_eq!(evidence_snippet(&hit, "what were my macros yesterday", 3), snippet(body, "what were my macros yesterday"),
+            "no query term in the chunk: whole-page snippet");
+        let hit = hit_with("macros intro\nmacros appendix\nProtein 137 g | Fat 35 g", &["The macros table: Protein 137 g | Fat 35 g"]);
+        assert!(evidence_snippet(&hit, "my macros table", 3).contains("Protein 137 g"));
+        // chunks_per_result = 1 keeps the original whole-page snippet.
+        assert!(evidence_snippet(&hit, "my macros table", 1).contains("macros intro"));
+        assert!(evidence_text(&hit).contains("Protein 137 g"));
+    }
+
+    #[test]
+    fn evidence_text_is_capped_and_falls_back_to_the_page() {
+        let long = "x ".repeat(3_000);
+        let hit = hit_with("body text", &[long.as_str()]);
+        assert_eq!(evidence_text(&hit).chars().count(), EVIDENCE_CHAR_CAP);
+        let none = hit_with("page body", &[]);
+        assert_eq!(evidence_text(&none), "page body");
     }
 
     #[test]

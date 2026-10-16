@@ -31,7 +31,8 @@ Options: `--split dev|test|all` (default all), `--param key=value` (repeatable, 
 `--sweep key=v1,v2` (repeatable; each value is an extra variant written next to `--out` as
 `<name>.<key>-<value>.json` and shares the base's index unless it changes `chunk_target`).
 Keys: `mode` (hybrid | dense_only | bm25_only), `rerank_bonus`, `filters`, `derived` (on | off),
-`rrf_k`, `prefetch`, `fused_limit`, `final_k`, `chunk_target` (bytes). `filters=off` disables the
+`rrf_k`, `prefetch`, `fused_limit`, `final_k`, `chunk_target` (bytes), `app_filter` (phrase | legacy),
+`app_fallback` (empty | weak | off), `app_fallback_ratio`, `chunks_per_result`. `filters=off` disables the
 regex filters and the post-cut observation-time check.
 
 ```bash
@@ -57,9 +58,12 @@ in the `timing` block.
 * **Chunk level** uses the Qdrant result before collapsing (derived points included, hit text is the
   chunk or the derived summary). Recall@k is the share of a question's relevant items found in the
   top k; `hit@k` is "at least one found" (counts shown as `n/N`). MRR uses the first relevant item.
-* **Final level** is the 8 results `ask` shows. A result is a hit if the retrieved chunk (or the
-  first 2,500 characters of the body for derived hits) plus the printed snippet contains the answer,
-  which is the evidence an LLM would receive.
+* **Final level** is the 8 results `ask` shows. A result is a hit if its retrieved chunks (up to
+  `chunks_per_result`, default 3, per snapshot; the first 2,500 characters of the body for derived
+  hits) plus the printed snippet contain the answer, which is the evidence an LLM receives. The snippet
+  is taken from the retrieved chunks when they hold a query term, else from the whole page. Before
+  Fix 2 the definition used one chunk and a whole-page snippet; `--param chunks_per_result=1`
+  reproduces it, so earlier reports can be re-scored (`reports/fixes/02-multi-chunk.chunks_per_result-1.json`).
 * **Near-duplicate crowding**: share of final slots (2nd onward) whose body has word-set Jaccard ≥ 0.8
   (and ≥ 0.5) with a higher-ranked result. **Derived pollution**: share of the top-10 chunk-level
   slots that are derived points.

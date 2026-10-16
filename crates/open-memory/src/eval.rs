@@ -167,6 +167,7 @@ fn apply_param(params: &mut Params, chunk_target: &mut usize, key: &str, value: 
                 _ => bail!("app_filter must be legacy or phrase"),
             }
         }
+        "chunks_per_result" => params.chunks_per_result = value.parse::<usize>()?.max(1),
         "app_fallback" => {
             params.app_fallback = match value {
                 "off" => AppFallback::Off,
@@ -176,7 +177,7 @@ fn apply_param(params: &mut Params, chunk_target: &mut usize, key: &str, value: 
             }
         }
         "app_fallback_ratio" => params.app_fallback_ratio = value.parse()?,
-        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, app_filter, app_fallback, app_fallback_ratio)"),
+        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, app_filter, app_fallback, app_fallback_ratio, chunks_per_result)"),
     }
     Ok(())
 }
@@ -389,10 +390,7 @@ fn evaluate_query(rt: &mut Runtime, index: usize, gold: &Gold, params: &Params, 
     let blobs: Vec<String> = retrieval
         .hits
         .iter()
-        .map(|h| {
-            let chunk = h.source.hit_text.clone().unwrap_or_else(|| truncate_chars(&h.source.body, 2_500));
-            norm(&format!("{chunk}\n{}", snippet(&h.source.body, &gold.query)))
-        })
+        .map(|h| norm(&format!("{}\n{}", evidence_text(h), evidence_snippet(h, &gold.query, params.chunks_per_result))))
         .collect();
     let final_first: Vec<Option<usize>> = answers.iter().map(|a| first_rank(&blobs, a)).collect();
     let right_rank = final_first.iter().flatten().min().copied();
