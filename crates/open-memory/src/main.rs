@@ -595,17 +595,17 @@ fn record(
     source_type: Option<String>,
     limitations: Option<Vec<String>>,
 ) -> Result<(i64, bool, Source)> {
-    record_with_target(db, window, url, source_type, limitations, cleaner::CHUNK_TARGET_BYTES)
+    record_with_target(db, window, url, source_type, limitations, &cleaner::DEFAULT_CFG)
 }
 
-/// `chunk_target` exists so offline evals can sweep chunk size; live capture uses the default.
+/// `chunking` lets offline evals sweep chunk size and overlap; live capture uses the default.
 fn record_with_target(
     db: &mut Connection,
     window: &AxWindow,
     url: Option<String>,
     source_type: Option<String>,
     limitations: Option<Vec<String>>,
-    chunk_target: usize,
+    chunking: &cleaner::ChunkCfg,
 ) -> Result<(i64, bool, Source)> {
     let cleaned = cleaner::clean(&window.roots, &window.app_id, url.as_deref(), &window.title);
     let body = &cleaned.body;
@@ -636,7 +636,7 @@ fn record_with_target(
     )?;
     transaction.execute("INSERT OR IGNORE INTO raw_versions(snapshot_id,ax_hash,ax_nodes_json,observed_ms) VALUES(?1,?2,?3,?4)",params![id,digest(&ax_nodes_json),ax_nodes_json,window.observed_ms])?;
     if existing.is_none() {
-        for (start, end, text) in cleaner::chunks_with(body, chunk_target) {
+        for (start, end, text) in cleaner::chunks_cfg(body, chunking) {
             transaction.execute("INSERT INTO chunks(snapshot_id,start_byte,end_byte,body) VALUES(?1,?2,?3,?4)", params![id,start as i64,end as i64,text])?;
         }
     }

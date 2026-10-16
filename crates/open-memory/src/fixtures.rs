@@ -82,7 +82,7 @@ pub fn ingest(
     runtime: &mut Runtime,
     state: &Path,
     corpus: &[Loaded],
-    chunk_target: usize,
+    chunking: &cleaner::ChunkCfg,
 ) -> Result<Vec<Ingested>> {
     let mut out = Vec::with_capacity(corpus.len());
     for loaded in corpus {
@@ -107,7 +107,7 @@ pub fn ingest(
             f.url.clone(),
             f.source_type.clone(),
             f.limitations.clone(),
-            chunk_target,
+            chunking,
         )?;
         if is_new && source.cleaner_quality != "navigation_only" {
             summarize(state, id)?;
@@ -142,7 +142,7 @@ pub fn run_cli(args: &[String]) -> Result<()> {
     fs::set_permissions(&state, fs::Permissions::from_mode(0o700))?;
     let fixtures = load_corpus(&corpus)?;
     let mut runtime = open_runtime(&state, false)?;
-    let ingested = ingest(&mut runtime, &state, &fixtures, cleaner::CHUNK_TARGET_BYTES)?;
+    let ingested = ingest(&mut runtime, &state, &fixtures, &cleaner::DEFAULT_CFG)?;
     for item in &ingested {
         println!("{} -> #{} ({}, {} bytes{})", item.fixture, item.snapshot_id, item.quality,
             item.body.len(), if item.is_new { "" } else { ", duplicate" });

@@ -130,12 +130,12 @@ fn parse_args(args: &[String]) -> Result<Args> {
 struct Variant {
     name: String,
     params: Params,
-    chunk_target: usize,
+    chunking: cleaner::ChunkCfg,
     /// Which key/value this variant overrides relative to the base (for naming the output).
     sweep: Option<(String, String)>,
 }
 
-fn apply_param(params: &mut Params, chunk_target: &mut usize, key: &str, value: &str) -> Result<()> {
+fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, key: &str, value: &str) -> Result<()> {
     let flag = |v: &str| -> Result<bool> {
         match v {
             "on" | "true" | "1" => Ok(true),
@@ -159,7 +159,22 @@ fn apply_param(params: &mut Params, chunk_target: &mut usize, key: &str, value: 
         "prefetch" => params.prefetch = value.parse()?,
         "fused_limit" => params.fused_limit = value.parse()?,
         "final_k" => params.final_k = value.parse()?,
-        "chunk_target" => *chunk_target = value.parse()?,
+        "chunk_target" => chunking.target = value.parse()?,
+        "chunk_unit" => {
+            chunking.chars = match value {
+                "bytes" => false,
+                "chars" => true,
+                _ => bail!("chunk_unit must be bytes or chars"),
+            }
+        }
+        "chunk_overlap" => chunking.overlap_pct = value.parse()?,
+        "chunk_boundaries" => chunking.boundaries = flag(value)?,
+        "chunk_mode" => {
+            if value != "legacy" {
+                bail!("chunk_mode accepts only legacy (bytes, no overlap, plain cuts)");
+            }
+            *chunking = cleaner::LEGACY;
+        }
         "app_filter" => {
             params.app_filter = match value {
                 "legacy" => AppFilter::Legacy,
@@ -198,24 +213,24 @@ fn apply_param(params: &mut Params, chunk_target: &mut usize, key: &str, value: 
             }
         }
         "app_fallback_ratio" => params.app_fallback_ratio = value.parse()?,
-        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support)"),
+        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, chunk_unit, chunk_overlap, chunk_boundaries, chunk_mode, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support)"),
     }
     Ok(())
 }
 
 fn variants(args: &Args, now_ms: i64) -> Result<Vec<Variant>> {
     let mut base_params = Params { now_ms: Some(now_ms), ..Params::default() };
-    let mut base_target = cleaner::CHUNK_TARGET_BYTES;
+    let mut base_chunking = cleaner::DEFAULT_CFG;
     for (k, v) in &args.base {
-        apply_param(&mut base_params, &mut base_target, k, v)?;
+        apply_param(&mut base_params, &mut base_chunking, k, v)?;
     }
-    let mut out = vec![Variant { name: "base".into(), params: base_params.clone(), chunk_target: base_target, sweep: None }];
+    let mut out = vec![Variant { name: "base".into(), params: base_params.clone(), chunking: base_chunking, sweep: None }];
     for (key, values) in &args.sweeps {
         for value in values {
             let mut p = base_params.clone();
-            let mut t = base_target;
+            let mut t = base_chunking;
             apply_param(&mut p, &mut t, key, value)?;
-            out.push(Variant { name: format!("{key}={value}"), params: p, chunk_target: t, sweep: Some((key.clone(), value.clone())) });
+            out.push(Variant { name: format!("{key}={value}"), params: p, chunking: t, sweep: Some((key.clone(), value.clone())) });
         }
     }
     Ok(out)
@@ -901,9 +916,12 @@ pub fn run(args: &[String]) -> Result<()> {
     let selected: Vec<usize> = golds.iter().enumerate().filter(|(_, g)| args.split == "all" || g.split == args.split).map(|(i, _)| i).collect();
 
     let mut model: Option<StaticModel> = None;
-    let mut targets: Vec<usize> = variants.iter().map(|v| v.chunk_target).collect();
-    targets.sort_unstable();
-    targets.dedup();
+    let mut targets: Vec<cleaner::ChunkCfg> = Vec::new();
+    for v in &variants {
+        if !targets.contains(&v.chunking) {
+            targets.push(v.chunking);
+        }
+    }
     for (group, target) in targets.iter().enumerate() {
         let state = env::temp_dir().join(format!("open-memory-eval-{}-{}", std::process::id(), group));
         if state.exists() {
@@ -931,7 +949,7 @@ pub fn run(args: &[String]) -> Result<()> {
 fn run_group(
     args: &Args,
     state: &Path,
-    chunk_target: usize,
+    chunking: cleaner::ChunkCfg,
     model: Option<StaticModel>,
     all_variants: &[Variant],
     corpus: &[Loaded],
@@ -945,7 +963,7 @@ fn run_group(
     }
     let mut runtime = open_runtime_with(state, false, model)?;
     let ingest_started = std::time::Instant::now();
-    let ingested = fixtures::ingest(&mut runtime, state, corpus, chunk_target)?;
+    let ingested = fixtures::ingest(&mut runtime, state, corpus, &chunking)?;
     let ingest_ms = ingest_started.elapsed().as_secs_f64() * 1000.0;
 
     // Every gold answer must be an exact (whitespace/case-normalised) substring of its cleaned body.
@@ -979,7 +997,7 @@ fn run_group(
     let probe_part = probes(&runtime.db, now_ms, &all_variants[0].params)?;
     let index_bytes = dir_size(state);
 
-    for variant in all_variants.iter().filter(|v| v.chunk_target == chunk_target) {
+    for variant in all_variants.iter().filter(|v| v.chunking == chunking) {
         let mut results = Vec::new();
         let mut latencies = Vec::new();
         for &i in selected {
@@ -1020,7 +1038,7 @@ fn run_group(
                 "git_commit": git(&["rev-parse", "HEAD"]).unwrap_or_else(|| "unknown".into()),
                 "git_dirty_in_inputs": dirty,
                 "model_version": MODEL_VERSION, "cleaner_version": cleaner::VERSION,
-                "params": variant.params, "chunk_target_bytes": chunk_target,
+                "params": variant.params, "chunking": chunking,
                 "split": args.split, "timezone": "UTC", "injected_now_ms": now_ms,
                 "corpus_fixtures": corpus.iter().map(|l| l.id.as_str()).collect::<BTreeSet<_>>().len(),"corpus_sightings": corpus.len(), "corpus_provenance": provenance,
                 "gold_total": golds.len(), "gold_evaluated": results.len(),
@@ -1060,10 +1078,10 @@ fn markdown(r: &Value) -> String {
     let m = &r["meta"];
     s.push_str(&format!("# Retrieval eval: {}\n\n", m["variant"].as_str().unwrap_or("")));
     s.push_str(&format!(
-        "- commit `{}`{} · model `{}` · cleaner v{} · chunk target {} B\n- params: `{}`\n- corpus: {} fixtures {} · gold: {} evaluated of {} ({} split) · clock fixed at 2026-10-17T12:00Z, TZ=UTC\n\n",
+        "- commit `{}`{} · model `{}` · cleaner v{} · chunking `{}`\n- params: `{}`\n- corpus: {} fixtures {} · gold: {} evaluated of {} ({} split) · clock fixed at 2026-10-17T12:00Z, TZ=UTC\n\n",
         m["git_commit"].as_str().unwrap_or("").chars().take(10).collect::<String>(),
         if m["git_dirty_in_inputs"] == true { " (dirty)" } else { "" },
-        m["model_version"].as_str().unwrap_or(""), m["cleaner_version"], m["chunk_target_bytes"],
+        m["model_version"].as_str().unwrap_or(""), m["cleaner_version"], m["chunking"],
         m["params"], m["corpus_fixtures"], m["corpus_provenance"], m["gold_evaluated"], m["gold_total"], m["split"],
     ));
     s.push_str("Counts are queries; small n means wide intervals, so differences of a few queries are within noise.\n\n");
