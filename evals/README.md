@@ -11,7 +11,7 @@ evals/
   pages/<stem>.facts.json    planted facts, noise strings, logical app/url/time for each page
   corpus/<stem>.json         AX fixtures, one per page (hand_authored until captured, see CAPTURE.md)
   gold/gold.jsonl            124 questions, 13 types, dev/test split
-  reports/                   baseline.json/.md, ablations/, ablations.md, analysis
+  reports/                   baseline.json/.md, ablations/, ablations.md, analysis; fixes/ = one report per fix + summary.md
   tools/                     corpus generator, report diff, paired bootstrap, ask regression check
   CAPTURE.md  export_fixtures.py   replace hand-authored trees with real Accessibility captures
 ```
