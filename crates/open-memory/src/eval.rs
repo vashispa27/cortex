@@ -160,7 +160,23 @@ fn apply_param(params: &mut Params, chunk_target: &mut usize, key: &str, value: 
         "fused_limit" => params.fused_limit = value.parse()?,
         "final_k" => params.final_k = value.parse()?,
         "chunk_target" => *chunk_target = value.parse()?,
-        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target)"),
+        "app_filter" => {
+            params.app_filter = match value {
+                "legacy" => AppFilter::Legacy,
+                "phrase" => AppFilter::Phrase,
+                _ => bail!("app_filter must be legacy or phrase"),
+            }
+        }
+        "app_fallback" => {
+            params.app_fallback = match value {
+                "off" => AppFallback::Off,
+                "empty" => AppFallback::Empty,
+                "weak" => AppFallback::Weak,
+                _ => bail!("app_fallback must be off, empty or weak"),
+            }
+        }
+        "app_fallback_ratio" => params.app_fallback_ratio = value.parse()?,
+        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, app_filter, app_fallback, app_fallback_ratio)"),
     }
     Ok(())
 }
@@ -294,6 +310,7 @@ struct QueryResult {
     zero: bool,
     has_filter: bool,
     has_app_filter: bool,
+    app_fallback: bool,
     excluded_all: bool,
     excluded_any: bool,
     obs_dropped: usize,
@@ -422,6 +439,7 @@ fn evaluate_query(rt: &mut Runtime, index: usize, gold: &Gold, params: &Params, 
         excluded_any = flags.iter().any(|&f| f);
     }
     let has_app_filter = retrieval.filter.iter().any(|c| c["key"] == "app");
+    let app_fallback = retrieval.app_fallback;
     let top_chunk_score = retrieval.ranked.first().map(|p| p.score as f64);
     let top_final_score = retrieval.hits.first().map(|h| h.source.score as f64);
     let chunk_best = chunk_first.iter().flatten().min().copied();
@@ -461,7 +479,7 @@ fn evaluate_query(rt: &mut Runtime, index: usize, gold: &Gold, params: &Params, 
         "time_bounds": retrieval.time.map(|(s, e)| json!([s, e])),
         "filter_excluded_all_relevant": excluded_all, "filter_excluded_any_relevant": excluded_any,
         "excluded_by": exclusion_keys, "observation_dropped": retrieval.observation_dropped,
-        "zero_results": retrieval.hits.is_empty(),
+        "zero_results": retrieval.hits.is_empty(), "app_filter_fallback": app_fallback,
         "n_ranked": retrieval.ranked.len(), "n_collapsed": retrieval.collapsed, "n_final": retrieval.hits.len(),
         "chunk_first_hit_rank": chunk_first, "final_first_hit_rank": final_first,
         "chunk_found_final_lost": chunk_found_final_lost,
@@ -476,7 +494,7 @@ fn evaluate_query(rt: &mut Runtime, index: usize, gold: &Gold, params: &Params, 
         QueryResult {
             gold: index, chunk_first, final_first, chunk_ndcg10, n_final: retrieval.hits.len(), crowd,
             derived_top10, top10_len: top10.len(), top_chunk_score, top_final_score,
-            zero: retrieval.hits.is_empty(), has_filter: !retrieval.filter.is_empty(), has_app_filter,
+            zero: retrieval.hits.is_empty(), has_filter: !retrieval.filter.is_empty(), has_app_filter, app_fallback,
             excluded_all, excluded_any, obs_dropped: retrieval.observation_dropped, wrong_before_right,
             chunk_found_final_lost, json,
         },
@@ -544,6 +562,7 @@ fn aggregate(results: &[&QueryResult], golds: &[Gold], final_k: usize) -> Value 
         "filters": {
             "queries_with_filter": rate(results.iter().filter(|r| r.has_filter).count(), results.len()),
             "queries_with_app_filter": rate(results.iter().filter(|r| r.has_app_filter).count(), results.len()),
+            "app_filter_abandoned_for_unfiltered": rate(results.iter().filter(|r| r.app_fallback).count(), results.len()),
             "excluded_all_relevant": rate(answerable.iter().filter(|r| r.excluded_all).count(), n),
             "excluded_some_relevant": rate(answerable.iter().filter(|r| r.excluded_any).count(), n),
             "zero_result_queries": rate(results.iter().filter(|r| r.zero).count(), results.len()),
@@ -775,14 +794,14 @@ fn intrinsics(
 }
 
 /// Direct probes of the date and app-word handling that do not need the corpus.
-fn probes(db: &Connection, now_ms: i64) -> Result<Value> {
+fn probes(db: &Connection, now_ms: i64, params: &Params) -> Result<Value> {
     let mut dates = Vec::new();
     for q in ["what did I read yesterday", "what did I read today", "notes from 2026-10-14", "what did I read last week", "what did I read this morning", "two days ago", "last month", "on October 14", "last Friday"] {
         dates.push(json!({"question": q, "bounds_produced": time_bounds(q, Some(now_ms))?.is_some()}));
     }
     let mut apps = Vec::new();
     for q in ["what is an edge case in this test plan", "what is the terminal velocity of a skydiver", "what did I write in my notes about hiring", "any messages about the deposit", "the slack of the rope", "chrome plating process", "what did I read in Safari"] {
-        let clauses = filter_clauses(db, q, Some(now_ms))?;
+        let clauses = filter_clauses(db, q, Some(now_ms), params.app_filter)?;
         let app = clauses.iter().find(|c| c["key"] == "app").map(|c| c["match"]["value"].clone());
         apps.push(json!({"question": q, "app_filter": app}));
     }
@@ -926,7 +945,7 @@ fn run_group(
     }
     let ctx = EvalCtx { fixture_snapshots: &fixture_snapshots, snapshot_fixtures: &snapshot_fixtures };
     let static_part = intrinsics(&runtime, corpus, &ingested, facts, golds)?;
-    let probe_part = probes(&runtime.db, now_ms)?;
+    let probe_part = probes(&runtime.db, now_ms, &all_variants[0].params)?;
     let index_bytes = dir_size(state);
 
     for variant in all_variants.iter().filter(|v| v.chunk_target == chunk_target) {

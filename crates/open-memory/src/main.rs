@@ -1,4 +1,5 @@
 #![cfg(target_os = "macos")]
+mod appscope;
 mod cleaner;
 mod eval;
 mod fixtures;
@@ -879,24 +880,38 @@ fn ask(state: &Path, question: &str) -> Result<()> {
 }
 
 /// The `must` clauses derived from the question's app words, privacy words, domain and date.
-fn filter_clauses(db: &Connection, question: &str, now_ms: Option<i64>) -> Result<Vec<Value>> {
+fn filter_clauses(db: &Connection, question: &str, now_ms: Option<i64>, apps: AppFilter) -> Result<Vec<Value>> {
     let q = question.to_lowercase();
     let mut must = Vec::<Value>::new();
-    let known_apps = [
-        ("chrome", "com.google.Chrome"),
-        ("safari", "com.apple.Safari"),
-        ("firefox", "org.mozilla.firefox"),
-        ("slack", "com.tinyspeck.slackmacgap"),
-        ("terminal", "com.apple.Terminal"),
-        ("notes", "com.apple.Notes"),
-        ("messages", "com.apple.iChat"),
-        ("edge", "com.microsoft.edgemac"),
-    ];
     let words: std::collections::HashSet<_> = q.split(|c: char| !c.is_alphanumeric()).collect();
-    for (label, id) in known_apps {
-        if words.contains(label) {
-            must.push(json!({"key":"app","match":{"value":id}}));
-            break;
+    match apps {
+        AppFilter::Legacy => {
+            // Original rule: any bare app word is a hard filter.
+            let known_apps = [
+                ("chrome", "com.google.Chrome"),
+                ("safari", "com.apple.Safari"),
+                ("firefox", "org.mozilla.firefox"),
+                ("slack", "com.tinyspeck.slackmacgap"),
+                ("terminal", "com.apple.Terminal"),
+                ("notes", "com.apple.Notes"),
+                ("messages", "com.apple.iChat"),
+                ("edge", "com.microsoft.edgemac"),
+            ];
+            for (label, id) in known_apps {
+                if words.contains(label) {
+                    must.push(json!({"key":"app","match":{"value":id}}));
+                    break;
+                }
+            }
+        }
+        AppFilter::Phrase => {
+            if let Some(ids) = appscope::app_scope(question) {
+                must.push(if ids.len() == 1 {
+                    json!({"key":"app","match":{"value":ids[0]}})
+                } else {
+                    json!({"key":"app","match":{"any":ids}})
+                });
+            }
         }
     }
     if words.contains("private") || words.contains("incognito") {
@@ -974,6 +989,27 @@ enum Mode {
     Bm25Only,
 }
 
+/// How an app mention in the question becomes an `app` filter.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+enum AppFilter {
+    /// Any bare app word ("edge case", "terminal velocity") was a hard filter. Kept for comparison.
+    Legacy,
+    /// Only a scoping phrase ("in Slack", "from my Notes app") filters; see `appscope`.
+    Phrase,
+}
+
+/// What to do when an app-scoped search finds nothing useful.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+enum AppFallback {
+    Off,
+    /// Retry without the app filter when the filtered search returns nothing.
+    Empty,
+    /// Also retry when the filtered top score is below `app_fallback_ratio` of the unfiltered top score.
+    Weak,
+}
+
 /// Retrieval knobs. `Params::default()` is exactly what `ask` has always done.
 #[derive(Clone, Debug, Serialize)]
 struct Params {
@@ -993,6 +1029,9 @@ struct Params {
     mode: Mode,
     /// Injected clock for "today"/"yesterday"; `None` is the real clock.
     now_ms: Option<i64>,
+    app_filter: AppFilter,
+    app_fallback: AppFallback,
+    app_fallback_ratio: f64,
 }
 
 impl Default for Params {
@@ -1007,6 +1046,9 @@ impl Default for Params {
             include_derived: true,
             mode: Mode::Hybrid,
             now_ms: None,
+            app_filter: AppFilter::Phrase,
+            app_fallback: AppFallback::Empty,
+            app_fallback_ratio: 0.75,
         }
     }
 }
@@ -1034,6 +1076,8 @@ struct Hit {
 }
 
 struct Retrieval {
+    /// True when an app-scoped search was abandoned and the unfiltered results are returned.
+    app_fallback: bool,
     /// Filter clauses `query_filter` produced (empty when none or filters are off).
     filter: Vec<Value>,
     time: Option<(i64, i64)>,
@@ -1047,9 +1091,38 @@ struct Retrieval {
 }
 
 fn retrieve(runtime: &mut Runtime, question: &str, params: &Params) -> Result<Retrieval> {
+    let first = retrieve_with(runtime, question, params, false)?;
+    let scoped = first.filter.iter().any(|c| c["key"] == "app");
+    if !scoped || params.app_fallback == AppFallback::Off {
+        return Ok(first);
+    }
+    let abandon = first.hits.is_empty() || params.app_fallback == AppFallback::Weak && {
+        let open = retrieve_with(runtime, question, params, true)?;
+        let top = |r: &Retrieval| r.ranked.first().map_or(0.0, |p| p.score as f64);
+        if top(&first) < params.app_fallback_ratio * top(&open) {
+            let mut open = open;
+            open.app_fallback = true;
+            return Ok(open);
+        }
+        false
+    };
+    if abandon {
+        let mut open = retrieve_with(runtime, question, params, true)?;
+        open.app_fallback = true;
+        return Ok(open);
+    }
+    Ok(first)
+}
+
+/// One search; `drop_app` removes the app clause (the fallback path).
+fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_app: bool) -> Result<Retrieval> {
     runtime.index_pending()?;
     let mut clauses = if params.use_filters {
-        filter_clauses(&runtime.db, question, params.now_ms)?
+        let mut c = filter_clauses(&runtime.db, question, params.now_ms, params.app_filter)?;
+        if drop_app {
+            c.retain(|clause| clause["key"] != "app");
+        }
+        c
     } else {
         Vec::new()
     };
@@ -1221,6 +1294,7 @@ fn retrieve(runtime: &mut Runtime, question: &str, params: &Params) -> Result<Re
     });
     keyed.truncate(params.final_k);
     Ok(Retrieval {
+        app_fallback: false,
         filter: reported_clauses,
         time,
         ranked,
@@ -1444,7 +1518,7 @@ mod tests {
     }
 
     fn app_filter(question: &str) -> Option<String> {
-        filter_clauses(&db(), question, None)
+        filter_clauses(&db(), question, None, AppFilter::Phrase)
             .unwrap()
             .iter()
             .find(|c| c["key"] == "app")
@@ -1467,7 +1541,7 @@ mod tests {
         let db = db();
         db.execute("INSERT INTO snapshots(fingerprint,evidence_fingerprint,app_id,title,domain,source_type,body,first_seen_ms,last_seen_ms,limitations) VALUES('a','a','x','t','known.example.org','browser','b',1,1,'[]')", []).unwrap();
         let keys = |q: &str| -> Vec<String> {
-            filter_clauses(&db, q, Some(at(17, 12))).unwrap().iter().map(|c| c["key"].as_str().unwrap().to_owned()).collect()
+            filter_clauses(&db, q, Some(at(17, 12)), AppFilter::Phrase).unwrap().iter().map(|c| c["key"].as_str().unwrap().to_owned()).collect()
         };
         assert_eq!(keys("what is on known.example.org"), vec!["domain"]);
         assert!(keys("what is on unknown.example.org").is_empty(), "unknown domains add no filter");
@@ -1487,6 +1561,14 @@ mod tests {
     }
 
     #[test]
+    fn legacy_mode_keeps_the_bare_word_rule() {
+        let legacy = filter_clauses(&db(), "what is an edge case in this test plan", None, AppFilter::Legacy).unwrap();
+        assert_eq!(legacy[0]["match"]["value"], "com.microsoft.edgemac");
+        let phrase = filter_clauses(&db(), "what is an edge case in this test plan", None, AppFilter::Phrase).unwrap();
+        assert!(phrase.is_empty());
+    }
+
+    #[test]
     fn retrieval_defaults_match_the_original_constants() {
         let p = Params::default();
         assert_eq!((p.prefetch, p.fused_limit, p.rrf_k, p.final_k), (80, 40, 60, 8));
@@ -1498,13 +1580,11 @@ mod tests {
     // ---- Known weaknesses. These fail today; remove `ignore` when the weakness is fixed.
 
     #[test]
-    #[ignore = "known weakness: query_filter treats the ordinary word 'edge' as the Edge browser and returns nothing else"]
     fn edge_case_is_not_an_app_filter() {
         assert_eq!(app_filter("what is an edge case in this test plan"), None);
     }
 
     #[test]
-    #[ignore = "known weakness: ordinary words 'terminal', 'notes' and 'messages' become hard app filters with no fallback"]
     fn ordinary_words_are_not_app_filters() {
         assert_eq!(app_filter("what is the terminal velocity of a skydiver"), None);
         assert_eq!(app_filter("what did I write in my notes about hiring"), None);
