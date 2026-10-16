@@ -10,7 +10,7 @@ evals/
   pages/<stem>.html          invented pages, styled like the real apps (open in Safari to capture)
   pages/<stem>.facts.json    planted facts, noise strings, logical app/url/time for each page
   corpus/<stem>.json         AX fixtures, one per page (hand_authored until captured, see CAPTURE.md)
-  gold/gold.jsonl            122 questions, 13 types, dev/test split
+  gold/gold.jsonl            124 questions, 13 types, dev/test split
   reports/                   baseline.json/.md, ablations/, ablations.md, analysis
   tools/                     corpus generator, report diff, paired bootstrap, ask regression check
   CAPTURE.md  export_fixtures.py   replace hand-authored trees with real Accessibility captures
@@ -32,7 +32,7 @@ Options: `--split dev|test|all` (default all), `--param key=value` (repeatable, 
 `<name>.<key>-<value>.json` and shares the base's index unless it changes `chunk_target`).
 Keys: `mode` (hybrid | dense_only | bm25_only), `rerank_bonus`, `filters`, `derived` (on | off),
 `rrf_k`, `prefetch`, `fused_limit`, `final_k`, `chunk_target`, `chunk_unit` (chars | bytes), `chunk_overlap` (percent), `chunk_boundaries` (on | off),
-`chunk_mode=legacy` (the pre-Fix-4 chunker), `app_filter` (phrase | legacy),
+`chunk_mode=legacy` (the pre-Fix-4 chunker), `prefix` (none | title | context: text embedded with each chunk), `app_filter` (phrase | legacy),
 `app_fallback` (empty | weak | off), `app_fallback_ratio`, `chunks_per_result`, `abstain=off` (zeroes every
 abstention threshold) and `abstain_score|support|dense|chunk|unseen|unseen_sim|ident|time_support`. `filters=off` disables the
 regex filters and the post-cut observation-time check.

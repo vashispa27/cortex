@@ -4,6 +4,7 @@ mod appscope;
 mod cleaner;
 mod eval;
 mod fixtures;
+mod prefix;
 
 use anyhow::{anyhow, bail, Context, Result};
 use chrono::{DateTime, Local, TimeZone, Utc};
@@ -87,6 +88,8 @@ struct Runtime {
     shard: EdgeShard,
     model: StaticModel,
     bm25: EdgeBm25,
+    /// Context prepended to chunk text before embedding; part of the index version.
+    prefix: prefix::Prefix,
 }
 
 fn main() -> Result<()> {
@@ -276,11 +279,11 @@ fn file_hash(path: &Path) -> Result<String> {
 }
 
 fn open_runtime(state: &Path, rebuild: bool) -> Result<Runtime> {
-    open_runtime_with(state, rebuild, None)
+    open_runtime_with(state, rebuild, None, prefix::Prefix::DEFAULT)
 }
 
 /// `model` lets offline evals reuse one loaded embedding model across state directories.
-fn open_runtime_with(state: &Path, rebuild: bool, model: Option<StaticModel>) -> Result<Runtime> {
+fn open_runtime_with(state: &Path, rebuild: bool, model: Option<StaticModel>, prefix_mode: prefix::Prefix) -> Result<Runtime> {
     let db = open_db(state)?;
     let stale: i64 = db.query_row("SELECT COUNT(*) FROM snapshots WHERE cleaner_version<?1", [cleaner::VERSION], |r| r.get(0))?;
     if stale > 0 {
@@ -291,8 +294,8 @@ fn open_runtime_with(state: &Path, rebuild: bool, model: Option<StaticModel>) ->
             r.get(0)
         })
         .optional()?;
-    if old.as_deref().is_some_and(|v| v != MODEL_VERSION) && !rebuild {
-        bail!("embedding model changed; run `open-memory capture --rebuild-index` to reindex originals in SQLite");
+    if old.as_deref().is_some_and(|v| v != prefix::index_version(prefix_mode)) && !rebuild {
+        bail!("embedding model or chunk context format changed; run `open-memory capture --rebuild-index` to reindex originals in SQLite");
     }
     let shard_dir = state.join("qdrant-edge");
     if rebuild || (old.is_none() && shard_dir.join("edge_config.json").exists()) {
@@ -347,12 +350,13 @@ fn open_runtime_with(state: &Path, rebuild: bool, model: Option<StaticModel>) ->
         fs::create_dir_all(&shard_dir)?;
         EdgeShard::new(&shard_dir, config)?
     };
-    db.execute("INSERT INTO index_meta(key,value) VALUES('model',?1) ON CONFLICT(key) DO UPDATE SET value=excluded.value", [MODEL_VERSION])?;
+    db.execute("INSERT INTO index_meta(key,value) VALUES('model',?1) ON CONFLICT(key) DO UPDATE SET value=excluded.value", [prefix::index_version(prefix_mode)])?;
     let mut runtime = Runtime {
         db,
         shard,
         model,
         bm25,
+        prefix: prefix_mode,
     };
     runtime.index_pending()?;
     Ok(runtime)
@@ -411,7 +415,7 @@ impl Runtime {
     }
     fn index_pending(&mut self) -> Result<usize> {
         let chunks = {
-            let mut stmt = self.db.prepare("SELECT c.id,c.snapshot_id,s.app_id,s.title,s.url,s.domain,s.source_type,c.body,c.start_byte,c.end_byte,s.first_seen_ms,s.last_seen_ms FROM chunks c JOIN snapshots s ON s.id=c.snapshot_id WHERE c.indexed=0 AND s.searchable=1 ORDER BY c.id LIMIT 100")?;
+            let mut stmt = self.db.prepare("SELECT c.id,c.snapshot_id,s.app_id,s.title,s.url,s.domain,s.source_type,c.body,c.start_byte,c.end_byte,s.first_seen_ms,s.last_seen_ms,s.body FROM chunks c JOIN snapshots s ON s.id=c.snapshot_id WHERE c.indexed=0 AND s.searchable=1 ORDER BY c.id LIMIT 100")?;
             let rows = stmt.query_map([], |r| {
                 Ok((
                     r.get::<_, i64>(0)?,
@@ -426,6 +430,7 @@ impl Runtime {
                     r.get::<_, i64>(9)?,
                     r.get::<_, i64>(10)?,
                     r.get::<_, i64>(11)?,
+                    r.get::<_, String>(12)?,
                 ))
             })?;
             rows.collect::<rusqlite::Result<Vec<_>>>()?
@@ -443,23 +448,25 @@ impl Runtime {
             })?;
             rows.collect::<rusqlite::Result<Vec<_>>>()?
         };
-        for (chunk_id, snapshot_id, app, _title, url, domain, source_type, body, start, end, first, last) in &chunks {
-            self.upsert_point((1_u64 << 61) + *chunk_id as u64, body, json!({"snapshot_id":snapshot_id,"chunk_id":chunk_id,"start_byte":start,"end_byte":end,"point_type":"chunk","app":app,"domain":domain,"url":url,"capture_time":first,"last_seen":last,"source_type":source_type,"model":MODEL_VERSION}))?;
+        let version = prefix::index_version(self.prefix);
+        for (chunk_id, snapshot_id, app, title, url, domain, source_type, body, start, end, first, last, snapshot_body) in &chunks {
+            let text = prefix::embed_text(self.prefix, &prefix::ChunkContext { title, app_id: app, domain: domain.as_deref(), first_seen_ms: *first, snapshot_body, start_byte: *start as usize }, body);
+            self.upsert_point((1_u64 << 61) + *chunk_id as u64, &text, json!({"snapshot_id":snapshot_id,"chunk_id":chunk_id,"start_byte":start,"end_byte":end,"point_type":"chunk","app":app,"domain":domain,"url":url,"capture_time":first,"last_seen":last,"source_type":source_type,"model":version}))?;
         }
         for (id, kind, body) in &derived {
             self.upsert_point(
                 (1_u64 << 62) + *id as u64,
                 body,
-                json!({"derived_id":id,"point_type":"derived","kind":kind,"model":MODEL_VERSION}),
+                json!({"derived_id":id,"point_type":"derived","kind":kind,"model":version}),
             )?;
         }
         let added = chunks.len() + derived.len();
         if added > 0 {
             self.shard.flush()?;
             let tx = self.db.transaction()?;
-            for (id, snapshot_id, _, _, _, _, _, _, _, _, _, _) in chunks {
+            for (id, snapshot_id, _, _, _, _, _, _, _, _, _, _, _) in chunks {
                 tx.execute("UPDATE chunks SET indexed=1 WHERE id=?1", [id])?;
-                tx.execute("UPDATE snapshots SET indexed=1,embedding_model=?2 WHERE id=?1", params![snapshot_id, MODEL_VERSION])?;
+                tx.execute("UPDATE snapshots SET indexed=1,embedding_model=?2 WHERE id=?1", params![snapshot_id, version])?;
             }
             for (id, _, body) in derived {
                 tx.execute(

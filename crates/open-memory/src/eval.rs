@@ -131,11 +131,12 @@ struct Variant {
     name: String,
     params: Params,
     chunking: cleaner::ChunkCfg,
+    prefix: prefix::Prefix,
     /// Which key/value this variant overrides relative to the base (for naming the output).
     sweep: Option<(String, String)>,
 }
 
-fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, key: &str, value: &str) -> Result<()> {
+fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, index_prefix: &mut prefix::Prefix, key: &str, value: &str) -> Result<()> {
     let flag = |v: &str| -> Result<bool> {
         match v {
             "on" | "true" | "1" => Ok(true),
@@ -169,6 +170,14 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, key: &str,
         }
         "chunk_overlap" => chunking.overlap_pct = value.parse()?,
         "chunk_boundaries" => chunking.boundaries = flag(value)?,
+        "prefix" => {
+            *index_prefix = match value {
+                "none" => prefix::Prefix::None,
+                "title" => prefix::Prefix::Title,
+                "context" => prefix::Prefix::Context,
+                _ => bail!("prefix must be none, title or context"),
+            }
+        }
         "chunk_mode" => {
             if value != "legacy" {
                 bail!("chunk_mode accepts only legacy (bytes, no overlap, plain cuts)");
@@ -213,7 +222,7 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, key: &str,
             }
         }
         "app_fallback_ratio" => params.app_fallback_ratio = value.parse()?,
-        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, chunk_unit, chunk_overlap, chunk_boundaries, chunk_mode, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support)"),
+        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, chunk_unit, chunk_overlap, chunk_boundaries, chunk_mode, prefix, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support)"),
     }
     Ok(())
 }
@@ -221,16 +230,18 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, key: &str,
 fn variants(args: &Args, now_ms: i64) -> Result<Vec<Variant>> {
     let mut base_params = Params { now_ms: Some(now_ms), ..Params::default() };
     let mut base_chunking = cleaner::DEFAULT_CFG;
+    let mut base_prefix = prefix::Prefix::DEFAULT;
     for (k, v) in &args.base {
-        apply_param(&mut base_params, &mut base_chunking, k, v)?;
+        apply_param(&mut base_params, &mut base_chunking, &mut base_prefix, k, v)?;
     }
-    let mut out = vec![Variant { name: "base".into(), params: base_params.clone(), chunking: base_chunking, sweep: None }];
+    let mut out = vec![Variant { name: "base".into(), params: base_params.clone(), chunking: base_chunking, prefix: base_prefix, sweep: None }];
     for (key, values) in &args.sweeps {
         for value in values {
             let mut p = base_params.clone();
             let mut t = base_chunking;
-            apply_param(&mut p, &mut t, key, value)?;
-            out.push(Variant { name: format!("{key}={value}"), params: p, chunking: t, sweep: Some((key.clone(), value.clone())) });
+            let mut px = base_prefix;
+            apply_param(&mut p, &mut t, &mut px, key, value)?;
+            out.push(Variant { name: format!("{key}={value}"), params: p, chunking: t, prefix: px, sweep: Some((key.clone(), value.clone())) });
         }
     }
     Ok(out)
@@ -916,10 +927,10 @@ pub fn run(args: &[String]) -> Result<()> {
     let selected: Vec<usize> = golds.iter().enumerate().filter(|(_, g)| args.split == "all" || g.split == args.split).map(|(i, _)| i).collect();
 
     let mut model: Option<StaticModel> = None;
-    let mut targets: Vec<cleaner::ChunkCfg> = Vec::new();
+    let mut targets: Vec<(cleaner::ChunkCfg, prefix::Prefix)> = Vec::new();
     for v in &variants {
-        if !targets.contains(&v.chunking) {
-            targets.push(v.chunking);
+        if !targets.contains(&(v.chunking, v.prefix)) {
+            targets.push((v.chunking, v.prefix));
         }
     }
     for (group, target) in targets.iter().enumerate() {
@@ -929,7 +940,7 @@ pub fn run(args: &[String]) -> Result<()> {
         }
         fs::create_dir_all(&state)?;
         fs::set_permissions(&state, fs::Permissions::from_mode(0o700))?;
-        let outcome = run_group(&args, &state, *target, model.take(), &variants, &corpus, &golds, &selected, &facts, now_ms);
+        let outcome = run_group(&args, &state, target.0, target.1, model.take(), &variants, &corpus, &golds, &selected, &facts, now_ms);
         let cleanup = |state: &Path| if !args.keep_state { let _ = fs::remove_dir_all(state); } else { eprintln!("kept state dir {}", state.display()); };
         match outcome {
             Ok(m) => {
@@ -950,6 +961,7 @@ fn run_group(
     args: &Args,
     state: &Path,
     chunking: cleaner::ChunkCfg,
+    index_prefix: prefix::Prefix,
     model: Option<StaticModel>,
     all_variants: &[Variant],
     corpus: &[Loaded],
@@ -961,7 +973,7 @@ fn run_group(
     if model.is_none() && env::var_os("OPEN_MEMORY_MODEL_DIR").is_none() {
         env::set_var("OPEN_MEMORY_MODEL_DIR", resolve_model_dir()?);
     }
-    let mut runtime = open_runtime_with(state, false, model)?;
+    let mut runtime = open_runtime_with(state, false, model, index_prefix)?;
     let ingest_started = std::time::Instant::now();
     let ingested = fixtures::ingest(&mut runtime, state, corpus, &chunking)?;
     let ingest_ms = ingest_started.elapsed().as_secs_f64() * 1000.0;
@@ -997,7 +1009,7 @@ fn run_group(
     let probe_part = probes(&runtime.db, now_ms, &all_variants[0].params)?;
     let index_bytes = dir_size(state);
 
-    for variant in all_variants.iter().filter(|v| v.chunking == chunking) {
+    for variant in all_variants.iter().filter(|v| v.chunking == chunking && v.prefix == index_prefix) {
         let mut results = Vec::new();
         let mut latencies = Vec::new();
         for &i in selected {
@@ -1037,7 +1049,7 @@ fn run_group(
                 "variant": variant.name,
                 "git_commit": git(&["rev-parse", "HEAD"]).unwrap_or_else(|| "unknown".into()),
                 "git_dirty_in_inputs": dirty,
-                "model_version": MODEL_VERSION, "cleaner_version": cleaner::VERSION,
+                "model_version": prefix::index_version(index_prefix), "prefix": index_prefix, "cleaner_version": cleaner::VERSION,
                 "params": variant.params, "chunking": chunking,
                 "split": args.split, "timezone": "UTC", "injected_now_ms": now_ms,
                 "corpus_fixtures": corpus.iter().map(|l| l.id.as_str()).collect::<BTreeSet<_>>().len(),"corpus_sightings": corpus.len(), "corpus_provenance": provenance,

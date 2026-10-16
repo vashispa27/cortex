@@ -117,6 +117,39 @@ fn is_boilerplate(value: &str, chatgpt: bool, x_chat: bool) -> bool {
         || value.trim() == "View keyboard shortcuts"))
 }
 
+fn time_of_day(value: &str) -> bool {
+    static TIME: OnceLock<Regex> = OnceLock::new();
+    TIME.get_or_init(|| Regex::new(r"(?i)^\d{1,2}:\d{2}\s*[AP]M$").unwrap()).is_match(value.trim())
+}
+
+/// Chat UIs such as Slack expose the sender as a button and the message time as the next link in the
+/// same container. The button would be dropped as an action control, losing who said what; detect
+/// the pair so the sender is kept. Returns button index -> (sender, time) and the indexes of the
+/// time nodes it consumes.
+fn sender_pairs(nodes: &[AxNode]) -> (std::collections::HashMap<usize, (String, String)>, std::collections::HashSet<usize>) {
+    let mut pairs = std::collections::HashMap::new();
+    let mut consumed = std::collections::HashSet::new();
+    for i in 0..nodes.len().saturating_sub(1) {
+        let (button, link) = (&nodes[i], &nodes[i + 1]);
+        let sender = button.value.as_deref().or(button.name.as_deref()).unwrap_or("").trim();
+        let time = link.value.as_deref().or(link.name.as_deref()).unwrap_or("").trim();
+        let words = sender.split_whitespace().count();
+        if button.role == "AXButton" && link.role == "AXLink" && time_of_day(time)
+            && (1..=4).contains(&words) && sender.chars().count() <= 40 && !is_action(sender)
+            && !sender.chars().any(|c| c.is_ascii_digit())
+            && button.extra.get("ancestor_path") == link.extra.get("ancestor_path")
+        {
+            pairs.insert(i, (sender.to_owned(), time.to_owned()));
+            consumed.insert(i + 1);
+            // The visible time text nested inside the link repeats it.
+            if nodes.get(i + 2).is_some_and(|n| n.value.as_deref().map(str::trim) == Some(time)) {
+                consumed.insert(i + 2);
+            }
+        }
+    }
+    (pairs, consumed)
+}
+
 pub fn clean(nodes: &[AxNode], app: &str, url: Option<&str>, _title: &str) -> Cleaned {
     let chatgpt = url.is_some_and(|u| u.contains("chatgpt.com") || u.contains("chat.openai.com"))
         || app.to_lowercase().contains("chatgpt");
@@ -128,6 +161,7 @@ pub fn clean(nodes: &[AxNode], app: &str, url: Option<&str>, _title: &str) -> Cl
     let mut retained_count = 0_usize;
     let mut confident_main = false;
     let mut last_speaker_time: Option<(String, String)> = None;
+    let (senders, sender_times) = sender_pairs(nodes);
     for (index, node) in nodes.iter().enumerate() {
         let value = node.value.as_deref().or(node.name.as_deref()).unwrap_or("");
         let value = value.replace("\r\n", "\n").replace('\r', "\n");
@@ -146,6 +180,10 @@ pub fn clean(nodes: &[AxNode], app: &str, url: Option<&str>, _title: &str) -> Cl
             ("drop", "app_boilerplate_v1")
         } else if x_chat && speaker_time(node).is_some_and(|(_, time)| trimmed == time) {
             ("drop", "displayed_time_attached")
+        } else if senders.contains_key(&index) {
+            ("keep", "sender_label")
+        } else if sender_times.contains(&index) {
+            ("drop", "displayed_time_attached")
         } else if is_action(trimmed) {
             ("drop", "action_control")
         } else if matches!(role, "AXButton" | "AXRadioButton" | "AXMenuItem" | "AXTab") {
@@ -160,6 +198,18 @@ pub fn clean(nodes: &[AxNode], app: &str, url: Option<&str>, _title: &str) -> Cl
             ("keep", "content")
         };
         decisions.push(Decision { node: index, region: node_region, class, reason });
+        if class == "keep" && reason == "sender_label" {
+            if node_region == "main" { confident_main = true; }
+            retained_count += 1;
+            let label = senders.get(&index).cloned();
+            if last_speaker_time.as_ref() != label.as_ref() {
+                if let Some((sender, time)) = &label {
+                    parts.push(Part { text: format!("{sender} ({time}):"), role: "AXHeading".to_owned() });
+                }
+            }
+            last_speaker_time = label;
+            continue;
+        }
         if class == "keep" {
             if node_region == "main" { confident_main = true; }
             retained_count += 1;
@@ -646,5 +696,27 @@ mod tests {
         for cfg in [DEFAULT_CFG, overlap_cfg(10), ChunkCfg { target: 7, ..DEFAULT_CFG }, ChunkCfg { target: 1, chars: false, ..DEFAULT_CFG }] {
             assert_covering("दाल 😀 Ship it. Done!\nline two\nQ: why?\nA: because.\n", &cfg);
         }
+    }
+
+    #[test]
+    fn slack_style_sender_buttons_keep_who_said_what() {
+        let list: Vec<(&str, &str)> = vec![("AXWindow", "Slack"), ("AXWebArea", "Slack"), ("AXGroup", "Message list")];
+        let link_path: Vec<(&str, &str)> = vec![("AXWindow", "Slack"), ("AXWebArea", "Slack"), ("AXGroup", "Message list"), ("AXLink", "9:12 AM")];
+        let nodes = vec![
+            ax("AXButton", "Message list / Lokesh Mehta", "Lokesh Mehta", &list),
+            ax("AXLink", "Message list / 9:12 AM", "9:12 AM", &list),
+            ax("AXStaticText", "Message list", "9:12 AM", &link_path),
+            ax("AXStaticText", "Message list", "Standup moved to 9:30 AM.", &list),
+            ax("AXButton", "Message list / Priya Raman", "Priya Raman", &list),
+            ax("AXLink", "Message list / 9:14 AM", "9:14 AM", &list),
+            ax("AXStaticText", "Message list", "Works for me.", &list),
+            ax("AXButton", "Message list / Reply", "Reply", &list),
+        ];
+        let cleaned = clean(&nodes, "com.tinyspeck.slackmacgap", None, "# standup");
+        assert_eq!(cleaned.body, "Lokesh Mehta (9:12 AM):\nStandup moved to 9:30 AM.\nPriya Raman (9:14 AM):\nWorks for me.");
+        assert!(cleaned.decisions.iter().any(|d| d.reason == "sender_label"));
+        // A button that is not followed by a time link stays an action control.
+        let lone = vec![ax("AXButton", "x", "Lokesh Mehta", &list), ax("AXStaticText", "x", "hello there", &list)];
+        assert_eq!(clean(&lone, "com.tinyspeck.slackmacgap", None, "t").body, "hello there");
     }
 }
