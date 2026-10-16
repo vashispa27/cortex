@@ -1,4 +1,5 @@
 #![cfg(target_os = "macos")]
+mod abstain;
 mod appscope;
 mod cleaner;
 mod eval;
@@ -1035,6 +1036,16 @@ struct Params {
     /// Chunks of one snapshot shown and sent as evidence for its result. 1 reproduces the
     /// original single-chunk behaviour (including the whole-body snippet).
     chunks_per_result: usize,
+    /// Say "no matching evidence" instead of listing weak results; see `abstain`.
+    abstain_score: f64,
+    abstain_support: f64,
+    abstain_dense: f64,
+    abstain_chunk: f64,
+    abstain_unseen: f64,
+    abstain_unseen_sim: f64,
+    abstain_ident: f64,
+    /// With a date window in the question, results that share too few of its terms are not an answer.
+    abstain_time_support: f64,
 }
 
 impl Default for Params {
@@ -1053,6 +1064,16 @@ impl Default for Params {
             app_fallback: AppFallback::Empty,
             app_fallback_ratio: 0.75,
             chunks_per_result: 3,
+            abstain_score: 0.0,
+            abstain_support: 0.0,
+            abstain_dense: 0.0,
+            abstain_chunk: 0.0,
+            // Chosen on the dev split (evals/reports/fixes/03-abstention-dev-curve.md).
+            abstain_unseen: 0.33,
+            abstain_unseen_sim: 0.23,
+            abstain_ident: 1.0,
+            // Midpoint between the dev time-scoped absent (0.0) and the lowest dev time-scoped answerable (0.33).
+            abstain_time_support: 0.25,
         }
     }
 }
@@ -1090,6 +1111,16 @@ struct Hit {
 }
 
 struct Retrieval {
+    /// Normalised best score and lexical support of the best results (see `abstain`).
+    score_norm: f64,
+    support: f64,
+    dense_sim: f64,
+    chunk_sim: f64,
+    chunk_support: f64,
+    unseen: f64,
+    ident: f64,
+    /// The abstention rule says the results are too weak to present as an answer.
+    abstained: bool,
     /// True when an app-scoped search was abandoned and the unfiltered results are returned.
     app_fallback: bool,
     /// Filter clauses `query_filter` produced (empty when none or filters are off).
@@ -1105,6 +1136,19 @@ struct Retrieval {
 }
 
 fn retrieve(runtime: &mut Runtime, question: &str, params: &Params) -> Result<Retrieval> {
+    let mut r = retrieve_scoped(runtime, question, params)?;
+    r.support = abstain::support(&r.hits, question);
+    r.dense_sim = abstain::dense_sim(runtime, &r.hits, question)?;
+    r.chunk_sim = abstain::chunk_sim(runtime, &r.ranked, question)?;
+    r.chunk_support = abstain::chunk_support(&r.ranked, question);
+    r.unseen = abstain::unseen_fraction(&runtime.db, question)?;
+    r.ident = abstain::identifier_support(&r.hits, question);
+    r.score_norm = abstain::score_norm(r.hits.first().map_or(0.0, |h| h.source.score as f64), params);
+    r.abstained = abstain::decide(&r, params);
+    Ok(r)
+}
+
+fn retrieve_scoped(runtime: &mut Runtime, question: &str, params: &Params) -> Result<Retrieval> {
     let first = retrieve_with(runtime, question, params, false)?;
     let scoped = first.filter.iter().any(|c| c["key"] == "app");
     if !scoped || params.app_fallback == AppFallback::Off {
@@ -1315,6 +1359,14 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
     });
     keyed.truncate(params.final_k);
     Ok(Retrieval {
+        score_norm: 0.0,
+        support: 0.0,
+        dense_sim: 0.0,
+        chunk_sim: 0.0,
+        chunk_support: 0.0,
+        unseen: 0.0,
+        ident: 1.0,
+        abstained: false,
         app_fallback: false,
         filter: reported_clauses,
         time,
@@ -1385,7 +1437,12 @@ fn answer(runtime: &mut Runtime, question: &str) -> Result<String> {
         return Ok("No earlier conversation evidence is available in this state directory. Ask about the conversation first.".into());
     }
     let params = Params::default();
-    let hits: Vec<Hit> = retrieve(runtime, question, &params)?.hits;
+    let retrieval = retrieve(runtime, question, &params)?;
+    if retrieval.abstained && !retrieval.hits.is_empty() {
+        let weak = retrieval.hits.iter().take(3).map(|h| format!("[{}] {}", h.source.id, h.source.title)).collect::<Vec<_>>().join("; ");
+        return Ok(format!("No matching captured evidence for this question.\nClosest captured pages (weak matches, probably not what you asked): {weak}"));
+    }
+    let hits: Vec<Hit> = retrieval.hits;
     let sources: Vec<&Source> = hits.iter().map(|hit| &hit.source).collect();
     if sources.is_empty() {
         return Ok("No matching captured evidence yet. Capture may be incomplete if the app did not expose text through Accessibility.".into());

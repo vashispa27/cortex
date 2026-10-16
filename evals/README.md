@@ -32,7 +32,8 @@ Options: `--split dev|test|all` (default all), `--param key=value` (repeatable, 
 `<name>.<key>-<value>.json` and shares the base's index unless it changes `chunk_target`).
 Keys: `mode` (hybrid | dense_only | bm25_only), `rerank_bonus`, `filters`, `derived` (on | off),
 `rrf_k`, `prefetch`, `fused_limit`, `final_k`, `chunk_target` (bytes), `app_filter` (phrase | legacy),
-`app_fallback` (empty | weak | off), `app_fallback_ratio`, `chunks_per_result`. `filters=off` disables the
+`app_fallback` (empty | weak | off), `app_fallback_ratio`, `chunks_per_result`, `abstain=off` (zeroes every
+abstention threshold) and `abstain_score|support|dense|chunk|unseen|unseen_sim|ident|time_support`. `filters=off` disables the
 regex filters and the post-cut observation-time check.
 
 ```bash
@@ -70,9 +71,12 @@ in the `timing` block.
 * **Fact-split rate**: share of distinct gold `(fixture, answer_text)` pairs that no single chunk of
   that fixture contains whole. `stale_or_wrong_text_ranked_above_answer` uses the optional gold field
   `wrong_text`.
-* **Abstention**: the pipeline has no threshold; the report records whether absent questions still
-  returned results and the top-score distributions (plus AUROC of answerable vs absent) for later
-  calibration on `dev`.
+* **Abstention**: `ask` prints "No matching captured evidence" when the rule in `abstain.rs` fires. The report
+  gives, for absent questions, how many abstained, and for answerable ones how many were wrongly abstained
+  (and how many of those would have hit): always read the two together. Per-query signals (`score_norm`,
+  `support`, `dense_sim`, `chunk_sim`, `unseen`, `ident`) are recorded for every query; thresholds are
+  chosen on `dev` only with `tools/abstention_curve.py` and reported on `test` (`by_split` in each report).
+  RRF scores are rank based, so `score_norm` divides by the best attainable score (rank 1 in every retriever).
 * Tokens are not reported: model2vec-rs does not expose its tokenizer, so bytes, characters and
   whitespace words are given instead.
 

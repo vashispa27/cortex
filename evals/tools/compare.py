@@ -85,8 +85,8 @@ def main():
                 out += block(base_q, var_q, tids, rng, "type: " + t)
         absent = [i for i in base_q if base_q[i]["expect_abstain"] and i in var_q]
         if absent:
-            n_b = sum(1 for i in absent if not base_q[i]["zero_results"])
-            n_v = sum(1 for i in absent if not var_q[i]["zero_results"])
+            n_b = sum(1 for i in absent if base_q[i].get("n_final", 1) > 0)
+            n_v = sum(1 for i in absent if var_q[i].get("n_final", 1) > 0)
             out.append("Absent questions that still returned results: base %d/%d, variant %d/%d." % (n_b, len(absent), n_v, len(absent)))
             out.append("")
     text = "\n".join(out)

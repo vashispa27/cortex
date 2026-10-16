@@ -168,6 +168,27 @@ fn apply_param(params: &mut Params, chunk_target: &mut usize, key: &str, value: 
             }
         }
         "chunks_per_result" => params.chunks_per_result = value.parse::<usize>()?.max(1),
+        "abstain" => {
+            if value != "off" {
+                bail!("abstain accepts only off (zero every threshold); set the thresholds individually otherwise");
+            }
+            params.abstain_score = 0.0;
+            params.abstain_support = 0.0;
+            params.abstain_dense = 0.0;
+            params.abstain_chunk = 0.0;
+            params.abstain_unseen = 0.0;
+            params.abstain_unseen_sim = 0.0;
+            params.abstain_ident = 0.0;
+            params.abstain_time_support = 0.0;
+        }
+        "abstain_score" => params.abstain_score = value.parse()?,
+        "abstain_support" => params.abstain_support = value.parse()?,
+        "abstain_dense" => params.abstain_dense = value.parse()?,
+        "abstain_chunk" => params.abstain_chunk = value.parse()?,
+        "abstain_ident" => params.abstain_ident = value.parse()?,
+        "abstain_time_support" => params.abstain_time_support = value.parse()?,
+        "abstain_unseen" => params.abstain_unseen = value.parse()?,
+        "abstain_unseen_sim" => params.abstain_unseen_sim = value.parse()?,
         "app_fallback" => {
             params.app_fallback = match value {
                 "off" => AppFallback::Off,
@@ -177,7 +198,7 @@ fn apply_param(params: &mut Params, chunk_target: &mut usize, key: &str, value: 
             }
         }
         "app_fallback_ratio" => params.app_fallback_ratio = value.parse()?,
-        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, app_filter, app_fallback, app_fallback_ratio, chunks_per_result)"),
+        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support)"),
     }
     Ok(())
 }
@@ -301,6 +322,9 @@ struct QueryResult {
     gold: usize,
     chunk_first: Vec<Option<usize>>,
     final_first: Vec<Option<usize>>,
+    /// Final ranks before the abstention rule (what the results would have been).
+    raw_final_first: Vec<Option<usize>>,
+    abstained: bool,
     chunk_ndcg10: f64,
     n_final: usize,
     crowd: [(usize, usize); 2],
@@ -392,7 +416,10 @@ fn evaluate_query(rt: &mut Runtime, index: usize, gold: &Gold, params: &Params, 
         .iter()
         .map(|h| norm(&format!("{}\n{}", evidence_text(h), evidence_snippet(h, &gold.query, params.chunks_per_result))))
         .collect();
-    let final_first: Vec<Option<usize>> = answers.iter().map(|a| first_rank(&blobs, a)).collect();
+    let raw_final_first: Vec<Option<usize>> = answers.iter().map(|a| first_rank(&blobs, a)).collect();
+    // An abstained query shows nothing: for final-level metrics it has no results.
+    let abstained = retrieval.abstained;
+    let final_first: Vec<Option<usize>> = if abstained { vec![None; answers.len()] } else { raw_final_first.clone() };
     let right_rank = final_first.iter().flatten().min().copied();
     let wrong_before_right = if wrong.is_empty() {
         None
@@ -402,8 +429,9 @@ fn evaluate_query(rt: &mut Runtime, index: usize, gold: &Gold, params: &Params, 
     };
 
     // Near-duplicate crowding of the final slots, by word-set overlap of the displayed bodies.
-    let sets: Vec<HashSet<String>> = retrieval.hits.iter().map(|h| words(&h.source.body)).collect();
-    let mut crowd = [(0_usize, retrieval.hits.len()); 2];
+    let shown: &[Hit] = if abstained { &[] } else { &retrieval.hits };
+    let sets: Vec<HashSet<String>> = shown.iter().map(|h| words(&h.source.body)).collect();
+    let mut crowd = [(0_usize, shown.len()); 2];
     for (t, threshold) in CROWD_THRESHOLDS.iter().enumerate() {
         for j in 1..sets.len() {
             if (0..j).any(|i| jaccard(&sets[i], &sets[j]) >= *threshold) {
@@ -478,19 +506,21 @@ fn evaluate_query(rt: &mut Runtime, index: usize, gold: &Gold, params: &Params, 
         "filter_excluded_all_relevant": excluded_all, "filter_excluded_any_relevant": excluded_any,
         "excluded_by": exclusion_keys, "observation_dropped": retrieval.observation_dropped,
         "zero_results": retrieval.hits.is_empty(), "app_filter_fallback": app_fallback,
-        "n_ranked": retrieval.ranked.len(), "n_collapsed": retrieval.collapsed, "n_final": retrieval.hits.len(),
+        "abstained": abstained, "support": round(retrieval.support), "dense_sim": round(retrieval.dense_sim), "chunk_sim": round(retrieval.chunk_sim), "chunk_support": round(retrieval.chunk_support), "unseen": round(retrieval.unseen), "has_time_window": retrieval.time.is_some(), "ident": round(retrieval.ident), "score_norm": round(retrieval.score_norm),
+        "would_have_hit": raw_final_first.iter().any(|f| f.is_some()),
+        "n_ranked": retrieval.ranked.len(), "n_collapsed": retrieval.collapsed, "n_final": shown.len(),
         "chunk_first_hit_rank": chunk_first, "final_first_hit_rank": final_first,
         "chunk_found_final_lost": chunk_found_final_lost,
         "wrong_before_right": wrong_before_right,
         "top_score_chunk": top_chunk_score.map(|s| round(s * 1e6) / 1e6 * 1.0),
         "top_score_final": top_final_score.map(|s| round(s * 1e6) / 1e6 * 1.0),
         "derived_in_top10": derived_top10,
-        "near_duplicate_slots": {"jaccard_0.8": crowd[0].0, "jaccard_0.5": crowd[1].0, "final_slots": retrieval.hits.len()},
+        "near_duplicate_slots": {"jaccard_0.8": crowd[0].0, "jaccard_0.5": crowd[1].0, "final_slots": shown.len()},
         "top5_chunks": top5, "final": final_view,
     });
     Ok((
         QueryResult {
-            gold: index, chunk_first, final_first, chunk_ndcg10, n_final: retrieval.hits.len(), crowd,
+            gold: index, chunk_first, final_first, raw_final_first, abstained, chunk_ndcg10, n_final: shown.len(), crowd,
             derived_top10, top10_len: top10.len(), top_chunk_score, top_final_score,
             zero: retrieval.hits.is_empty(), has_filter: !retrieval.filter.is_empty(), has_app_filter, app_fallback,
             excluded_all, excluded_any, obs_dropped: retrieval.observation_dropped, wrong_before_right,
@@ -567,7 +597,10 @@ fn aggregate(results: &[&QueryResult], golds: &[Gold], final_k: usize) -> Value 
             "observation_check_dropped_hits": results.iter().map(|r| r.obs_dropped).sum::<usize>(),
         },
         "abstention": {
-            "absent_queries_returning_results": rate(absent.iter().filter(|r| !r.zero).count(), absent.len()),
+            "absent_queries_returning_results": rate(absent.iter().filter(|r| r.n_final > 0).count(), absent.len()),
+            "absent_queries_abstained": rate(absent.iter().filter(|r| r.n_final == 0).count(), absent.len()),
+            "answerable_wrongly_abstained": rate(answerable.iter().filter(|r| r.abstained).count(), n),
+            "answerable_wrongly_abstained_that_would_have_hit": rate(answerable.iter().filter(|r| r.abstained && r.raw_final_first.iter().any(|f| f.is_some())).count(), n),
             "top_chunk_score_absent": dist(&abs_scores), "top_chunk_score_answerable": dist(&ans_scores),
             "top_final_score_absent": dist(&abs_final), "top_final_score_answerable": dist(&ans_final),
             "auroc_answerable_vs_absent_chunk_score": auroc(&ans_scores, &abs_scores).map(round),
