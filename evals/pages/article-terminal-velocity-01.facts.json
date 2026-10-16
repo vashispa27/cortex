@@ -2,6 +2,7 @@
  "stem": "article-terminal-velocity-01",
  "html": "article-terminal-velocity-01.html",
  "observed_at": "2026-10-09T12:00:00Z",
+ "also_observed_at": [],
  "logical": {
   "app_id": "com.apple.Safari",
   "title": "What is terminal velocity? - Physics Daily",

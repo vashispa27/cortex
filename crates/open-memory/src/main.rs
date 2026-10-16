@@ -54,7 +54,7 @@ struct AxWindow {
     focus_name: Option<String>,
     roots: Vec<AxNode>,
 }
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 struct AxNode {
     role: String,
     name: Option<String>,

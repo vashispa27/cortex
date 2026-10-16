@@ -11,9 +11,10 @@ from templates import (chatgpt_page, xchat_page, slack_page, article_page, email
 SPECS = []
 
 
-def add(page, observed, facts, noise=(), searchable=True, logical=None, tags=()):
+def add(page, observed, facts, noise=(), searchable=True, logical=None, tags=(), also_observed=()):
     SPECS.append(dict(page=page, observed=observed, facts=list(facts), noise=list(noise),
-                      searchable=searchable, logical=logical or {}, tags=list(tags)))
+                      searchable=searchable, logical=logical or {}, tags=list(tags),
+                      also_observed=list(also_observed)))
 
 
 CHATGPT_NOISE = ["ChatGPT can make mistakes. Check important info.", "Rate response",
@@ -458,7 +459,7 @@ add(email_page(
     "2026-10-13T09:00:00Z",
     ["Total due: €2,380.00.", "Payment is due by 30 October 2026.", "Bank transfer reference: HP-4471-2026."],
     ["Archive", "Reply All", "Mailboxes", "Your hold is ready", "Monthly statement"],
-    tags=["email"])
+    tags=["email", "seen_again"], also_observed=["2026-10-16T09:00:00Z"])
 
 add(email_page(
     "email-flight-confirmation-01", "Your booking confirmation - MR 1347",

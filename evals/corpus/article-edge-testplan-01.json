@@ -5,6 +5,7 @@
  "url": "https://qa.example.org/plans/checkout-test-plan",
  "source_type": "browser",
  "observed_ms": 1792145700000,
+ "also_observed_ms": [],
  "focus_role": "",
  "focus_name": "",
  "limitations": [],

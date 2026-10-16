@@ -2,6 +2,9 @@
  "stem": "email-invoice-4471-01",
  "html": "email-invoice-4471-01.html",
  "observed_at": "2026-10-13T09:00:00Z",
+ "also_observed_at": [
+  "2026-10-16T09:00:00Z"
+ ],
  "logical": {
   "app_id": "com.apple.mail",
   "title": "Invoice 4471 - Harbor Print",
@@ -10,7 +13,8 @@
  },
  "expect_searchable": true,
  "tags": [
-  "email"
+  "email",
+  "seen_again"
  ],
  "facts": [
   {

@@ -2,6 +2,7 @@
  "stem": "slack-standup-thu-01",
  "html": "slack-standup-thu-01.html",
  "observed_at": "2026-10-15T09:40:00Z",
+ "also_observed_at": [],
  "logical": {
   "app_id": "com.tinyspeck.slackmacgap",
   "title": "# standup - Northwind - Slack",

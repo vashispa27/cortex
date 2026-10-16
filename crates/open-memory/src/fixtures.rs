@@ -4,13 +4,17 @@
 
 use super::*;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct Fixture {
     pub app_id: String,
     pub title: String,
     pub url: Option<String>,
     pub source_type: Option<String>,
     pub observed_ms: i64,
+    /// Later sightings of the identical page (the capture loop sees an open page again and again).
+    /// Each is ingested as a repeat observation of the same snapshot.
+    #[serde(default)]
+    pub also_observed_ms: Vec<i64>,
     #[serde(default)]
     pub focus_role: Option<String>,
     #[serde(default)]
@@ -42,7 +46,8 @@ pub struct Ingested {
 }
 
 /// Reads `*.json` fixtures (files starting with `_` are ignored) ordered by
-/// (observed_ms, id) so ingest order, and therefore snapshot ids, are deterministic.
+/// (observed_ms, id) so ingest order, and therefore snapshot ids, are deterministic. A fixture
+/// with `also_observed_ms` yields one entry per sighting, all under the same id.
 pub fn load_corpus(dir: &Path) -> Result<Vec<Loaded>> {
     let mut loaded = Vec::new();
     for entry in fs::read_dir(dir).with_context(|| format!("cannot read corpus {}", dir.display()))? {
@@ -54,6 +59,12 @@ pub fn load_corpus(dir: &Path) -> Result<Vec<Loaded>> {
         let text = fs::read_to_string(&path)?;
         let fixture: Fixture = serde_json::from_str(&text)
             .with_context(|| format!("invalid fixture {}", path.display()))?;
+        for later in fixture.also_observed_ms.clone() {
+            let mut repeat = fixture.clone();
+            repeat.observed_ms = later;
+            repeat.also_observed_ms.clear();
+            loaded.push(Loaded { id: stem.to_owned(), fixture: repeat });
+        }
         loaded.push(Loaded { id: stem.to_owned(), fixture });
     }
     loaded.sort_by(|a, b| (a.fixture.observed_ms, &a.id).cmp(&(b.fixture.observed_ms, &b.id)));

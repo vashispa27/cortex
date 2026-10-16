@@ -2,6 +2,7 @@
  "stem": "chatgpt-budget-v1",
  "html": "chatgpt-budget-v1.html",
  "observed_at": "2026-10-10T20:05:00Z",
+ "also_observed_at": [],
  "logical": {
   "app_id": "com.google.Chrome",
   "title": "Monthly budget planning - ChatGPT",

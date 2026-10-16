@@ -593,6 +593,22 @@ fn intrinsics(
         y.push(b.len() as f64);
     }
     let per_snapshot: Vec<f64> = by_snapshot.values().map(|v| v.len() as f64).collect();
+    // How much meaning a chunk carries on its own: chunks are embedded without title, app or
+    // speaker, so tiny chunks and chunks that share no word with their page title are the ones
+    // that depend on context the index never sees.
+    let mut titles: HashMap<i64, HashSet<String>> = HashMap::new();
+    {
+        let mut stmt = rt.db.prepare("SELECT id,title FROM snapshots")?;
+        for row in stmt.query_map([], |r| Ok((r.get::<_, i64>(0)?, r.get::<_, String>(1)?)))? {
+            let (id, title) = row?;
+            titles.insert(id, words(&title).into_iter().filter(|w| w.chars().count() > 3).collect());
+        }
+    }
+    let without_title = chunk_rows.iter().filter(|(_, s, b)| {
+        let t = &titles[s];
+        !t.is_empty() && words(b).is_disjoint(t)
+    }).count();
+    let tiny = chunk_rows.iter().filter(|(_, _, b)| b.len() < 100).count();
 
     // Fact-split rate: a gold answer that no single chunk of its fixture contains whole.
     let mut seen = BTreeSet::new();
@@ -670,7 +686,7 @@ fn intrinsics(
     let mut per_fixture = Vec::new();
     let (mut facts_total, mut facts_kept, mut noise_total, mut noise_leaked, mut fixtures_leaking) = (0, 0, 0, 0, 0);
     let mut nav_ok = Vec::new();
-    for item in ingested {
+    for item in ingested.iter().filter(|i| i.is_new || !ingested.iter().any(|j| j.fixture == i.fixture && j.is_new)) {
         let f = facts.get(&item.fixture);
         let body = norm(&item.body);
         let (mut lost, mut leaked) = (Vec::new(), Vec::new());
@@ -679,9 +695,14 @@ fn intrinsics(
                 facts_total += 1;
                 if body.contains(&norm(&fact.text)) { facts_kept += 1 } else { lost.push(json!({"id": fact.id, "text": fact.text})) }
             }
+            let body_lines: Vec<String> = item.body.lines().map(norm).collect();
             for noise in &f.noise_strings {
                 noise_total += 1;
-                if body.contains(&norm(noise)) {
+                // A leak is a body line equal to the UI string, or (for multi-word strings) the
+                // string embedded in a longer line. Substring-only matching would flag "Send"
+                // inside ordinary sentences.
+                let n = norm(noise);
+                if body_lines.iter().any(|l| *l == n) || (n.split(' ').count() >= 3 && body.contains(&n)) {
                     noise_leaked += 1;
                     leaked.push(noise.clone());
                 }
@@ -719,6 +740,10 @@ fn intrinsics(
             "chunks_per_snapshot": dist(&per_snapshot), "bytes": dist(&bytes), "chars": dist(&chars),
             "words": dist(&word_counts),
             "tokens": "not available: Model2Vec's tokenizer is not exposed by model2vec-rs; words reported instead",
+            "context": {
+                "chunks_sharing_no_word_with_their_page_title": rate(without_title, chunk_rows.len()),
+                "chunks_under_100_bytes": rate(tiny, chunk_rows.len()),
+            },
             "chars_per_chunk_non_english": dist(&ne_chars), "chars_per_chunk_english": dist(&en_chars),
             "bytes_per_chunk_non_english": dist(&ne_bytes), "bytes_per_chunk_english": dist(&en_bytes),
             "fact_split": {
@@ -741,7 +766,7 @@ fn intrinsics(
         "cleaner": {
             "planted_facts_surviving_cleaning": rate(facts_kept, facts_total),
             "noise_strings_leaked_into_body": rate(noise_leaked, noise_total),
-            "fixtures_with_any_noise_leak": rate(fixtures_leaking, ingested.len()),
+            "fixtures_with_any_noise_leak": rate(fixtures_leaking, per_fixture.len()),
             "navigation_only_fixtures": nav_ok,
             "node_decisions": drop_reasons,
             "per_fixture": per_fixture,
@@ -765,6 +790,24 @@ fn probes(db: &Connection, now_ms: i64) -> Result<Value> {
 }
 
 // ------------------------------------------------------------------------------- driver
+
+/// Where the pinned embedding model comes from when `OPEN_MEMORY_MODEL_DIR` is not set: an
+/// existing Hugging Face hub cache entry for the pinned revision, else a download (checksum
+/// verified) into `<repo>/target/eval-cache`, which later runs reuse. Never the user's state dir.
+fn resolve_model_dir() -> Result<PathBuf> {
+    if let Some(home) = env::var_os("HOME") {
+        let hub = PathBuf::from(home)
+            .join(".cache/huggingface/hub/models--minishlab--potion-base-32M/snapshots")
+            .join(MODEL_REVISION);
+        if hub.join("model.safetensors").is_file() && file_hash(&hub.join("model.safetensors"))? == MODEL_SHA256 {
+            return Ok(hub);
+        }
+    }
+    let cache = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../target/eval-cache");
+    fs::create_dir_all(&cache)?;
+    eprintln!("embedding model not found locally; downloading the pinned revision into {}", cache.display());
+    download_model(&cache)
+}
 
 pub fn run(args: &[String]) -> Result<()> {
     let args = parse_args(args)?;
@@ -848,10 +891,7 @@ fn run_group(
     now_ms: i64,
 ) -> Result<StaticModel> {
     if model.is_none() && env::var_os("OPEN_MEMORY_MODEL_DIR").is_none() {
-        // Reuse one downloaded copy across runs: <repo>/target/eval-cache/models/<revision>.
-        let cache = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../target/eval-cache");
-        fs::create_dir_all(&cache)?;
-        env::set_var("OPEN_MEMORY_MODEL_DIR", download_model(&cache)?);
+        env::set_var("OPEN_MEMORY_MODEL_DIR", resolve_model_dir()?);
     }
     let mut runtime = open_runtime_with(state, false, model)?;
     let ingest_started = std::time::Instant::now();
@@ -873,10 +913,16 @@ fn run_group(
     if !problems.is_empty() {
         bail!("gold set does not match the cleaned corpus:\n  {}", problems.join("\n  "));
     }
-    let fixture_snapshots: BTreeMap<String, i64> = ingested.iter().map(|i| (i.fixture.clone(), i.snapshot_id)).collect();
+    let mut fixture_snapshots: BTreeMap<String, i64> = BTreeMap::new();
+    for i in &ingested {
+        fixture_snapshots.entry(i.fixture.clone()).or_insert(i.snapshot_id);
+    }
     let mut snapshot_fixtures: BTreeMap<i64, Vec<String>> = BTreeMap::new();
     for i in &ingested {
-        snapshot_fixtures.entry(i.snapshot_id).or_default().push(i.fixture.clone());
+        let names = snapshot_fixtures.entry(i.snapshot_id).or_default();
+        if !names.contains(&i.fixture) {
+            names.push(i.fixture.clone());
+        }
     }
     let ctx = EvalCtx { fixture_snapshots: &fixture_snapshots, snapshot_fixtures: &snapshot_fixtures };
     let static_part = intrinsics(&runtime, corpus, &ingested, facts, golds)?;
@@ -901,10 +947,22 @@ fn run_group(
             }
         }
         let overall = aggregate(&refs, golds, final_k);
-        let provenance: BTreeMap<String, usize> = corpus.iter().fold(BTreeMap::new(), |mut m, l| {
-            *m.entry(l.fixture.provenance.clone()).or_default() += 1;
-            m
-        });
+        let mut by_split = BTreeMap::new();
+        for split in ["dev", "test"] {
+            let group: Vec<&QueryResult> = refs.iter().copied().filter(|r| golds[r.gold].split == split).collect();
+            if !group.is_empty() {
+                by_split.insert(split.to_owned(), aggregate(&group, golds, final_k));
+            }
+        }
+        let provenance: BTreeMap<String, usize> = corpus
+            .iter()
+            .map(|l| (l.id.clone(), l.fixture.provenance.clone()))
+            .collect::<BTreeMap<_, _>>()
+            .into_values()
+            .fold(BTreeMap::new(), |mut m, p| {
+                *m.entry(p).or_default() += 1;
+                m
+            });
         let dirty = git(&["status", "--porcelain", "--", "crates", "evals/corpus", "evals/gold", "evals/pages"]).map_or(false, |s| !s.is_empty());
         let report = json!({
             "meta": {
@@ -914,12 +972,13 @@ fn run_group(
                 "model_version": MODEL_VERSION, "cleaner_version": cleaner::VERSION,
                 "params": variant.params, "chunk_target_bytes": chunk_target,
                 "split": args.split, "timezone": "UTC", "injected_now_ms": now_ms,
-                "corpus_fixtures": corpus.len(), "corpus_provenance": provenance,
+                "corpus_fixtures": corpus.iter().map(|l| l.id.as_str()).collect::<BTreeSet<_>>().len(),"corpus_sightings": corpus.len(), "corpus_provenance": provenance,
                 "gold_total": golds.len(), "gold_evaluated": results.len(),
                 "gold_by_split": golds.iter().fold(BTreeMap::new(), |mut m: BTreeMap<String, usize>, g| { *m.entry(g.split.clone()).or_default() += 1; m }),
             },
             "overall": overall,
             "by_type": by_type,
+            "by_split": by_split,
             "intrinsics": static_part,
             "probes": probe_part,
             "queries": results.iter().map(|r| r.json.clone()).collect::<Vec<_>>(),

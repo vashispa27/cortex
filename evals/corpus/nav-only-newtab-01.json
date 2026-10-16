@@ -5,6 +5,7 @@
  "url": "chrome://newtab/",
  "source_type": "browser",
  "observed_ms": 1792188000000,
+ "also_observed_ms": [],
  "focus_role": "",
  "focus_name": "",
  "limitations": [],

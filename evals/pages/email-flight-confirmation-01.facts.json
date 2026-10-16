@@ -2,6 +2,7 @@
  "stem": "email-flight-confirmation-01",
  "html": "email-flight-confirmation-01.html",
  "observed_at": "2026-10-14T09:10:00Z",
+ "also_observed_at": [],
  "logical": {
   "app_id": "com.apple.mail",
   "title": "Your booking confirmation - MR 1347",
