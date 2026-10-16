@@ -1,5 +1,5 @@
 {
- "provenance": "hand_authored",
+ "provenance": "real_capture_invented_content",
  "app_id": "com.apple.mail",
  "title": "Your booking confirmation - MR 1347",
  "url": null,
@@ -9,45 +9,216 @@
  "focus_role": "",
  "focus_name": "",
  "limitations": [],
- "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "notes": "Real Accessibility capture of evals/pages/email-flight-confirmation-01.html in com.apple.Safari (64 nodes). app_id, title, url, source_type and observed_ms were rewritten from the page's facts.json to simulate com.apple.mail; browser-chrome text outside the AXWebArea was redacted (15 nodes).",
+ "captured_with": {
+  "app_id": "com.apple.Safari",
+  "source_type": "browser",
+  "limitations": []
+ },
  "roots": [
   {
    "role": "AXHeading",
-   "name": "Sidebar",
+   "name": "Sidebar / Mailboxes",
    "value": "Mailboxes",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Sidebar"
-    }
-   ],
    "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    }
+   ],
+   "bounds": {
+    "height": 27,
+    "y": 152,
+    "width": 176,
+    "x": 85
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Mailboxes",
+   "children": [],
+   "bounds": {
+    "y": 154,
+    "x": 85,
+    "height": 22,
+    "width": 85
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Mailboxes",
+     "role": "AXHeading"
+    }
+   ],
+   "protected": false,
+   "excluded": false
   },
   {
    "role": "AXLink",
    "name": "Sidebar / Inbox",
    "value": "Inbox",
+   "protected": false,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "y": 196,
+    "width": 176,
+    "height": 33,
+    "x": 85
+   },
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Inbox",
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Inbox"
     }
    ],
    "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "y": 203,
+    "x": 93,
+    "height": 19,
+    "width": 38
+   }
   },
   {
    "role": "AXLink",
@@ -55,18 +226,101 @@
    "value": "VIP",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
+   "visible": true,
+   "bounds": {
+    "y": 228,
+    "width": 176,
+    "height": 33,
+    "x": 85
+   },
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "VIP",
+   "bounds": {
+    "height": 19,
+    "x": 93,
+    "y": 235,
+    "width": 23
+   },
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "name": "VIP",
+     "role": "AXLink"
+    }
+   ]
   },
   {
    "role": "AXLink",
@@ -74,278 +328,965 @@
    "value": "Flagged",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
    "excluded": false,
+   "bounds": {
+    "height": 33,
+    "y": 260,
+    "width": 176,
+    "x": 85
+   },
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Flagged",
+   "bounds": {
+    "x": 93,
+    "y": 267,
+    "width": 56,
+    "height": 19
+   },
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Flagged",
+     "role": "AXLink"
+    }
+   ]
   },
   {
    "role": "AXLink",
    "name": "Sidebar / Drafts",
    "value": "Drafts",
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
+   "bounds": {
+    "width": 176,
+    "y": 292,
+    "height": 33,
+    "x": 85
+   },
+   "children": [],
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Drafts",
    "protected": false,
+   "visible": true,
+   "bounds": {
+    "height": 19,
+    "y": 299,
+    "x": 93,
+    "width": 43
+   },
    "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Drafts"
+    }
+   ],
    "children": []
   },
   {
    "role": "AXLink",
    "name": "Sidebar / Sent",
    "value": "Sent",
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
     }
    ],
+   "bounds": {
+    "x": 85,
+    "y": 324,
+    "width": 176,
+    "height": 33
+   },
    "visible": true,
-   "protected": false,
    "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Sent",
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Sent",
+     "role": "AXLink"
+    }
+   ],
+   "excluded": false,
+   "protected": false,
+   "visible": true,
+   "bounds": {
+    "y": 331,
+    "height": 19,
+    "x": 93,
+    "width": 32
+   }
   },
   {
    "role": "AXLink",
    "name": "Sidebar / Junk",
    "value": "Junk",
+   "visible": true,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "height": 33,
+    "x": 85,
+    "y": 356,
+    "width": 176
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Junk",
+   "bounds": {
+    "x": 93,
+    "y": 363,
+    "height": 19,
+    "width": 33
+   },
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Junk",
+     "role": "AXLink"
+    }
+   ],
+   "children": [],
+   "excluded": false,
+   "protected": false,
+   "visible": true
   },
   {
    "role": "AXLink",
    "name": "Sidebar / Trash",
    "value": "Trash",
+   "children": [],
+   "visible": true,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
     }
    ],
+   "protected": false,
+   "bounds": {
+    "height": 33,
+    "y": 388,
+    "width": 176,
+    "x": 85
+   },
+   "excluded": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Trash",
    "visible": true,
+   "children": [],
    "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 93,
+    "height": 19,
+    "y": 395,
+    "width": 38
+   },
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Trash"
+    }
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Harbor Print Billing",
+   "protected": false,
+   "visible": true,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 135,
+    "height": 18,
+    "x": 287,
+    "width": 136
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Invoice 4471",
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "x": 287,
+    "y": 157,
+    "width": 87,
+    "height": 18
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Message list"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Please find invoice 4471 attached.",
+   "bounds": {
+    "y": 178,
+    "width": 207,
+    "height": 16,
+    "x": 287
+   },
+   "visible": true,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
+   "children": [],
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Campus Library",
+   "visible": true,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Message list"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "width": 114,
+    "x": 287,
+    "y": 219,
+    "height": 18
+   },
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Your hold is ready",
+   "visible": true,
+   "excluded": false,
+   "protected": false,
+   "bounds": {
+    "x": 287,
+    "height": 18,
+    "width": 123,
+    "y": 241
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "The book you requested is waiting at the desk.",
+   "protected": false,
+   "children": [],
+   "visible": true,
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 282,
+    "height": 16,
+    "x": 287,
+    "y": 262
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Orbit Bank",
+   "bounds": {
+    "height": 18,
+    "x": 287,
+    "y": 303,
+    "width": 77
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
-     "name": "Message list"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message list"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
+   "children": [],
    "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Monthly statement",
+   "protected": false,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
-     "name": "Message list"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message list"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 129,
+    "height": 18,
+    "y": 325,
+    "x": 287
+   },
+   "visible": true
   },
   {
    "role": "AXStaticText",
@@ -353,22 +1294,56 @@
    "value": "Your October statement is available online.",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Message list"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
+   "children": [],
    "excluded": false,
-   "children": []
+   "protected": false,
+   "visible": true,
+   "bounds": {
+    "x": 287,
+    "width": 259,
+    "y": 346,
+    "height": 16
+   }
   },
   {
    "role": "AXButton",
@@ -376,8 +1351,32 @@
    "value": "Archive",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -388,19 +1387,57 @@
      "name": "Message toolbar"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
+   "protected": false,
+   "visible": true,
+   "bounds": {
+    "y": 141,
+    "x": 621,
+    "height": 32,
+    "width": 72
+   },
    "children": []
   },
   {
    "role": "AXButton",
    "name": "Message toolbar / Delete",
    "value": "Delete",
+   "bounds": {
+    "x": 700,
+    "y": 141,
+    "height": 32,
+    "width": 65
+   },
+   "visible": true,
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -411,19 +1448,49 @@
      "name": "Message toolbar"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "protected": false
   },
   {
    "role": "AXButton",
    "name": "Message toolbar / Reply",
    "value": "Reply",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "x": 772,
+    "y": 141,
+    "width": 59
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -434,19 +1501,44 @@
      "name": "Message toolbar"
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXButton",
    "name": "Message toolbar / Reply All",
    "value": "Reply All",
+   "excluded": false,
+   "visible": true,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -457,19 +1549,56 @@
      "name": "Message toolbar"
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 838,
+    "y": 141,
+    "height": 32,
+    "width": 80
+   }
   },
   {
    "role": "AXButton",
    "name": "Message toolbar / Forward",
    "value": "Forward",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "width": 77,
+    "x": 925,
+    "y": 141,
+    "height": 32
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -479,39 +1608,151 @@
      "role": "AXGroup",
      "name": "Message toolbar"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXHeading",
-   "name": "Message content",
+   "name": "Message content / Your booking confirmation - MR 1347",
    "value": "Your booking confirmation - MR 1347",
+   "visible": true,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Message content"
     }
    ],
-   "visible": true,
    "protected": false,
+   "children": [],
    "excluded": false,
+   "bounds": {
+    "width": 748,
+    "height": 33,
+    "y": 187,
+    "x": 621
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message content",
+   "value": "Your booking confirmation - MR 1347",
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "width": 389,
+    "height": 27,
+    "x": 621,
+    "y": 190
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message content"
+    },
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXHeading"
+    }
+   ],
    "children": []
   },
   {
    "role": "AXStaticText",
    "name": "Message header",
    "value": "From: Meridian Air Reservations <noreply@meridianair.example.com>",
+   "children": [],
+   "bounds": {
+    "x": 621,
+    "y": 229,
+    "width": 420,
+    "height": 16
+   },
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -520,21 +1761,49 @@
     {
      "role": "AXGroup",
      "name": "Message header"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXStaticText",
    "name": "Message header",
    "value": "To: You",
+   "excluded": false,
+   "protected": false,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -543,21 +1812,62 @@
     {
      "role": "AXGroup",
      "name": "Message header"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 249,
+    "height": 16,
+    "x": 621,
+    "width": 45
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Message header",
    "value": "Date: 14 October 2026 at 9:03 AM",
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "height": 16,
+    "y": 269,
+    "width": 210,
+    "x": 621
+   },
+   "excluded": false,
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -566,163 +1876,988 @@
     {
      "role": "AXGroup",
      "name": "Message header"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "Thank you for booking with Meridian Air.",
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true,
+   "bounds": {
+    "y": 304,
+    "x": 621,
+    "height": 18,
+    "width": 275
+   },
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "Booking reference: QK7M2P.",
+   "visible": true,
+   "excluded": false,
+   "protected": false,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 18,
+    "y": 341,
+    "width": 197,
+    "x": 621
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "Outbound: Friday 20 November 2026, flight MR 1347 departs 07:55 and arrives 10:25.",
+   "visible": true,
+   "bounds": {
+    "x": 621,
+    "width": 589,
+    "height": 18,
+    "y": 378
+   },
+   "excluded": false,
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Message content"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "Return: Sunday 22 November 2026, flight MR 1352 departs 18:15.",
+   "protected": false,
+   "bounds": {
+    "width": 449,
+    "height": 18,
+    "x": 621,
+    "y": 415
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
+   "visible": true,
    "children": []
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "Baggage: one cabin bag up to 8 kg is included.",
+   "children": [],
+   "bounds": {
+    "y": 452,
+    "x": 621,
+    "width": 321,
+    "height": 18
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "visible": true,
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "Check-in opens 24 hours before departure and closes 60 minutes before departure. Please arrive at the airport at least two hours before your flight.",
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Message content"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
+   "bounds": {
+    "width": 710,
+    "height": 40,
+    "x": 621,
+    "y": 489
+   },
    "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true,
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "Seat selection is free at check-in. Changes to your booking are possible up to 48 hours before departure for a small fee.",
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "width": 737,
+    "x": 621,
+    "y": 548,
+    "height": 40
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Message content"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "Manage your booking online at any time before check-in closes.",
+   "excluded": false,
+   "protected": false,
+   "bounds": {
+    "width": 437,
+    "height": 18,
+    "x": 621,
+    "y": 607
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Your booking confirmation - MR 1347"
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Message content"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "protected": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "x": 244,
+    "height": 36,
+    "y": 41,
+    "width": 36
+   }
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "bounds": {
+    "width": 36,
+    "x": 281,
+    "height": 36,
+    "y": 41
+   },
+   "excluded": false,
+   "protected": false,
+   "children": [],
+   "visible": true
+  },
+  {
+   "role": "AXTextField",
+   "name": "smart search field",
+   "value": "",
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "y": 51,
+    "height": 31,
+    "x": 490.5,
+    "width": 481
+   },
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "protected": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "bounds": {
+    "y": 45.5,
+    "x": 977.5,
+    "width": 23.5,
+    "height": 29
+   },
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Share",
+   "value": "Share",
+   "excluded": false,
+   "protected": false,
+   "bounds": {
+    "y": 33,
+    "width": 41,
+    "height": 52,
+    "x": 1272
+   },
+   "visible": true,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "New Tab",
+   "value": "New Tab",
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "protected": false,
+   "visible": true,
+   "bounds": {
+    "x": 1313,
+    "y": 33,
+    "height": 52,
+    "width": 37
+   },
+   "excluded": false
+  },
+  {
+   "role": "AXButton",
+   "name": "Tab Overview",
+   "value": "Tab Overview",
+   "excluded": false,
+   "protected": false,
+   "bounds": {
+    "height": 52,
+    "x": 1350,
+    "y": 33,
+    "width": 43
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "excluded": false,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "y": 85,
+    "width": 92,
+    "x": 81,
+    "height": 32
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "children": [],
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "height": 32,
+    "x": 174,
+    "y": 85,
+    "width": 92
+   },
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "width": 92,
+    "y": 85,
+    "x": 267,
+    "height": 32
+   },
+   "protected": false,
+   "children": [],
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "x": 360,
+    "width": 92,
+    "height": 32,
+    "y": 85
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "x": 453,
+    "y": 85,
+    "height": 32,
+    "width": 92
+   },
+   "excluded": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "y": 85,
+    "width": 92,
+    "x": 546,
+    "height": 32
+   },
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "width": 92,
+    "x": 639,
+    "y": 85,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
     }
    ],
    "visible": true,
    "protected": false,
    "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "width": 92,
+    "height": 32,
+    "x": 732,
+    "y": 85
+   },
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "y": 85,
+    "width": 91,
+    "height": 32,
+    "x": 825
+   },
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "visible": true,
+   "excluded": false,
+   "protected": false,
+   "bounds": {
+    "x": 917,
+    "width": 91,
+    "height": 32,
+    "y": 85
+   },
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "height": 32,
+    "x": 1009,
+    "width": 91,
+    "y": 85
+   },
+   "visible": true,
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "protected": false,
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "width": 91,
+    "y": 85,
+    "x": 1101,
+    "height": 32
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Your booking confirmation - MR 1347",
+   "value": "Your booking confirmation - MR 1347",
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "width": 196,
+    "x": 1193
+   },
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "Your booking confirmation - MR 1347",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 13 tabs",
+     "role": "AXOpaqueProviderGroup"
+    },
+    {
+     "name": "Your booking confirmation - MR 1347",
+     "role": "AXRadioButton"
+    }
+   ],
+   "bounds": {
+    "height": 18,
+    "x": 1242,
+    "y": 92,
+    "width": 140
+   },
+   "visible": true,
+   "protected": false,
    "children": []
   }
  ]

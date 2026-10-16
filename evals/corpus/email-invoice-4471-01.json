@@ -1,5 +1,5 @@
 {
- "provenance": "hand_authored",
+ "provenance": "real_capture_invented_content",
  "app_id": "com.apple.mail",
  "title": "Invoice 4471 - Harbor Print",
  "url": null,
@@ -11,26 +11,114 @@
  "focus_role": "",
  "focus_name": "",
  "limitations": [],
- "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "notes": "Real Accessibility capture of evals/pages/email-invoice-4471-01.html in com.apple.Safari (64 nodes). app_id, title, url, source_type and observed_ms were rewritten from the page's facts.json to simulate com.apple.mail; browser-chrome text outside the AXWebArea was redacted (16 nodes).",
+ "captured_with": {
+  "app_id": "com.apple.Safari",
+  "source_type": "browser",
+  "limitations": []
+ },
  "roots": [
   {
    "role": "AXHeading",
-   "name": "Sidebar",
+   "name": "Sidebar / Mailboxes",
    "value": "Mailboxes",
+   "excluded": false,
+   "bounds": {
+    "y": 152,
+    "x": 85,
+    "height": 27,
+    "width": 176
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
+   "children": [],
    "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Mailboxes",
+   "bounds": {
+    "width": 85,
+    "x": 85,
+    "height": 22,
+    "y": 154
+   },
+   "children": [],
+   "protected": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Mailboxes",
+     "role": "AXHeading"
+    }
+   ],
+   "excluded": false
   },
   {
    "role": "AXLink",
@@ -42,18 +130,150 @@
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
+   "children": [],
+   "bounds": {
+    "x": 85,
+    "y": 196,
+    "height": 33,
+    "width": 176
+   },
    "protected": false,
+   "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Inbox",
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "x": 93,
+    "y": 203,
+    "width": 38,
+    "height": 19
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Inbox"
+    }
+   ],
    "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXLink",
    "name": "Sidebar / VIP",
+   "value": "VIP",
+   "excluded": false,
+   "bounds": {
+    "height": 33,
+    "x": 85,
+    "width": 176,
+    "y": 228
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    }
+   ],
+   "children": [],
+   "visible": true,
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
    "value": "VIP",
    "ancestor_path": [
     {
@@ -61,37 +281,203 @@
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "name": "VIP",
+     "role": "AXLink"
     }
    ],
-   "visible": true,
    "protected": false,
+   "children": [],
    "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 235,
+    "width": 23,
+    "x": 93,
+    "height": 19
+   },
+   "visible": true
   },
   {
    "role": "AXLink",
    "name": "Sidebar / Flagged",
    "value": "Flagged",
+   "excluded": false,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    }
+   ],
+   "bounds": {
+    "height": 33,
+    "x": 85,
+    "y": 260,
+    "width": 176
+   },
+   "visible": true,
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Flagged",
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Flagged"
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
+   "bounds": {
+    "width": 56,
+    "height": 19,
+    "x": 93,
+    "y": 267
+   },
    "children": []
   },
   {
    "role": "AXLink",
    "name": "Sidebar / Drafts",
+   "value": "Drafts",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "y": 292,
+    "width": 176,
+    "x": 85,
+    "height": 33
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
    "value": "Drafts",
    "ancestor_path": [
     {
@@ -99,14 +485,48 @@
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Drafts",
+     "role": "AXLink"
     }
    ],
-   "visible": true,
    "protected": false,
+   "visible": true,
    "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "width": 43,
+    "height": 19,
+    "y": 299,
+    "x": 93
+   }
   },
   {
    "role": "AXLink",
@@ -118,18 +538,150 @@
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
    "excluded": false,
+   "bounds": {
+    "y": 324,
+    "width": 176,
+    "x": 85,
+    "height": 33
+   },
+   "protected": false,
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Sent",
+   "children": [],
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "width": 32,
+    "y": 331,
+    "height": 19,
+    "x": 93
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Sent",
+     "role": "AXLink"
+    }
+   ],
+   "excluded": false
   },
   {
    "role": "AXLink",
    "name": "Sidebar / Junk",
+   "value": "Junk",
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "width": 176,
+    "y": 356,
+    "x": 85,
+    "height": 33
+   },
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    }
+   ],
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
    "value": "Junk",
    "ancestor_path": [
     {
@@ -137,54 +689,205 @@
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Junk"
     }
    ],
+   "excluded": false,
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "width": 33,
+    "height": 19,
+    "x": 93,
+    "y": 363
+   }
   },
   {
    "role": "AXLink",
    "name": "Sidebar / Trash",
    "value": "Trash",
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Sidebar"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
+   "bounds": {
+    "width": 176,
+    "height": 33,
+    "x": 85,
+    "y": 388
+   },
    "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
-   "name": "Message list",
-   "value": "Harbor Print Billing",
+   "name": "Sidebar",
+   "value": "Trash",
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
-     "role": "AXList",
-     "name": "Message list"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Sidebar",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Trash"
     }
    ],
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "x": 93,
+    "y": 395,
+    "width": 38,
+    "height": 19
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Harbor Print Billing",
    "visible": true,
    "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message list",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "bounds": {
+    "height": 18,
+    "width": 136,
+    "x": 287,
+    "y": 135
+   },
    "excluded": false,
    "children": []
   },
@@ -192,106 +895,272 @@
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Invoice 4471",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "x": 287,
+    "y": 157,
+    "width": 87,
+    "height": 18
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
-     "role": "AXList",
-     "name": "Message list"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message list",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Please find invoice 4471 attached.",
+   "excluded": false,
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
-     "role": "AXList",
-     "name": "Message list"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message list",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "y": 178,
+    "width": 207,
+    "x": 287,
+    "height": 16
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Campus Library",
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
-     "role": "AXList",
-     "name": "Message list"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message list",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
+   "bounds": {
+    "y": 219,
+    "x": 287,
+    "width": 114,
+    "height": 18
+   },
    "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Your hold is ready",
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
-     "role": "AXList",
-     "name": "Message list"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message list",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "height": 18,
+    "x": 287,
+    "y": 241,
+    "width": 123
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "The book you requested is waiting at the desk.",
+   "children": [],
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
-     "role": "AXList",
-     "name": "Message list"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message list",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -300,77 +1169,183 @@
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 287,
+    "height": 16,
+    "y": 262,
+    "width": 282
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Orbit Bank",
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
-     "role": "AXList",
-     "name": "Message list"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message list",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
+   "children": [],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 77,
+    "height": 18,
+    "y": 303,
+    "x": 287
+   },
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Monthly statement",
+   "excluded": false,
+   "bounds": {
+    "height": 18,
+    "y": 325,
+    "width": 129,
+    "x": 287
+   },
+   "protected": false,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
-     "role": "AXList",
-     "name": "Message list"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message list",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXStaticText",
    "name": "Message list",
    "value": "Your October statement is available online.",
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
-     "role": "AXList",
-     "name": "Message list"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message list",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
+   "children": [],
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 346,
+    "width": 259,
+    "x": 287,
+    "height": 16
+   },
+   "visible": true
   },
   {
    "role": "AXButton",
@@ -382,31 +1357,86 @@
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Message toolbar"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 72,
+    "x": 621,
+    "y": 141,
+    "height": 32
+   },
+   "protected": false,
+   "children": [],
+   "visible": true
   },
   {
    "role": "AXButton",
    "name": "Message toolbar / Delete",
    "value": "Delete",
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -415,31 +1445,66 @@
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "y": 141,
+    "x": 700,
+    "height": 32,
+    "width": 65
+   }
   },
   {
    "role": "AXButton",
    "name": "Message toolbar / Reply",
    "value": "Reply",
+   "children": [],
+   "bounds": {
+    "x": 772,
+    "height": 32,
+    "y": 141,
+    "width": 59
+   },
+   "protected": false,
+   "excluded": false,
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Message toolbar"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXButton",
@@ -451,221 +1516,636 @@
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Message toolbar"
     }
    ],
-   "visible": true,
    "protected": false,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "x": 838,
+    "y": 141,
+    "width": 80
+   },
    "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXButton",
    "name": "Message toolbar / Forward",
    "value": "Forward",
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "x": 925,
+    "y": 141,
+    "height": 32,
+    "width": 77
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Message toolbar"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXHeading",
-   "name": "Message content",
+   "name": "Message content / Invoice 4471 - Harbor Print",
    "value": "Invoice 4471 - Harbor Print",
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "width": 748,
+    "x": 621,
+    "y": 187,
+    "height": 33
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message content",
+   "value": "Invoice 4471 - Harbor Print",
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXHeading",
+     "name": "Invoice 4471 - Harbor Print"
+    }
+   ],
+   "bounds": {
+    "x": 621,
+    "y": 190,
+    "width": 282,
+    "height": 27
+   },
+   "visible": true
   },
   {
    "role": "AXStaticText",
    "name": "Message header",
    "value": "From: Harbor Print Billing <billing@harborprint.example.com>",
+   "children": [],
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "y": 229,
+    "height": 16,
+    "x": 621,
+    "width": 372
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
-     "role": "AXGroup",
-     "name": "Message content"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Message header"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Message header",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Message header",
    "value": "To: You",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "x": 621,
+    "height": 16,
+    "y": 249,
+    "width": 45
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
-     "role": "AXGroup",
-     "name": "Message content"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Message header"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Message header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Message header",
    "value": "Date: 13 October 2026 at 8:42 AM",
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
-     "role": "AXGroup",
-     "name": "Message content"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Message header"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Message header",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
+   "children": [],
    "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 269,
+    "x": 621,
+    "width": 209,
+    "height": 16
+   },
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "Hello, please find invoice 4471 for the October print run.",
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
+   "children": [],
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 18,
+    "width": 384,
+    "y": 304,
+    "x": 621
+   },
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "Total due: €2,380.00.",
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
+   "bounds": {
+    "x": 621,
+    "width": 146,
+    "y": 341,
+    "height": 18
+   },
    "children": []
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "Payment is due by 30 October 2026. Late payments incur a 2% monthly fee.",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "width": 522,
+    "x": 621,
+    "height": 18,
+    "y": 378
+   },
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "Bank transfer reference: HP-4471-2026.",
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
+   "bounds": {
+    "y": 415,
+    "width": 277,
+    "height": 18,
+    "x": 621
+   },
+   "protected": false,
    "children": []
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "If you have already paid, please disregard this reminder and send the remittance advice to the address above so we can reconcile it.",
+   "bounds": {
+    "y": 452,
+    "width": 745,
+    "height": 40,
+    "x": 621
+   },
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
    "children": []
@@ -680,33 +2160,679 @@
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
+   "children": [],
    "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 725,
+    "height": 40,
+    "y": 511,
+    "x": 621
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Message content",
    "value": "This email was sent because you are a customer of Harbor Print. Unsubscribe from billing reminders.",
+   "bounds": {
+    "x": 621,
+    "width": 688,
+    "y": 570,
+    "height": 18
+   },
+   "children": [],
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Invoice 4471 - Harbor Print"
     },
     {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Message content"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Message content",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "protected": false,
+   "excluded": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "bounds": {
+    "y": 41,
+    "x": 244,
+    "height": 36,
+    "width": 36
+   },
+   "excluded": false,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "excluded": false,
+   "protected": false,
+   "bounds": {
+    "width": 36,
+    "x": 281,
+    "y": 41,
+    "height": 36
+   }
+  },
+  {
+   "role": "AXTextField",
+   "name": "smart search field",
+   "value": "",
+   "bounds": {
+    "y": 51,
+    "width": 481,
+    "x": 490.5,
+    "height": 31
+   },
+   "children": [],
+   "visible": true,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "width": 23.5,
+    "x": 977.5,
+    "y": 45.5,
+    "height": 29
+   },
+   "protected": false
+  },
+  {
+   "role": "AXButton",
+   "name": "Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
     }
    ],
    "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "y": 33,
+    "height": 52,
+    "x": 1272,
+    "width": 41
+   }
+  },
+  {
+   "role": "AXButton",
+   "name": "New Tab",
+   "value": "New Tab",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "y": 33,
+    "height": 52,
+    "width": 37,
+    "x": 1313
+   },
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXButton",
+   "name": "Tab Overview",
+   "value": "Tab Overview",
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "x": 1350,
+    "width": 43,
+    "y": 33,
+    "height": 52
+   },
+   "visible": true,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "x": 81,
+    "y": 85,
+    "width": 85
+   },
+   "visible": true,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ],
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "bounds": {
+    "height": 32,
+    "width": 85,
+    "y": 85,
+    "x": 167
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 253,
+    "width": 85,
+    "height": 32,
+    "y": 85
+   },
+   "children": [],
+   "protected": false,
+   "visible": true,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "x": 339,
+    "width": 85,
+    "y": 85,
+    "height": 32
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ],
+   "children": [],
+   "protected": false,
+   "visible": true,
+   "bounds": {
+    "width": 85,
+    "x": 425,
+    "height": 32,
+    "y": 85
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "bounds": {
+    "x": 511,
+    "y": 85,
+    "width": 85,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ],
+   "protected": false,
+   "excluded": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ],
+   "visible": true,
+   "bounds": {
+    "height": 32,
+    "x": 597,
+    "width": 85,
+    "y": 85
+   },
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "x": 683,
+    "width": 84,
+    "y": 85,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ],
+   "children": [],
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ],
+   "bounds": {
+    "y": 85,
+    "width": 84,
+    "x": 768,
+    "height": 32
+   },
+   "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "width": 84,
+    "x": 853
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "bounds": {
+    "height": 32,
+    "x": 938,
+    "y": 85,
+    "width": 84
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ],
+   "children": [],
+   "excluded": false,
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "width": 84,
+    "y": 85,
+    "height": 32,
+    "x": 1023
+   },
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "y": 85,
+    "width": 84,
+    "x": 1108,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ],
+   "children": [],
+   "protected": false,
+   "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Invoice 4471 - Harbor Print",
+   "value": "Invoice 4471 - Harbor Print",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "x": 1193,
+    "width": 196
+   },
+   "children": [],
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "Invoice 4471 - Harbor Print",
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "y": 92,
+    "width": 140,
+    "x": 1242,
+    "height": 18
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Invoice 4471 - Harbor Print"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 14 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "Invoice 4471 - Harbor Print"
+    }
+   ],
+   "excluded": false,
+   "visible": true
   }
  ]
 }

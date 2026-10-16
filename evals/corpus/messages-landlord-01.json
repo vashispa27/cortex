@@ -1,5 +1,5 @@
 {
- "provenance": "hand_authored",
+ "provenance": "real_capture_invented_content",
  "app_id": "com.apple.MobileSMS",
  "title": "Messages - Dolores Whitfield",
  "url": null,
@@ -9,65 +9,155 @@
  "focus_role": "",
  "focus_name": "",
  "limitations": [],
- "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "notes": "Real Accessibility capture of evals/pages/messages-landlord-01.html in com.apple.Safari (36 nodes). app_id, title, url, source_type and observed_ms were rewritten from the page's facts.json to simulate com.apple.MobileSMS; browser-chrome text outside the AXWebArea was redacted (17 nodes).",
+ "captured_with": {
+  "app_id": "com.apple.Safari",
+  "source_type": "browser",
+  "limitations": []
+ },
  "roots": [
   {
    "role": "AXStaticText",
    "name": "Sidebar",
    "value": "Dolores Whitfield",
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "x": 129,
+    "y": 152,
+    "height": 18,
+    "width": 118
+   },
+   "excluded": false,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Messages - Dolores Whitfield"
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
-     "name": "Sidebar"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Sidebar",
    "value": "Hi, your deposit...",
+   "bounds": {
+    "height": 17,
+    "y": 153,
+    "width": 115,
+    "x": 250
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Messages - Dolores Whitfield"
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
-     "name": "Sidebar"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
+   "children": [],
    "protected": false,
    "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXStaticText",
    "name": "Sidebar",
    "value": "Sam",
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Messages - Dolores Whitfield"
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Sidebar"
     },
     {
@@ -75,22 +165,52 @@
      "name": ""
     }
    ],
+   "bounds": {
+    "width": 31,
+    "x": 129,
+    "y": 199,
+    "height": 18
+   },
+   "children": [],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Sidebar",
    "value": "see you at 7",
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Messages - Dolores Whitfield"
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Sidebar"
     },
     {
@@ -98,183 +218,1103 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "x": 163,
+    "y": 200,
+    "width": 79,
+    "height": 17
+   },
+   "visible": true
   },
   {
    "role": "AXStaticText",
    "name": "Sidebar",
    "value": "Noor",
+   "bounds": {
+    "height": 18,
+    "x": 129,
+    "y": 246,
+    "width": 34
+   },
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Messages - Dolores Whitfield"
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
-     "name": "Sidebar"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Sidebar",
    "value": "chapter nine was wild",
+   "protected": false,
+   "bounds": {
+    "height": 17,
+    "x": 166,
+    "y": 247,
+    "width": 140
+   },
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Messages - Dolores Whitfield"
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Sidebar"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXHeading",
-   "name": "",
+   "name": "Dolores Whitfield",
    "value": "Dolores Whitfield",
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Messages - Dolores Whitfield"
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
      "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
+   "bounds": {
+    "height": 34,
+    "x": 429,
+    "width": 935,
+    "y": 155
+   },
    "protected": false,
-   "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "Dolores Whitfield",
+   "visible": true,
+   "excluded": false,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXHeading",
+     "name": "Dolores Whitfield"
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "height": 28,
+    "x": 429,
+    "y": 158,
+    "width": 182
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Transcript",
    "value": "Hi, your deposit of $1,200 will be returned by 5 November.",
+   "visible": true,
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Messages - Dolores Whitfield"
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Transcript"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "y": 263,
+    "width": 399,
+    "x": 443,
+    "height": 19
+   },
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Transcript",
    "value": "Thanks. Please send it to the same account.",
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Messages - Dolores Whitfield"
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Transcript"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
+   "children": [],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 345,
+    "width": 302,
+    "height": 19,
+    "x": 443
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Transcript",
    "value": "Will do. Keys are due back on 31 October.",
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "x": 443,
+    "width": 285,
+    "height": 19,
+    "y": 427
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Messages - Dolores Whitfield"
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Transcript"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
-   ],
-   "visible": true,
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Composer",
+   "value": "iMessage",
    "protected": false,
+   "bounds": {
+    "x": 443,
+    "y": 809,
+    "width": 66,
+    "height": 18
+   },
+   "visible": true,
+   "children": [],
    "excluded": false,
-   "children": []
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXTextArea",
+     "name": "iMessage"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ]
   },
   {
    "role": "AXButton",
    "name": "Composer / Send",
    "value": "Send",
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "x": 1292,
+    "y": 797,
+    "height": 65,
+    "width": 72
+   },
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Messages - Dolores Whitfield"
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
      "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Composer"
     }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
    ],
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "x": 244,
+    "width": 36,
+    "y": 41,
+    "height": 36
+   }
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 41,
+    "x": 281,
+    "height": 36,
+    "width": 36
+   },
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXTextField",
+   "name": "smart search field",
+   "value": "",
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "x": 490.5,
+    "y": 51,
+    "width": 481,
+    "height": 31
+   },
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "bounds": {
+    "x": 977.5,
+    "width": 23.5,
+    "y": 45.5,
+    "height": 29
+   },
+   "protected": false,
+   "children": [],
+   "visible": true
+  },
+  {
+   "role": "AXButton",
+   "name": "Share",
+   "value": "Share",
+   "visible": true,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "y": 33,
+    "x": 1272,
+    "width": 41,
+    "height": 52
+   }
+  },
+  {
+   "role": "AXButton",
+   "name": "New Tab",
+   "value": "New Tab",
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "x": 1313,
+    "y": 33,
+    "height": 52,
+    "width": 37
+   },
+   "excluded": false,
+   "protected": false
+  },
+  {
+   "role": "AXButton",
+   "name": "Tab Overview",
+   "value": "Tab Overview",
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "height": 52,
+    "x": 1350,
+    "y": 33,
+    "width": 43
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 81,
+    "y": 85,
+    "width": 79,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 161,
+    "width": 79,
+    "height": 32,
+    "y": 85
+   },
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "protected": false,
+   "bounds": {
+    "x": 241,
+    "height": 32,
+    "y": 85,
+    "width": 79
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "y": 85,
+    "width": 79,
+    "height": 32,
+    "x": 321
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "width": 79,
+    "x": 401,
+    "y": 85,
+    "height": 32
+   },
+   "excluded": false,
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "width": 79,
+    "x": 481,
+    "height": 32,
+    "y": 85
+   },
+   "protected": false,
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "visible": true,
+   "excluded": false,
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "x": 561,
+    "width": 78,
+    "y": 85
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "width": 78,
+    "x": 640
+   },
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "width": 78,
+    "height": 32,
+    "x": 719,
+    "y": 85
+   },
    "visible": true,
    "protected": false,
    "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "y": 85,
+    "x": 798,
+    "height": 32,
+    "width": 78
+   },
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "width": 78,
+    "y": 85,
+    "height": 32,
+    "x": 877
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "width": 78,
+    "height": 32,
+    "x": 956,
+    "y": 85
+   },
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "width": 78,
+    "x": 1035
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "x": 1114,
+    "y": 85,
+    "height": 32,
+    "width": 78
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Messages - Dolores Whitfield",
+   "value": "Messages - Dolores Whitfield",
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "width": 196,
+    "y": 85,
+    "height": 32,
+    "x": 1193
+   },
+   "children": [],
+   "excluded": false,
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "Messages - Dolores Whitfield",
+   "ancestor_path": [
+    {
+     "name": "Messages - Dolores Whitfield",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 15 tabs",
+     "role": "AXOpaqueProviderGroup"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "Messages - Dolores Whitfield"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "height": 18,
+    "x": 1242,
+    "width": 140,
+    "y": 92
+   },
+   "visible": true,
+   "children": [],
+   "excluded": false
   }
  ]
 }

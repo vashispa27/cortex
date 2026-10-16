@@ -1,5 +1,5 @@
 {
- "provenance": "hand_authored",
+ "provenance": "real_capture_invented_content",
  "app_id": "com.google.Chrome",
  "title": "Rebuilding a rear wheel - ChatGPT",
  "url": "https://chatgpt.com/c/0d77ab3e-wheel",
@@ -9,161 +9,199 @@
  "focus_role": "",
  "focus_name": "",
  "limitations": [],
- "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "notes": "Real Accessibility capture of evals/pages/chatgpt-bikewheel-long-01.html in com.apple.Safari (121 nodes). app_id, title, url, source_type and observed_ms were rewritten from the page's facts.json to simulate com.google.Chrome; browser-chrome text outside the AXWebArea was redacted (27 nodes).",
+ "captured_with": {
+  "app_id": "com.apple.Safari",
+  "source_type": "browser",
+  "limitations": []
+ },
  "roots": [
-  {
-   "role": "AXButton",
-   "name": "Back",
-   "value": "Back",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Forward",
-   "value": "Forward",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Reload",
-   "value": "Reload",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXTextField",
-   "name": "Address and search bar",
-   "value": "https://chatgpt.com/c/0d77ab3e-wheel",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXRadioButton",
-   "name": "Rebuilding a rear wheel - ChatGPT",
-   "value": "Rebuilding a rear wheel - ChatGPT",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXTabGroup",
-     "name": "Tab Strip"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
   {
    "role": "AXButton",
    "name": "Sidebar / New chat",
    "value": "New chat",
+   "bounds": {
+    "x": 79,
+    "height": 28,
+    "y": 129,
+    "width": 138
+   },
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Sidebar"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "protected": false
   },
   {
    "role": "AXLink",
    "name": "Sidebar / Search chats",
    "value": "Search chats",
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Sidebar"
     }
    ],
+   "bounds": {
+    "height": 16,
+    "x": 79,
+    "width": 138,
+    "y": 161
+   },
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "protected": false
   },
   {
-   "role": "AXLink",
-   "name": "Chat history / Weekly meal prep ideas",
-   "value": "Weekly meal prep ideas",
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Search chats",
+   "protected": false,
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "width": 63,
+    "height": 12,
+    "x": 85,
+    "y": 163
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "name": "Search chats",
+     "role": "AXLink"
+    }
+   ]
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Weekly meal prep ideas",
+   "value": "Weekly meal prep ideas",
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -174,10 +212,70 @@
      "name": "Chat history"
     }
    ],
-   "visible": true,
    "protected": false,
+   "bounds": {
+    "y": 179,
+    "height": 16,
+    "x": 79,
+    "width": 126
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Chat history",
+   "value": "Weekly meal prep ideas",
+   "bounds": {
+    "height": 12,
+    "y": 181,
+    "x": 85,
+    "width": 115
+   },
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    },
+    {
+     "role": "AXLink",
+     "name": "Weekly meal prep ideas"
+    }
+   ],
    "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXLink",
@@ -189,8 +287,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -201,14 +319,130 @@
      "name": "Chat history"
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "x": 79,
+    "height": 28,
+    "width": 95,
+    "y": 191
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Chat history",
+   "value": "Python decorators explained",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    },
+    {
+     "name": "Python decorators explained",
+     "role": "AXLink"
+    }
+   ],
+   "bounds": {
+    "y": 193,
+    "height": 24,
+    "width": 96,
+    "x": 79
+   },
+   "children": [],
+   "excluded": false,
+   "visible": true
   },
   {
    "role": "AXLink",
    "name": "Chat history / Cover letter feedback",
+   "value": "Cover letter feedback",
+   "children": [],
+   "bounds": {
+    "x": 79,
+    "width": 118,
+    "y": 203,
+    "height": 28
+   },
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Chat history",
    "value": "Cover letter feedback",
    "ancestor_path": [
     {
@@ -216,8 +450,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -226,25 +480,63 @@
     {
      "role": "AXGroup",
      "name": "Chat history"
+    },
+    {
+     "name": "Cover letter feedback",
+     "role": "AXLink"
     }
    ],
+   "children": [],
+   "bounds": {
+    "width": 118,
+    "y": 205,
+    "height": 24,
+    "x": 79
+   },
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXLink",
    "name": "Chat history / Weekend hike packing list",
    "value": "Weekend hike packing list",
+   "children": [],
+   "bounds": {
+    "width": 127,
+    "x": 79,
+    "height": 28,
+    "y": 215
+   },
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -255,23 +547,106 @@
      "name": "Chat history"
     }
    ],
+   "protected": false,
+   "excluded": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Chat history",
+   "value": "Weekend hike packing list",
+   "children": [],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 217,
+    "height": 24,
+    "width": 127,
+    "x": 79
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    },
+    {
+     "role": "AXLink",
+     "name": "Weekend hike packing list"
+    }
+   ],
+   "excluded": false
   },
   {
    "role": "AXLink",
    "name": "Chat history / Rebuilding a rear wheel",
    "value": "Rebuilding a rear wheel",
+   "protected": false,
+   "visible": true,
+   "bounds": {
+    "y": 227,
+    "width": 130,
+    "x": 79,
+    "height": 28
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -282,108 +657,213 @@
      "name": "Chat history"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Rebuilding a rear wheel - ChatGPT / ChatGPT",
-   "value": "ChatGPT",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Rebuilding a rear wheel - ChatGPT / Share",
-   "value": "Share",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXHeading",
-   "name": "Conversation",
-   "value": "You said:",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXArticle",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
-   "name": "Conversation",
-   "value": "I'm rebuilding the rear wheel on my gravel bike with a new rim and the old hub. Where do I even start?",
+   "name": "Chat history",
+   "value": "Rebuilding a rear wheel",
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "height": 24,
+    "y": 229,
+    "width": 130,
+    "x": 79
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    },
+    {
+     "role": "AXLink",
+     "name": "Rebuilding a rear wheel"
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "ChatGPT",
+   "value": "ChatGPT",
+   "excluded": false,
+   "bounds": {
+    "width": 77,
+    "y": 125,
+    "height": 22,
+    "x": 233
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "protected": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Share",
+   "value": "Share",
+   "visible": true,
+   "children": [],
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "bounds": {
+    "height": 22,
+    "y": 125,
+    "x": 1316,
+    "width": 54
+   },
+   "protected": false
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation / You said:",
+   "value": "You said:",
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "width": 1,
+    "height": 2,
+    "y": 165,
+    "x": 235
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -394,18 +874,133 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "excluded": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "You said:",
+   "children": [],
+   "bounds": {
+    "y": 164,
+    "width": 40,
+    "x": 235,
+    "height": 11
+   },
+   "excluded": false,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
      "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXHeading",
+     "name": "You said:"
+    }
+   ],
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "I'm rebuilding the rear wheel on my gravel bike with a new rim and the old hub. Where do I even start?",
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 165,
+    "height": 12,
+    "x": 245,
+    "width": 490
+   },
+   "excluded": false
   },
   {
    "role": "AXButton",
@@ -417,8 +1012,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -429,31 +1044,62 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "x": 235,
+    "width": 15,
+    "y": 189,
+    "height": 11
+   }
   },
   {
    "role": "AXButton",
    "name": "Conversation / Copy",
    "value": "Copy",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "width": 16,
+    "y": 189,
+    "x": 256,
+    "height": 11
+   },
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -464,31 +1110,50 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / ChatGPT said:",
    "value": "ChatGPT said:",
+   "bounds": {
+    "width": 1,
+    "height": 2,
+    "x": 235,
+    "y": 219
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -499,27 +1164,112 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "excluded": false,
+   "protected": false,
+   "bounds": {
+    "y": 218,
+    "width": 63,
+    "height": 11,
+    "x": 235
+   },
+   "visible": true,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "ChatGPT said:",
+     "role": "AXHeading"
+    }
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Start by removing the tire, tube and rim strip, then clamp the hub in a truing stand so the axle spins freely. Check the rim for flat spots and dents before you lace anything.",
+   "excluded": false,
+   "protected": false,
+   "visible": true,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -530,31 +1280,61 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 235,
+    "y": 206,
+    "width": 822,
+    "height": 12
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Sort the spokes into two groups. The drive-side spokes are shorter and pull from the right flange, while the non-drive-side spokes are longer. Mixing them up is the most common lacing mistake.",
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "width": 934,
+    "x": 235,
+    "height": 12,
+    "y": 220
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -565,18 +1345,16 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
@@ -588,8 +1366,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -600,31 +1398,67 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "width": 927,
+    "x": 235,
+    "y": 234,
+    "height": 12
+   },
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Add a drop of light oil to each spoke thread. This prevents the nipples from seizing and makes later adjustments much easier on a wheel that sees wet roads.",
+   "excluded": false,
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "x": 235,
+    "y": 248,
+    "height": 12,
+    "width": 757
+   },
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -635,31 +1469,48 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXButton",
    "name": "Conversation / Copy",
    "value": "Copy",
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -670,31 +1521,59 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
+   "bounds": {
+    "y": 261,
+    "x": 235,
+    "width": 15,
+    "height": 11
+   },
    "excluded": false,
-   "children": []
+   "protected": false,
+   "visible": true
   },
   {
    "role": "AXButton",
    "name": "Conversation / Rate response",
    "value": "Rate response",
+   "bounds": {
+    "y": 261,
+    "height": 11,
+    "x": 256,
+    "width": 22
+   },
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -705,31 +1584,54 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXButton",
    "name": "Conversation / Share",
    "value": "Share",
+   "bounds": {
+    "y": 261,
+    "width": 16,
+    "height": 11,
+    "x": 283
+   },
+   "excluded": false,
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -740,31 +1642,47 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXButton",
    "name": "Conversation / Read aloud",
    "value": "Read aloud",
+   "children": [],
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -775,21 +1693,78 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "x": 304,
+    "y": 261,
+    "height": 11,
+    "width": 22
+   }
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation / You said:",
+   "value": "You said:",
+   "visible": true,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
      "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 2,
+    "x": 235,
+    "y": 291,
+    "width": 1
+   },
+   "excluded": false
   },
   {
-   "role": "AXHeading",
+   "role": "AXStaticText",
    "name": "Conversation",
    "value": "You said:",
    "ancestor_path": [
@@ -798,8 +1773,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -810,27 +1805,65 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXHeading",
+     "name": "You said:"
     }
    ],
+   "children": [],
+   "excluded": false,
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 290,
+    "x": 235,
+    "width": 40,
+    "height": 11
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Okay, lacing is done. How do I true it?",
+   "children": [],
+   "bounds": {
+    "y": 291,
+    "width": 182,
+    "x": 245,
+    "height": 12
+   },
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -841,7 +1874,7 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -849,23 +1882,50 @@
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXButton",
    "name": "Conversation / Edit message",
    "value": "Edit message",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "width": 15,
+    "x": 235,
+    "y": 315,
+    "height": 11
+   },
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -876,31 +1936,52 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXButton",
    "name": "Conversation / Copy",
    "value": "Copy",
+   "protected": false,
+   "bounds": {
+    "height": 11,
+    "x": 256,
+    "width": 16,
+    "y": 315
+   },
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -911,31 +1992,48 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / ChatGPT said:",
    "value": "ChatGPT said:",
+   "visible": true,
+   "children": [],
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -946,27 +2044,112 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "x": 235,
+    "height": 2,
+    "y": 345,
+    "width": 1
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "ChatGPT said:",
+     "role": "AXHeading"
+    }
+   ],
    "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 11,
+    "y": 344,
+    "x": 235,
+    "width": 63
+   },
+   "visible": true
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Thought for 21 seconds",
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -977,7 +2160,7 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -985,10 +2168,15 @@
      "name": ""
     }
    ],
+   "children": [],
+   "bounds": {
+    "height": 16,
+    "width": 144,
+    "x": 235,
+    "y": 331
+   },
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
@@ -1000,8 +2188,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1012,7 +2220,7 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -1021,22 +2229,57 @@
     }
    ],
    "visible": true,
-   "protected": false,
+   "bounds": {
+    "y": 349,
+    "x": 235,
+    "width": 941,
+    "height": 12
+   },
    "excluded": false,
+   "protected": false,
    "children": []
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Use a tensiometer at the end of each pass. Even tension matters more than hitting a number, and a spread of more than 15 percent between spokes is the usual cause of a wheel going out of true after the first ride.",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "height": 12,
+    "y": 363,
+    "width": 1029,
+    "x": 235
+   },
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1047,7 +2290,7 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -1055,10 +2298,7 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
@@ -1070,8 +2310,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1082,7 +2342,7 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -1090,23 +2350,50 @@
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
+   "visible": true,
+   "children": [],
    "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 235,
+    "height": 12,
+    "width": 766,
+    "y": 377
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Target drive-side spoke tension is 110 kgf for this rim, and the non-drive side will land near 70 kgf once the wheel is dished correctly. Do not exceed the rim manufacturer's limit.",
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1117,18 +2404,23 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "x": 235,
+    "width": 853,
+    "height": 12,
+    "y": 391
+   },
+   "protected": false
   },
   {
    "role": "AXStaticText",
@@ -1140,8 +2432,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1152,7 +2464,7 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -1161,22 +2473,58 @@
     }
    ],
    "visible": true,
+   "bounds": {
+    "x": 235,
+    "y": 405,
+    "width": 912,
+    "height": 12
+   },
+   "children": [],
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXButton",
    "name": "Conversation / Copy",
    "value": "Copy",
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "x": 235,
+    "width": 15,
+    "y": 418,
+    "height": 11
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1187,31 +2535,52 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXButton",
    "name": "Conversation / Rate response",
    "value": "Rate response",
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "x": 256,
+    "y": 418,
+    "width": 22,
+    "height": 11
+   },
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1222,17 +2591,10 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
   },
   {
@@ -1245,8 +2607,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1257,31 +2639,55 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
    "visible": true,
-   "protected": false,
+   "bounds": {
+    "y": 418,
+    "height": 11,
+    "x": 283,
+    "width": 16
+   },
+   "children": [],
    "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXButton",
    "name": "Conversation / Read aloud",
    "value": "Read aloud",
+   "children": [],
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1292,31 +2698,57 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 11,
+    "x": 304,
+    "y": 418,
+    "width": 22
+   },
+   "excluded": false
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / You said:",
    "value": "You said:",
+   "bounds": {
+    "width": 1,
+    "x": 235,
+    "height": 2,
+    "y": 448
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1327,27 +2759,111 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
+   "visible": true,
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "You said:",
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "You said:",
+     "role": "AXHeading"
+    }
+   ],
+   "bounds": {
+    "width": 40,
+    "height": 11,
+    "y": 447,
+    "x": 235
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Now I'm mounting it. Do I need a torque wrench for the axle?",
+   "children": [],
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1358,7 +2874,7 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -1366,23 +2882,52 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 292,
+    "height": 12,
+    "x": 245,
+    "y": 448
+   },
+   "visible": true
   },
   {
    "role": "AXButton",
    "name": "Conversation / Edit message",
    "value": "Edit message",
+   "bounds": {
+    "width": 15,
+    "height": 11,
+    "x": 235,
+    "y": 472
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1393,16 +2938,12 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
+   "visible": true,
    "excluded": false,
    "children": []
   },
@@ -1410,14 +2951,36 @@
    "role": "AXButton",
    "name": "Conversation / Copy",
    "value": "Copy",
+   "visible": true,
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1428,31 +2991,61 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "x": 256,
+    "height": 11,
+    "y": 472,
+    "width": 16
+   }
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / ChatGPT said:",
    "value": "ChatGPT said:",
+   "visible": true,
+   "bounds": {
+    "y": 502,
+    "x": 235,
+    "width": 1,
+    "height": 2
+   },
+   "protected": false,
+   "excluded": false,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1463,27 +3056,110 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "children": [],
+   "excluded": false,
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "ChatGPT said:",
+     "role": "AXHeading"
+    }
+   ],
+   "bounds": {
+    "x": 235,
+    "height": 11,
+    "y": 501,
+    "width": 63
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Yes. Over-tightening can crush the bearings and under-tightening lets the cassette body wobble. Before you refit the wheel, clean the dropout faces and add a thin film of grease to the axle threads.",
+   "bounds": {
+    "x": 235,
+    "height": 12,
+    "width": 953,
+    "y": 489
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1494,31 +3170,53 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Fit the thru axle through the frame and hub, thread it in by hand until it seats, and only then bring the torque wrench to the fastener. Pull smoothly instead of jerking the handle.",
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1529,8 +3227,8 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -1538,22 +3236,56 @@
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "height": 12,
+    "x": 235,
+    "y": 503,
+    "width": 847
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Keep your hand near the head of the wrench, wipe off any excess grease so grit does not stick, and confirm the brake rotor sits centred between the pads on both sides of the caliper.",
+   "protected": false,
+   "children": [],
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "y": 517,
+    "width": 880,
+    "height": 12,
+    "x": 235
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1564,31 +3296,55 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Spin the wheel to check that nothing rubs, and confirm the quick release lever on the disc side does not point into the rotor before you ride away. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more before moving on. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more before moving on. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more before moving on. Take.",
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "y": 531,
+    "width": 1113,
+    "x": 235,
+    "height": 60
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1599,31 +3355,58 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Torque specification for the rear axle nut:",
+   "children": [],
+   "bounds": {
+    "height": 12,
+    "y": 593,
+    "width": 199,
+    "x": 235
+   },
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1634,31 +3417,56 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "85 Nm (63 lb-ft)",
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "width": 80,
+    "height": 12,
+    "y": 607,
+    "x": 235
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1669,31 +3477,59 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Re-check the torque after your first ride, since the bearings seat slightly.",
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "x": 235,
+    "height": 12,
+    "width": 351,
+    "y": 621
+   },
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1704,18 +3540,14 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXButton",
@@ -1727,8 +3559,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1739,15 +3591,17 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
+   "bounds": {
+    "height": 11,
+    "width": 15,
+    "x": 235,
+    "y": 634
+   },
    "protected": false,
    "excluded": false,
    "children": []
@@ -1756,14 +3610,37 @@
    "role": "AXButton",
    "name": "Conversation / Rate response",
    "value": "Rate response",
+   "children": [],
+   "visible": true,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1774,31 +3651,52 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 22,
+    "x": 256,
+    "y": 634,
+    "height": 11
+   },
+   "protected": false
   },
   {
    "role": "AXButton",
    "name": "Conversation / Share",
    "value": "Share",
+   "children": [],
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1809,31 +3707,61 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 634,
+    "x": 283,
+    "height": 11,
+    "width": 16
+   },
+   "protected": false
   },
   {
    "role": "AXButton",
    "name": "Conversation / Read aloud",
    "value": "Read aloud",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "y": 634,
+    "width": 22,
+    "height": 11,
+    "x": 304
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1844,31 +3772,51 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / You said:",
    "value": "You said:",
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "width": 1,
+    "x": 235,
+    "height": 2,
+    "y": 664
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1879,14 +3827,73 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "You said:",
+   "bounds": {
+    "y": 663,
+    "width": 40,
+    "height": 11,
+    "x": 235
+   },
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXHeading",
+     "name": "You said:"
+    }
+   ]
   },
   {
    "role": "AXStaticText",
@@ -1898,8 +3905,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1910,7 +3937,7 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -1918,10 +3945,16 @@
      "name": ""
     }
    ],
-   "visible": true,
+   "bounds": {
+    "x": 245,
+    "y": 664,
+    "width": 215,
+    "height": 12
+   },
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "visible": true,
+   "excluded": false
   },
   {
    "role": "AXButton",
@@ -1933,8 +3966,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1945,31 +3998,61 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "width": 15,
+    "height": 11,
+    "y": 688,
+    "x": 235
+   }
   },
   {
    "role": "AXButton",
    "name": "Conversation / Copy",
    "value": "Copy",
+   "protected": false,
+   "bounds": {
+    "x": 256,
+    "y": 688,
+    "height": 11,
+    "width": 16
+   },
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -1980,31 +4063,48 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "visible": true
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / ChatGPT said:",
    "value": "ChatGPT said:",
+   "visible": true,
+   "protected": false,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -2015,27 +4115,119 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 718,
+    "height": 2,
+    "x": 235,
+    "width": 1
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXHeading",
+     "name": "ChatGPT said:"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "x": 235,
+    "y": 717,
+    "width": 63,
+    "height": 11
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Tubeless works well on gravel. Use tape that is two millimetres wider than the rim channel and press it down firmly with a rag so no air can pass under it.",
+   "bounds": {
+    "width": 735,
+    "y": 705,
+    "height": 12,
+    "x": 235
+   },
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -2046,31 +4238,58 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Seat the tire with a floor pump that has a booster chamber or a compressor. If the bead refuses to seat, remove the valve core to let more air through for the first rush.",
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "width": 803,
+    "y": 719,
+    "height": 12,
+    "x": 235
+   },
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -2081,31 +4300,50 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Spin the wheel in all positions after inflating so the sealant coats the whole bead, and ride gently for the first few kilometres. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more before moving on. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more before moving on. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more before moving on. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more.",
+   "visible": true,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -2116,18 +4354,22 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 733,
+    "width": 1116,
+    "x": 235,
+    "height": 72
+   },
+   "excluded": false
   },
   {
    "role": "AXStaticText",
@@ -2139,8 +4381,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -2151,16 +4413,22 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
+   "bounds": {
+    "x": 235,
+    "y": 807,
+    "height": 12,
+    "width": 245
+   },
    "protected": false,
+   "visible": true,
    "excluded": false,
    "children": []
   },
@@ -2168,14 +4436,43 @@
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "A: Wait 24 hours before riding.",
+   "bounds": {
+    "y": 821,
+    "x": 235,
+    "height": 12,
+    "width": 148
+   },
+   "children": [],
+   "excluded": false,
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -2186,7 +4483,7 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -2194,23 +4491,41 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Top up the sealant every four to six months and carry a tire plug kit for punctures that do not seal.",
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -2221,31 +4536,65 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
+     "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 473,
+    "height": 12,
+    "y": 835,
+    "x": 235
+   }
   },
   {
    "role": "AXButton",
    "name": "Conversation / Copy",
    "value": "Copy",
+   "protected": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "x": 235,
+    "width": 15,
+    "height": 11,
+    "y": 848
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -2256,18 +4605,11 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXButton",
@@ -2279,8 +4621,28 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -2291,31 +4653,61 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
+   "excluded": false,
+   "children": [],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 256,
+    "y": 848,
+    "width": 22,
+    "height": 11
+   }
   },
   {
    "role": "AXButton",
    "name": "Conversation / Share",
    "value": "Share",
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "x": 283,
+    "y": 848,
+    "width": 16,
+    "height": 11
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -2326,31 +4718,54 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "excluded": false
   },
   {
    "role": "AXButton",
    "name": "Conversation / Read aloud",
    "value": "Read aloud",
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "width": 22,
+    "height": 11,
+    "x": 304,
+    "y": 848
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -2361,395 +4776,11 @@
      "name": "Conversation"
     },
     {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXHeading",
-   "name": "Conversation",
-   "value": "You said:",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXArticle",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Conversation",
-   "value": "Last thing: how often should I check the wheel afterwards?",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Edit message",
-   "value": "Edit message",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Copy",
-   "value": "Copy",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXHeading",
-   "name": "Conversation",
-   "value": "ChatGPT said:",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXArticle",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Conversation",
-   "value": "Check the true and the spoke tension after the first ride, again after the first 100 km, and then at every service. A wheel that stays quiet and straight through the first month is usually stable for years.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Conversation",
-   "value": "Listen for ticking from the hub or spokes; most noises are dry nipples or a loose cassette lockring, both of which take only minutes to fix.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Copy",
-   "value": "Copy",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Rate response",
-   "value": "Rate response",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Share",
-   "value": "Share",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Read aloud",
-   "value": "Read aloud",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXArticle",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXButton",
@@ -2761,26 +4792,109 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "Composer",
+     "role": "AXGroup"
+    }
+   ],
+   "protected": false,
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "x": 447,
+    "y": 806,
+    "height": 32,
+    "width": 33
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Composer",
+   "value": "Ask anything",
+   "children": [],
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "x": 489,
+    "y": 820,
+    "width": 63,
+    "height": 12
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
-     "role": "AXGroup",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
      "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Composer"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "Composer",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Ask ChatGPT",
+     "role": "AXTextArea"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXButton",
@@ -2792,26 +4906,48 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": "Composer"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "Composer",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 32,
+    "x": 1083,
+    "width": 33,
+    "y": 806
+   },
+   "children": [],
+   "excluded": false
   },
   {
    "role": "AXButton",
@@ -2823,20 +4959,581 @@
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "Composer",
+     "role": "AXGroup"
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "x": 1123,
+    "width": 33,
+    "y": 806,
+    "height": 32
+   },
+   "children": [],
+   "visible": true,
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "ChatGPT can make mistakes. Check important info.",
+   "protected": false,
+   "bounds": {
+    "y": 852,
+    "x": 688,
+    "width": 227,
+    "height": 11
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
      "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Composer"
+     "name": ""
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "width": 36,
+    "x": 244,
+    "y": 41,
+    "height": 36
+   },
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
+    }
+   ],
+   "excluded": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "width": 36,
+    "height": 36,
+    "x": 281,
+    "y": 41
+   },
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Page Menu",
+   "value": "Page Menu",
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "width": 30.5,
+    "y": 45,
+    "height": 29,
+    "x": 467.5
+   },
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "height": 30,
+    "y": 44,
+    "width": 24,
+    "x": 489.5
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "children": [],
+   "excluded": false,
+   "visible": true
+  },
+  {
+   "role": "AXTextField",
+   "name": "smart search field",
+   "value": "https://chatgpt.com/c/0d77ab3e-wheel",
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "x": 490.5,
+    "width": 481,
+    "height": 31,
+    "y": 51
+   },
+   "visible": true
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "excluded": false,
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "x": 977.5,
+    "y": 45.5,
+    "width": 23.5,
+    "height": 29
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "Share",
+   "value": "Share",
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "x": 1272,
+    "width": 41,
+    "y": 33,
+    "height": 52
+   },
+   "protected": false
+  },
+  {
+   "role": "AXButton",
+   "name": "New Tab",
+   "value": "New Tab",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "width": 37,
+    "x": 1313,
+    "height": 52,
+    "y": 33
+   },
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Tab Overview",
+   "value": "Tab Overview",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "excluded": false,
+   "protected": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "x": 1350,
+    "y": 33,
+    "width": 43,
+    "height": 52
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "y": 85,
+    "width": 48,
+    "x": 81,
+    "height": 32
+   },
+   "children": [],
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "visible": true,
+   "bounds": {
+    "width": 48,
+    "x": 130,
+    "y": 85,
+    "height": 32
+   },
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "x": 179,
+    "y": 85,
+    "height": 32,
+    "width": 48
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "y": 85,
+    "width": 48,
+    "x": 228,
+    "height": 32
+   },
+   "visible": true,
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "width": 48,
+    "x": 277,
+    "y": 85,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Rebuilding a rear wheel - ChatGPT",
+   "value": "Rebuilding a rear wheel - ChatGPT",
+   "bounds": {
+    "y": 85,
+    "width": 197,
+    "height": 32,
+    "x": 326
+   },
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "Rebuilding a rear wheel - ChatGPT",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    }
+   ],
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "y": 92,
+    "height": 18,
+    "x": 375,
+    "width": 141
+   },
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "height": 32,
+    "x": 524,
+    "y": 85,
+    "width": 48
+   },
+   "excluded": false,
+   "visible": true,
+   "protected": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 573,
+    "width": 48,
+    "y": 85,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
     }
    ],
    "visible": true,
@@ -2845,27 +5542,404 @@
    "children": []
   },
   {
-   "role": "AXStaticText",
-   "name": "Rebuilding a rear wheel - ChatGPT",
-   "value": "ChatGPT can make mistakes. Check important info.",
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Rebuilding a rear wheel - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Rebuilding a rear wheel - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
     }
    ],
+   "children": [],
    "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 85,
+    "x": 622,
+    "width": 47,
+    "height": 32
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "x": 670,
+    "width": 47
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "width": 47,
+    "x": 718,
+    "y": 85
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "width": 47,
+    "x": 766,
+    "height": 32,
+    "y": 85
+   },
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "width": 47,
+    "y": 85,
+    "x": 814
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "x": 862,
+    "y": 85,
+    "width": 47,
+    "height": 32
+   },
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 85,
+    "width": 47,
+    "x": 910,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "height": 32,
+    "x": 958,
+    "y": 85,
+    "width": 47
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "bounds": {
+    "width": 47,
+    "x": 1006,
+    "height": 32,
+    "y": 85
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "children": [],
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "height": 32,
+    "width": 47,
+    "y": 85,
+    "x": 1054
+   },
+   "children": [],
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "width": 47,
+    "y": 85,
+    "x": 1102,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "bounds": {
+    "x": 1150,
+    "height": 32,
+    "width": 47,
+    "y": 85
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "children": [],
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "height": 32,
+    "width": 47,
+    "y": 85,
+    "x": 1198
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "y": 85,
+    "x": 1246,
+    "width": 47,
+    "height": 32
+   },
+   "children": [],
+   "visible": true,
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "width": 47,
+    "x": 1294,
+    "y": 85
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "y": 85,
+    "width": 47,
+    "x": 1342,
+    "height": 32
+   },
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false
   }
  ]
 }

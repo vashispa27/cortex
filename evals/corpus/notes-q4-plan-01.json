@@ -1,5 +1,5 @@
 {
- "provenance": "hand_authored",
+ "provenance": "real_capture_invented_content",
  "app_id": "com.apple.Notes",
  "title": "Q4 planning notes",
  "url": null,
@@ -9,16 +9,48 @@
  "focus_role": "",
  "focus_name": "",
  "limitations": [],
- "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "notes": "Real Accessibility capture of evals/pages/notes-q4-plan-01.html in com.apple.Safari (45 nodes). app_id, title, url, source_type and observed_ms were rewritten from the page's facts.json to simulate com.apple.Notes; browser-chrome text outside the AXWebArea was redacted (20 nodes).",
+ "captured_with": {
+  "app_id": "com.apple.Safari",
+  "source_type": "browser",
+  "limitations": []
+ },
  "roots": [
   {
    "role": "AXHeading",
-   "name": "Sidebar",
+   "name": "Sidebar / Folders",
    "value": "Folders",
+   "children": [],
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -26,9 +58,65 @@
     }
    ],
    "visible": true,
-   "protected": false,
+   "bounds": {
+    "x": 85,
+    "width": 166,
+    "height": 27,
+    "y": 152
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Folders",
    "excluded": false,
-   "children": []
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "name": "Folders",
+     "role": "AXHeading"
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "width": 63,
+    "x": 85,
+    "height": 22,
+    "y": 154
+   },
+   "protected": false
   },
   {
    "role": "AXLink",
@@ -36,18 +124,101 @@
    "value": "iCloud",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Sidebar"
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 166,
+    "y": 196,
+    "height": 31,
+    "x": 85
+   },
+   "children": [],
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "iCloud",
+   "excluded": false,
+   "protected": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXLink",
+     "name": "iCloud"
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "height": 19,
+    "x": 93,
+    "y": 202,
+    "width": 44
+   }
   },
   {
    "role": "AXLink",
@@ -55,60 +226,260 @@
    "value": "Work",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Sidebar"
     }
    ],
+   "children": [],
+   "excluded": false,
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 166,
+    "y": 226,
+    "height": 31,
+    "x": 85
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Work",
+   "protected": false,
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "y": 232,
+    "x": 93,
+    "width": 36,
+    "height": 19
+   },
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXLink",
+     "name": "Work"
+    }
+   ],
+   "excluded": false
   },
   {
    "role": "AXLink",
    "name": "Sidebar / Recently Deleted",
    "value": "Recently Deleted",
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "y": 256,
+    "x": 85,
+    "height": 31,
+    "width": 166
+   },
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Sidebar"
     }
    ],
-   "visible": true,
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Recently Deleted",
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 262,
+    "height": 19,
+    "x": 93,
+    "width": 117
+   },
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXLink",
+     "name": "Recently Deleted"
+    }
+   ],
+   "children": [],
+   "visible": true,
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Notes",
    "value": "Groceries and errands",
+   "excluded": false,
+   "protected": false,
+   "visible": true,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Notes"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "height": 18,
+    "width": 163,
+    "y": 135,
+    "x": 277
+   }
   },
   {
    "role": "AXStaticText",
@@ -116,35 +487,98 @@
    "value": "Today",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Notes"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
+   "children": [],
    "excluded": false,
-   "children": []
+   "visible": true,
+   "bounds": {
+    "y": 156,
+    "x": 277,
+    "height": 16,
+    "width": 37
+   },
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Notes",
    "value": "Q4 planning notes",
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Notes"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -153,77 +587,184 @@
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 197,
+    "height": 18,
+    "x": 277,
+    "width": 134
+   },
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Notes",
    "value": "Yesterday",
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "y": 218,
+    "width": 60,
+    "height": 16,
+    "x": 277
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Notes"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Notes",
    "value": "Book list",
+   "excluded": false,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Notes"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
+   "bounds": {
+    "x": 277,
+    "height": 18,
+    "y": 259,
+    "width": 64
+   },
    "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXStaticText",
    "name": "Notes",
    "value": "Last week",
+   "visible": true,
+   "bounds": {
+    "y": 280,
+    "x": 277,
+    "height": 16,
+    "width": 61
+   },
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
     },
     {
-     "role": "AXList",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
      "name": "Notes"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "excluded": false
   },
   {
    "role": "AXButton",
@@ -231,8 +772,32 @@
    "value": "New Note",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -243,19 +808,58 @@
      "name": "Notes toolbar"
     }
    ],
+   "children": [],
    "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 571,
+    "y": 153,
+    "height": 30,
+    "width": 31
+   }
   },
   {
    "role": "AXButton",
    "name": "Notes toolbar / Delete",
    "value": "Delete",
+   "protected": false,
+   "bounds": {
+    "height": 30,
+    "x": 609,
+    "y": 153,
+    "width": 38
+   },
+   "visible": true,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -266,19 +870,49 @@
      "name": "Notes toolbar"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXButton",
    "name": "Notes toolbar / Share",
    "value": "Share",
+   "children": [],
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "height": 30,
+    "width": 28,
+    "x": 654,
+    "y": 153
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -289,29 +923,791 @@
      "name": "Notes toolbar"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXTextArea",
    "name": "Editor / Note body",
    "value": "Q4 planning notes\n\nGoals\n- Ship v2 onboarding by 20 November\n- Cut the support backlog below 40 tickets\n- Hire one more backend engineer by 15 December\n\nRisks\n- Design review slips past 30 October\n- Vendor contract renewal on 1 December\n\nOpen questions\n- Who owns the migration runbook?\n",
+   "excluded": false,
+   "protected": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "width": 802,
+    "x": 559,
+    "y": 190,
+    "height": 601
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Q4 planning notes"
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Editor"
     }
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Editor",
+   "value": "Q4 planning notes\n\nGoals\n- Ship v2 onboarding by 20 November\n- Cut the support backlog below 40 tickets\n- Hire one more backend engineer by 15 December\n\nRisks\n- Design review slips past 30 October\n- Vendor contract renewal on 1 December\n\nOpen questions\n- Who owns the migration runbook?\n",
+   "children": [],
+   "bounds": {
+    "y": 195,
+    "width": 370,
+    "height": 318,
+    "x": 561
+   },
+   "visible": true,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Editor"
+    },
+    {
+     "name": "Note body",
+     "role": "AXTextArea"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "excluded": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "x": 244,
+    "width": 36,
+    "height": 36,
+    "y": 41
+   },
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "width": 36,
+    "y": 41,
+    "x": 281,
+    "height": 36
+   },
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "protected": false
+  },
+  {
+   "role": "AXTextField",
+   "name": "smart search field",
+   "value": "",
+   "bounds": {
+    "x": 490.5,
+    "y": 51,
+    "width": 481,
+    "height": 31
+   },
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
    ],
    "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "width": 23.5,
+    "height": 29,
+    "x": 977.5,
+    "y": 45.5
+   },
+   "excluded": false,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "children": [],
+   "visible": true
+  },
+  {
+   "role": "AXButton",
+   "name": "Share",
+   "value": "Share",
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "y": 33,
+    "width": 41,
+    "height": 52,
+    "x": 1272
+   },
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "New Tab",
+   "value": "New Tab",
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "visible": true,
+   "bounds": {
+    "x": 1313,
+    "height": 52,
+    "y": 33,
+    "width": 37
+   },
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Tab Overview",
+   "value": "Tab Overview",
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "width": 43,
+    "x": 1350,
+    "height": 52,
+    "y": 33
+   },
+   "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "width": 65,
+    "x": 81
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "x": 147,
+    "y": 85,
+    "width": 65,
+    "height": 32
+   },
+   "visible": true,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 213,
+    "height": 32,
+    "y": 85,
+    "width": 65
+   },
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "y": 85,
+    "width": 65,
+    "height": 32,
+    "x": 279
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "x": 345,
+    "width": 65,
+    "height": 32,
+    "y": 85
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "x": 411,
+    "width": 65
+   },
+   "excluded": false,
+   "children": [],
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "x": 477,
+    "width": 65
+   },
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "y": 85,
+    "width": 64,
+    "height": 32,
+    "x": 543
+   },
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
+   "visible": true,
+   "excluded": false,
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "x": 608,
+    "width": 64,
+    "y": 85,
+    "height": 32
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 673,
+    "y": 85,
+    "width": 64,
+    "height": 32
+   },
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "x": 738,
+    "y": 85,
+    "width": 64,
+    "height": 32
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "bounds": {
+    "x": 803,
+    "y": 85,
+    "height": 32,
+    "width": 64
+   },
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "width": 64,
+    "x": 868
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "bounds": {
+    "x": 933,
+    "height": 32,
+    "y": 85,
+    "width": 64
+   },
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
    "protected": false,
    "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "x": 998,
+    "width": 64
+   },
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "width": 64,
+    "x": 1063
+   },
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "bounds": {
+    "x": 1128,
+    "y": 85,
+    "width": 64,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
+   "children": [],
+   "excluded": false,
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Q4 planning notes",
+   "value": "Q4 planning notes",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 85,
+    "width": 196,
+    "x": 1193,
+    "height": 32
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "Q4 planning notes",
+   "ancestor_path": [
+    {
+     "name": "Q4 planning notes",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 18 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "Q4 planning notes"
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 92,
+    "x": 1245.5,
+    "width": 113,
+    "height": 18
+   },
+   "protected": false
   }
  ]
 }

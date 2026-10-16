@@ -46,6 +46,10 @@ tab page and must not become searchable).
 
 When every page has printed `new #N` (24 pages, 23 `new` plus 1 `navigation_only`), press Ctrl-C in tab 1.
 
+Only text that is **on screen** is captured. Keep the Safari window large (full screen is best) and do not
+resize it mid-run; long pages use a compact layout so they fit. The export step in 5 fails loudly if a gold
+answer is missing, which is how a clipped page shows up.
+
 ## 4. Export fixtures
 
 ```bash

@@ -76,9 +76,9 @@ in the `timing` block.
 
 * 61 questions: a difference of one or two queries is noise. `compare.py` prints bootstrap intervals
   and flags rows "within noise".
-* Until `CAPTURE.md` is run, fixtures are synthesized from the page definitions with the same node
-  rules as the AX helper; the roles real apps expose may differ. Hand-authored and real-capture
-  numbers are not comparable.
+* Fixtures are now real Safari captures (`provenance: real_capture_invented_content`, app id, URL and
+  time rewritten). `evals/tools/build_corpus.py` can still regenerate hand-authored trees; the earlier
+  hand-authored baseline is kept in `reports/hand-authored/`. Do not mix the two when comparing.
 * The corpus is engineered to expose weaknesses (planted boundary straddles, near-duplicates,
   filter traps); the rates it reports are not production rates.
 * Changes made to `main.rs` for this harness are behaviour-preserving: `retrieve()`/`Params` defaults

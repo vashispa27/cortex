@@ -1,5 +1,5 @@
 {
- "provenance": "hand_authored",
+ "provenance": "real_capture_invented_content",
  "app_id": "com.apple.Safari",
  "title": "Priya Nair / Chat / X",
  "url": "https://x.com/i/chat/2201260-finance",
@@ -9,416 +9,904 @@
  "focus_role": "",
  "focus_name": "",
  "limitations": [],
- "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "notes": "Real Accessibility capture of evals/pages/xchat-finance-priya-01.html in com.apple.Safari (58 nodes). app_id, title, url, source_type and observed_ms were rewritten from the page's facts.json to simulate com.apple.Safari; browser-chrome text outside the AXWebArea was redacted (27 nodes).",
+ "captured_with": {
+  "app_id": "com.apple.Safari",
+  "source_type": "browser",
+  "limitations": []
+ },
  "roots": [
-  {
-   "role": "AXButton",
-   "name": "Back",
-   "value": "Back",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Forward",
-   "value": "Forward",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Reload",
-   "value": "Reload",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXTextField",
-   "name": "Address and search bar",
-   "value": "https://x.com/i/chat/2201260-finance",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXRadioButton",
-   "name": "Priya Nair / Chat / X",
-   "value": "Priya Nair / Chat / X",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
-    },
-    {
-     "role": "AXTabGroup",
-     "name": "Tab Strip"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
   {
    "role": "AXLink",
    "name": "Primary / Home",
    "value": "Home",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 135,
+    "width": 63,
+    "x": 85,
+    "height": 22
+   },
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
     }
    ],
+   "excluded": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Home",
+   "bounds": {
+    "y": 137,
+    "x": 85,
+    "height": 18,
+    "width": 43
+   },
    "visible": true,
    "protected": false,
    "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Home",
+     "role": "AXLink"
+    }
+   ],
    "children": []
   },
   {
    "role": "AXLink",
    "name": "Primary / Explore",
    "value": "Explore",
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "protected": false,
+   "visible": true,
+   "bounds": {
+    "y": 169,
+    "height": 22,
+    "x": 85,
+    "width": 63
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Explore",
+   "children": [],
+   "protected": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Explore",
+     "role": "AXLink"
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "y": 171,
+    "x": 85,
+    "width": 54,
+    "height": 18
+   }
   },
   {
    "role": "AXLink",
    "name": "Primary / Notifications",
    "value": "Notifications",
+   "children": [],
+   "bounds": {
+    "x": 85,
+    "height": 22,
+    "y": 203,
+    "width": 92
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
    "excluded": false,
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Notifications",
+   "excluded": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Notifications",
+     "role": "AXLink"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "width": 92,
+    "height": 18,
+    "x": 85,
+    "y": 205
+   },
    "children": []
   },
   {
    "role": "AXLink",
    "name": "Primary / Messages",
    "value": "Messages",
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
+   "bounds": {
+    "width": 72,
+    "y": 237,
+    "height": 22,
+    "x": 85
+   },
    "protected": false,
+   "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Messages",
+   "visible": true,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 85,
+    "width": 73,
+    "height": 18,
+    "y": 239
+   },
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Messages"
+    }
+   ]
   },
   {
    "role": "AXHeading",
-   "name": "Conversations",
+   "name": "Conversations / Messages",
    "value": "Messages",
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "width": 339,
+    "y": 123,
+    "x": 161,
+    "height": 58
+   },
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Conversations"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Conversations",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Messages",
+   "children": [],
    "excluded": false,
-   "children": []
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Conversations",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Messages",
+     "role": "AXHeading"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "x": 177,
+    "width": 96,
+    "y": 140,
+    "height": 23
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Conversations",
    "value": "Launch crew",
+   "visible": true,
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversations"
-    },
-    {
-     "role": "AXList",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "Conversations",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 195,
+    "width": 88,
+    "height": 18,
+    "x": 177
+   },
+   "children": [],
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversations",
    "value": "Mira: I'm out on Wednesday afternoon",
+   "excluded": false,
+   "visible": true,
+   "protected": false,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversations"
-    },
-    {
-     "role": "AXList",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "Conversations",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 177,
+    "width": 271,
+    "y": 196,
+    "height": 39
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Conversations",
    "value": "Weekend plans",
+   "visible": true,
+   "protected": false,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Conversations"
+     "name": ""
     },
     {
-     "role": "AXList",
+     "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Conversations",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 18,
+    "y": 264,
+    "x": 177,
+    "width": 105
+   },
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversations",
    "value": "Sam: see you at 7",
+   "bounds": {
+    "y": 265,
+    "width": 115,
+    "height": 17,
+    "x": 285
+   },
+   "visible": true,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Conversations"
+     "name": ""
     },
     {
-     "role": "AXList",
+     "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Conversations",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversations",
    "value": "Book club",
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "x": 177,
+    "y": 311,
+    "width": 68,
+    "height": 18
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Conversations"
+     "name": ""
     },
     {
-     "role": "AXList",
+     "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Conversations",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Conversations",
    "value": "Noor: chapter nine was wild",
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Conversations"
+     "name": ""
     },
     {
-     "role": "AXList",
+     "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Conversations",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "x": 248,
+    "width": 180,
+    "height": 17,
+    "y": 312
+   },
+   "visible": true
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / Priya Nair",
    "value": "Priya Nair",
+   "protected": false,
+   "bounds": {
+    "y": 155,
+    "x": 517,
+    "width": 864,
+    "height": 34
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -430,6 +918,62 @@
     }
    ],
    "visible": true,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Priya Nair",
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "Priya Nair",
+     "role": "AXHeading"
+    }
+   ],
+   "bounds": {
+    "height": 28,
+    "width": 102,
+    "x": 517,
+    "y": 158
+   },
    "protected": false,
    "excluded": false,
    "children": []
@@ -438,32 +982,62 @@
    "role": "AXStaticText",
    "name": "Priya Nair 11:30 AM",
    "value": "Invoice 4471 is overdue by 12 days.",
+   "protected": false,
+   "children": [],
+   "visible": true,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Priya Nair 11:30 AM"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 241,
+    "x": 531,
+    "y": 263,
+    "height": 19
+   },
+   "excluded": false
   },
   {
    "role": "AXStaticText",
@@ -471,20 +1045,40 @@
    "value": "11:30 AM",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -492,9 +1086,15 @@
     }
    ],
    "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "height": 16,
+    "y": 266,
+    "x": 789,
+    "width": 53
+   }
   },
   {
    "role": "AXStaticText",
@@ -502,26 +1102,56 @@
    "value": "Which vendor is it?",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
+    },
+    {
+     "name": "You 11:32 AM",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
-     "name": "You 11:32 AM"
+     "name": ""
     }
    ],
+   "bounds": {
+    "x": 531,
+    "height": 19,
+    "width": 130,
+    "y": 345
+   },
    "visible": true,
    "protected": false,
    "excluded": false,
@@ -531,107 +1161,272 @@
    "role": "AXStaticText",
    "name": "You 11:32 AM",
    "value": "11:32 AM",
+   "bounds": {
+    "height": 16,
+    "y": 348,
+    "x": 678,
+    "width": 53
+   },
+   "visible": true,
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": "You 11:32 AM"
+     "name": "You 11:32 AM",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
    "name": "Priya Nair 11:35 AM",
    "value": "Harbor Print. They want payment before 30 October.",
+   "visible": true,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": "Priya Nair 11:35 AM"
+     "name": "Priya Nair 11:35 AM",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 361,
+    "y": 427,
+    "x": 531,
+    "height": 19
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Priya Nair 11:35 AM",
    "value": "11:35 AM",
+   "bounds": {
+    "y": 430,
+    "height": 16,
+    "width": 52,
+    "x": 909
+   },
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": "Priya Nair 11:35 AM"
+     "name": "Priya Nair 11:35 AM",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
    "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message composer",
+   "value": "Start a new message",
+   "children": [],
+   "bounds": {
+    "y": 755,
+    "width": 144,
+    "x": 531,
+    "height": 18
+   },
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message composer"
+    },
+    {
+     "role": "AXTextArea",
+     "name": "Start a new message"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ]
   },
   {
    "role": "AXButton",
    "name": "Message composer / Send",
    "value": "Send",
+   "visible": true,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -642,33 +1437,870 @@
      "name": "Message composer"
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 743,
+    "height": 65,
+    "width": 72,
+    "x": 1309
+   },
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "To view keyboard shortcuts, press question mark",
+   "protected": false,
+   "bounds": {
+    "height": 15,
+    "y": 839,
+    "width": 277,
+    "x": 517
+   },
+   "excluded": false,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Priya Nair / Chat / X"
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXSplitGroup",
+     "name": ""
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Priya Nair / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "visible": true
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "y": 41,
+    "x": 244,
+    "width": 36,
+    "height": 36
+   },
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "x": 281,
+    "width": 36,
+    "height": 36,
+    "y": 41
+   }
+  },
+  {
+   "role": "AXTextField",
+   "name": "smart search field",
+   "value": "https://x.com/i/chat/2201260-finance",
+   "children": [],
+   "bounds": {
+    "height": 31,
+    "width": 481,
+    "x": 490.5,
+    "y": 51
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "x": 977.5,
+    "width": 23.5,
+    "y": 45.5,
+    "height": 29
+   },
+   "excluded": false,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "Share",
+   "value": "Share",
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "x": 1272,
+    "width": 41,
+    "height": 52,
+    "y": 33
+   }
+  },
+  {
+   "role": "AXButton",
+   "name": "New Tab",
+   "value": "New Tab",
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "y": 33,
+    "width": 37,
+    "height": 52,
+    "x": 1313
+   },
+   "visible": true
+  },
+  {
+   "role": "AXButton",
+   "name": "Tab Overview",
+   "value": "Tab Overview",
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "x": 1350,
+    "y": 33,
+    "height": 52,
+    "width": 43
+   },
+   "protected": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "x": 81,
+    "width": 50
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "bounds": {
+    "width": 50,
+    "x": 132,
+    "y": 85,
+    "height": 32
+   },
+   "visible": true,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 183,
+    "height": 32,
+    "y": 85,
+    "width": 50
+   },
+   "children": [],
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "excluded": false,
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "x": 234,
+    "y": 85,
+    "height": 32,
+    "width": 50
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "x": 285,
+    "width": 50
+   },
+   "excluded": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "x": 336,
+    "width": 50,
+    "y": 85
+   },
+   "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "x": 387,
+    "width": 50,
+    "height": 32,
+    "y": 85
+   },
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "x": 438,
+    "width": 50
+   },
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "visible": true,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "excluded": false,
+   "protected": false,
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "width": 50,
+    "x": 489
+   },
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "x": 540,
+    "width": 50
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "visible": true,
+   "children": [],
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "x": 591,
+    "width": 50,
+    "height": 32,
+    "y": 85
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "height": 32,
+    "x": 642,
+    "y": 85,
+    "width": 50
+   },
+   "children": [],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "width": 49,
+    "x": 693
+   },
+   "children": [],
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "bounds": {
+    "height": 32,
+    "x": 743,
+    "width": 49,
+    "y": 85
+   },
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "width": 49,
+    "height": 32,
+    "x": 793,
+    "y": 85
+   },
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "y": 85,
+    "x": 843,
+    "width": 49,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "x": 893,
+    "width": 49
+   },
+   "excluded": false,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "width": 49,
+    "x": 943,
+    "y": 85,
+    "height": 32
+   },
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "visible": true,
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "x": 993,
+    "width": 49
+   },
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "y": 85,
+    "x": 1043,
+    "height": 32,
+    "width": 49
+   },
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
     }
    ],
    "visible": true,
    "protected": false,
    "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "protected": false,
+   "bounds": {
+    "height": 32,
+    "x": 1093,
+    "y": 85,
+    "width": 49
+   },
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "width": 49,
+    "x": 1143,
+    "y": 85,
+    "height": 32
+   },
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "visible": true,
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "width": 196,
+    "x": 1193
+   },
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Priya Nair / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 23 tabs"
+    },
+    {
+     "name": "Nair / Chat / X",
+     "role": "AXRadioButton"
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "height": 18,
+    "x": 1259,
+    "width": 86.5,
+    "y": 92
+   },
+   "visible": true
   }
  ]
 }

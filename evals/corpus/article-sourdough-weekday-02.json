@@ -1,5 +1,5 @@
 {
- "provenance": "hand_authored",
+ "provenance": "real_capture_invented_content",
  "app_id": "com.apple.Safari",
  "title": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
  "url": "https://crumbandcrust.example.com/weekday-loaf",
@@ -9,175 +9,212 @@
  "focus_role": "",
  "focus_name": "",
  "limitations": [],
- "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "notes": "Real Accessibility capture of evals/pages/article-sourdough-weekday-02.html in com.apple.Safari (43 nodes). app_id, title, url, source_type and observed_ms were rewritten from the page's facts.json to simulate com.apple.Safari; browser-chrome text outside the AXWebArea was redacted (9 nodes).",
+ "captured_with": {
+  "app_id": "com.apple.Safari",
+  "source_type": "browser",
+  "limitations": []
+ },
  "roots": [
-  {
-   "role": "AXButton",
-   "name": "Back",
-   "value": "Back",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Forward",
-   "value": "Forward",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Reload",
-   "value": "Reload",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXTextField",
-   "name": "Address and search bar",
-   "value": "https://crumbandcrust.example.com/weekday-loaf",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXRadioButton",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
-   "value": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXTabGroup",
-     "name": "Tab Strip"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
   {
    "role": "AXStaticText",
    "name": "Cookie consent",
    "value": "We use cookies to improve your experience.",
+   "bounds": {
+    "width": 284,
+    "x": 93,
+    "height": 17,
+    "y": 139
+   },
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
-     "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Cookie consent"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Cookie consent",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "visible": true
   },
   {
    "role": "AXButton",
    "name": "Cookie consent / Accept all cookies",
    "value": "Accept all cookies",
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
-     "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Cookie consent"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Cookie consent",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 146,
+    "y": 133,
+    "x": 392,
+    "height": 29
+   },
+   "protected": false
   },
   {
    "role": "AXButton",
    "name": "Cookie consent / Manage preferences",
    "value": "Manage preferences",
+   "visible": true,
+   "bounds": {
+    "width": 161,
+    "x": 554,
+    "y": 133,
+    "height": 29
+   },
+   "children": [],
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
-     "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Cookie consent"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Cookie consent",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXLink",
    "name": "Site header / Crumb & Crust",
+   "value": "Crumb & Crust",
+   "protected": false,
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "x": 105,
+    "width": 143,
+    "y": 186,
+    "height": 30
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    }
+   ],
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site header",
    "value": "Crumb & Crust",
    "ancestor_path": [
     {
@@ -185,18 +222,48 @@
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
-     "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Site header"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Crumb & Crust",
+     "role": "AXLink"
     }
    ],
    "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "x": 105,
+    "y": 189,
+    "height": 23,
+    "width": 143
+   }
   },
   {
    "role": "AXLink",
@@ -208,80 +275,382 @@
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    }
+   ],
+   "excluded": false,
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "width": 41,
+    "y": 192,
+    "x": 1122,
+    "height": 18
+   },
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Home",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
-     "role": "AXGroup",
-     "name": "Site header"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Home"
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
+   "bounds": {
+    "width": 42,
+    "y": 192,
+    "height": 18,
+    "x": 1122
+   },
+   "visible": true,
    "children": []
   },
   {
    "role": "AXLink",
    "name": "Primary / Bread",
    "value": "Bread",
+   "protected": false,
+   "children": [],
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": "Site header"
+     "name": "Site header",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": "Primary"
+     "name": "Primary",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
+   "bounds": {
+    "width": 42,
+    "x": 1184,
+    "y": 192,
+    "height": 18
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Bread",
+   "visible": true,
    "excluded": false,
-   "children": []
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Bread"
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "width": 41,
+    "height": 18,
+    "y": 192,
+    "x": 1185
+   }
   },
   {
    "role": "AXLink",
    "name": "Primary / Pastry",
    "value": "Pastry",
+   "excluded": false,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    }
+   ],
+   "bounds": {
+    "y": 192,
+    "height": 18,
+    "x": 1247,
+    "width": 44
+   },
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Pastry",
+   "protected": false,
+   "bounds": {
+    "width": 44,
+    "x": 1247,
+    "y": 192,
+    "height": 18
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
-     "role": "AXGroup",
-     "name": "Site header"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Pastry",
+     "role": "AXLink"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "visible": true
   },
   {
    "role": "AXLink",
    "name": "Primary / Shop",
+   "value": "Shop",
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "y": 192,
+    "x": 1312,
+    "width": 36,
+    "height": 18
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    }
+   ],
+   "excluded": false,
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
    "value": "Shop",
    "ancestor_path": [
     {
@@ -289,26 +658,109 @@
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": "Site header"
+     "name": "Site header",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": "Primary"
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Shop"
     }
    ],
    "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "x": 1312,
+    "height": 18,
+    "width": 36,
+    "y": 192
+   },
+   "protected": false
   },
   {
    "role": "AXHeading",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+   "name": "A Weekday Sourdough in 6 Hours",
+   "value": "A Weekday Sourdough in 6 Hours",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "bounds": {
+    "y": 259,
+    "x": 396,
+    "width": 661,
+    "height": 40
+   },
+   "children": [],
+   "excluded": false,
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
    "value": "A Weekday Sourdough in 6 Hours",
    "ancestor_path": [
     {
@@ -316,26 +768,56 @@
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "role": "AXHeading",
+     "name": "A Weekday Sourdough in 6 Hours"
     }
    ],
+   "excluded": false,
+   "bounds": {
+    "width": 593,
+    "x": 396,
+    "y": 260,
+    "height": 38
+   },
    "visible": true,
    "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+   "name": "",
    "value": "By Dale Okafor · 2 October 2026 · 5 min read",
    "ancestor_path": [
     {
@@ -343,8 +825,32 @@
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -355,14 +861,20 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 17,
+    "width": 292,
+    "x": 396,
+    "y": 305
+   },
+   "protected": false,
+   "children": [],
+   "visible": true
   },
   {
    "role": "AXStaticText",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+   "name": "",
    "value": "You do not need a long cold ferment to get a good sourdough loaf. A warm, fast schedule fits around a working day.",
    "ancestor_path": [
     {
@@ -370,35 +882,86 @@
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "protected": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 346,
+    "height": 50,
+    "width": 626,
+    "x": 396
+   }
   },
   {
    "role": "AXHeading",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+   "name": "The schedule",
    "value": "The schedule",
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -409,23 +972,113 @@
      "name": ""
     }
    ],
+   "bounds": {
+    "width": 661,
+    "height": 33,
+    "y": 426,
+    "x": 396
+   },
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+   "name": "",
+   "value": "The schedule",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXHeading",
+     "name": "The schedule"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "width": 153,
+    "height": 26,
+    "x": 396,
+    "y": 429
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
    "value": "Mix flour, water and 30 percent starter at 68% hydration.",
+   "bounds": {
+    "height": 21,
+    "width": 457,
+    "y": 478,
+    "x": 436
+   },
+   "visible": true,
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -444,23 +1097,49 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "excluded": false
   },
   {
    "role": "AXStaticText",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+   "name": "",
    "value": "Bulk ferment for 6 hours at 27 °C.",
+   "protected": false,
+   "bounds": {
+    "height": 21,
+    "x": 436,
+    "width": 269,
+    "y": 507
+   },
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -479,23 +1158,44 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXStaticText",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+   "name": "",
    "value": "Shape and proof on the counter for 90 minutes.",
+   "excluded": false,
+   "visible": true,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -510,27 +1210,225 @@
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 21,
+    "x": 436,
+    "width": 378,
+    "y": 536
+   }
   },
   {
    "role": "AXHeading",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+   "name": "Baking",
    "value": "Baking",
+   "children": [],
+   "visible": true,
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "y": 587,
+    "height": 33,
+    "x": 396,
+    "width": 661
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "Baking",
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXHeading",
+     "name": "Baking"
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "height": 26,
+    "x": 396,
+    "y": 590,
+    "width": 82
+   },
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "Bake in a preheated Dutch oven at 230 °C for 25 minutes lid on, then 15 minutes lid off.",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "children": [],
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "y": 642,
+    "x": 396,
+    "width": 638,
+    "height": 50
+   }
+  },
+  {
+   "role": "AXHeading",
+   "name": "Make it fit your day",
+   "value": "Make it fit your day",
+   "excluded": false,
+   "bounds": {
+    "x": 396,
+    "width": 661,
+    "y": 722,
+    "height": 33
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -542,40 +1440,11 @@
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
-   "value": "Bake in a preheated Dutch oven at 230 °C for 25 minutes lid on, then 15 minutes lid off.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXHeading",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+   "name": "",
    "value": "Make it fit your day",
    "ancestor_path": [
     {
@@ -583,35 +1452,97 @@
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "role": "AXHeading",
+     "name": "Make it fit your day"
     }
    ],
+   "excluded": false,
+   "bounds": {
+    "width": 225,
+    "height": 26,
+    "x": 396,
+    "y": 725
+   },
    "visible": true,
    "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+   "name": "",
    "value": "Feed your starter the night before and mix the dough as soon as you get up. By the time you are back from work the dough is ready to shape, and the loaf is out of the oven before dinner.",
+   "bounds": {
+    "height": 79,
+    "x": 396,
+    "y": 777,
+    "width": 652
+   },
+   "visible": true,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXScrollArea"
+    },
+    {
      "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -622,210 +1553,422 @@
      "name": ""
     }
    ],
+   "excluded": false,
+   "protected": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "height": 36,
+    "y": 41,
+    "width": 36,
+    "x": 244
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "visible": true,
+   "bounds": {
+    "y": 41,
+    "x": 281,
+    "height": 36,
+    "width": 36
+   },
+   "excluded": false,
+   "protected": false
+  },
+  {
+   "role": "AXTextField",
+   "name": "smart search field",
+   "value": "https://crumbandcrust.example.com/weekday-loaf",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "x": 490.5,
+    "height": 31,
+    "y": 51,
+    "width": 481
+   },
+   "protected": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "excluded": false,
    "visible": true,
    "protected": false,
+   "bounds": {
+    "height": 29,
+    "x": 977.5,
+    "y": 45.5,
+    "width": 23.5
+   }
+  },
+  {
+   "role": "AXButton",
+   "name": "Share",
+   "value": "Share",
+   "bounds": {
+    "y": 33,
+    "height": 52,
+    "x": 1272,
+    "width": 41
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
    "excluded": false,
    "children": []
   },
   {
+   "role": "AXButton",
+   "name": "New Tab",
+   "value": "New Tab",
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "bounds": {
+    "y": 33,
+    "height": 52,
+    "x": 1313,
+    "width": 37
+   },
+   "excluded": false
+  },
+  {
+   "role": "AXButton",
+   "name": "Tab Overview",
+   "value": "Tab Overview",
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "y": 33,
+    "width": 43,
+    "height": 52,
+    "x": 1350
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 81,
+    "y": 85,
+    "width": 327,
+    "height": 32
+   },
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 4 tabs"
+    }
+   ],
+   "protected": false,
+   "excluded": false,
+   "visible": true
+  },
+  {
    "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "x": 130,
+    "width": 273,
+    "y": 92,
+    "height": 18
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 4 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    }
+   ],
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 4 tabs"
+    }
+   ],
+   "bounds": {
+    "height": 32,
+    "width": 326,
+    "y": 85,
+    "x": 409
+   },
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "excluded": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 481.5,
+    "y": 92,
+    "width": 203,
+    "height": 18
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 4 tabs"
+    },
+    {
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+     "role": "AXRadioButton"
+    }
+   ],
+   "excluded": false,
+   "protected": false,
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "x": 736,
+    "y": 85,
+    "width": 326
+   },
+   "visible": true,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 4 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 783,
+    "width": 265.5,
+    "y": 92,
+    "height": 18
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 4 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    }
+   ],
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
    "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
-   "value": "If the kitchen is cold, put the dough in the oven with only the light on. A steady warm spot keeps the schedule predictable from one loaf to the next.",
+   "value": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "height": 32,
+    "width": 326,
+    "y": 85,
+    "x": 1063
+   },
+   "excluded": false,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
-     "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 4 tabs"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
-   "value": "Use a clear container so you can watch the bubbles.",
+   "name": "",
+   "value": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+   "excluded": false,
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
     },
     {
-     "role": "AXWebArea",
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 4 tabs"
+    },
+    {
+     "role": "AXRadioButton",
      "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXList",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
     }
    ],
+   "bounds": {
+    "x": 1112,
+    "y": 92,
+    "height": 18,
+    "width": 270
+   },
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
-   "value": "Mark the starting level with a rubber band.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXList",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
-   "value": "Cover with a damp cloth, not a tight lid.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXList",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Site footer",
-   "value": "© 2026 Crumb & Crust Media.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Site footer"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXLink",
-   "name": "Site footer / Advertise",
-   "value": "Advertise",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Site footer"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXLink",
-   "name": "Site footer / Contact",
-   "value": "Contact",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Site footer"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
   }
  ]

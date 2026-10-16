@@ -1,5 +1,5 @@
 {
- "provenance": "hand_authored",
+ "provenance": "real_capture_invented_content",
  "app_id": "com.apple.Safari",
  "title": "Launch crew / Chat / X",
  "url": "https://x.com/i/chat/1893042-launch",
@@ -9,125 +9,114 @@
  "focus_role": "",
  "focus_name": "",
  "limitations": [],
- "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "notes": "Real Accessibility capture of evals/pages/xchat-launch-plan-01.html in com.apple.Safari (68 nodes). app_id, title, url, source_type and observed_ms were rewritten from the page's facts.json to simulate com.apple.Safari; browser-chrome text outside the AXWebArea was redacted (26 nodes).",
+ "captured_with": {
+  "app_id": "com.apple.Safari",
+  "source_type": "browser",
+  "limitations": []
+ },
  "roots": [
-  {
-   "role": "AXButton",
-   "name": "Back",
-   "value": "Back",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Forward",
-   "value": "Forward",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Reload",
-   "value": "Reload",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXTextField",
-   "name": "Address and search bar",
-   "value": "https://x.com/i/chat/1893042-launch",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXRadioButton",
-   "name": "Launch crew / Chat / X",
-   "value": "Launch crew / Chat / X",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXTabGroup",
-     "name": "Tab Strip"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
   {
    "role": "AXLink",
    "name": "Primary / Home",
    "value": "Home",
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
+   "bounds": {
+    "height": 22,
+    "width": 63,
+    "x": 85,
+    "y": 135
+   },
    "protected": false,
-   "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Home",
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Home",
+     "role": "AXLink"
+    }
+   ],
+   "visible": true,
+   "bounds": {
+    "y": 137,
+    "height": 18,
+    "x": 85,
+    "width": 43
+   },
+   "children": [],
+   "protected": false,
+   "excluded": false
   },
   {
    "role": "AXLink",
@@ -135,91 +124,407 @@
    "value": "Explore",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "width": 63,
+    "x": 85,
+    "y": 169,
+    "height": 22
+   },
+   "visible": true,
+   "protected": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Explore",
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Explore"
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "width": 54,
+    "height": 18,
+    "y": 171,
+    "x": 85
+   }
   },
   {
    "role": "AXLink",
    "name": "Primary / Notifications",
    "value": "Notifications",
+   "bounds": {
+    "height": 22,
+    "x": 85,
+    "y": 203,
+    "width": 92
+   },
+   "children": [],
+   "visible": true,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Notifications",
+   "bounds": {
+    "height": 18,
+    "y": 205,
+    "width": 92,
+    "x": 85
+   },
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Notifications",
+     "role": "AXLink"
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "visible": true
   },
   {
    "role": "AXLink",
    "name": "Primary / Messages",
    "value": "Messages",
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXHeading",
-   "name": "Conversations",
-   "value": "Messages",
-   "ancestor_path": [
+     "name": ""
+    },
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    }
+   ],
+   "bounds": {
+    "width": 72,
+    "y": 237,
+    "x": 85,
+    "height": 22
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Messages",
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "width": 73,
+    "height": 18,
+    "x": 85,
+    "y": 239
+   },
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Messages",
+     "role": "AXLink"
+    }
+   ],
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversations / Messages",
+   "value": "Messages",
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversations"
     }
    ],
-   "visible": true,
+   "bounds": {
+    "y": 123,
+    "width": 339,
+    "height": 58,
+    "x": 161
+   },
    "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Messages",
+   "children": [],
    "excluded": false,
-   "children": []
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXHeading",
+     "name": "Messages"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "y": 140,
+    "height": 23,
+    "x": 177,
+    "width": 96
+   }
   },
   {
    "role": "AXStaticText",
@@ -227,19 +532,39 @@
    "value": "Launch crew",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversations"
     },
     {
-     "role": "AXList",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -247,30 +572,57 @@
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
+   "bounds": {
+    "width": 88,
+    "height": 18,
+    "y": 195,
+    "x": 177
+   },
+   "visible": true,
    "children": []
   },
   {
    "role": "AXStaticText",
    "name": "Conversations",
    "value": "Mira: I'm out on Wednesday afternoon",
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversations"
     },
     {
-     "role": "AXList",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -278,92 +630,170 @@
      "name": ""
     }
    ],
+   "bounds": {
+    "width": 271,
+    "height": 39,
+    "x": 177,
+    "y": 196
+   },
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversations",
    "value": "Weekend plans",
+   "visible": true,
+   "bounds": {
+    "width": 105,
+    "height": 18,
+    "x": 177,
+    "y": 264
+   },
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversations"
     },
     {
-     "role": "AXList",
+     "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversations",
    "value": "Sam: see you at 7",
+   "bounds": {
+    "width": 115,
+    "x": 285,
+    "y": 265,
+    "height": 17
+   },
+   "children": [],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversations"
     },
     {
-     "role": "AXList",
+     "role": "AXGroup",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Conversations",
    "value": "Book club",
+   "visible": true,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversations"
     },
     {
-     "role": "AXList",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -371,30 +801,56 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "y": 311,
+    "width": 68,
+    "x": 177,
+    "height": 18
+   },
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversations",
    "value": "Noor: chapter nine was wild",
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversations"
     },
     {
-     "role": "AXList",
+     "role": "AXGroup",
      "name": ""
     },
     {
@@ -404,66 +860,184 @@
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "y": 312,
+    "width": 180,
+    "height": 17,
+    "x": 248
+   }
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / Launch crew",
    "value": "Launch crew",
+   "excluded": false,
+   "bounds": {
+    "width": 864,
+    "y": 155,
+    "height": 34,
+    "x": 517
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
+   "children": [],
    "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Launch crew",
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXHeading",
+     "name": "Launch crew"
+    }
+   ],
    "excluded": false,
+   "protected": false,
+   "bounds": {
+    "y": 158,
+    "x": 517,
+    "width": 134,
+    "height": 28
+   },
+   "visible": true,
    "children": []
   },
   {
    "role": "AXStaticText",
    "name": "Lokesh 10:42 AM",
    "value": "Beta goes out Thursday at 4 PM.",
+   "visible": true,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Lokesh 10:42 AM"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "width": 225,
+    "height": 19,
+    "x": 531,
+    "y": 263
+   }
   },
   {
    "role": "AXStaticText",
@@ -471,20 +1045,40 @@
    "value": "10:42 AM",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -493,6 +1087,12 @@
    ],
    "visible": true,
    "protected": false,
+   "bounds": {
+    "width": 54,
+    "y": 266,
+    "x": 773,
+    "height": 16
+   },
    "excluded": false,
    "children": []
   },
@@ -500,53 +1100,104 @@
    "role": "AXStaticText",
    "name": "Mira 10:44 AM",
    "value": "Budget for the launch video is 3,200 euros.",
+   "children": [],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Mira 10:44 AM"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 345,
+    "width": 295,
+    "x": 531,
+    "height": 19
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Mira 10:44 AM",
    "value": "10:44 AM",
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -555,60 +1206,123 @@
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "width": 55,
+    "x": 843,
+    "y": 348,
+    "height": 16
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Lokesh 10:47 AM",
    "value": "Can we move the press embargo to 9 AM Friday?",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "width": 336,
+    "height": 19,
+    "y": 427,
+    "x": 531
+   },
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Lokesh 10:47 AM"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Lokesh 10:47 AM",
    "value": "10:47 AM",
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "height": 16,
+    "width": 54,
+    "x": 884,
+    "y": 430
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -616,40 +1330,68 @@
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Mira 10:51 AM",
    "value": "Yes. I'll tell the agency.",
+   "children": [],
+   "bounds": {
+    "y": 509,
+    "x": 531,
+    "width": 156,
+    "height": 19
+   },
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Mira 10:51 AM"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXStaticText",
@@ -657,214 +1399,408 @@
    "value": "10:51 AM",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Mira 10:51 AM"
     }
    ],
-   "visible": true,
    "protected": false,
+   "bounds": {
+    "x": 704,
+    "width": 53,
+    "height": 16,
+    "y": 512
+   },
    "excluded": false,
-   "children": []
+   "children": [],
+   "visible": true
   },
   {
    "role": "AXStaticText",
    "name": "Lokesh 11:02 AM",
    "value": "Also the new pricing page goes live with the beta.",
+   "bounds": {
+    "y": 591,
+    "height": 19,
+    "width": 340,
+    "x": 531
+   },
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Lokesh 11:02 AM"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "visible": true,
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Lokesh 11:02 AM",
    "value": "11:02 AM",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "x": 888,
+    "height": 16,
+    "y": 594,
+    "width": 52
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Lokesh 11:02 AM"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Mira 11:03 AM",
    "value": "I'm out on Wednesday afternoon.",
+   "bounds": {
+    "x": 531,
+    "height": 19,
+    "y": 673,
+    "width": 228
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Mira 11:03 AM",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Mira 11:03 AM"
+     "name": ""
     }
    ],
    "visible": true,
+   "children": [],
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Mira 11:03 AM",
    "value": "11:03 AM",
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "height": 16,
+    "x": 776,
+    "width": 52,
+    "y": 676
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": "Mira 11:03 AM"
+     "name": "Mira 11:03 AM",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXStaticText",
    "name": "Lokesh 11:10 AM",
    "value": "No problem. Can you send the revised script to the agency before you leave?",
+   "protected": false,
+   "visible": true,
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "width": 527,
+    "height": 19,
+    "x": 531,
+    "y": 755
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Lokesh 11:10 AM"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Lokesh 11:10 AM",
    "value": "11:10 AM",
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Lokesh 11:10 AM"
     }
    ],
+   "bounds": {
+    "height": 61,
+    "y": 758,
+    "x": 517,
+    "width": 586
+   },
    "visible": true,
-   "protected": false,
    "excluded": false,
    "children": []
   },
@@ -872,311 +1808,123 @@
    "role": "AXStaticText",
    "name": "Mira 11:12 AM",
    "value": "Sure, I'll attach the storyboard frames as well so they can start on the animatic.",
+   "bounds": {
+    "width": 541,
+    "y": 859,
+    "height": 15,
+    "x": 531
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Messages",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Mira 11:12 AM"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
+   "visible": true,
    "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
-   "name": "Mira 11:12 AM",
-   "value": "11:12 AM",
+   "name": "Message composer",
+   "value": "Start a new message",
+   "excluded": false,
+   "visible": true,
+   "protected": false,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXList",
-     "name": "Messages"
+     "name": "Message composer",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXTextArea",
+     "name": "Start a new message"
     },
     {
      "role": "AXGroup",
-     "name": "Mira 11:12 AM"
+     "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Lokesh 11:20 AM",
-   "value": "Legal still needs to review the claims on the pricing page, so please keep the copy generic until they sign off.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXList",
-     "name": "Messages"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Lokesh 11:20 AM"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Lokesh 11:20 AM",
-   "value": "11:20 AM",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXList",
-     "name": "Messages"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Lokesh 11:20 AM"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Mira 11:24 AM",
-   "value": "Understood. I'll mark the sections that need review in yellow.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXList",
-     "name": "Messages"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Mira 11:24 AM"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Mira 11:24 AM",
-   "value": "11:24 AM",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXList",
-     "name": "Messages"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Mira 11:24 AM"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Lokesh 11:31 AM",
-   "value": "Great. Let's do a quick run-through with the whole crew on Wednesday morning.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXList",
-     "name": "Messages"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Lokesh 11:31 AM"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Lokesh 11:31 AM",
-   "value": "11:31 AM",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXList",
-     "name": "Messages"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Lokesh 11:31 AM"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Mira 11:33 AM",
-   "value": "Works for me. I'll book the small meeting room.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXList",
-     "name": "Messages"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Mira 11:33 AM"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Mira 11:33 AM",
-   "value": "11:33 AM",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXList",
-     "name": "Messages"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Mira 11:33 AM"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 531,
+    "y": 755,
+    "height": 18,
+    "width": 144
+   }
   },
   {
    "role": "AXButton",
@@ -1184,49 +1932,933 @@
    "value": "Send",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": "Message composer"
+     "name": "Message composer",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 743,
+    "height": 65,
+    "x": 1309,
+    "width": 72
+   },
+   "children": [],
+   "visible": true
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "To view keyboard shortcuts, press question mark",
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "Launch crew / Chat / X"
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
     },
     {
      "role": "AXWebArea",
-     "name": "Launch crew / Chat / X"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "x": 517,
+    "y": 839,
+    "height": 15,
+    "width": 277
+   },
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "bounds": {
+    "x": 244,
+    "y": 41,
+    "height": 36,
+    "width": 36
+   },
+   "protected": false,
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "height": 36,
+    "y": 41,
+    "width": 36,
+    "x": 281
+   },
+   "excluded": false
+  },
+  {
+   "role": "AXTextField",
+   "name": "smart search field",
+   "value": "https://x.com/i/chat/1893042-launch",
+   "visible": true,
+   "bounds": {
+    "x": 490.5,
+    "y": 51,
+    "height": 31,
+    "width": 481
+   },
+   "children": [],
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "bounds": {
+    "x": 977.5,
+    "height": 29,
+    "y": 45.5,
+    "width": 23.5
+   },
+   "children": [],
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "Share",
+   "value": "Share",
+   "bounds": {
+    "height": 52,
+    "y": 33,
+    "width": 41,
+    "x": 1272
+   },
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "New Tab",
+   "value": "New Tab",
+   "visible": true,
+   "children": [],
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "height": 52,
+    "x": 1313,
+    "width": 37,
+    "y": 33
+   }
+  },
+  {
+   "role": "AXButton",
+   "name": "Tab Overview",
+   "value": "Tab Overview",
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "x": 1350,
+    "height": 52,
+    "width": 43,
+    "y": 33
+   },
+   "excluded": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "height": 32,
+    "width": 48,
+    "y": 85,
+    "x": 81
+   },
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "x": 130,
+    "y": 85,
+    "width": 48,
+    "height": 32
+   },
+   "protected": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "visible": true,
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "x": 179,
+    "width": 48
+   },
+   "protected": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 228,
+    "width": 48,
+    "height": 32,
+    "y": 85
+   },
+   "visible": true,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "y": 85,
+    "x": 277,
+    "height": 32,
+    "width": 48
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "width": 48,
+    "x": 326
+   },
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "width": 48,
+    "height": 32,
+    "x": 375,
+    "y": 85
+   },
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
     }
    ],
    "visible": true,
    "protected": false,
    "excluded": false,
+   "bounds": {
+    "width": 48,
+    "height": 32,
+    "x": 424,
+    "y": 85
+   },
    "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "x": 473,
+    "width": 47
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "visible": true,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "x": 521,
+    "y": 85,
+    "width": 47
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "width": 47,
+    "x": 569,
+    "y": 85
+   },
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "y": 85,
+    "x": 617,
+    "width": 47,
+    "height": 32
+   },
+   "excluded": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "width": 47,
+    "height": 32,
+    "x": 665,
+    "y": 85
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "width": 47,
+    "height": 32,
+    "x": 713,
+    "y": 85
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "width": 47,
+    "x": 761
+   },
+   "children": [],
+   "protected": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "width": 47,
+    "x": 809
+   },
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "width": 47,
+    "x": 857,
+    "y": 85
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "width": 47,
+    "y": 85,
+    "x": 905,
+    "height": 32
+   },
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "height": 32,
+    "x": 953,
+    "y": 85,
+    "width": 47
+   },
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "width": 47,
+    "y": 85,
+    "height": 32,
+    "x": 1001
+   },
+   "children": [],
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "height": 32,
+    "width": 47,
+    "y": 85,
+    "x": 1049
+   },
+   "children": [],
+   "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "children": [],
+   "excluded": false,
+   "protected": false,
+   "visible": true,
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "width": 47,
+    "x": 1097
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "bounds": {
+    "x": 1145,
+    "height": 32,
+    "width": 47,
+    "y": 85
+   },
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Launch crew / Chat / X",
+   "value": "Launch crew / Chat / X",
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "y": 85,
+    "x": 1193,
+    "width": 196,
+    "height": 32
+   },
+   "excluded": false,
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "Launch crew / Chat / X",
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "height": 18,
+    "width": 138.5,
+    "x": 1242,
+    "y": 92
+   },
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "Launch crew / Chat / X",
+     "role": "AXWindow"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "Launch crew / Chat / X"
+    }
+   ]
   }
  ]
 }

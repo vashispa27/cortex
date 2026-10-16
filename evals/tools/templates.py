@@ -53,6 +53,22 @@ body{background:#212121;color:#ececec;display:flex}
 .thought{color:#9b9b9b;font-size:13px;margin:0 0 6px}
 """
 
+# The AX helper only reads text that is on screen, so long pages must fit the window.
+COMPACT_CHATGPT_CSS = """
+body{font-size:10px;line-height:1.2}
+.sidebar{width:150px;padding:6px}.sidebar a{font-size:10px;padding:2px 6px}
+.top{padding:2px 10px}.turn{max-width:1200px;padding:3px 12px}
+.turn.user .msg{margin-left:0;padding:3px 10px}.turn.assistant .msg p{margin:0 0 2px}
+.turn ul{margin:0 0 2px}.actions{margin-top:0}.actions button{font-size:9px;padding:0 4px}
+.composer .box{padding:4px 10px}.composer textarea{height:20px}.disclaimer{padding:2px;font-size:9px}
+"""
+COMPACT_ARTICLE_CSS = """
+.hdr{padding:6px 20px}main{max-width:1200px;margin:6px auto}main h1{font-size:20px;margin:0}
+main h2{font-size:14px;margin:6px 0 2px}.by{margin:0 0 4px;font-size:11px}
+main p,main li{font-size:11px;line-height:1.3;margin:2px 0}footer{margin-top:6px;padding:6px 20px}
+.cookie{padding:3px 20px}
+"""
+
 XCHAT_CSS = BASE_CSS + """
 body{background:#000;color:#e7e9ea;display:flex}
 .rail{width:88px;border-right:1px solid #2f3336;padding:12px;display:flex;flex-direction:column;gap:12px}
@@ -161,7 +177,7 @@ def _windowed(app_id, title, url, content, chrome):
 # ------------------------------------------------------------------ ChatGPT
 
 def chatgpt_page(stem, title, chat_title, turns, app_id="com.google.Chrome",
-                 url=None, chats=None, draft="", notes="", article_role="AXArticle"):
+                 url=None, chats=None, draft="", notes="", article_role="AXArticle", compact=False):
     """turns: list of ("user", text) | ("assistant", [blocks]).
     block: ("p", text) | ("ul", [items]) | ("h", text) | ("thought", text)"""
     chats = chats or ["Weekly meal prep ideas", "Python decorators explained",
@@ -212,7 +228,8 @@ def chatgpt_page(stem, title, chat_title, turns, app_id="com.google.Chrome",
         tag="main", cls="pane")
     content = [side, main]
     tree = _windowed(app_id, title, url, content, chrome=True)
-    return Page(stem, app_id, title, url, "browser", tree, CHATGPT_CSS, notes=notes)
+    return Page(stem, app_id, title, url, "browser", tree,
+                CHATGPT_CSS + (COMPACT_CHATGPT_CSS if compact else ""), notes=notes)
 
 
 # -------------------------------------------------------------------- X chat
@@ -278,7 +295,7 @@ def slack_page(stem, channel, messages, app_id="com.tinyspeck.slackmacgap", note
 def article_page(stem, site, title, url, nav, headline, byline, blocks, footer,
                  cookie=True, app_id="com.apple.Safari", lang="en", notes="", tab_title=None,
                  cookie_text="We use cookies to improve your experience.",
-                 cookie_buttons=("Accept all cookies", "Manage preferences")):
+                 cookie_buttons=("Accept all cookies", "Manage preferences"), compact=False):
     """blocks: ("p", t) | ("h", t) | ("ul", [t]) | ("ol", [t])"""
     nodes = []
     if cookie:
@@ -302,7 +319,8 @@ def article_page(stem, site, title, url, nav, headline, byline, blocks, footer,
     nodes.append(G(*[T(f, tag="p") if isinstance(f, str) else L(f[0]) for f in footer],
                    tag="footer", name="Site footer"))
     tree = _windowed(app_id, title, url, nodes, chrome=True)
-    return Page(stem, app_id, title, url, "browser", tree, ARTICLE_CSS, lang=lang, notes=notes)
+    return Page(stem, app_id, title, url, "browser", tree,
+                ARTICLE_CSS + (COMPACT_ARTICLE_CSS if compact else ""), lang=lang, notes=notes)
 
 
 # --------------------------------------------------------------------- Email

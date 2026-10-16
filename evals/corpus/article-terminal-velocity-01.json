@@ -1,5 +1,5 @@
 {
- "provenance": "hand_authored",
+ "provenance": "real_capture_invented_content",
  "app_id": "com.apple.Safari",
  "title": "What is terminal velocity? - Physics Daily",
  "url": "https://physicsdaily.example.org/skydiving/terminal-velocity",
@@ -9,125 +9,61 @@
  "focus_role": "",
  "focus_name": "",
  "limitations": [],
- "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "notes": "Real Accessibility capture of evals/pages/article-terminal-velocity-01.html in com.apple.Safari (42 nodes). app_id, title, url, source_type and observed_ms were rewritten from the page's facts.json to simulate com.apple.Safari; browser-chrome text outside the AXWebArea was redacted (11 nodes).",
+ "captured_with": {
+  "app_id": "com.apple.Safari",
+  "source_type": "browser",
+  "limitations": []
+ },
  "roots": [
-  {
-   "role": "AXButton",
-   "name": "Back",
-   "value": "Back",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Forward",
-   "value": "Forward",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Reload",
-   "value": "Reload",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXTextField",
-   "name": "Address and search bar",
-   "value": "https://physicsdaily.example.org/skydiving/terminal-velocity",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXRadioButton",
-   "name": "What is terminal velocity? - Physics Daily",
-   "value": "What is terminal velocity? - Physics Daily",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXTabGroup",
-     "name": "Tab Strip"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
   {
    "role": "AXStaticText",
    "name": "Cookie consent",
    "value": "We use cookies to improve your experience.",
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
     },
     {
      "role": "AXGroup",
      "name": "Cookie consent"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 93,
+    "y": 139,
+    "height": 17,
+    "width": 284
+   }
   },
   {
    "role": "AXButton",
@@ -135,122 +71,419 @@
    "value": "Accept all cookies",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
     },
     {
      "role": "AXGroup",
      "name": "Cookie consent"
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "width": 146,
+    "height": 29,
+    "y": 133,
+    "x": 392
+   }
   },
   {
    "role": "AXButton",
    "name": "Cookie consent / Manage preferences",
    "value": "Manage preferences",
+   "children": [],
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "x": 554,
+    "height": 29,
+    "width": 161,
+    "y": 133
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
     },
     {
      "role": "AXGroup",
      "name": "Cookie consent"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXLink",
    "name": "Site header / Physics Daily",
    "value": "Physics Daily",
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Site header"
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
     }
    ],
+   "excluded": false,
+   "bounds": {
+    "height": 30,
+    "y": 186,
+    "width": 128,
+    "x": 105
+   },
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site header",
+   "value": "Physics Daily",
    "visible": true,
    "protected": false,
+   "children": [],
+   "bounds": {
+    "y": 189,
+    "width": 128,
+    "x": 105,
+    "height": 23
+   },
    "excluded": false,
-   "children": []
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Physics Daily"
+    }
+   ]
   },
   {
    "role": "AXLink",
    "name": "Primary / Mechanics",
    "value": "Mechanics",
+   "excluded": false,
+   "visible": true,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Site header"
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Primary"
     }
    ],
-   "visible": true,
+   "bounds": {
+    "height": 18,
+    "width": 75,
+    "x": 1045,
+    "y": 192
+   },
    "protected": false,
-   "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Mechanics",
+   "visible": true,
+   "bounds": {
+    "height": 18,
+    "y": 192,
+    "width": 75,
+    "x": 1045
+   },
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    },
+    {
+     "name": "Mechanics",
+     "role": "AXLink"
+    }
+   ],
+   "protected": false
   },
   {
    "role": "AXLink",
    "name": "Primary / Optics",
    "value": "Optics",
+   "bounds": {
+    "x": 1141,
+    "width": 46,
+    "y": 192,
+    "height": 18
+   },
+   "children": [],
+   "excluded": false,
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Site header"
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Primary"
     }
    ],
-   "visible": true,
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Optics",
+   "bounds": {
+    "height": 18,
+    "x": 1141,
+    "width": 46,
+    "y": 192
+   },
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    },
+    {
+     "role": "AXLink",
+     "name": "Optics"
+    }
+   ],
    "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true,
+   "excluded": false
   },
   {
    "role": "AXLink",
@@ -258,26 +491,109 @@
    "value": "Quantum",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Site header"
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Primary"
     }
    ],
+   "excluded": false,
+   "bounds": {
+    "height": 18,
+    "x": 1208,
+    "width": 64,
+    "y": 192
+   },
    "visible": true,
    "protected": false,
-   "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Quantum",
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    },
+    {
+     "role": "AXLink",
+     "name": "Quantum"
+    }
+   ],
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "y": 192,
+    "x": 1208,
+    "height": 18,
+    "width": 64
+   },
+   "protected": false,
+   "excluded": false
   },
   {
    "role": "AXLink",
@@ -285,39 +601,152 @@
    "value": "Quizzes",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Site header"
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Primary"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "height": 18,
+    "y": 192,
+    "width": 55,
+    "x": 1293
+   },
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Quizzes",
+   "bounds": {
+    "height": 18,
+    "x": 1293,
+    "width": 55,
+    "y": 192
+   },
+   "visible": true,
+   "excluded": false,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    },
+    {
+     "role": "AXLink",
+     "name": "Quizzes"
+    }
+   ],
    "children": []
   },
   {
    "role": "AXHeading",
-   "name": "What is terminal velocity? - Physics Daily",
+   "name": "What is terminal velocity?",
    "value": "What is terminal velocity?",
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "y": 259,
+    "width": 661,
+    "height": 40,
+    "x": 396
+   },
+   "visible": true,
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
     },
     {
      "role": "AXGroup",
@@ -327,51 +756,156 @@
      "role": "AXGroup",
      "name": ""
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
-   "name": "What is terminal velocity? - Physics Daily",
+   "name": "",
+   "value": "What is terminal velocity?",
+   "excluded": false,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "What is terminal velocity?",
+     "role": "AXHeading"
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "y": 260,
+    "x": 396,
+    "width": 458,
+    "height": 38
+   },
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
    "value": "By Ines Duarte · 4 October 2026 · 6 min read",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
    "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "height": 17,
+    "x": 396,
+    "width": 290,
+    "y": 305
+   },
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ]
   },
   {
    "role": "AXStaticText",
-   "name": "What is terminal velocity? - Physics Daily",
+   "name": "",
    "value": "Terminal velocity is the constant speed a falling object reaches when air resistance balances its weight. The object stops accelerating at that point.",
+   "children": [],
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
     },
     {
      "role": "AXGroup",
@@ -380,25 +914,56 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 50,
+    "y": 346,
+    "x": 396,
+    "width": 652
+   },
+   "visible": true
   },
   {
    "role": "AXHeading",
-   "name": "What is terminal velocity? - Physics Daily",
+   "name": "Skydivers",
    "value": "Skydivers",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
     },
     {
      "role": "AXGroup",
@@ -409,23 +974,109 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
+   "bounds": {
+    "y": 426,
+    "x": 396,
+    "width": 661,
+    "height": 33
+   },
    "children": []
   },
   {
    "role": "AXStaticText",
-   "name": "What is terminal velocity? - Physics Daily",
+   "name": "",
+   "value": "Skydivers",
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "Skydivers",
+     "role": "AXHeading"
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "height": 26,
+    "x": 396,
+    "y": 429,
+    "width": 114
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
    "value": "A belly-down skydiver reaches a terminal velocity of about 55 m/s (200 km/h). Pulling into a head-down position can raise that to roughly 90 m/s.",
+   "protected": false,
+   "children": [],
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -437,22 +1088,56 @@
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 396,
+    "width": 626,
+    "height": 50,
+    "y": 481
+   },
+   "excluded": false
   },
   {
    "role": "AXStaticText",
-   "name": "What is terminal velocity? - Physics Daily",
+   "name": "",
    "value": "A small steel ball has a much higher terminal velocity than a feather because its weight is large compared with the drag it experiences.",
+   "bounds": {
+    "x": 396,
+    "y": 557,
+    "width": 629,
+    "height": 50
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -464,22 +1149,42 @@
     }
    ],
    "visible": true,
-   "protected": false,
    "excluded": false,
+   "protected": false,
    "children": []
   },
   {
    "role": "AXHeading",
-   "name": "What is terminal velocity? - Physics Daily",
+   "name": "Why shape matters",
    "value": "Why shape matters",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
     },
     {
      "role": "AXGroup",
@@ -490,23 +1195,116 @@
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
+   "bounds": {
+    "y": 637,
+    "width": 661,
+    "height": 33,
+    "x": 396
+   },
+   "visible": true,
    "children": []
   },
   {
    "role": "AXStaticText",
-   "name": "What is terminal velocity? - Physics Daily",
+   "name": "",
+   "value": "Why shape matters",
+   "bounds": {
+    "width": 224,
+    "height": 26,
+    "y": 640,
+    "x": 396
+   },
+   "visible": true,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXHeading",
+     "name": "Why shape matters"
+    }
+   ],
+   "protected": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
    "value": "Drag depends on the cross-sectional area facing the air and on a drag coefficient that captures how streamlined the body is. A flat, spread-out body presents a large area and falls slowly; a narrow, pointed body falls much faster.",
+   "visible": true,
+   "bounds": {
+    "y": 692,
+    "height": 79,
+    "x": 396,
+    "width": 653
+   },
+   "excluded": false,
+   "children": [],
+   "protected": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
     },
     {
      "role": "AXGroup",
@@ -515,25 +1313,56 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
-   "name": "What is terminal velocity? - Physics Daily",
+   "name": "",
    "value": "Air density also changes the answer. In thinner air at high altitude the same body falls faster, which is why a jump from very high up begins with extreme speeds before the atmosphere thickens.",
+   "visible": true,
+   "bounds": {
+    "y": 797,
+    "height": 77,
+    "width": 644,
+    "x": 396
+   },
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -544,184 +1373,478 @@
      "name": ""
     }
    ],
-   "visible": true,
+   "excluded": false,
+   "children": [],
+   "protected": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
    "protected": false,
    "excluded": false,
-   "children": []
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 41,
+    "width": 36,
+    "x": 244,
+    "height": 36
+   }
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "bounds": {
+    "width": 36,
+    "y": 41,
+    "height": 36,
+    "x": 281
+   },
+   "protected": false
+  },
+  {
+   "role": "AXTextField",
+   "name": "smart search field",
+   "value": "https://physicsdaily.example.org/skydiving/terminal-velocity",
+   "children": [],
+   "bounds": {
+    "x": 490.5,
+    "width": 481,
+    "height": 31,
+    "y": 51
+   },
+   "visible": true,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "x": 977.5,
+    "y": 45.5,
+    "height": 29,
+    "width": 23.5
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "Share",
+   "value": "Share",
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "bounds": {
+    "width": 41,
+    "y": 33,
+    "x": 1272,
+    "height": 52
+   }
+  },
+  {
+   "role": "AXButton",
+   "name": "New Tab",
+   "value": "New Tab",
+   "visible": true,
+   "bounds": {
+    "height": 52,
+    "x": 1313,
+    "width": 37,
+    "y": 33
+   },
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "protected": false
+  },
+  {
+   "role": "AXButton",
+   "name": "Tab Overview",
+   "value": "Tab Overview",
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "x": 1350,
+    "height": 52,
+    "width": 43,
+    "y": 33
+   },
+   "children": [],
+   "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 5 tabs"
+    }
+   ],
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "width": 261,
+    "x": 81,
+    "y": 85,
+    "height": 32
+   }
   },
   {
    "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 5 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    }
+   ],
+   "bounds": {
+    "width": 207,
+    "x": 130,
+    "y": 92,
+    "height": 18
+   },
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 5 tabs"
+    }
+   ],
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "x": 343,
+    "y": 85,
+    "width": 261
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "visible": true,
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 5 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    }
+   ],
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "width": 203,
+    "y": 92,
+    "x": 390,
+    "height": 18
+   },
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 5 tabs"
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "x": 605,
+    "y": 85,
+    "width": 261
+   },
+   "visible": true,
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "y": 92,
+    "height": 18,
+    "width": 209,
+    "x": 652
+   },
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 5 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    }
+   ],
+   "excluded": false,
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "height": 32,
+    "width": 261,
+    "x": 867,
+    "y": 85
+   },
+   "visible": true,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 5 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "width": 209,
+    "height": 18,
+    "x": 914,
+    "y": 92
+   },
+   "children": [],
+   "ancestor_path": [
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 5 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
    "name": "What is terminal velocity? - Physics Daily",
-   "value": "Parachute open: a few metres per second",
+   "value": "What is terminal velocity? - Physics Daily",
    "ancestor_path": [
     {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
     },
     {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXList",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 5 tabs"
     }
    ],
    "visible": true,
+   "children": [],
    "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 32,
+    "x": 1129,
+    "y": 85,
+    "width": 260
+   }
   },
   {
    "role": "AXStaticText",
-   "name": "What is terminal velocity? - Physics Daily",
-   "value": "Cat in a curled posture: slower than most small animals expect",
+   "name": "",
+   "value": "What is terminal velocity? - Physics Daily",
+   "excluded": false,
    "ancestor_path": [
     {
-     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXWindow"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 5 tabs"
+    },
+    {
+     "role": "AXRadioButton",
      "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXList",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
     }
    ],
-   "visible": true,
+   "bounds": {
+    "x": 1178,
+    "y": 92,
+    "width": 204,
+    "height": 18
+   },
    "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "What is terminal velocity? - Physics Daily",
-   "value": "Raindrop: roughly 9 m/s depending on size",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXList",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Site footer",
-   "value": "© 2026 Physics Daily.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Site footer"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXLink",
-   "name": "Site footer / Newsletter",
-   "value": "Newsletter",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Site footer"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXLink",
-   "name": "Site footer / Advertise",
-   "value": "Advertise",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "What is terminal velocity? - Physics Daily"
-    },
-    {
-     "role": "AXGroup",
-     "name": "Site footer"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "visible": true
   }
  ]
 }

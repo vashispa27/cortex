@@ -1,5 +1,5 @@
 {
- "provenance": "hand_authored",
+ "provenance": "real_capture_invented_content",
  "app_id": "com.apple.Safari",
  "title": "The Long Cold Ferment - Baker's Notebook",
  "url": "https://bakersnotebook.example.org/posts/long-cold-ferment",
@@ -9,125 +9,61 @@
  "focus_role": "",
  "focus_name": "",
  "limitations": [],
- "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "notes": "Real Accessibility capture of evals/pages/article-sourdough-longferment-01.html in com.apple.Safari (80 nodes). app_id, title, url, source_type and observed_ms were rewritten from the page's facts.json to simulate com.apple.Safari; browser-chrome text outside the AXWebArea was redacted (28 nodes).",
+ "captured_with": {
+  "app_id": "com.apple.Safari",
+  "source_type": "browser",
+  "limitations": []
+ },
  "roots": [
-  {
-   "role": "AXButton",
-   "name": "Back",
-   "value": "Back",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "The Long Cold Ferment - Baker's Notebook"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Forward",
-   "value": "Forward",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "The Long Cold Ferment - Baker's Notebook"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Reload",
-   "value": "Reload",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "The Long Cold Ferment - Baker's Notebook"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXTextField",
-   "name": "Address and search bar",
-   "value": "https://bakersnotebook.example.org/posts/long-cold-ferment",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "The Long Cold Ferment - Baker's Notebook"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXRadioButton",
-   "name": "The Long Cold Ferment - Baker's Notebook",
-   "value": "The Long Cold Ferment - Baker's Notebook",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "The Long Cold Ferment - Baker's Notebook"
-    },
-    {
-     "role": "AXTabGroup",
-     "name": "Tab Strip"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
   {
    "role": "AXStaticText",
    "name": "Cookie consent",
    "value": "We use cookies to improve your experience.",
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Cookie consent"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Cookie consent",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 17,
+    "x": 93,
+    "width": 284,
+    "y": 132
+   }
   },
   {
    "role": "AXButton",
@@ -139,293 +75,995 @@
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Cookie consent"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Cookie consent",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
+   "children": [],
    "excluded": false,
-   "children": []
+   "visible": true,
+   "bounds": {
+    "y": 126,
+    "height": 29,
+    "width": 146,
+    "x": 392
+   },
+   "protected": false
   },
   {
    "role": "AXButton",
    "name": "Cookie consent / Manage preferences",
    "value": "Manage preferences",
+   "protected": false,
+   "bounds": {
+    "height": 29,
+    "y": 126,
+    "width": 161,
+    "x": 554
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Cookie consent"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Cookie consent",
+     "role": "AXGroup"
     }
    ],
+   "children": [],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXLink",
    "name": "Site header / Baker's Notebook",
    "value": "Baker's Notebook",
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "width": 172,
+    "y": 164,
+    "height": 30,
+    "x": 93
+   },
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Site header"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site header",
+   "value": "Baker's Notebook",
+   "excluded": false,
+   "bounds": {
+    "height": 23,
+    "y": 167,
+    "width": 172,
+    "x": 93
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Baker's Notebook"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "protected": false
   },
   {
    "role": "AXLink",
    "name": "Primary / Recipes",
    "value": "Recipes",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "height": 18,
+    "x": 967,
+    "y": 170,
+    "width": 55
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Recipes",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXGroup",
-     "name": "Site header"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Recipes",
+     "role": "AXLink"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 170,
+    "height": 18,
+    "x": 967,
+    "width": 56
+   }
   },
   {
    "role": "AXLink",
    "name": "Primary / Techniques",
    "value": "Techniques",
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 170,
+    "width": 80,
+    "x": 1043,
+    "height": 18
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Techniques",
+   "excluded": false,
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXGroup",
-     "name": "Site header"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Techniques",
+     "role": "AXLink"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 18,
+    "y": 170,
+    "x": 1044,
+    "width": 79
+   },
+   "visible": true
   },
   {
    "role": "AXLink",
    "name": "Primary / Equipment",
    "value": "Equipment",
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "height": 18,
+    "y": 170,
+    "width": 74,
+    "x": 1144
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Equipment",
+   "visible": true,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXGroup",
-     "name": "Site header"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Equipment"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "x": 1144,
+    "width": 74,
+    "height": 18,
+    "y": 170
+   },
+   "excluded": false
   },
   {
    "role": "AXLink",
    "name": "Primary / Newsletter",
    "value": "Newsletter",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "y": 170,
+    "width": 75,
+    "x": 1239,
+    "height": 18
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "Newsletter",
+   "visible": true,
+   "children": [],
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXGroup",
-     "name": "Site header"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Newsletter",
+     "role": "AXLink"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 1239,
+    "y": 170,
+    "width": 75,
+    "height": 18
+   },
+   "protected": false
   },
   {
    "role": "AXLink",
    "name": "Primary / About",
    "value": "About",
+   "protected": false,
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "width": 42,
+    "height": 18,
+    "x": 1335,
+    "y": 170
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Primary",
+   "value": "About",
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXGroup",
-     "name": "Site header"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Primary"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site header",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Primary",
+     "role": "AXGroup"
+    },
+    {
+     "name": "About",
+     "role": "AXLink"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 1335,
+    "width": 42,
+    "y": 170,
+    "height": 18
+   },
+   "visible": true
   },
   {
    "role": "AXHeading",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "The Long Cold Ferment",
    "value": "The Long Cold Ferment",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "y": 207,
+    "height": 24,
+    "x": 155,
+    "width": 1160
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "The Long Cold Ferment",
+   "protected": false,
+   "bounds": {
+    "height": 22,
+    "y": 208,
+    "x": 155,
+    "width": 242
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
      "role": "AXGroup",
      "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXHeading",
+     "name": "The Long Cold Ferment"
     }
    ],
    "visible": true,
-   "protected": false,
    "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
    "value": "By Anika Rao · 9 October 2026 · 7 min read",
+   "visible": true,
+   "bounds": {
+    "x": 155,
+    "y": 231,
+    "height": 13,
+    "width": 227
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
    "value": "A slow, cold ferment is the simplest way to build flavor in a sourdough loaf without adding more starter. It trades your attention for time.",
+   "children": [],
+   "bounds": {
+    "y": 249,
+    "width": 663,
+    "height": 12,
+    "x": 155
+   },
+   "visible": true,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
    "value": "Most of the work happens while you are asleep or at your desk. You mix the dough in the evening, let it rise slowly at room temperature, and then park it in the refrigerator so the flavor keeps developing without the dough over-proofing.",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 265,
+    "width": 1140,
+    "height": 12,
+    "x": 155
+   },
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
@@ -434,25 +1072,48 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXHeading",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "The schedule",
    "value": "The schedule",
+   "excluded": false,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
@@ -461,25 +1122,107 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 21,
+    "x": 155,
+    "y": 284,
+    "width": 1160
+   }
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
+   "value": "The schedule",
+   "children": [],
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "x": 155,
+    "width": 95,
+    "height": 16,
+    "y": 286
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXHeading",
+     "name": "The schedule"
+    }
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
    "value": "Mix flour, water and 20 percent starter at 78% hydration.",
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
@@ -488,6 +1231,22 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXList",
@@ -498,23 +1257,42 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
+   "bounds": {
+    "x": 195,
+    "width": 278,
+    "height": 12,
+    "y": 321
+   },
+   "children": [],
    "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
    "value": "Bulk ferment for 14 hours at 21 °C.",
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "height": 12,
+    "y": 337,
+    "width": 168,
+    "x": 195
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
@@ -523,6 +1301,22 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXList",
@@ -532,24 +1326,33 @@
      "role": "AXGroup",
      "name": ""
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
    "value": "Shape, then retard in the refrigerator for 12 hours at 4 °C.",
+   "bounds": {
+    "y": 353,
+    "width": 279,
+    "height": 12,
+    "x": 195
+   },
+   "protected": false,
+   "excluded": false,
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
@@ -558,6 +1361,22 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXList",
@@ -568,77 +1387,145 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
    "value": "If your kitchen runs warmer, shorten the bulk rather than raising the starter percentage. A warm kitchen can finish the same job in half the time, so watch the dough rather than the clock.",
+   "excluded": false,
+   "protected": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 382,
+    "height": 12,
+    "width": 903,
+    "x": 155
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
    "value": "Use a clear container so you can see the bubbles forming along the sides. The dough is ready when it has grown by about half and the surface looks domed and slightly glossy. Trust the dough more than the schedule and adjust the timing to your own kitchen. Different flours drink water at different rates, so treat the hydration as a starting point. Write down the room temperature each time; it explains most surprises. A cooler kitchen simply means a longer rise, not a worse loaf. Keep the starter at a steady feeding routine so the timings stay repeatable. If the dough looks slack after the first hour, add one extra set of stretch and folds.",
+   "protected": false,
+   "visible": true,
+   "bounds": {
+    "y": 398,
+    "width": 1155,
+    "x": 155,
+    "height": 40
+   },
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXHeading",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "Baking",
    "value": "Baking",
+   "bounds": {
+    "y": 445,
+    "height": 21,
+    "x": 155,
+    "width": 1160
+   },
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
@@ -647,16 +1534,88 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
+   "value": "Baking",
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Baking",
+     "role": "AXHeading"
+    }
+   ],
+   "visible": true,
+   "excluded": false,
+   "protected": false,
+   "bounds": {
+    "y": 447,
+    "width": 51,
+    "x": 155,
+    "height": 16
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
    "value": "Bake in a preheated Dutch oven at 245 °C for 20 minutes lid on, then 22 minutes lid off. Let the loaf cool for an hour before slicing.",
    "ancestor_path": [
     {
@@ -664,8 +1623,12 @@
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
@@ -674,25 +1637,63 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
+   "bounds": {
+    "x": 155,
+    "width": 633,
+    "height": 12,
+    "y": 469
+   },
    "visible": true,
-   "protected": false,
+   "children": [],
    "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXHeading",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "Why the cold works",
    "value": "Why the cold works",
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "x": 155,
+    "y": 488,
+    "width": 1160,
+    "height": 21
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
@@ -701,79 +1702,224 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "Why the cold works",
+   "bounds": {
+    "x": 155,
+    "width": 142,
+    "y": 490,
+    "height": 16
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Why the cold works",
+     "role": "AXHeading"
+    }
+   ],
    "protected": false,
    "excluded": false,
    "children": []
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
    "value": "Cold fermentation slows yeast activity more than it slows the bacteria that make acid, so the dough develops tang and aroma without over-proofing. The longer the dough sits, the more the enzymes break down starch into sugars that brown beautifully in the oven.",
+   "visible": true,
+   "bounds": {
+    "height": 26,
+    "x": 155,
+    "width": 1157,
+    "y": 512
+   },
+   "children": [],
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
    "value": "A dough that has chilled overnight is also firmer and easier to shape. If the surface feels sticky when you pull it from the refrigerator, dust the top lightly with rice flour before turning it out.",
+   "children": [],
+   "bounds": {
+    "x": 155,
+    "height": 12,
+    "width": 910,
+    "y": 542
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true,
+   "excluded": false
   },
   {
    "role": "AXHeading",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "Troubleshooting",
    "value": "Troubleshooting",
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 561,
+    "height": 21,
+    "x": 155,
+    "width": 1160
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
@@ -782,33 +1928,131 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
-   "value": "Flat loaf: the dough was probably over-proofed before it went into the cold.",
+   "name": "",
+   "value": "Troubleshooting",
+   "excluded": false,
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "y": 563,
+    "width": 120,
+    "height": 16,
+    "x": 155
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Troubleshooting",
+     "role": "AXHeading"
+    }
+   ],
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "Flat loaf: the dough was probably over-proofed before it went into the cold.",
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "y": 598,
+    "width": 364,
+    "x": 195,
+    "height": 12
+   },
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
      "role": "AXGroup",
      "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXList",
@@ -819,14 +2063,11 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
    "value": "Dense crumb: extend the stretch and fold sequence during the first two hours.",
    "ancestor_path": [
     {
@@ -834,8 +2075,12 @@
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
@@ -844,6 +2089,22 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXList",
@@ -854,14 +2115,20 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "height": 12,
+    "x": 195,
+    "width": 378,
+    "y": 614
+   },
+   "protected": false,
+   "children": [],
+   "visible": true
   },
   {
    "role": "AXStaticText",
-   "name": "The Long Cold Ferment - Baker's Notebook",
+   "name": "",
    "value": "Pale crust: bake the second stage a few minutes longer until it is deep brown.",
    "ancestor_path": [
     {
@@ -869,8 +2136,12 @@
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
@@ -879,6 +2150,22 @@
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXList",
@@ -891,100 +2178,1259 @@
    ],
    "visible": true,
    "protected": false,
+   "children": [],
    "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 195,
+    "height": 12,
+    "y": 630,
+    "width": 372
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Site footer",
    "value": "© 2026 Baker's Notebook. All rights reserved.",
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Site footer"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site footer",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     }
    ],
-   "visible": true,
+   "bounds": {
+    "width": 280,
+    "height": 16,
+    "x": 93,
+    "y": 678
+   },
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "excluded": false
   },
   {
    "role": "AXLink",
    "name": "Site footer / Privacy",
    "value": "Privacy",
+   "excluded": false,
+   "bounds": {
+    "width": 44,
+    "x": 93,
+    "height": 16,
+    "y": 707
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Site footer"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site footer",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site footer",
+   "value": "Privacy",
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site footer",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Privacy"
+    }
+   ],
+   "bounds": {
+    "y": 707,
+    "height": 16,
+    "x": 93,
+    "width": 45
+   },
+   "protected": false
   },
   {
    "role": "AXLink",
    "name": "Site footer / Terms",
    "value": "Terms",
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Site footer"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site footer",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 155,
+    "height": 16,
+    "y": 707,
+    "width": 37
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site footer",
+   "value": "Terms",
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site footer",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Terms",
+     "role": "AXLink"
+    }
+   ],
+   "bounds": {
+    "y": 707,
+    "height": 16,
+    "width": 38,
+    "x": 154
+   }
   },
   {
    "role": "AXLink",
    "name": "Site footer / Subscribe to the newsletter",
    "value": "Subscribe to the newsletter",
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "The Long Cold Ferment - Baker's Notebook"
     },
     {
-     "role": "AXWebArea",
-     "name": "The Long Cold Ferment - Baker's Notebook"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
     },
     {
      "role": "AXGroup",
-     "name": "Site footer"
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site footer",
+     "role": "AXGroup"
+    }
+   ],
+   "bounds": {
+    "width": 167,
+    "height": 16,
+    "y": 707,
+    "x": 209
+   },
+   "excluded": false,
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site footer",
+   "value": "Subscribe to the newsletter",
+   "bounds": {
+    "x": 209,
+    "width": 168,
+    "y": 707,
+    "height": 16
+   },
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "name": "",
+     "role": "AXTabGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXWebArea"
+    },
+    {
+     "name": "Site footer",
+     "role": "AXGroup"
+    },
+    {
+     "name": "Subscribe to the newsletter",
+     "role": "AXLink"
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "x": 244,
+    "width": 36,
+    "y": 41,
+    "height": 36
+   }
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "bounds": {
+    "x": 281,
+    "y": 41,
+    "width": 36,
+    "height": 36
+   }
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "y": 45,
+    "height": 29,
+    "x": 467.5,
+    "width": 31
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "protected": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "height": 30,
+    "x": 489.5,
+    "width": 24,
+    "y": 44
+   }
+  },
+  {
+   "role": "AXTextField",
+   "name": "smart search field",
+   "value": "https://bakersnotebook.example.org/posts/long-cold-ferment",
+   "bounds": {
+    "height": 31,
+    "width": 481,
+    "y": 51,
+    "x": 490.5
+   },
+   "protected": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "children": [],
+   "excluded": false
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "bounds": {
+    "x": 977.5,
+    "y": 45.5,
+    "height": 29,
+    "width": 23.5
+   },
+   "protected": false,
+   "excluded": false
+  },
+  {
+   "role": "AXButton",
+   "name": "Share",
+   "value": "Share",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "x": 1272,
+    "y": 33,
+    "width": 41,
+    "height": 52
+   }
+  },
+  {
+   "role": "AXButton",
+   "name": "New Tab",
+   "value": "New Tab",
+   "children": [],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "height": 52,
+    "y": 33,
+    "x": 1313,
+    "width": 37
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "Tab Overview",
+   "value": "Tab Overview",
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "",
+     "role": "AXToolbar"
+    }
+   ],
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "width": 43,
+    "x": 1350,
+    "height": 52,
+    "y": 33
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "bounds": {
+    "x": 81,
+    "y": 85,
+    "width": 48,
+    "height": 32
+   },
+   "visible": true,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "y": 85,
+    "height": 32,
+    "x": 130,
+    "width": 48
+   },
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "The Long Cold Ferment - Baker's Notebook",
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "width": 197,
+    "height": 32,
+    "x": 179,
+    "y": 85
+   },
+   "excluded": false,
+   "protected": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "The Long Cold Ferment - Baker's Notebook",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    },
+    {
+     "name": "The Long Cold Ferment - Baker's Notebook",
+     "role": "AXRadioButton"
+    }
+   ],
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 92,
+    "x": 228,
+    "width": 141,
+    "height": 18
+   },
+   "excluded": false,
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "y": 85,
+    "width": 48,
+    "x": 377,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
     }
    ],
    "visible": true,
    "protected": false,
+   "children": [],
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "width": 48,
+    "height": 32,
+    "x": 426,
+    "y": 85
+   },
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "height": 32,
+    "x": 475,
+    "y": 85,
+    "width": 48
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "width": 48,
+    "x": 524,
+    "height": 32,
+    "y": 85
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 573,
+    "y": 85,
+    "height": 32,
+    "width": 48
+   },
+   "protected": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
    "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "x": 622,
+    "width": 47,
+    "y": 85,
+    "height": 32
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "width": 47,
+    "y": 85,
+    "x": 670,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "y": 85,
+    "x": 718,
+    "height": 32,
+    "width": 47
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "y": 85,
+    "width": 47,
+    "x": 766,
+    "height": 32
+   },
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "height": 32,
+    "x": 814,
+    "y": 85,
+    "width": 47
+   },
+   "protected": false,
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 862,
+    "y": 85,
+    "height": 32,
+    "width": 47
+   },
+   "children": [],
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "x": 910,
+    "y": 85,
+    "width": 47,
+    "height": 32
+   },
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "bounds": {
+    "x": 958,
+    "y": 85,
+    "width": 47,
+    "height": 32
+   },
+   "visible": true,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "y": 85,
+    "width": 47,
+    "height": 32,
+    "x": 1006
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "x": 1054,
+    "y": 85,
+    "height": 32,
+    "width": 47
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "x": 1102,
+    "width": 47
+   },
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "y": 85,
+    "width": 47,
+    "height": 32,
+    "x": 1150
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "width": 47,
+    "x": 1198,
+    "height": 32,
+    "y": 85
+   },
+   "protected": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 1246,
+    "width": 47,
+    "y": 85,
+    "height": 32
+   },
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "visible": true,
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "x": 1294,
+    "width": 47,
+    "height": 32,
+    "y": 85
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "protected": false,
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "height": 32,
+    "y": 85,
+    "width": 47,
+    "x": 1342
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "name": "Tab bar, 24 tabs",
+     "role": "AXOpaqueProviderGroup"
+    }
+   ],
+   "visible": true,
+   "protected": false
   }
  ]
 }

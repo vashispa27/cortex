@@ -1,5 +1,5 @@
 {
- "provenance": "hand_authored",
+ "provenance": "real_capture_invented_content",
  "app_id": "com.apple.Safari",
  "title": "Lisbon long weekend itinerary - ChatGPT",
  "url": "https://chatgpt.com/c/9b41c7d2-lisbon",
@@ -9,115 +9,47 @@
  "focus_role": "",
  "focus_name": "",
  "limitations": [],
- "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "notes": "Real Accessibility capture of evals/pages/chatgpt-lisbon-trip-01.html in com.apple.Safari (81 nodes). app_id, title, url, source_type and observed_ms were rewritten from the page's facts.json to simulate com.apple.Safari; browser-chrome text outside the AXWebArea was redacted (23 nodes).",
+ "captured_with": {
+  "app_id": "com.apple.Safari",
+  "source_type": "browser",
+  "limitations": []
+ },
  "roots": [
-  {
-   "role": "AXButton",
-   "name": "Back",
-   "value": "Back",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Forward",
-   "value": "Forward",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Reload",
-   "value": "Reload",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXTextField",
-   "name": "Address and search bar",
-   "value": "https://chatgpt.com/c/9b41c7d2-lisbon",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXToolbar",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXRadioButton",
-   "name": "Lisbon long weekend itinerary - ChatGPT",
-   "value": "Lisbon long weekend itinerary - ChatGPT",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXTabGroup",
-     "name": "Tab Strip"
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
   {
    "role": "AXButton",
    "name": "Sidebar / New chat",
    "value": "New chat",
+   "excluded": false,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
@@ -125,13 +57,66 @@
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 85,
+    "width": 236,
+    "height": 38,
+    "y": 135
+   },
+   "protected": false
   },
   {
    "role": "AXLink",
    "name": "Sidebar / Search chats",
+   "value": "Search chats",
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "protected": false,
+   "bounds": {
+    "width": 236,
+    "y": 177,
+    "height": 37,
+    "x": 85
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
    "value": "Search chats",
    "ancestor_path": [
     {
@@ -139,18 +124,48 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Sidebar"
+    },
+    {
+     "name": "Search chats",
+     "role": "AXLink"
     }
    ],
    "visible": true,
+   "children": [],
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 85,
+    "height": 17,
+    "y": 187,
+    "x": 95
+   },
+   "excluded": false
   },
   {
    "role": "AXLink",
@@ -162,20 +177,103 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Sidebar"
     },
     {
-     "role": "AXGroup",
-     "name": "Chat history"
+     "name": "Chat history",
+     "role": "AXGroup"
     }
    ],
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "height": 33,
+    "width": 173,
+    "y": 213,
+    "x": 85
+   },
    "visible": true,
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Chat history",
+   "value": "Weekly meal prep ideas",
    "protected": false,
+   "visible": true,
+   "bounds": {
+    "width": 153,
+    "y": 221,
+    "x": 95,
+    "height": 17
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "name": "Chat history",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Weekly meal prep ideas"
+    }
+   ],
    "excluded": false,
    "children": []
   },
@@ -189,26 +287,162 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Sidebar"
     },
     {
+     "name": "Chat history",
+     "role": "AXGroup"
+    }
+   ],
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "width": 233,
+    "x": 85,
+    "y": 213,
+    "height": 55
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Chat history",
+   "value": "Python decorators explained",
+   "bounds": {
+    "x": 85,
+    "width": 233,
+    "height": 39,
+    "y": 221
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
      "role": "AXGroup",
-     "name": "Chat history"
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "name": "Chat history",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Python decorators explained"
     }
    ],
    "visible": true,
+   "children": [],
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXLink",
    "name": "Chat history / Cover letter feedback",
+   "value": "Cover letter feedback",
+   "children": [],
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "x": 85,
+    "height": 55,
+    "width": 236,
+    "y": 235
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "name": "Chat history",
+     "role": "AXGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Chat history",
    "value": "Cover letter feedback",
    "ancestor_path": [
     {
@@ -216,22 +450,52 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Sidebar"
     },
     {
-     "role": "AXGroup",
-     "name": "Chat history"
+     "name": "Chat history",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Cover letter feedback"
     }
    ],
-   "visible": true,
    "protected": false,
+   "bounds": {
+    "x": 85,
+    "width": 236,
+    "y": 243,
+    "height": 39
+   },
    "excluded": false,
-   "children": []
+   "children": [],
+   "visible": true
   },
   {
    "role": "AXLink",
@@ -243,26 +507,162 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Sidebar"
     },
     {
-     "role": "AXGroup",
-     "name": "Chat history"
+     "name": "Chat history",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
+   "bounds": {
+    "x": 85,
+    "y": 257,
+    "width": 229,
+    "height": 55
+   },
+   "children": [],
+   "excluded": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Chat history",
+   "value": "Weekend hike packing list",
+   "protected": false,
+   "children": [],
    "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 85,
+    "width": 229,
+    "y": 265,
+    "height": 39
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "name": "Chat history",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Weekend hike packing list"
+    }
+   ],
+   "visible": true
   },
   {
    "role": "AXLink",
    "name": "Chat history / Lisbon long weekend itinerary",
+   "value": "Lisbon long weekend itinerary",
+   "protected": false,
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "height": 55,
+    "width": 179,
+    "x": 85,
+    "y": 279
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "name": "Chat history",
+     "role": "AXGroup"
+    }
+   ],
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Chat history",
    "value": "Lisbon long weekend itinerary",
    "ancestor_path": [
     {
@@ -270,26 +670,56 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
      "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": "Sidebar"
     },
     {
-     "role": "AXGroup",
-     "name": "Chat history"
+     "name": "Chat history",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXLink",
+     "name": "Lisbon long weekend itinerary"
     }
    ],
    "visible": true,
+   "children": [],
+   "bounds": {
+    "height": 39,
+    "y": 287,
+    "width": 179,
+    "x": 85
+   },
    "protected": false,
-   "excluded": false,
-   "children": []
+   "excluded": false
   },
   {
    "role": "AXButton",
-   "name": "Lisbon long weekend itinerary - ChatGPT / ChatGPT",
+   "name": "ChatGPT",
    "value": "ChatGPT",
    "ancestor_path": [
     {
@@ -297,12 +727,32 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -310,53 +760,115 @@
     }
    ],
    "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "y": 133,
+    "width": 99,
+    "height": 32,
+    "x": 349
+   }
   },
   {
    "role": "AXButton",
-   "name": "Lisbon long weekend itinerary - ChatGPT / Share",
+   "name": "Share",
    "value": "Share",
+   "excluded": false,
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "x": 1298,
+    "height": 32,
+    "width": 66,
+    "y": 133
+   }
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / You said:",
    "value": "You said:",
+   "children": [],
+   "bounds": {
+    "x": 484,
+    "width": 1,
+    "height": 2,
+    "y": 209
+   },
+   "visible": true,
+   "excluded": false,
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -366,10 +878,67 @@
      "role": "AXGroup",
      "name": ""
     }
-   ],
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "You said:",
+   "bounds": {
+    "height": 16,
+    "y": 210,
+    "x": 484,
+    "width": 57
+   },
    "visible": true,
-   "protected": false,
    "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXHeading",
+     "name": "You said:"
+    }
+   ],
+   "protected": false,
    "children": []
   },
   {
@@ -382,12 +951,32 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -398,31 +987,67 @@
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "y": 216,
+    "x": 580,
+    "height": 40,
+    "width": 564
+   }
   },
   {
    "role": "AXButton",
    "name": "Conversation / Edit message",
    "value": "Edit message",
+   "protected": false,
+   "visible": true,
+   "bounds": {
+    "x": 484,
+    "width": 23,
+    "y": 289,
+    "height": 23
+   },
+   "excluded": false,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -431,16 +1056,8 @@
     {
      "role": "AXGroup",
      "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXButton",
@@ -452,12 +1069,32 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -466,47 +1103,136 @@
     {
      "role": "AXGroup",
      "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "x": 512,
+    "y": 289,
+    "width": 23,
+    "height": 23
+   }
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / ChatGPT said:",
    "value": "ChatGPT said:",
+   "children": [],
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
+   "bounds": {
+    "x": 484,
+    "height": 2,
+    "y": 360,
+    "width": 1
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "children": [],
+   "visible": true,
+   "protected": false,
    "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 484,
+    "height": 16,
+    "y": 361,
+    "width": 89
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "ChatGPT said:",
+     "role": "AXHeading"
+    }
+   ]
   },
   {
    "role": "AXStaticText",
@@ -518,55 +1244,109 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "protected": false,
+   "visible": true,
+   "bounds": {
+    "x": 484,
+    "height": 16,
+    "y": 341,
+    "width": 144
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Day 1 (Friday): Land on flight MR 1347, which arrives at 10:25. Check in at Hotel Alfama Vista on Rua das Gaivotas, then walk up to the Portas do Sol viewpoint for sunset.",
+   "excluded": false,
+   "children": [],
+   "bounds": {
+    "y": 371,
+    "width": 711,
+    "height": 40,
+    "x": 484
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -574,69 +1354,116 @@
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Day 2 (Saturday): Take the Sintra train from Rossio at 8:40 and book Pena Palace tickets for 11:00. Tickets cost 16 euros per adult.",
+   "protected": false,
+   "children": [],
+   "visible": true,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "y": 425,
+    "height": 40,
+    "width": 723,
+    "x": 484
+   }
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Day 3 (Sunday): Brunch in Principe Real, then catch the 15:50 airport shuttle. Your return flight MR 1352 leaves at 18:15.",
+   "excluded": false,
+   "protected": false,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -644,79 +1471,126 @@
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 484,
+    "height": 40,
+    "y": 479,
+    "width": 710
+   }
   },
   {
    "role": "AXButton",
    "name": "Conversation / Copy",
    "value": "Copy",
+   "visible": true,
+   "children": [],
+   "bounds": {
+    "height": 23,
+    "y": 531,
+    "width": 23,
+    "x": 484
+   },
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "protected": false
   },
   {
    "role": "AXButton",
    "name": "Conversation / Rate response",
    "value": "Rate response",
+   "children": [],
+   "bounds": {
+    "x": 512,
+    "height": 23,
+    "width": 32,
+    "y": 531
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
-   "children": []
+   "visible": true
   },
   {
    "role": "AXButton",
@@ -728,96 +1602,227 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
+   "children": [],
    "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 23,
+    "y": 531,
+    "height": 23,
+    "x": 549
+   },
+   "visible": true
   },
   {
    "role": "AXButton",
    "name": "Conversation / Read aloud",
    "value": "Read aloud",
+   "bounds": {
+    "width": 32,
+    "y": 531,
+    "x": 577,
+    "height": 23
+   },
+   "excluded": false,
+   "protected": false,
+   "children": [],
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / You said:",
    "value": "You said:",
+   "visible": true,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
    "protected": false,
    "excluded": false,
+   "bounds": {
+    "height": 2,
+    "width": 1,
+    "x": 484,
+    "y": 602
+   },
    "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "You said:",
+   "children": [],
+   "protected": false,
+   "excluded": false,
+   "visible": true,
+   "bounds": {
+    "x": 484,
+    "width": 57,
+    "height": 16,
+    "y": 603
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "name": "You said:",
+     "role": "AXHeading"
+    }
+   ]
   },
   {
    "role": "AXStaticText",
@@ -829,104 +1834,174 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "width": 133,
+    "height": 18,
+    "y": 609,
+    "x": 580
+   },
+   "protected": false
   },
   {
    "role": "AXButton",
    "name": "Conversation / Edit message",
    "value": "Edit message",
+   "visible": true,
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "y": 660,
+    "height": 23,
+    "x": 484,
+    "width": 23
+   }
   },
   {
    "role": "AXButton",
    "name": "Conversation / Copy",
    "value": "Copy",
+   "children": [],
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Conversation"
     },
     {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "x": 512,
+    "width": 23,
+    "y": 660,
+    "height": 23
+   }
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / ChatGPT said:",
    "value": "ChatGPT said:",
    "ancestor_path": [
     {
@@ -934,12 +2009,32 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -950,27 +2045,124 @@
      "name": ""
     }
    ],
+   "excluded": false,
    "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "y": 731,
+    "width": 1,
+    "height": 2,
+    "x": 484
+   }
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "children": [],
+   "bounds": {
+    "width": 89,
+    "height": 16,
+    "y": 732,
+    "x": 484
+   },
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "ChatGPT said:",
+     "role": "AXHeading"
+    }
+   ],
+   "visible": true,
+   "excluded": false
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "Tram 28 is crowded after 10:00. Ride it before 9:00 or skip it and walk the Alfama hills instead.",
+   "bounds": {
+    "x": 484,
+    "height": 18,
+    "width": 642,
+    "y": 713
+   },
+   "children": [],
+   "protected": false,
+   "visible": true,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -981,31 +2173,50 @@
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXButton",
    "name": "Conversation / Copy",
    "value": "Copy",
+   "excluded": false,
+   "protected": false,
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -1014,16 +2225,15 @@
     {
      "role": "AXGroup",
      "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
     }
    ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 23,
+    "height": 23,
+    "x": 484,
+    "y": 743
+   }
   },
   {
    "role": "AXButton",
@@ -1035,12 +2245,32 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -1049,33 +2279,57 @@
     {
      "role": "AXGroup",
      "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "width": 32,
+    "height": 23,
+    "x": 512,
+    "y": 743
+   },
+   "visible": true,
+   "excluded": false
   },
   {
    "role": "AXButton",
    "name": "Conversation / Share",
    "value": "Share",
+   "visible": true,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -1084,33 +2338,63 @@
     {
      "role": "AXGroup",
      "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
     }
    ],
-   "visible": true,
    "protected": false,
-   "excluded": false,
-   "children": []
+   "children": [],
+   "bounds": {
+    "height": 23,
+    "x": 549,
+    "y": 743,
+    "width": 23
+   }
   },
   {
    "role": "AXButton",
    "name": "Conversation / Read aloud",
    "value": "Read aloud",
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "height": 23,
+    "x": 577,
+    "y": 743,
+    "width": 32
+   },
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -1119,33 +2403,52 @@
     {
      "role": "AXGroup",
      "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
     }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   ]
   },
   {
    "role": "AXHeading",
-   "name": "Conversation",
+   "name": "Conversation / You said:",
    "value": "You said:",
+   "bounds": {
+    "width": 1,
+    "y": 814,
+    "height": 2,
+    "x": 484
+   },
+   "protected": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -1157,26 +2460,108 @@
     }
    ],
    "visible": true,
-   "protected": false,
+   "children": [],
+   "excluded": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "You said:",
    "excluded": false,
-   "children": []
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "height": 16,
+    "x": 484,
+    "y": 815,
+    "width": 57
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "You said:",
+     "role": "AXHeading"
+    }
+   ]
   },
   {
    "role": "AXStaticText",
    "name": "Conversation",
    "value": "What should I eat? I like seafood but I am not an early dinner person.",
+   "protected": false,
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -1187,31 +2572,62 @@
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "name": "",
+     "role": "AXGroup"
     }
    ],
+   "bounds": {
+    "height": 18,
+    "width": 467,
+    "x": 580,
+    "y": 821
+   },
    "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXButton",
    "name": "Conversation / Edit message",
    "value": "Edit message",
+   "excluded": false,
+   "bounds": {
+    "x": 484,
+    "width": 23,
+    "y": 872,
+    "height": 2
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -1220,68 +2636,49 @@
     {
      "role": "AXGroup",
      "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
     }
    ],
    "visible": true,
    "protected": false,
-   "excluded": false,
    "children": []
   },
   {
    "role": "AXButton",
    "name": "Conversation / Copy",
    "value": "Copy",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
    "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXHeading",
-   "name": "Conversation",
-   "value": "ChatGPT said:",
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
@@ -1292,725 +2689,14 @@
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
    "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Conversation",
-   "value": "Most kitchens in the old town take orders until 22:00. Try grilled sea bream with boiled potatoes, clams with garlic and coriander, and a custard tart from a bakery for dessert.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
+   "bounds": {
+    "width": 23,
+    "x": 512,
+    "height": 2,
+    "y": 872
+   },
    "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Conversation",
-   "value": "Book dinner for 21:00 on Saturday; small restaurants fill quickly on weekends even in November. Lunch menus of the day are usually the cheapest way to eat well.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Conversation",
-   "value": "Saturday lunch: market stalls near the river",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXList",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Conversation",
-   "value": "Sunday brunch: Principe Real cafe",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXList",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Conversation",
-   "value": "Friday dinner: small tavern in Alfama",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXList",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Copy",
-   "value": "Copy",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Rate response",
-   "value": "Rate response",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Share",
-   "value": "Share",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Read aloud",
-   "value": "Read aloud",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXHeading",
-   "name": "Conversation",
-   "value": "You said:",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Conversation",
-   "value": "Do I need a transport card?",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Edit message",
-   "value": "Edit message",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Copy",
-   "value": "Copy",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXHeading",
-   "name": "Conversation",
-   "value": "ChatGPT said:",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Conversation",
-   "value": "A rechargeable transit card makes the metro, buses and the Sintra line simple, and each journey is cheaper than a paper ticket. Load a modest amount; leftover balance stays on the card for next time.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXStaticText",
-   "name": "Conversation",
-   "value": "Pack a light rain jacket and comfortable shoes with grip, because the cobbled streets turn slippery in the drizzle that is common in November.",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Copy",
-   "value": "Copy",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Rate response",
-   "value": "Rate response",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Share",
-   "value": "Share",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
-  },
-  {
-   "role": "AXButton",
-   "name": "Conversation / Read aloud",
-   "value": "Read aloud",
-   "ancestor_path": [
-    {
-     "role": "AXWindow",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": "Conversation"
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    },
-    {
-     "role": "AXGroup",
-     "name": ""
-    }
-   ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
    "children": []
   },
   {
@@ -2023,24 +2709,107 @@
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    }
+   ],
+   "children": [],
+   "bounds": {
+    "width": 33,
+    "height": 32,
+    "y": 774,
+    "x": 506
+   },
+   "excluded": false,
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Composer",
+   "value": "Ask anything",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
     },
     {
      "role": "AXGroup",
      "name": "Composer"
     },
     {
+     "role": "AXTextArea",
+     "name": "Ask ChatGPT"
+    },
+    {
      "role": "AXGroup",
      "name": ""
     }
    ],
+   "bounds": {
+    "x": 548,
+    "width": 89,
+    "y": 766,
+    "height": 18
+   },
    "visible": true,
-   "protected": false,
    "excluded": false,
    "children": []
   },
@@ -2048,57 +2817,756 @@
    "role": "AXButton",
    "name": "Composer / Dictate",
    "value": "Dictate",
+   "excluded": false,
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
-     "name": "Lisbon long weekend itinerary - ChatGPT"
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     },
     {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
      "role": "AXGroup",
      "name": "Composer"
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "width": 33,
+    "x": 1134,
+    "y": 774,
+    "height": 32
+   },
+   "visible": true
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Send",
+   "value": "Send",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    }
+   ],
+   "bounds": {
+    "x": 1174,
+    "width": 33,
+    "height": 32,
+    "y": 774
+   },
+   "visible": true,
+   "protected": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "ChatGPT can make mistakes. Check important info.",
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "y": 837,
+    "x": 711,
+    "width": 291,
+    "height": 15
+   },
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "name": "",
+     "role": "AXSplitGroup"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    },
+    {
+     "role": "AXWebArea",
+     "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
     },
     {
      "role": "AXGroup",
      "name": ""
     }
    ],
-   "visible": true,
-   "protected": false,
-   "excluded": false,
-   "children": []
+   "bounds": {
+    "width": 36,
+    "y": 41,
+    "height": 36,
+    "x": 244
+   },
+   "children": [],
+   "excluded": false
   },
   {
    "role": "AXButton",
-   "name": "Composer / Send",
-   "value": "Send",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "children": [],
+   "excluded": false,
+   "bounds": {
+    "x": 281,
+    "y": 41,
+    "height": 36,
+    "width": 36
+   },
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
+     "role": "AXToolbar",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true
+  },
+  {
+   "role": "AXTextField",
+   "name": "smart search field",
+   "value": "https://chatgpt.com/c/9b41c7d2-lisbon",
+   "excluded": false,
+   "bounds": {
+    "height": 31,
+    "x": 490.5,
+    "y": 51,
+    "width": 481
+   },
+   "protected": false,
+   "children": [],
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXGroup",
+     "role": "AXToolbar",
      "name": ""
     },
     {
-     "role": "AXGroup",
-     "name": "Composer"
+     "name": "",
+     "role": "AXGroup"
+    }
+   ]
+  },
+  {
+   "role": "AXButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "y": 45.5,
+    "width": 23.5,
+    "height": 29,
+    "x": 977.5
+   },
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXGroup",
+     "role": "AXToolbar",
      "name": ""
+    },
+    {
+     "name": "",
+     "role": "AXGroup"
+    }
+   ],
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXButton",
+   "name": "Share",
+   "value": "Share",
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "bounds": {
+    "x": 1272,
+    "width": 41,
+    "y": 33,
+    "height": 52
+   },
+   "protected": false,
+   "visible": true
+  },
+  {
+   "role": "AXButton",
+   "name": "New Tab",
+   "value": "New Tab",
+   "bounds": {
+    "width": 37,
+    "y": 33,
+    "x": 1313,
+    "height": 52
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "protected": false,
+   "children": [],
+   "excluded": false
+  },
+  {
+   "role": "AXButton",
+   "name": "Tab Overview",
+   "value": "Tab Overview",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "bounds": {
+    "height": 52,
+    "width": 43,
+    "y": 33,
+    "x": 1350
+   },
+   "visible": true,
+   "children": [],
+   "protected": false,
+   "excluded": false
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "width": 111,
+    "x": 81,
+    "y": 85,
+    "height": 32
+   },
+   "children": [],
+   "protected": false,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    }
+   ],
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    },
+    {
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+     "role": "AXRadioButton"
+    }
+   ],
+   "excluded": false,
+   "protected": false,
+   "bounds": {
+    "y": 92,
+    "height": 18,
+    "x": 130,
+    "width": 57
+   },
+   "children": [],
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "width": 111,
+    "x": 193,
+    "height": 32,
+    "y": 85
+   },
+   "excluded": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "protected": false,
+   "bounds": {
+    "x": 240,
+    "width": 59,
+    "y": 92,
+    "height": 18
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    },
+    {
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+     "role": "AXRadioButton"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "visible": true
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "width": 110,
+    "height": 32,
+    "x": 305,
+    "y": 85
+   },
+   "protected": false,
+   "children": [],
+   "visible": true,
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "bounds": {
+    "width": 58,
+    "y": 92,
+    "height": 18,
+    "x": 352
+   },
+   "visible": true,
+   "excluded": false,
+   "protected": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    },
+    {
+     "name": "The Long Cold Ferment - Baker's Notebook",
+     "role": "AXRadioButton"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 416,
+    "height": 32,
+    "y": 85,
+    "width": 110
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    }
+   ],
+   "excluded": false,
+   "children": [],
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "visible": true,
+   "excluded": false,
+   "children": [],
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "A Weekday Sourdough in 6 Hours - Crumb & Crust"
+    }
+   ],
+   "bounds": {
+    "height": 18,
+    "x": 463,
+    "y": 92,
+    "width": 58
+   }
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "excluded": false,
+   "children": [],
+   "visible": true,
+   "bounds": {
+    "width": 110,
+    "y": 85,
+    "x": 527,
+    "height": 32
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "excluded": false,
+   "protected": false,
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    },
+    {
+     "name": "What is terminal velocity? - Physics Daily",
+     "role": "AXRadioButton"
+    }
+   ],
+   "bounds": {
+    "y": 92,
+    "height": 18,
+    "width": 58,
+    "x": 574
+   },
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "visible": true,
+   "protected": false,
+   "children": [],
+   "bounds": {
+    "y": 85,
+    "x": 638,
+    "width": 110,
+    "height": 32
+   },
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    }
+   ]
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "protected": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    }
+   ],
+   "bounds": {
+    "y": 92,
+    "height": 18,
+    "x": 685,
+    "width": 58
+   },
+   "excluded": false,
+   "visible": true,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "protected": false,
+   "bounds": {
+    "width": 110,
+    "x": 749,
+    "y": 85,
+    "height": 32
+   },
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    }
+   ],
+   "children": [],
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "visible": true,
+   "protected": false,
+   "bounds": {
+    "width": 58,
+    "height": 18,
+    "y": 92,
+    "x": 796
+   },
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "Monthly budget planning - ChatGPT"
+    }
+   ],
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "bounds": {
+    "width": 110,
+    "height": 32,
+    "y": 85,
+    "x": 860
+   },
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
     }
    ],
    "visible": true,
@@ -2108,26 +3576,194 @@
   },
   {
    "role": "AXStaticText",
-   "name": "Lisbon long weekend itinerary - ChatGPT",
-   "value": "ChatGPT can make mistakes. Check important info.",
+   "name": "",
+   "value": "[redacted]",
+   "protected": false,
+   "visible": true,
+   "excluded": false,
+   "bounds": {
+    "width": 58,
+    "x": 907,
+    "y": 92,
+    "height": 18
+   },
+   "children": [],
    "ancestor_path": [
     {
      "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXWebArea",
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "Monthly budget planning - ChatGPT"
+    }
+   ]
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "children": [],
+   "protected": false,
+   "bounds": {
+    "width": 110,
+    "x": 971,
+    "height": 32,
+    "y": 85
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
      "name": "Lisbon long weekend itinerary - ChatGPT"
     },
     {
-     "role": "AXGroup",
-     "name": ""
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
     }
    ],
+   "excluded": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "bounds": {
+    "x": 1018,
+    "width": 58,
+    "y": 92,
+    "height": 18
+   },
+   "visible": true,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    },
+    {
+     "name": "Autumn vegetable garden plan - ChatGPT",
+     "role": "AXRadioButton"
+    }
+   ],
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "[redacted]",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    }
+   ],
+   "children": [],
+   "protected": false,
+   "excluded": false,
+   "bounds": {
+    "x": 1082,
+    "y": 85,
+    "width": 110,
+    "height": 32
+   },
+   "visible": true
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "[redacted]",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    },
+    {
+     "name": "Autumn vegetable garden plan - ChatGPT",
+     "role": "AXRadioButton"
+    }
+   ],
+   "bounds": {
+    "y": 92,
+    "height": 18,
+    "width": 58,
+    "x": 1129
+   },
    "visible": true,
    "protected": false,
    "excluded": false,
    "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Lisbon long weekend itinerary - ChatGPT",
+   "value": "Lisbon long weekend itinerary - ChatGPT",
+   "visible": true,
+   "bounds": {
+    "y": 85,
+    "width": 196,
+    "x": 1193,
+    "height": 32
+   },
+   "excluded": false,
+   "children": [],
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    }
+   ],
+   "protected": false
+  },
+  {
+   "role": "AXStaticText",
+   "name": "",
+   "value": "Lisbon long weekend itinerary - ChatGPT",
+   "excluded": false,
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXOpaqueProviderGroup",
+     "name": "Tab bar, 11 tabs"
+    },
+    {
+     "role": "AXRadioButton",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    }
+   ],
+   "bounds": {
+    "width": 140,
+    "height": 18,
+    "x": 1242,
+    "y": 92
+   },
+   "children": [],
+   "visible": true,
+   "protected": false
   }
  ]
 }
