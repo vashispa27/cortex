@@ -77,6 +77,13 @@ npm run tauri build -- --bundles app
 
 The browser-only preview is `npm run dev` from `apps/desktop`; select **Explore sample workspace** during onboarding. The browser preview cannot call the authenticated daemon. For an isolated invented source, run `cargo build -p goldfish-daemon` and `OPEN_MEMORY_STATE_DIR="$(mktemp -d)" target/debug/goldfish-daemon --seed-synthetic` from the repository root. Do not use your normal state directory for fixtures.
 
+## Retrieval evals
+
+`evals/` holds an offline harness for the open-memory chunking and retrieval: invented pages and AX
+fixtures, a 61-question gold set, `open-memory eval`, and a committed baseline with ablations. See
+[evals/README.md](evals/README.md); `evals/CAPTURE.md` explains how to replace the hand-authored AX trees
+with real captures. It uses temp state directories only and never enables capture.
+
 ## Components
 
 | Path | Current purpose |
