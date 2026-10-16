@@ -767,6 +767,21 @@ fn reprocess(state: &Path, apply: bool) -> Result<()> {
     Ok(())
 }
 
+/// Capitalised words that are never entities: AX role words, calendar names, question words,
+/// pronouns and the verbs and openers that begin sentences in chats and articles.
+const NOT_ENTITY: &[&str] = &[
+    "static", "text", "button", "heading", "group", "window", "search",
+    "january", "february", "march", "april", "june", "july", "august", "september", "october", "november", "december",
+    "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "today", "yesterday", "tomorrow",
+    "what", "when", "where", "which", "while", "who", "whom", "whose", "why", "how", "the", "this", "that", "these", "those",
+    "there", "they", "them", "their", "then", "than", "here", "you", "your", "yours", "our", "its", "his", "her", "she", "him",
+    "and", "but", "for", "with", "from", "into", "about", "also", "just", "only", "will", "would", "can", "could", "should",
+    "may", "might", "must", "has", "have", "had", "was", "were", "are", "not", "yes", "okay", "thanks", "please", "sorry",
+    "add", "check", "choose", "cut", "keep", "give", "given", "help", "hire", "let", "make", "mix", "mixing", "plan", "pull",
+    "pulling", "run", "running", "same", "saved", "ship", "sort", "stake", "start", "take", "tell", "update", "use", "water",
+    "works", "write", "last", "most", "land", "hours", "each", "some", "any", "all", "one", "two", "new", "old", "next",
+];
+
 fn summarize(state: &Path, snapshot_id: i64) -> Result<()> {
     let db = open_db(state)?;
     let source = load_source(&db, snapshot_id, 0.0)?.context("snapshot missing")?;
@@ -783,16 +798,13 @@ fn summarize(state: &Path, snapshot_id: i64) -> Result<()> {
             &[snapshot_id],
         )?;
     }
-    let entity_re = Regex::new(r"\b[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,})?\b")?;
+    // A label is one or two capitalised words on one line; calendar names, question words, pronouns,
+    // common imperatives and AX role words are not entities.
+    let entity_re = Regex::new(r"\b[A-Z][a-z]{2,}(?:[ ]+[A-Z][a-z]{2,})?\b")?;
     for name in entity_re
         .find_iter(&source.body)
         .map(|m| m.as_str())
-        .filter(|n| {
-            ![
-                "Static", "Text", "Button", "Heading", "Group", "Window", "Search",
-            ]
-            .contains(n)
-        })
+        .filter(|n| n.split(' ').filter(|w| !w.is_empty()).all(|w| !NOT_ENTITY.contains(&w.to_lowercase().as_str())))
         .take(12)
     {
         let body = format!("Entity label {name} appears in source snapshot #{snapshot_id}. This is a mention, not a verified identity.");
@@ -1764,6 +1776,17 @@ mod tests {
         assert_eq!(evidence_text(&hit).chars().count(), EVIDENCE_CHAR_CAP);
         let none = hit_with("page body", &[]);
         assert_eq!(evidence_text(&none), "page body");
+    }
+
+    #[test]
+    fn entity_labels_skip_calendar_words_question_words_and_line_breaks() {
+        let re = Regex::new(r"\b[A-Z][a-z]{2,}(?:[ ]+[A-Z][a-z]{2,})?\b").unwrap();
+        let found: Vec<&str> = re
+            .find_iter("Please add Priya Raman to Home\nExplore on Monday. What about Harbor Print in October?")
+            .map(|m| m.as_str())
+            .filter(|n| n.split(' ').all(|w| !NOT_ENTITY.contains(&w.to_lowercase().as_str())))
+            .collect();
+        assert_eq!(found, vec!["Priya Raman", "Home", "Explore", "Harbor Print"], "a name never spans a line break");
     }
 
     #[test]
