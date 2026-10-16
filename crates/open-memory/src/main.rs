@@ -921,15 +921,6 @@ fn filter_clauses(db: &Connection, question: &str, now_ms: Option<i64>) -> Resul
     Ok(must)
 }
 
-fn query_filter(db: &Connection, question: &str, now_ms: Option<i64>) -> Result<Option<Filter>> {
-    let must = filter_clauses(db, question, now_ms)?;
-    if must.is_empty() {
-        Ok(None)
-    } else {
-        Ok(Some(serde_json::from_value(json!({"must":must}))?))
-    }
-}
-
 /// `now_ms` injects the clock for "today"/"yesterday"; `None` uses the real clock.
 fn time_bounds(question: &str, now_ms: Option<i64>) -> Result<Option<(i64, i64)>> {
     let q = question.to_lowercase();
@@ -1104,7 +1095,15 @@ fn retrieve(runtime: &mut Runtime, question: &str, params: &Params) -> Result<Re
     if let Some(filter) = filter {
         builder = builder.filter(filter);
     }
-    let points = runtime.shard.query(builder.build())?;
+    let mut points = runtime.shard.query(builder.build())?;
+    // Qdrant Edge returns exactly tied RRF scores in arbitrary order; break ties by point id so
+    // results (and evals) are reproducible. Scores are already descending, so only ties move.
+    points.sort_by(|a, b| {
+        b.score.total_cmp(&a.score).then_with(|| match (&a.id, &b.id) {
+            (PointId::NumId(x), PointId::NumId(y)) => x.cmp(y),
+            _ => std::cmp::Ordering::Equal,
+        })
+    });
     // Insertion-ordered so equal scores resolve by Qdrant rank, not by hash order.
     let mut index_by_evidence = std::collections::HashMap::<String, usize>::new();
     let mut collapsed: Vec<(Source, Option<i64>)> = Vec::new();
@@ -1432,4 +1431,89 @@ fn llm_answer(question: &str, sources: &[Source]) -> Result<String> {
         .as_str()
         .context("LLM response lacked content")?
         .to_owned())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn db() -> Connection {
+        let db = Connection::open_in_memory().unwrap();
+        db.execute_batch(include_str!("schema.sql")).unwrap();
+        db
+    }
+
+    fn app_filter(question: &str) -> Option<String> {
+        filter_clauses(&db(), question, None)
+            .unwrap()
+            .iter()
+            .find(|c| c["key"] == "app")
+            .map(|c| c["match"]["value"].as_str().unwrap().to_owned())
+    }
+
+    fn at(day: u32, hour: u32) -> i64 {
+        Utc.with_ymd_and_hms(2026, 10, day, hour, 0, 0).unwrap().timestamp_millis()
+    }
+
+    #[test]
+    fn app_words_become_app_filters() {
+        assert_eq!(app_filter("In Slack, when is the standup?").as_deref(), Some("com.tinyspeck.slackmacgap"));
+        assert_eq!(app_filter("what did I read in Safari").as_deref(), Some("com.apple.Safari"));
+        assert_eq!(app_filter("what time is the standup"), None);
+    }
+
+    #[test]
+    fn private_domain_and_date_clauses() {
+        let db = db();
+        db.execute("INSERT INTO snapshots(fingerprint,evidence_fingerprint,app_id,title,domain,source_type,body,first_seen_ms,last_seen_ms,limitations) VALUES('a','a','x','t','known.example.org','browser','b',1,1,'[]')", []).unwrap();
+        let keys = |q: &str| -> Vec<String> {
+            filter_clauses(&db, q, Some(at(17, 12))).unwrap().iter().map(|c| c["key"].as_str().unwrap().to_owned()).collect()
+        };
+        assert_eq!(keys("what is on known.example.org"), vec!["domain"]);
+        assert!(keys("what is on unknown.example.org").is_empty(), "unknown domains add no filter");
+        assert_eq!(keys("my private browsing"), vec!["source_type"]);
+        assert_eq!(keys("what did I read yesterday"), vec!["capture_time", "last_seen"]);
+    }
+
+    #[test]
+    fn time_bounds_use_the_injected_clock() {
+        // The local timezone decides day edges; pin it like the eval does.
+        env::set_var("TZ", "UTC");
+        let now = at(17, 12);
+        assert_eq!(time_bounds("what did I do today", Some(now)).unwrap(), Some((at(17, 0), at(18, 0))));
+        assert_eq!(time_bounds("what did I do yesterday", Some(now)).unwrap(), Some((at(16, 0), at(17, 0))));
+        assert_eq!(time_bounds("notes from 2026-10-14", Some(now)).unwrap(), Some((at(14, 0), at(15, 0))));
+        assert_eq!(time_bounds("no date here", Some(now)).unwrap(), None);
+    }
+
+    #[test]
+    fn retrieval_defaults_match_the_original_constants() {
+        let p = Params::default();
+        assert_eq!((p.prefetch, p.fused_limit, p.rrf_k, p.final_k), (80, 40, 60, 8));
+        assert!(p.use_filters && p.use_rerank_bonus && p.include_derived);
+        assert_eq!(p.mode, Mode::Hybrid);
+        assert_eq!(p.now_ms, None);
+    }
+
+    // ---- Known weaknesses. These fail today; remove `ignore` when the weakness is fixed.
+
+    #[test]
+    #[ignore = "known weakness: query_filter treats the ordinary word 'edge' as the Edge browser and returns nothing else"]
+    fn edge_case_is_not_an_app_filter() {
+        assert_eq!(app_filter("what is an edge case in this test plan"), None);
+    }
+
+    #[test]
+    #[ignore = "known weakness: ordinary words 'terminal', 'notes' and 'messages' become hard app filters with no fallback"]
+    fn ordinary_words_are_not_app_filters() {
+        assert_eq!(app_filter("what is the terminal velocity of a skydiver"), None);
+        assert_eq!(app_filter("what did I write in my notes about hiring"), None);
+        assert_eq!(app_filter("what did the messages from the landlord say"), None);
+    }
+
+    #[test]
+    #[ignore = "known weakness: time_bounds only understands today, yesterday and ISO dates; 'last week' is silently ignored"]
+    fn last_week_is_a_time_filter() {
+        assert!(time_bounds("what did I read last week", Some(at(17, 12))).unwrap().is_some());
+    }
 }

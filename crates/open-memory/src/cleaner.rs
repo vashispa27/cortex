@@ -266,3 +266,175 @@ pub fn chunks_with(body: &str, target: usize) -> Vec<(usize, usize, String)> {
     }
     chunks
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    fn ax(role: &str, name: &str, value: &str, path: &[(&str, &str)]) -> AxNode {
+        serde_json::from_value(json!({
+            "role": role, "name": name, "value": value,
+            "ancestor_path": path.iter().map(|(r, n)| json!({"role": r, "name": n})).collect::<Vec<_>>(),
+        }))
+        .unwrap()
+    }
+
+    const BROWSER: [(&str, &str); 2] = [("AXWindow", "Page"), ("AXWebArea", "Page")];
+
+    /// Spans are char-aligned, in order, non-overlapping, and only whitespace-only stretches
+    /// (dropped empty chunks) may lie between them; every other character is covered once.
+    fn assert_well_formed(body: &str, target: usize) -> Vec<(usize, usize, String)> {
+        let chunks = chunks_with(body, target);
+        let mut previous_end = 0;
+        for (start, end, text) in &chunks {
+            assert!(body.is_char_boundary(*start) && body.is_char_boundary(*end), "span {start}..{end} splits a character");
+            assert!(start < end, "empty span");
+            assert!(*start >= previous_end, "spans must be ordered and non-overlapping");
+            assert!(body[previous_end..*start].trim().is_empty(), "text between spans must be whitespace only");
+            assert_eq!(text, body[*start..*end].trim(), "text must be the trimmed span");
+            previous_end = *end;
+        }
+        assert!(body[previous_end..].trim().is_empty(), "the tail after the last span must be whitespace only");
+        let joined: String = chunks.iter().flat_map(|(_, _, t)| t.chars()).filter(|c| !c.is_whitespace()).collect();
+        let original: String = body.chars().filter(|c| !c.is_whitespace()).collect();
+        assert_eq!(joined, original, "every non-whitespace character must be covered exactly once");
+        chunks
+    }
+
+    fn sample_body() -> String {
+        let mut body = String::new();
+        for i in 0..40 {
+            body.push_str(&format!("Line {i}: the quick brown fox jumps over the lazy dog. Another sentence follows here!\n"));
+        }
+        body.push_str(&"A very long single line that keeps going. ".repeat(80));
+        body.push('\n');
+        body.push_str("You said:\nwhat now?\nChatGPT said:\nNothing much.\n");
+        body
+    }
+
+    #[test]
+    fn chunk_spans_are_valid_ordered_and_cover_content() {
+        for target in [1_600, 400, 97] {
+            assert_well_formed(&sample_body(), target);
+        }
+        assert!(chunks("").is_empty());
+        assert!(chunks("  \n\t ").is_empty());
+        let single = assert_well_formed("one short line", 1_600);
+        assert_eq!(single.len(), 1);
+    }
+
+    /// Bound, as the code stands: a chunk closes before a unit would pass the target, and a unit
+    /// is a line (<= target) or a sentence-aligned piece of a longer line (<= target + 1 byte
+    /// when a sentence end is in reach). So chunks are <= target + 1 byte, except that one
+    /// unbroken sentence longer than the target becomes a single chunk of that sentence's length.
+    #[test]
+    fn chunk_size_exceeds_target_by_at_most_one_sentence() {
+        let target = 1_600;
+        for chunk in assert_well_formed(&sample_body(), target) {
+            assert!(chunk.1 - chunk.0 <= target + 1, "chunk of {} bytes", chunk.1 - chunk.0);
+        }
+        let long_sentence = format!("{} end.", "word ".repeat(700));
+        let body = format!("intro line\n{long_sentence}\ntrailer line");
+        let chunks = assert_well_formed(&body, target);
+        let longest = chunks.iter().map(|c| c.1 - c.0).max().unwrap();
+        assert!(longest <= long_sentence.len() + 2, "{longest} > one sentence");
+        assert!(longest > target, "an unbroken sentence is kept whole");
+    }
+
+    #[test]
+    fn speaker_markers_start_a_new_chunk_and_stay_with_their_message() {
+        let body = "You said:\nhello there\nChatGPT said:\nhi, how can I help?\nYou said:\nplan my day\nLokesh sent the following message:\nBeta ships Thursday.";
+        let chunks = assert_well_formed(body, 1_600);
+        let texts: Vec<&str> = chunks.iter().map(|c| c.2.as_str()).collect();
+        assert_eq!(texts, vec![
+            "You said:\nhello there",
+            "ChatGPT said:\nhi, how can I help?",
+            "You said:\nplan my day",
+            "Lokesh sent the following message:\nBeta ships Thursday.",
+        ]);
+    }
+
+    #[test]
+    fn multibyte_text_never_panics_or_splits_a_character() {
+        let devanagari = "दाल को 25 मिनट तक उबालें। फिर घी में जीरा डालें! क्या यह ठीक है? ".repeat(60);
+        let emoji = "Ship it 🚀. Tests passed ✅! Party time 🎉🎉🎉? ".repeat(80);
+        let mixed = format!("{devanagari}\n{emoji}\nप्रश्न: कितना घी?\nउत्तर: 2 चम्मच घी\n");
+        for target in [1, 2, 3, 5, 7, 50, 333, 1_600] {
+            assert_well_formed(&mixed, target);
+        }
+        let no_terminator = "दाल".repeat(900);
+        assert_well_formed(&no_terminator, 1_600);
+    }
+
+    #[test]
+    fn navigation_only_input_yields_no_body() {
+        let nodes = vec![
+            ax("AXButton", "Back", "Back", &[("AXWindow", "New Tab"), ("AXToolbar", "")]),
+            ax("AXTextField", "Address and search bar", "chrome://newtab/", &[("AXWindow", "New Tab"), ("AXToolbar", "")]),
+            ax("AXRadioButton", "Tab Strip", "New Tab", &[("AXWindow", "New Tab"), ("AXTabGroup", "Tab Strip")]),
+            ax("AXLink", "Chat history / Weekly meal prep", "Weekly meal prep", &[("AXWindow", "ChatGPT"), ("AXGroup", "Sidebar"), ("AXGroup", "Chat history")]),
+            ax("AXLink", "Gmail", "Gmail", &[("AXWindow", "New Tab - Google Chrome"), ("AXWebArea", "New Tab")]),
+        ];
+        let cleaned = clean(&nodes, "com.google.Chrome", Some("chrome://newtab/"), "New Tab - Google Chrome");
+        assert_eq!(cleaned.body, "");
+        assert_eq!(cleaned.quality, "navigation_only");
+        assert!(cleaned.decisions.iter().all(|d| d.class == "drop"));
+        assert!(chunks(&cleaned.body).is_empty());
+    }
+
+    #[test]
+    fn chatgpt_conversation_keeps_messages_and_drops_chrome() {
+        let convo: Vec<(&str, &str)> = vec![("AXWindow", "Chat"), ("AXWebArea", "Chat"), ("AXGroup", "Conversation")];
+        let nodes = vec![
+            ax("AXLink", "Chat history / Old chat", "Old chat", &[("AXWindow", "Chat"), ("AXWebArea", "Chat"), ("AXGroup", "Sidebar"), ("AXGroup", "Chat history")]),
+            ax("AXHeading", "Conversation", "You said:", &convo),
+            ax("AXStaticText", "Conversation", "How much oil?", &convo),
+            ax("AXButton", "Conversation / Copy", "Copy", &convo),
+            ax("AXHeading", "Conversation", "ChatGPT said:", &convo),
+            ax("AXStaticText", "Conversation", "Add 10 ml olive oil.", &convo),
+            ax("AXButton", "Conversation / Rate response", "Rate response", &convo),
+            ax("AXTextArea", "Composer / Ask ChatGPT", "half typed draft", &[("AXWindow", "Chat"), ("AXWebArea", "Chat"), ("AXGroup", "Composer")]),
+            ax("AXStaticText", "", "ChatGPT can make mistakes. Check important info.", &[("AXWindow", "Chat"), ("AXWebArea", "Chat")]),
+        ];
+        let cleaned = clean(&nodes, "com.google.Chrome", Some("https://chatgpt.com/c/abc"), "Chat");
+        assert_eq!(cleaned.body, "You said:\nHow much oil?\nChatGPT said:\nAdd 10 ml olive oil.");
+        assert_eq!(cleaned.quality, "main_content");
+    }
+
+    #[test]
+    fn plain_web_text_survives_with_adjacent_duplicates_collapsed() {
+        let nodes = vec![
+            ax("AXHeading", "", "Title", &BROWSER),
+            ax("AXStaticText", "", "Body paragraph.", &BROWSER),
+            ax("AXStaticText", "", "Body paragraph.", &BROWSER),
+        ];
+        let cleaned = clean(&nodes, "com.apple.Safari", Some("https://example.org/"), "Title");
+        assert_eq!(cleaned.body, "Title\nBody paragraph.");
+    }
+
+    // ---- Known weaknesses. These fail today; remove `ignore` when the weakness is fixed.
+
+    #[test]
+    #[ignore = "known weakness: no overlap or label-aware boundary, so a value can land in a different chunk from its label (number plus unit at the 1,600-byte edge)"]
+    fn fact_with_number_and_unit_stays_in_one_chunk() {
+        let filler: Vec<String> = (0..64).map(|i| format!("{i:0>49}")).collect();
+        let header = "Maximum permitted load on the rear axle is:";
+        let value = "450 kg per axle";
+        let mut body = String::new();
+        for line in &filler {
+            if body.len() + line.len() + 1 + header.len() + 1 > 1_596 {
+                break;
+            }
+            body.push_str(line);
+            body.push('\n');
+        }
+        body.push_str(header);
+        body.push('\n');
+        assert!(body.len() <= 1_600 && body.len() + value.len() + 1 > 1_600, "setup puts the boundary between label and value");
+        body.push_str(value);
+        let chunks = chunks(&body);
+        assert!(chunks.iter().any(|c| c.2.contains(header) && c.2.contains("450 kg")),
+            "label and value are in different chunks: {:?}", chunks.iter().map(|c| c.2.len()).collect::<Vec<_>>());
+    }
+}
