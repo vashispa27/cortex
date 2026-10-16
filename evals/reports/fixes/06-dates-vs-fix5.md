@@ -11,9 +11,9 @@ Answerable questions only (absent questions have no answer to rank). Bootstrap: 
 | chunk hit@8 | 0.961 | 0.971 | +0.010 | [+0.000, +0.029] | within noise (1 queries differ) |
 | chunk hit@40 | 0.990 | 0.990 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | chunk MRR | 0.816 | 0.838 | +0.022 | [+0.002, +0.049] | better (5 queries differ) |
-| final hit@1 | 0.706 | 0.745 | +0.039 | [+0.010, +0.078] | better (4 queries differ) |
-| final hit@8 | 0.961 | 0.951 | -0.010 | [-0.029, +0.000] | within noise (1 queries differ) |
-| final MRR | 0.824 | 0.842 | +0.019 | [+0.000, +0.042] | within noise (5 queries differ) |
+| final hit@1 | 0.706 | 0.755 | +0.049 | [+0.010, +0.098] | better (5 queries differ) |
+| final hit@8 | 0.961 | 0.961 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final MRR | 0.824 | 0.852 | +0.029 | [+0.007, +0.056] | better (5 queries differ) |
 
 #### type: paraphrase (n=12)
 
@@ -55,9 +55,9 @@ Answerable questions only (absent questions have no answer to rank). Bootstrap: 
 | chunk hit@8 | 0.900 | 0.950 | +0.050 | [+0.000, +0.150] | within noise (1 queries differ) |
 | chunk hit@40 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | chunk MRR | 0.663 | 0.777 | +0.114 | [+0.018, +0.239] | better (5 queries differ) |
-| final hit@1 | 0.650 | 0.800 | +0.150 | [+0.000, +0.300] | within noise (3 queries differ) |
-| final hit@8 | 0.950 | 0.900 | -0.050 | [-0.150, +0.000] | within noise (1 queries differ) |
-| final MRR | 0.779 | 0.850 | +0.071 | [-0.013, +0.175] | within noise (4 queries differ) |
+| final hit@1 | 0.650 | 0.850 | +0.200 | [+0.050, +0.400] | better (4 queries differ) |
+| final hit@8 | 0.950 | 0.950 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final MRR | 0.779 | 0.900 | +0.121 | [+0.025, +0.242] | better (4 queries differ) |
 
 #### type: filter_trap (n=15)
 
@@ -92,5 +92,5 @@ Answerable questions only (absent questions have no answer to rank). Bootstrap: 
 | final hit@8 | 0.833 | 0.833 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.833 | 0.833 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
-Absent questions that still returned results: base 15/22, variant 13/22.
+Absent questions that still returned results: base 15/22, variant 12/22.
 

@@ -33,7 +33,7 @@ Options: `--split dev|test|all` (default all), `--param key=value` (repeatable, 
 Keys: `mode` (hybrid | dense_only | bm25_only), `rerank_bonus`, `filters`, `derived` (on | off),
 `rrf_k`, `prefetch`, `fused_limit`, `final_k`, `chunk_target`, `chunk_unit` (chars | bytes), `chunk_overlap` (percent), `chunk_boundaries` (on | off),
 `chunk_mode=legacy` (the pre-Fix-4 chunker), `prefix` (none | title | context: text embedded with each chunk), `app_filter` (phrase | legacy),
-`app_fallback` (empty | weak | off), `app_fallback_ratio`, `chunks_per_result`, `obs_prefilter`, `abstain=off` (zeroes every
+`app_fallback` (empty | weak | off), `app_fallback_ratio`, `chunks_per_result`, `obs_prefilter`, `dedup_jaccard`, `version_order`, `version_margin`, `abstain=off` (zeroes every
 abstention threshold) and `abstain_score|support|dense|chunk|unseen|unseen_sim|ident|time_support`. `filters=off` disables the
 regex filters and the post-cut observation-time check.
 

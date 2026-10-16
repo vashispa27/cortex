@@ -209,7 +209,7 @@ mod tests {
         let off = Params { abstain_unseen: 0.0, abstain_ident: 0.0, abstain_time_support: 0.0, ..Params::default() };
         let mut r = blank();
         assert!(decide(&r, &off), "no hits always abstains");
-        r.hits.push(Hit { source: Source { id: 1, app_id: "a".into(), title: "t".into(), url: None, domain: None, source_type: "app".into(), body: "b".into(), first_seen_ms: 0, last_seen_ms: 0, sightings: 1, limitations: "[]".into(), cleaner_quality: "main_content".into(), hit_text: None, score: 0.0 }, best_chunk_id: None, chunks: vec![] });
+        r.hits.push(Hit { source: Source { id: 1, app_id: "a".into(), title: "t".into(), url: None, domain: None, source_type: "app".into(), body: "b".into(), first_seen_ms: 0, last_seen_ms: 0, sightings: 1, limitations: "[]".into(), cleaner_quality: "main_content".into(), hit_text: None, score: 0.0 }, best_chunk_id: None, chunks: vec![], versions: vec![] });
         assert!(!decide(&r, &off));
         let p = Params { abstain_ident: 1.0, ..off.clone() };
         r.ident = 0.5;

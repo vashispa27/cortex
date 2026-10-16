@@ -6,6 +6,7 @@ mod eval;
 mod fixtures;
 mod prefix;
 mod timewin;
+mod versions;
 
 use anyhow::{anyhow, bail, Context, Result};
 use chrono::{DateTime, Local, TimeZone, Utc};
@@ -1029,6 +1030,12 @@ struct Params {
     /// With a date window, restrict chunk points to snapshots actually observed in it inside Qdrant,
     /// instead of dropping them after the top-`fused_limit` cut.
     obs_prefilter: bool,
+    /// Word-set overlap above which two results with the same numbers, names and negations are one.
+    dedup_jaccard: f64,
+    /// Order versions of one page by what the question asks for (newest by default).
+    version_order: bool,
+    /// Largest normalised score gap between versions for which they are reordered.
+    version_margin: f64,
 }
 
 impl Default for Params {
@@ -1059,6 +1066,11 @@ impl Default for Params {
             // the lowest dev dated answerable at 0.25, so 'none of the question's terms appear' (< 0.1).
             abstain_time_support: 0.1,
             obs_prefilter: true,
+            // dedup_jaccard changed nothing on dev or test (no mergeable pair exists in the corpus); 0.9 merges
+            // only near-identical results. version_margin: dev cannot tell 0.05..1.0 apart; 0.3 is the safe tie.
+            dedup_jaccard: 0.9,
+            version_order: true,
+            version_margin: 0.3,
         }
     }
 }
@@ -1093,6 +1105,8 @@ struct Hit {
     best_chunk_id: Option<i64>,
     /// Up to `chunks_per_result` retrieved chunks, best first when selected, shown in document order.
     chunks: Vec<EvidenceChunk>,
+    /// Other snapshots of the same page that were collapsed into or ordered around this result.
+    versions: Vec<i64>,
 }
 
 struct Retrieval {
@@ -1336,7 +1350,7 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
         });
     }
     let collapsed_count = collapsed.len();
-    let mut keyed: Vec<(f32, (Source, Option<i64>, Vec<EvidenceChunk>))> = if params.use_rerank_bonus {
+    let mut keyed: Vec<(f32, (Source, Option<i64>, Vec<EvidenceChunk>, Vec<i64>))> = if params.use_rerank_bonus {
         let terms = content_terms(question);
         collapsed
             .into_iter()
@@ -1346,16 +1360,17 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
                     .iter()
                     .map(|term| body.matches(term).count().min(5))
                     .sum();
-                (entry.0.score + (matches as f32) / (body.len().max(100) as f32).sqrt(), entry)
+                (entry.0.score + (matches as f32) / (body.len().max(100) as f32).sqrt(), (entry.0, entry.1, entry.2, Vec::new()))
             })
             .collect()
     } else {
-        collapsed.into_iter().map(|entry| (entry.0.score, entry)).collect()
+        collapsed.into_iter().map(|entry| (entry.0.score, (entry.0, entry.1, entry.2, Vec::new()))).collect()
     };
     keyed.sort_by(|a, b| {
         b.0.total_cmp(&a.0)
             .then_with(|| b.1 .0.last_seen_ms.cmp(&a.1 .0.last_seen_ms))
     });
+    let mut keyed = versions::apply(keyed, question, params);
     keyed.truncate(params.final_k);
     Ok(Retrieval {
         score_norm: 0.0,
@@ -1374,7 +1389,7 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
         observation_dropped,
         hits: keyed
             .into_iter()
-            .map(|(_, (source, best_chunk_id, mut chunks))| {
+            .map(|(_, (source, best_chunk_id, mut chunks, versions))| {
                 // The best chunk always stays; the rest are the highest-scoring others. Shown in
                 // document order so adjacent chunks read as the page does.
                 chunks.sort_by(|a, b| {
@@ -1383,7 +1398,7 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
                 });
                 chunks.truncate(params.chunks_per_result.max(1));
                 chunks.sort_by_key(|c| c.chunk_id);
-                Hit { source, best_chunk_id, chunks }
+                Hit { source, best_chunk_id, chunks, versions }
             })
             .collect(),
     })
@@ -1473,6 +1488,9 @@ fn answer(runtime: &mut Runtime, question: &str) -> Result<String> {
         let shown = norm_space(&snippet);
         for chunk in hit.chunks.iter().filter(|c| hit.chunks.len() > 1 && !shown.contains(&norm_space(&c.text.lines().next().unwrap_or("")))).take(2) {
             output.push_str(&format!("   Also retrieved: {}\n", chunk.text.split_whitespace().collect::<Vec<_>>().join(" ").chars().take(200).collect::<String>()));
+        }
+        if !hit.versions.is_empty() {
+            output.push_str(&format!("   Other captured versions of this page: {}\n", hit.versions.iter().map(|id| format!("[{id}]")).collect::<Vec<_>>().join(" ")));
         }
         if source.limitations != "[]" {
             output.push_str(&format!("   Capture limitations: {}\n", source.limitations));
@@ -1721,6 +1739,7 @@ mod tests {
             source,
             best_chunk_id: Some(1),
             chunks: chunks.iter().enumerate().map(|(i, c)| EvidenceChunk { chunk_id: i as i64 + 1, text: (*c).into(), score: 0.0 }).collect(),
+            versions: vec![],
         }
     }
 
