@@ -299,7 +299,7 @@ fn dist(values: &[f64]) -> Value {
     v.sort_by(|a, b| a.total_cmp(b));
     json!({
         "n": v.len(), "mean": round(mean(&v)), "p50": round(percentile(&v, 0.5)),
-        "p95": round(percentile(&v, 0.95)), "min": round(v.first().copied().unwrap_or(0.0)),
+        "p95": round(percentile(&v, 0.95)), "p99": round(percentile(&v, 0.99)), "min": round(v.first().copied().unwrap_or(0.0)),
         "max": round(v.last().copied().unwrap_or(0.0)),
     })
 }
