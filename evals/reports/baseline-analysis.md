@@ -41,8 +41,8 @@ numbers as provisional; the comparisons between variants are what the harness is
 |---|---|---|
 | 1 absent facts still return 8 results | **held** | 6/6 absent questions returned results (`bm25_only` abstains on 3/6 only because no query term matches). Top fused score: absent mean 0.025 vs answerable 0.033; AUROC 0.77 (chunk) / 0.93 (final) on 6 vs 53 queries, so a score threshold looks feasible but is calibrated on 6 points. No threshold implemented. |
 | 2 ordinary words become app filters, no fallback | **held** | 4/4 filter_trap questions got an `app` clause; `edge` and `messages` returned zero results, `terminal` and `notes` returned the wrong app's pages; 0/4 answered, 3/4 with `filters=off` (CI [+0.25, +1.0]). Probes: "the slack of the rope" and "chrome plating process" are also filtered. `messages` maps to `com.apple.iChat`, which is not the Messages app id. |
-| 3 facts straddle the 1,600-byte boundary | **held for planted cases, rare naturally** | 3/3 planted straddles are never retrieved whole; 3/50 (6%) of all gold answers are split, 0/47 of the others. Chunk target 800 or 3200 fixes these three but only by moving the boundary (no overlap), so some other string splits instead. |
-| 4 chunks embedded without title/app/speaker lose meaning | **plausible, not isolated** | 31/83 chunks (37%) are under 100 bytes and 29/83 (35%) share no word with their page title; Slack sender names never reach the body (q015, q043 depend on luck). Isolating the effect needs a fix (prepend context), so only structural evidence here. |
+| 3 facts straddle the 1,600-byte boundary | **held for planted cases, rare naturally** | 3/3 planted straddles are never retrieved whole; 3/50 (6%) of all gold answers are split, 0/47 of the others. Chunk target 800 or 3200 puts all three in one chunk (chunk hit@8 0→3/3) but only by moving the boundary (no overlap), and only 1/3 then reaches the text `ask` shows; a different string would split at another size. |
+| 4 chunks embedded without title/app/speaker lose meaning | **plausible, not isolated** | 31/83 chunks (37%) are under 100 bytes and 29/83 (35%) share no word with their page title; Slack sender names never reach the body (q015, q043). Isolating the effect needs a fix (prepend context), so only structural evidence here. |
 | 5 derived points compete; entity regex makes junk | **competition yes, harm small; junk yes** | derived points hold 170/507 (34%) of top-10 chunk slots but only 2/61 queries have one at rank 1; `derived=off` changes final hit@8 by 0 (41→41), hit@1 by −1, chunk MRR +0.008 (CI just above 0). 138 entity points for 83 chunks; 15 contain newlines ("Home\nExplore", "December\n\nRisks"), 8 are calendar words, and many are verbs or question words ("Add", "What", "Please"). |
 | 6 keyword rerank bonus: help or hurt | **no evidence it helps** | `rerank_bonus=off`: final hit@1 34→37, MRR 0.674→0.706, hit@8 41→41, all CIs include 0 (7 queries change). |
 | 7 near-duplicates crowd the top 8 | **held, modest at this corpus size** | 15/388 final slots (4%) near-identical (Jaccard ≥0.8), 27/388 (7%) at ≥0.5; 15/61 queries have at least one. Dedup keys on the whole body, so one edited line makes a new snapshot: the budget edits share 16/20 chunks, the garden scroll pair 8/14. Stale text is ranked above the right text in 2/8 questions that carry a stale answer. |
@@ -52,8 +52,10 @@ numbers as provisional; the comparisons between variants are what the harness is
 
 ## Ablations (details in `ablations.md`, paired bootstrap 95% CI)
 
-Only three rows exclude zero: `filters=off` helps filter_trap (0→3/4) and hurts time_scoped; `chunk_target`
-800/3200 fix the planted boundary cases. Everything else (mode, rerank bonus, derived) is within noise.
+Intervals that exclude zero: `filters=off` (filter_trap 0→3/4 better, time_scoped MRR worse, overall chunk
+hit@8 +0.07), `chunk_target` 800/3200 (boundary_fact chunk hit@8 0→3/3, overall chunk-level metrics up),
+`derived=off` (chunk MRR +0.008). Every overall final-level difference, and everything for `mode` and
+`rerank_bonus`, is within noise.
 
 | variant | final hit@1 | final hit@8 | final MRR | chunk MRR |
 |---|---|---|---|---|
