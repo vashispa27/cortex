@@ -1,0 +1,735 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.Safari",
+ "title": "Priya Raman / Chat / X",
+ "url": "https://x.com/i/chat/2201177-design",
+ "source_type": "browser",
+ "observed_ms": 1791975600000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://x.com/i/chat/2201177-design",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Priya Raman / Chat / X",
+   "value": "Priya Raman / Chat / X",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Home",
+   "value": "Home",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Explore",
+   "value": "Explore",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Notifications",
+   "value": "Notifications",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Messages",
+   "value": "Messages",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversations",
+   "value": "Messages",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Launch crew",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Mira: I'm out on Wednesday afternoon",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Weekend plans",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Sam: see you at 7",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Book club",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Noor: chapter nine was wild",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "Priya Raman",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Priya Raman 3:10 PM",
+   "value": "The logo kerning fix landed in commit a4f9c21.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Priya Raman 3:10 PM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Priya Raman 3:10 PM",
+   "value": "3:10 PM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Priya Raman 3:10 PM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "You 3:12 PM",
+   "value": "Great. Did the dark-mode favicon ship too?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "You 3:12 PM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "You 3:12 PM",
+   "value": "3:12 PM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "You 3:12 PM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Priya Raman 3:15 PM",
+   "value": "Not yet, the favicon ships Monday.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Priya Raman 3:15 PM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Priya Raman 3:15 PM",
+   "value": "3:15 PM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Priya Raman 3:15 PM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "You 3:16 PM",
+   "value": "Thanks.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "You 3:16 PM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "You 3:16 PM",
+   "value": "3:16 PM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "You 3:16 PM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message composer / Send",
+   "value": "Send",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message composer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "To view keyboard shortcuts, press question mark",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Priya Raman / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

@@ -1,0 +1,935 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.Safari",
+ "title": "The Long Cold Ferment - Baker's Notebook",
+ "url": "https://bakersnotebook.example.org/posts/long-cold-ferment",
+ "source_type": "browser",
+ "observed_ms": 1791705600000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://bakersnotebook.example.org/posts/long-cold-ferment",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "The Long Cold Ferment - Baker's Notebook",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Cookie consent",
+   "value": "We use cookies to improve your experience.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / Accept all cookies",
+   "value": "Accept all cookies",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / Manage preferences",
+   "value": "Manage preferences",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site header / Baker's Notebook",
+   "value": "Baker's Notebook",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Recipes",
+   "value": "Recipes",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Techniques",
+   "value": "Techniques",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Equipment",
+   "value": "Equipment",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Newsletter",
+   "value": "Newsletter",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / About",
+   "value": "About",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "The Long Cold Ferment",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "By Anika Rao · 9 October 2026 · 7 min read",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "A slow, cold ferment is the simplest way to build flavor in a sourdough loaf without adding more starter. It trades your attention for time.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "The schedule",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Mix flour, water and 20 percent starter at 78% hydration.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Bulk ferment for 14 hours at 21 °C.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Shape, then retard in the refrigerator for 12 hours at 4 °C.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "If your kitchen runs warmer, shorten the bulk rather than raising the starter percentage. A warm kitchen can finish the same job in half the time.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Baking",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Bake in a preheated Dutch oven at 245 °C for 20 minutes lid on, then 22 minutes lid off. Let the loaf cool for an hour before slicing.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Why the cold works",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Cold fermentation slows yeast activity more than it slows the bacteria that make acid, so the dough develops tang and aroma without over-proofing. The longer the dough sits, the more the enzymes break down starch into sugars that brown beautifully in the oven.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "A dough that has chilled overnight is also firmer and easier to shape. If the surface feels sticky when you pull it from the refrigerator, dust the top lightly with rice flour before turning it out.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Troubleshooting",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Flat loaf: the dough was probably over-proofed before it went into the cold.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Dense crumb: extend the stretch and fold sequence during the first two hours.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Pale crust: bake the second stage a few minutes longer until it is deep brown.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site footer",
+   "value": "© 2026 Baker's Notebook. All rights reserved.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / Privacy",
+   "value": "Privacy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / Terms",
+   "value": "Terms",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / Subscribe to the newsletter",
+   "value": "Subscribe to the newsletter",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

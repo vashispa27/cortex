@@ -1,5 +1,7 @@
 #![cfg(target_os = "macos")]
 mod cleaner;
+mod eval;
+mod fixtures;
 
 use anyhow::{anyhow, bail, Context, Result};
 use chrono::{DateTime, Local, TimeZone, Utc};
@@ -90,6 +92,12 @@ fn main() -> Result<()> {
         libc_umask(0o077);
     }
     let args: Vec<String> = env::args().skip(1).collect();
+    // Offline commands never touch the default state directory.
+    match args.first().map(String::as_str) {
+        Some("eval") => return eval::run(&args[1..]),
+        Some("ingest-fixtures") => return fixtures::run_cli(&args[1..]),
+        _ => {}
+    }
     let state = state_dir()?;
     fs::create_dir_all(&state)?;
     fs::set_permissions(&state, fs::Permissions::from_mode(0o700))?;
@@ -131,7 +139,7 @@ unsafe fn libc_umask(mask: u32) {
     umask(mask);
 }
 fn usage() {
-    eprintln!("Usage: open-memory capture [--print] [--rebuild-index]\n       open-memory capture --clean-dry-run\n       open-memory capture --apply-cleaning\n       open-memory ask \"natural-language question\"");
+    eprintln!("Usage: open-memory capture [--print] [--rebuild-index]\n       open-memory capture --clean-dry-run\n       open-memory capture --apply-cleaning\n       open-memory ask \"natural-language question\"\n       OPEN_MEMORY_STATE_DIR=<tmp> open-memory ingest-fixtures --corpus evals/corpus\n       open-memory eval --corpus evals/corpus --gold evals/gold/gold.jsonl --out evals/reports/<name>.json");
 }
 fn state_dir() -> Result<PathBuf> {
     if let Some(path) = env::var_os("OPEN_MEMORY_STATE_DIR") {
@@ -213,6 +221,20 @@ fn run_helper(path: &Path, mode: &str) -> Result<AxReply> {
 }
 
 fn download_model(state: &Path) -> Result<PathBuf> {
+    // Offline evals point at an already-downloaded copy of the pinned model so a
+    // throwaway state directory does not re-download it. The checksum is still enforced.
+    if let Some(dir) = env::var_os("OPEN_MEMORY_MODEL_DIR") {
+        let dir = PathBuf::from(dir);
+        for file in ["config.json", "tokenizer.json", "model.safetensors"] {
+            if !dir.join(file).is_file() {
+                bail!("OPEN_MEMORY_MODEL_DIR is missing {file}");
+            }
+        }
+        if file_hash(&dir.join("model.safetensors"))? != MODEL_SHA256 {
+            bail!("OPEN_MEMORY_MODEL_DIR model checksum mismatch");
+        }
+        return Ok(dir);
+    }
     let dir = state.join("models").join(MODEL_REVISION);
     fs::create_dir_all(&dir)?;
     let client = Client::builder()
@@ -252,6 +274,11 @@ fn file_hash(path: &Path) -> Result<String> {
 }
 
 fn open_runtime(state: &Path, rebuild: bool) -> Result<Runtime> {
+    open_runtime_with(state, rebuild, None)
+}
+
+/// `model` lets offline evals reuse one loaded embedding model across state directories.
+fn open_runtime_with(state: &Path, rebuild: bool, model: Option<StaticModel>) -> Result<Runtime> {
     let db = open_db(state)?;
     let stale: i64 = db.query_row("SELECT COUNT(*) FROM snapshots WHERE cleaner_version<?1", [cleaner::VERSION], |r| r.get(0))?;
     if stale > 0 {
@@ -279,16 +306,22 @@ fn open_runtime(state: &Path, rebuild: bool) -> Result<Runtime> {
         db.execute("UPDATE chunks SET indexed=0", [])?;
         db.execute("UPDATE derived SET indexed=0", [])?;
     }
-    let model_dir = download_model(state)?;
-    let model = StaticModel::from_pretrained(
-        model_dir.to_str().context("model path is not UTF-8")?,
-        None,
-        None,
-        None,
-    )?;
-    if model.encode(&["dimension check".to_owned()])[0].len() != 512 {
-        bail!("pinned model dimension is not 512");
-    }
+    let model = match model {
+        Some(model) => model,
+        None => {
+            let model_dir = download_model(state)?;
+            let model = StaticModel::from_pretrained(
+                model_dir.to_str().context("model path is not UTF-8")?,
+                None,
+                None,
+                None,
+            )?;
+            if model.encode(&["dimension check".to_owned()])[0].len() != 512 {
+                bail!("pinned model dimension is not 512");
+            }
+            model
+        }
+    };
     let bm25 = EdgeBm25::new(EdgeBm25Config {
         language: Some("english".into()),
         ..Default::default()
@@ -350,6 +383,28 @@ impl Runtime {
         self.shard.update(UpdateOperation::PointOperation(
             PointOperations::UpsertPoints(PointInsertOperations::PointsList(vec![point])),
         ))?;
+        Ok(())
+    }
+    /// A re-sighting of a known snapshot only advances the `last_seen` payload of its chunk points.
+    fn refresh_seen(&self, id: i64, source: &Source) -> Result<()> {
+        let chunk_ids = {
+            let mut stmt = self.db.prepare("SELECT id FROM chunks WHERE snapshot_id=?1")?;
+            let found = stmt.query_map([id], |r| r.get::<_, i64>(0))?.collect::<rusqlite::Result<Vec<_>>>()?;
+            found
+        };
+        if !chunk_ids.is_empty() {
+            let payload: Payload = serde_json::from_value(
+                json!({"last_seen":source.last_seen_ms,"source_type":source.source_type}),
+            )?;
+            self.shard.update(UpdateOperation::PayloadOperation(
+                PayloadOps::SetPayload(SetPayloadOp {
+                    payload,
+                    points: Some(chunk_ids.into_iter().map(|chunk_id| PointId::NumId((1_u64 << 61) + chunk_id as u64)).collect()),
+                    filter: None,
+                    key: None,
+                }),
+            ))?;
+        }
         Ok(())
     }
     fn index_pending(&mut self) -> Result<usize> {
@@ -470,24 +525,7 @@ fn capture(state: &Path, print: bool, rebuild: bool) -> Result<()> {
                     if is_new && source.cleaner_quality != "navigation_only" {
                         tx.send(id)?;
                     } else {
-                        let chunk_ids = {
-                            let mut stmt = rt.db.prepare("SELECT id FROM chunks WHERE snapshot_id=?1")?;
-                            let found = stmt.query_map([id], |r| r.get::<_, i64>(0))?.collect::<rusqlite::Result<Vec<_>>>()?;
-                            found
-                        };
-                        if !chunk_ids.is_empty() {
-                            let payload: Payload = serde_json::from_value(
-                                json!({"last_seen":source.last_seen_ms,"source_type":source.source_type}),
-                            )?;
-                            rt.shard.update(UpdateOperation::PayloadOperation(
-                                PayloadOps::SetPayload(SetPayloadOp {
-                                    payload,
-                                    points: Some(chunk_ids.into_iter().map(|chunk_id| PointId::NumId((1_u64 << 61) + chunk_id as u64)).collect()),
-                                    filter: None,
-                                    key: None,
-                                }),
-                            ))?;
-                        }
+                        rt.refresh_seen(id, &source)?;
                     }
                     let indexed = rt.index_pending()?;
                     let status = if source.cleaner_quality == "navigation_only" { "navigation_only" } else if is_new { "new" } else { "seen" };
@@ -555,6 +593,18 @@ fn record(
     source_type: Option<String>,
     limitations: Option<Vec<String>>,
 ) -> Result<(i64, bool, Source)> {
+    record_with_target(db, window, url, source_type, limitations, cleaner::CHUNK_TARGET_BYTES)
+}
+
+/// `chunk_target` exists so offline evals can sweep chunk size; live capture uses the default.
+fn record_with_target(
+    db: &mut Connection,
+    window: &AxWindow,
+    url: Option<String>,
+    source_type: Option<String>,
+    limitations: Option<Vec<String>>,
+    chunk_target: usize,
+) -> Result<(i64, bool, Source)> {
     let cleaned = cleaner::clean(&window.roots, &window.app_id, url.as_deref(), &window.title);
     let body = &cleaned.body;
     let domain = url
@@ -584,7 +634,7 @@ fn record(
     )?;
     transaction.execute("INSERT OR IGNORE INTO raw_versions(snapshot_id,ax_hash,ax_nodes_json,observed_ms) VALUES(?1,?2,?3,?4)",params![id,digest(&ax_nodes_json),ax_nodes_json,window.observed_ms])?;
     if existing.is_none() {
-        for (start, end, text) in cleaner::chunks(body) {
+        for (start, end, text) in cleaner::chunks_with(body, chunk_target) {
             transaction.execute("INSERT INTO chunks(snapshot_id,start_byte,end_byte,body) VALUES(?1,?2,?3,?4)", params![id,start as i64,end as i64,text])?;
         }
     }
@@ -828,7 +878,8 @@ fn ask(state: &Path, question: &str) -> Result<()> {
     Ok(())
 }
 
-fn query_filter(db: &Connection, question: &str) -> Result<Option<Filter>> {
+/// The `must` clauses derived from the question's app words, privacy words, domain and date.
+fn filter_clauses(db: &Connection, question: &str, now_ms: Option<i64>) -> Result<Vec<Value>> {
     let q = question.to_lowercase();
     let mut must = Vec::<Value>::new();
     let known_apps = [
@@ -863,10 +914,15 @@ fn query_filter(db: &Connection, question: &str) -> Result<Option<Filter>> {
             must.push(json!({"key":"domain","match":{"value":value}}));
         }
     }
-    if let Some((start, end)) = time_bounds(question)? {
+    if let Some((start, end)) = time_bounds(question, now_ms)? {
         must.push(json!({"key":"capture_time","range":{"lt":end}}));
         must.push(json!({"key":"last_seen","range":{"gte":start}}));
     }
+    Ok(must)
+}
+
+fn query_filter(db: &Connection, question: &str, now_ms: Option<i64>) -> Result<Option<Filter>> {
+    let must = filter_clauses(db, question, now_ms)?;
     if must.is_empty() {
         Ok(None)
     } else {
@@ -874,18 +930,23 @@ fn query_filter(db: &Connection, question: &str) -> Result<Option<Filter>> {
     }
 }
 
-fn time_bounds(question: &str) -> Result<Option<(i64, i64)>> {
+/// `now_ms` injects the clock for "today"/"yesterday"; `None` uses the real clock.
+fn time_bounds(question: &str, now_ms: Option<i64>) -> Result<Option<(i64, i64)>> {
     let q = question.to_lowercase();
     let date_re = Regex::new(r"\b\d{4}-\d{2}-\d{2}\b")?;
+    let today = || -> Result<chrono::NaiveDate> {
+        match now_ms {
+            Some(ms) => Ok(DateTime::<Utc>::from_timestamp_millis(ms)
+                .context("invalid injected clock")?
+                .with_timezone(&Local)
+                .date_naive()),
+            None => Ok(Local::now().date_naive()),
+        }
+    };
     let date = if q.contains("yesterday") {
-        Some(
-            Local::now()
-                .date_naive()
-                .pred_opt()
-                .context("invalid yesterday")?,
-        )
+        Some(today()?.pred_opt().context("invalid yesterday")?)
     } else if q.contains("today") {
-        Some(Local::now().date_naive())
+        Some(today()?)
     } else {
         date_re
             .find(question)
@@ -914,6 +975,265 @@ fn time_bounds(question: &str) -> Result<Option<(i64, i64)>> {
     }
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+enum Mode {
+    Hybrid,
+    DenseOnly,
+    Bm25Only,
+}
+
+/// Retrieval knobs. `Params::default()` is exactly what `ask` has always done.
+#[derive(Clone, Debug, Serialize)]
+struct Params {
+    /// Per-retriever candidate depth (dense and BM25 prefetch).
+    prefetch: usize,
+    /// Fused candidates returned by Qdrant before collapsing.
+    fused_limit: usize,
+    rrf_k: usize,
+    /// Results kept after collapsing and re-ranking.
+    final_k: usize,
+    /// Regex-derived app/domain/private/date filters (and the observation-time check).
+    use_filters: bool,
+    /// Keyword-count bonus added to the fused score before the final sort.
+    use_rerank_bonus: bool,
+    /// Whether derived (topic/entity/hour/day) points may be retrieved.
+    include_derived: bool,
+    mode: Mode,
+    /// Injected clock for "today"/"yesterday"; `None` is the real clock.
+    now_ms: Option<i64>,
+}
+
+impl Default for Params {
+    fn default() -> Self {
+        Params {
+            prefetch: 80,
+            fused_limit: 40,
+            rrf_k: 60,
+            final_k: 8,
+            use_filters: true,
+            use_rerank_bonus: true,
+            include_derived: true,
+            mode: Mode::Hybrid,
+            now_ms: None,
+        }
+    }
+}
+
+/// One point from the Qdrant result, in fused rank order, before collapsing.
+#[derive(Clone, Debug, Serialize)]
+struct RankedPoint {
+    rank: usize,
+    /// "chunk", "derived", or "snapshot" (legacy snapshot-level point).
+    kind: &'static str,
+    chunk_id: Option<i64>,
+    derived_id: Option<i64>,
+    derived_kind: Option<String>,
+    /// Chunks map to one snapshot; derived points to the snapshots they summarise.
+    snapshot_ids: Vec<i64>,
+    score: f32,
+    text: String,
+    /// False when the observation-time check removed every snapshot behind this point.
+    passed_time_check: bool,
+}
+
+struct Hit {
+    source: Source,
+    best_chunk_id: Option<i64>,
+}
+
+struct Retrieval {
+    /// Filter clauses `query_filter` produced (empty when none or filters are off).
+    filter: Vec<Value>,
+    time: Option<(i64, i64)>,
+    ranked: Vec<RankedPoint>,
+    /// Distinct evidence bodies before the final truncate.
+    collapsed: usize,
+    /// Snapshot hits removed by the post-cut observation-time check.
+    observation_dropped: usize,
+    /// Final ordered results (at most `final_k`).
+    hits: Vec<Hit>,
+}
+
+fn retrieve(runtime: &mut Runtime, question: &str, params: &Params) -> Result<Retrieval> {
+    runtime.index_pending()?;
+    let mut clauses = if params.use_filters {
+        filter_clauses(&runtime.db, question, params.now_ms)?
+    } else {
+        Vec::new()
+    };
+    let time = if params.use_filters { time_bounds(question, params.now_ms)? } else { None };
+    let reported_clauses = clauses.clone();
+    if !params.include_derived {
+        clauses.push(json!({"key":"point_type","match":{"value":"chunk"}}));
+    }
+    let filter: Option<Filter> = if clauses.is_empty() {
+        None
+    } else {
+        Some(serde_json::from_value(json!({"must":clauses}))?)
+    };
+    let mut builder = QueryRequestBuilder::new(params.fused_limit);
+    if params.mode != Mode::Bm25Only {
+        let dense = runtime.vector(question)?;
+        builder = builder.add_prefetch(
+            PrefetchBuilder::new(params.prefetch)
+                .query(ScoringQuery::Vector(QueryEnum::Nearest(NamedQuery {
+                    query: VectorInternal::from(dense),
+                    using: Some("dense".into()),
+                })))
+                .build(),
+        );
+    }
+    if params.mode != Mode::DenseOnly {
+        let sparse = runtime.bm25.embed_query(question);
+        builder = builder.add_prefetch(
+            PrefetchBuilder::new(params.prefetch)
+                .query(ScoringQuery::Vector(QueryEnum::Nearest(NamedQuery {
+                    query: VectorInternal::from(sparse),
+                    using: Some("bm25".into()),
+                })))
+                .build(),
+        );
+    }
+    let mut builder = builder
+        .query(ScoringQuery::Fusion(Fusion::Rrf {
+            k: params.rrf_k,
+            weights: None,
+        }))
+        .with_payload(WithPayloadInterface::Bool(true));
+    if let Some(filter) = filter {
+        builder = builder.filter(filter);
+    }
+    let points = runtime.shard.query(builder.build())?;
+    // Insertion-ordered so equal scores resolve by Qdrant rank, not by hash order.
+    let mut index_by_evidence = std::collections::HashMap::<String, usize>::new();
+    let mut collapsed: Vec<(Source, Option<i64>)> = Vec::new();
+    let mut ranked = Vec::with_capacity(points.len());
+    let mut observation_dropped = 0_usize;
+    for (rank, point) in points.into_iter().enumerate() {
+        let PointId::NumId(point_id) = point.id else {
+            continue;
+        };
+        let mut derived_id = None;
+        let mut derived_kind = None;
+        let mut chunk_id = None;
+        let mut point_text = String::new();
+        let hits: Vec<(i64, Option<String>, Option<i64>)> = if point_id >= (1_u64 << 62) {
+            let id = (point_id - (1_u64 << 62)) as i64;
+            derived_id = Some(id);
+            let mut stmt = runtime
+                .db
+                .prepare("SELECT snapshot_id FROM derived_sources WHERE derived_id=?1 LIMIT 8")?;
+            let found = stmt
+                .query_map([id], |r| r.get::<_, i64>(0))?
+                .collect::<rusqlite::Result<Vec<_>>>()?;
+            if let Some((kind, body)) = runtime
+                .db
+                .query_row("SELECT kind,body FROM derived WHERE id=?1", [id], |r| {
+                    Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?))
+                })
+                .optional()?
+            {
+                derived_kind = Some(kind);
+                point_text = body;
+            }
+            found.into_iter().map(|id| (id, None, None)).collect()
+        } else if point_id >= (1_u64 << 61) {
+            let id = (point_id - (1_u64 << 61)) as i64;
+            chunk_id = Some(id);
+            let row: Option<(i64, String)> = runtime.db.query_row("SELECT snapshot_id,body FROM chunks WHERE id=?1", [id], |r| Ok((r.get::<_, i64>(0)?, r.get::<_, String>(1)?))).optional()?;
+            match row {
+                Some((snapshot_id, body)) => {
+                    point_text = body.clone();
+                    vec![(snapshot_id, Some(body), Some(id))]
+                }
+                None => Vec::new(),
+            }
+        } else {
+            vec![(point_id as i64, None, None)]
+        };
+        let snapshot_ids: Vec<i64> = hits.iter().map(|(id, _, _)| *id).collect();
+        let mut passed_any = false;
+        for (id, hit_text, hit_chunk) in hits {
+            if let Some((start, end)) = time {
+                let observed: bool = runtime.db.query_row("SELECT EXISTS(SELECT 1 FROM observations WHERE snapshot_id=?1 AND observed_ms>=?2 AND observed_ms<?3)",params![id,start,end],|r|r.get(0))?;
+                if !observed {
+                    observation_dropped += 1;
+                    continue;
+                }
+            }
+            passed_any = true;
+            if let Some(mut source) = load_source(&runtime.db, id, point.score)? {
+                source.hit_text = hit_text;
+                let evidence = evidence_key(
+                    &source.app_id,
+                    source.domain.as_deref(),
+                    &source.source_type,
+                    &source.body,
+                );
+                match index_by_evidence.entry(evidence) {
+                    std::collections::hash_map::Entry::Vacant(entry) => {
+                        entry.insert(collapsed.len());
+                        collapsed.push((source, hit_chunk));
+                    }
+                    std::collections::hash_map::Entry::Occupied(entry) => {
+                        let existing = &mut collapsed[*entry.get()];
+                        if source.score > existing.0.score || (source.score == existing.0.score && source.last_seen_ms > existing.0.last_seen_ms) {
+                            let mut newer = source;
+                            newer.score = newer.score.max(existing.0.score);
+                            *existing = (newer, hit_chunk);
+                        }
+                    }
+                }
+            }
+        }
+        ranked.push(RankedPoint {
+            rank: rank + 1,
+            kind: if derived_id.is_some() { "derived" } else if chunk_id.is_some() { "chunk" } else { "snapshot" },
+            chunk_id,
+            derived_id,
+            derived_kind,
+            snapshot_ids,
+            score: point.score,
+            text: point_text,
+            passed_time_check: passed_any,
+        });
+    }
+    let collapsed_count = collapsed.len();
+    let mut keyed: Vec<(f32, (Source, Option<i64>))> = if params.use_rerank_bonus {
+        let terms = content_terms(question);
+        collapsed
+            .into_iter()
+            .map(|entry| {
+                let body = entry.0.body.to_lowercase();
+                let matches: usize = terms
+                    .iter()
+                    .map(|term| body.matches(term).count().min(5))
+                    .sum();
+                (entry.0.score + (matches as f32) / (body.len().max(100) as f32).sqrt(), entry)
+            })
+            .collect()
+    } else {
+        collapsed.into_iter().map(|entry| (entry.0.score, entry)).collect()
+    };
+    keyed.sort_by(|a, b| {
+        b.0.total_cmp(&a.0)
+            .then_with(|| b.1 .0.last_seen_ms.cmp(&a.1 .0.last_seen_ms))
+    });
+    keyed.truncate(params.final_k);
+    Ok(Retrieval {
+        filter: reported_clauses,
+        time,
+        ranked,
+        collapsed: collapsed_count,
+        observation_dropped,
+        hits: keyed
+            .into_iter()
+            .map(|(_, (source, best_chunk_id))| Hit { source, best_chunk_id })
+            .collect(),
+    })
+}
+
 fn answer(runtime: &mut Runtime, question: &str) -> Result<String> {
     if question.len() > 2_000 {
         bail!("question is too long");
@@ -935,106 +1255,14 @@ fn answer(runtime: &mut Runtime, question: &str) -> Result<String> {
         }
         return Ok("No earlier conversation evidence is available in this state directory. Ask about the conversation first.".into());
     }
-    runtime.index_pending()?;
-    let filter = query_filter(&runtime.db, question)?;
-    let time = time_bounds(question)?;
-    let dense = runtime.vector(question)?;
-    let sparse = runtime.bm25.embed_query(question);
-    let mut builder = QueryRequestBuilder::new(40)
-        .add_prefetch(
-            PrefetchBuilder::new(80)
-                .query(ScoringQuery::Vector(QueryEnum::Nearest(NamedQuery {
-                    query: VectorInternal::from(dense),
-                    using: Some("dense".into()),
-                })))
-                .build(),
-        )
-        .add_prefetch(
-            PrefetchBuilder::new(80)
-                .query(ScoringQuery::Vector(QueryEnum::Nearest(NamedQuery {
-                    query: VectorInternal::from(sparse),
-                    using: Some("bm25".into()),
-                })))
-                .build(),
-        )
-        .query(ScoringQuery::Fusion(Fusion::Rrf {
-            k: 60,
-            weights: None,
-        }))
-        .with_payload(WithPayloadInterface::Bool(true));
-    if let Some(filter) = filter {
-        builder = builder.filter(filter);
-    }
-    let points = runtime.shard.query(builder.build())?;
-    let mut by_evidence = std::collections::HashMap::<String, Source>::new();
-    for point in points {
-        let PointId::NumId(point_id) = point.id else {
-            continue;
-        };
-        let hits: Vec<(i64,Option<String>)> = if point_id >= (1_u64 << 62) {
-            let derived_id = (point_id - (1_u64 << 62)) as i64;
-            let mut stmt = runtime
-                .db
-                .prepare("SELECT snapshot_id FROM derived_sources WHERE derived_id=?1 LIMIT 8")?;
-            let found = stmt
-                .query_map([derived_id], |r| r.get::<_, i64>(0))?
-                .collect::<rusqlite::Result<Vec<_>>>()?;
-            found.into_iter().map(|id| (id,None)).collect()
-        } else if point_id >= (1_u64 << 61) {
-            let chunk_id = (point_id - (1_u64 << 61)) as i64;
-            runtime.db.query_row("SELECT snapshot_id,body FROM chunks WHERE id=?1", [chunk_id], |r| Ok((r.get::<_, i64>(0)?,Some(r.get::<_,String>(1)?)))).optional()?.into_iter().collect()
-        } else {
-            vec![(point_id as i64,None)]
-        };
-        for (id,hit_text) in hits {
-            if let Some((start, end)) = time {
-                let observed: bool = runtime.db.query_row("SELECT EXISTS(SELECT 1 FROM observations WHERE snapshot_id=?1 AND observed_ms>=?2 AND observed_ms<?3)",params![id,start,end],|r|r.get(0))?;
-                if !observed {
-                    continue;
-                }
-            }
-            if let Some(mut source) = load_source(&runtime.db, id, point.score)? {
-                source.hit_text = hit_text;
-                let evidence = evidence_key(
-                    &source.app_id,
-                    source.domain.as_deref(),
-                    &source.source_type,
-                    &source.body,
-                );
-                match by_evidence.entry(evidence) {
-                    std::collections::hash_map::Entry::Vacant(entry) => {
-                        entry.insert(source);
-                    }
-                    std::collections::hash_map::Entry::Occupied(mut entry) => {
-                        if source.score > entry.get().score || (source.score == entry.get().score && source.last_seen_ms > entry.get().last_seen_ms) {
-                            let mut newer = source;
-                            newer.score = newer.score.max(entry.get().score);
-                            entry.insert(newer);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    let mut sources: Vec<Source> = by_evidence.into_values().collect();
+    let sources: Vec<Source> = retrieve(runtime, question, &Params::default())?
+        .hits
+        .into_iter()
+        .map(|hit| hit.source)
+        .collect();
     if sources.is_empty() {
         return Ok("No matching captured evidence yet. Capture may be incomplete if the app did not expose text through Accessibility.".into());
     }
-    let terms = content_terms(question);
-    sources.sort_by(|a, b| {
-        let relevance = |source: &Source| {
-            let body = source.body.to_lowercase();
-            let matches: usize = terms
-                .iter()
-                .map(|term| body.matches(term).count().min(5))
-                .sum();
-            source.score + (matches as f32) / (body.len().max(100) as f32).sqrt()
-        };
-        relevance(b)
-            .total_cmp(&relevance(a))
-            .then_with(|| b.last_seen_ms.cmp(&a.last_seen_ms))
-    });
-    sources.truncate(8);
     runtime.db.execute("INSERT INTO index_meta(key,value) VALUES('last_answer_snapshot',?1) ON CONFLICT(key) DO UPDATE SET value=excluded.value",[sources[0].id.to_string()])?;
     let mut output = String::new();
     if env::var("OPEN_MEMORY_LLM_URL").is_ok() {

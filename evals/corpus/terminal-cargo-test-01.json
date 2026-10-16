@@ -1,0 +1,33 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.Terminal",
+ "title": "Terminal - cargo test - 100x30",
+ "url": null,
+ "source_type": "app",
+ "observed_ms": 1792167600000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXTextArea",
+   "name": "shell",
+   "value": "Last login: Fri Oct 16 16:02:11 on ttys003\ndev@orbit-mbp invoice-svc % cargo test\n   Compiling invoice-svc v0.4.2 (/Users/dev/invoice-svc)\nerror[E0382]: borrow of moved value: `config`\n  --> src/billing.rs:88:21\n   |\n84 |     let config = load_config()?;\n85 |     let client = Client::new(config);\n   |                                ------ value moved here\n88 |     println!(\"{}\", config.region);\n   |                    ^^^^^^^^^^^^^ value borrowed here after move\nerror: could not compile `invoice-svc` (lib test) due to 1 previous error\ndev@orbit-mbp invoice-svc % cargo test -- --nocapture\n   Compiling invoice-svc v0.4.2 (/Users/dev/invoice-svc)\n    Finished test [unoptimized + debuginfo] target(s) in 4.12s\n     Running unittests src/lib.rs\nrunning 43 tests\ntest billing::tests::rounds_half_up ... FAILED\ntest ledger::tests::negative_balance ... FAILED\ntest result: FAILED. 41 passed; 2 failed; 0 ignored; 0 measured\nfailures:\n    billing::tests::rounds_half_up\n    ledger::tests::negative_balance\ndev@orbit-mbp invoice-svc % git stash\nSaved working directory and index state WIP on main: 3fa91c2 bump serde\ndev@orbit-mbp invoice-svc % ",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Terminal - cargo test - 100x30"
+    },
+    {
+     "role": "AXScrollArea",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

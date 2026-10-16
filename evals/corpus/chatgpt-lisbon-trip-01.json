@@ -1,0 +1,2132 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.Safari",
+ "title": "Lisbon long weekend itinerary - ChatGPT",
+ "url": "https://chatgpt.com/c/9b41c7d2-lisbon",
+ "source_type": "browser",
+ "observed_ms": 1792002000000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://chatgpt.com/c/9b41c7d2-lisbon",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Lisbon long weekend itinerary - ChatGPT",
+   "value": "Lisbon long weekend itinerary - ChatGPT",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Sidebar / New chat",
+   "value": "New chat",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Search chats",
+   "value": "Search chats",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Weekly meal prep ideas",
+   "value": "Weekly meal prep ideas",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Python decorators explained",
+   "value": "Python decorators explained",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Cover letter feedback",
+   "value": "Cover letter feedback",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Weekend hike packing list",
+   "value": "Weekend hike packing list",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Lisbon long weekend itinerary",
+   "value": "Lisbon long weekend itinerary",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Lisbon long weekend itinerary - ChatGPT / ChatGPT",
+   "value": "ChatGPT",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Lisbon long weekend itinerary - ChatGPT / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Plan a 3-day Lisbon trip for November. I land on Friday morning and I am staying in Alfama.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Thought for 14 seconds",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Day 1 (Friday): Land on flight MR 1347, which arrives at 10:25. Check in at Hotel Alfama Vista on Rua das Gaivotas, then walk up to the Portas do Sol viewpoint for sunset.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Day 2 (Saturday): Take the Sintra train from Rossio at 8:40 and book Pena Palace tickets for 11:00. Tickets cost 16 euros per adult.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Day 3 (Sunday): Brunch in Principe Real, then catch the 15:50 airport shuttle. Your return flight MR 1352 leaves at 18:15.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Is tram 28 worth it?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Tram 28 is crowded after 10:00. Ride it before 9:00 or skip it and walk the Alfama hills instead.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "What should I eat? I like seafood but I am not an early dinner person.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Most kitchens in the old town take orders until 22:00. Try grilled sea bream with boiled potatoes, clams with garlic and coriander, and a custard tart from a bakery for dessert.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Book dinner for 21:00 on Saturday; small restaurants fill quickly on weekends even in November. Lunch menus of the day are usually the cheapest way to eat well.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Saturday lunch: market stalls near the river",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Sunday brunch: Principe Real cafe",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Friday dinner: small tavern in Alfama",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Do I need a transport card?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "A rechargeable transit card makes the metro, buses and the Sintra line simple, and each journey is cheaper than a paper ticket. Load a modest amount; leftover balance stays on the card for next time.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Pack a light rain jacket and comfortable shoes with grip, because the cobbled streets turn slippery in the drizzle that is common in November.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Add files and more",
+   "value": "Add files and more",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Dictate",
+   "value": "Dictate",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Send",
+   "value": "Send",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lisbon long weekend itinerary - ChatGPT",
+   "value": "ChatGPT can make mistakes. Check important info.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Lisbon long weekend itinerary - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

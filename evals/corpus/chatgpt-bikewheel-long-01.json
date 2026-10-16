@@ -1,0 +1,2870 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.google.Chrome",
+ "title": "Rebuilding a rear wheel - ChatGPT",
+ "url": "https://chatgpt.com/c/0d77ab3e-wheel",
+ "source_type": "browser",
+ "observed_ms": 1792080000000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://chatgpt.com/c/0d77ab3e-wheel",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Rebuilding a rear wheel - ChatGPT",
+   "value": "Rebuilding a rear wheel - ChatGPT",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Sidebar / New chat",
+   "value": "New chat",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Search chats",
+   "value": "Search chats",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Weekly meal prep ideas",
+   "value": "Weekly meal prep ideas",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Python decorators explained",
+   "value": "Python decorators explained",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Cover letter feedback",
+   "value": "Cover letter feedback",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Weekend hike packing list",
+   "value": "Weekend hike packing list",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Rebuilding a rear wheel",
+   "value": "Rebuilding a rear wheel",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Rebuilding a rear wheel - ChatGPT / ChatGPT",
+   "value": "ChatGPT",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Rebuilding a rear wheel - ChatGPT / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "I'm rebuilding the rear wheel on my gravel bike with a new rim and the old hub. Where do I even start?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Start by removing the tire, tube and rim strip, then clamp the hub in a truing stand so the axle spins freely. Check the rim for flat spots and dents before you lace anything.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Sort the spokes into two groups. The drive-side spokes are shorter and pull from the right flange, while the non-drive-side spokes are longer. Mixing them up is the most common lacing mistake.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Lace the first set of spokes loosely so each nipple has about four threads showing. Cross each spoke over three others and weave the last crossing under the neighbouring spoke for clearance.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Add a drop of light oil to each spoke thread. This prevents the nipples from seizing and makes later adjustments much easier on a wheel that sees wet roads.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Okay, lacing is done. How do I true it?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Thought for 21 seconds",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Work around the wheel in quarter turns. Lateral true comes first, then radial true, then dish. Resist the urge to chase one wobble with a single big adjustment because it moves the neighbours too.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Use a tensiometer at the end of each pass. Even tension matters more than hitting a number, and a spread of more than 15 percent between spokes is the usual cause of a wheel going out of true after the first ride.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Stress relieve by squeezing pairs of spokes together with gloved hands, then re-check the true. You will hear small pings as the nipples settle, which is normal.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Target drive-side spoke tension is 110 kgf for this rim, and the non-drive side will land near 70 kgf once the wheel is dished correctly. Do not exceed the rim manufacturer's limit.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "If a single spoke keeps losing tension, check the nipple seat for a burr and the spoke bed for a crack. Replacing one spoke is far cheaper than rebuilding the wheel after a failure on the road.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Now I'm mounting it. Do I need a torque wrench for the axle?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Yes. Over-tightening can crush the bearings and under-tightening lets the cassette body wobble. Before you refit the wheel, clean the dropout faces and add a thin film of grease to the axle threads.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Fit the thru axle through the frame and hub, thread it in by hand until it seats, and only then bring the torque wrench to the fastener. Pull smoothly instead of jerking the handle.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Keep your hand near the head of the wrench, wipe off any excess grease so grit does not stick, and confirm the brake rotor sits centred between the pads on both sides of the caliper.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Spin the wheel to check that nothing rubs, and confirm the quick release lever on the disc side does not point into the rotor before you ride away. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more before moving on. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more before moving on. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more before moving on. Take.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Torque specification for the rear axle nut:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "85 Nm (63 lb-ft)",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Re-check the torque after your first ride, since the bearings seat slightly.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "I also want to run tubeless. Any sealant tips?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Tubeless works well on gravel. Use tape that is two millimetres wider than the rim channel and press it down firmly with a rag so no air can pass under it.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Seat the tire with a floor pump that has a booster chamber or a compressor. If the bead refuses to seat, remove the valve core to let more air through for the first rush.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Spin the wheel in all positions after inflating so the sealant coats the whole bead, and ride gently for the first few kilometres. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more before moving on. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more before moving on. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more before moving on. Take your time with this step and keep the work area clean, because small bits of grit on the threads or the seating faces are the usual reason a fastener never feels quite right. Work in good light, keep a rag nearby, and recheck each setting once more.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Q: How long should the sealant cure before riding?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "A: Wait 24 hours before riding.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Top up the sealant every four to six months and carry a tire plug kit for punctures that do not seal.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Last thing: how often should I check the wheel afterwards?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Check the true and the spoke tension after the first ride, again after the first 100 km, and then at every service. A wheel that stays quiet and straight through the first month is usually stable for years.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Listen for ticking from the hub or spokes; most noises are dry nipples or a loose cassette lockring, both of which take only minutes to fix.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Add files and more",
+   "value": "Add files and more",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Dictate",
+   "value": "Dictate",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Send",
+   "value": "Send",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Rebuilding a rear wheel - ChatGPT",
+   "value": "ChatGPT can make mistakes. Check important info.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Rebuilding a rear wheel - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+{
+ "stem": "chatgpt-budget-v2",
+ "html": "chatgpt-budget-v2.html",
+ "observed_at": "2026-10-15T08:40:00Z",
+ "logical": {
+  "app_id": "com.google.Chrome",
+  "title": "Monthly budget planning - ChatGPT",
+  "url": "https://chatgpt.com/c/c3d81f46-budget",
+  "source_type": "browser"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "chatgpt",
+  "near_duplicate",
+  "contradiction"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "monthly rent budget capped at $2,050 per month"
+  },
+  {
+   "id": "f2",
+   "text": "Decision recorded: move to the Corvina Street apartment and keep rent within the cap."
+  }
+ ],
+ "noise_strings": [
+  "ChatGPT can make mistakes. Check important info.",
+  "Rate response",
+  "Search chats",
+  "Weekend hike packing list",
+  "Cover letter feedback"
+ ]
+}

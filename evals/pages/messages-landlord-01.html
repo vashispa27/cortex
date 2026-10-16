@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Messages - Dolores Whitfield</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+button{font:inherit;cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+body{background:#000;color:#e7e9ea;display:flex}
+.rail{width:88px;border-right:1px solid #2f3336;padding:12px;display:flex;flex-direction:column;gap:12px}
+.rail a{color:#e7e9ea;text-decoration:none;font-weight:600}
+.convs{width:340px;border-right:1px solid #2f3336;height:100vh;overflow:auto}
+.convs h2{padding:14px 16px;margin:0;font-size:20px}
+.convs li{list-style:none;padding:12px 16px;border-bottom:1px solid #16181c}
+.convs ul{margin:0;padding:0}
+.convs .prev{color:#71767b;font-size:14px}
+.thread{flex:1;display:flex;flex-direction:column;height:100vh}
+.thread header{padding:14px 16px;border-bottom:1px solid #2f3336;font-weight:700}
+.msgs{flex:1;overflow:auto;padding:16px;margin:0;list-style:none}
+.msgs li{margin:0 0 14px;max-width:70%}
+.msgs li .meta{color:#71767b;font-size:12px}
+.msgs li .bubble{background:#16181c;border-radius:16px;padding:8px 14px;display:inline-block}
+.compose{display:flex;gap:8px;padding:12px 16px;border-top:1px solid #2f3336}
+.compose textarea{flex:1;background:#202327;border:0;border-radius:20px;color:#e7e9ea;padding:10px 14px;font:inherit}
+.compose button{background:#1d9bf0;color:#fff;border:0;border-radius:18px;padding:0 18px}
+.kbd{color:#71767b;font-size:12px;padding:6px 16px}
+</style>
+</head>
+<body>
+  <ul class="convs" aria-label="Sidebar">
+    <li>
+      <span>Dolores Whitfield</span>
+      <span class="prev">Hi, your deposit...</span>
+    </li>
+    <li>
+      <span>Sam</span>
+      <span class="prev">see you at 7</span>
+    </li>
+    <li>
+      <span>Noor</span>
+      <span class="prev">chapter nine was wild</span>
+    </li>
+  </ul>
+  <section class="thread">
+    <header>
+      <h2>Dolores Whitfield</h2>
+    </header>
+    <ul class="msgs" aria-label="Transcript">
+      <li>
+        <p class="bubble">Hi, your deposit of $1,200 will be returned by 5 November.</p>
+      </li>
+      <li>
+        <p class="bubble">Thanks. Please send it to the same account.</p>
+      </li>
+      <li>
+        <p class="bubble">Will do. Keys are due back on 31 October.</p>
+      </li>
+    </ul>
+    <form class="compose" aria-label="Composer">
+      <textarea aria-label="iMessage" placeholder="iMessage"></textarea>
+      <button aria-label="Send">Send</button>
+    </form>
+  </section>
+</body>
+</html>

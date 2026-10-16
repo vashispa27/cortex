@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Checkout Test Plan - Edge Cases - QA Handbook</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+button{font:inherit;cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+body{background:#faf8f3;color:#222;font-family:Georgia,"Times New Roman",serif}
+.cookie{background:#222;color:#fff;padding:10px 20px;display:flex;gap:16px;align-items:center;font:14px -apple-system,sans-serif}
+.cookie button{background:#f2c14e;border:0;padding:6px 14px;border-radius:4px}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid #ddd;font-family:-apple-system,sans-serif}
+.hdr .site{font-weight:800;font-size:20px;color:#222;text-decoration:none}
+.hdr nav a{margin-left:18px;color:#555;text-decoration:none}
+main{max-width:700px;margin:28px auto;padding:0 20px}
+main h1{font-size:34px;line-height:1.2;margin:0 0 6px}
+main h2{margin:26px 0 6px}
+.by{color:#777;font:14px -apple-system,sans-serif;margin:0 0 20px}
+main p,main li{font-size:18px;line-height:1.65}
+footer{border-top:1px solid #ddd;margin-top:40px;padding:20px 32px;color:#777;font:13px -apple-system,sans-serif}
+footer a{color:#777;margin-right:14px}
+</style>
+</head>
+<body>
+  <header class="hdr" aria-label="Site header">
+    <a class="site" href="#">QA Handbook</a>
+    <nav aria-label="Primary">
+      <a href="#">Plans</a>
+      <a href="#">Checklists</a>
+      <a href="#">Tooling</a>
+      <a href="#">Contributing</a>
+    </nav>
+  </header>
+  <main>
+    <article>
+      <h1>Checkout test plan: edge cases</h1>
+      <p class="by">Maintained by the payments QA group · updated 16 October 2026</p>
+      <p>This plan covers the checkout flow from cart review to payment confirmation. Each case lists the expected error code.</p>
+      <h2>Cart cases</h2>
+      <ul>
+        <li>
+          <span>An edge case in this plan: a cart with 0 items and a coupon applied must show error CART-204.</span>
+        </li>
+        <li>
+          <span>Edge case: a quantity of 10,000 units must be rejected with error QTY-413.</span>
+        </li>
+        <li>
+          <span>A cart containing only a gift card skips the shipping step.</span>
+        </li>
+      </ul>
+      <h2>Browser matrix</h2>
+      <p>Run the suite on Chrome 130, Safari 19 and Edge 130 before every release.</p>
+      <h2>Payment cases</h2>
+      <ul>
+        <li>
+          <span>A card declined by the issuer returns the shopper to the payment step with error PAY-102.</span>
+        </li>
+        <li>
+          <span>A timeout from the payment provider retries once after three seconds and then shows error PAY-408.</span>
+        </li>
+        <li>
+          <span>A currency mismatch between the cart and the card is blocked before the authorization request.</span>
+        </li>
+      </ul>
+      <h2>Reporting</h2>
+      <p>File defects in the payments board with the case number from this plan, the browser version and a screen recording. Link the build number so the fix can be verified against the same artifact.</p>
+    </article>
+  </main>
+  <footer aria-label="Site footer">
+    <p>© 2026 QA Handbook contributors.</p>
+    <a href="#">Edit this page</a>
+  </footer>
+</body>
+</html>

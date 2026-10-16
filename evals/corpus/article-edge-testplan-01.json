@@ -1,0 +1,739 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.Safari",
+ "title": "Checkout Test Plan - Edge Cases - QA Handbook",
+ "url": "https://qa.example.org/plans/checkout-test-plan",
+ "source_type": "browser",
+ "observed_ms": 1792145700000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://qa.example.org/plans/checkout-test-plan",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site header / QA Handbook",
+   "value": "QA Handbook",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Plans",
+   "value": "Plans",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Checklists",
+   "value": "Checklists",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Tooling",
+   "value": "Tooling",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Contributing",
+   "value": "Contributing",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "Checkout test plan: edge cases",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "Maintained by the payments QA group · updated 16 October 2026",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "This plan covers the checkout flow from cart review to payment confirmation. Each case lists the expected error code.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "Cart cases",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "An edge case in this plan: a cart with 0 items and a coupon applied must show error CART-204.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "Edge case: a quantity of 10,000 units must be rejected with error QTY-413.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "A cart containing only a gift card skips the shipping step.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "Browser matrix",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "Run the suite on Chrome 130, Safari 19 and Edge 130 before every release.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "Payment cases",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "A card declined by the issuer returns the shopper to the payment step with error PAY-102.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "A timeout from the payment provider retries once after three seconds and then shows error PAY-408.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "A currency mismatch between the cart and the card is blocked before the authorization request.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "Reporting",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Checkout Test Plan - Edge Cases - QA Handbook",
+   "value": "File defects in the payments board with the case number from this plan, the browser version and a screen recording. Link the build number so the fix can be verified against the same artifact.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site footer",
+   "value": "© 2026 QA Handbook contributors.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / Edit this page",
+   "value": "Edit this page",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Checkout Test Plan - Edge Cases - QA Handbook"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

@@ -1,0 +1,279 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.MobileSMS",
+ "title": "Messages - Dolores Whitfield",
+ "url": null,
+ "source_type": "app",
+ "observed_ms": 1792071000000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Dolores Whitfield",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Messages - Dolores Whitfield"
+    },
+    {
+     "role": "AXList",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Hi, your deposit...",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Messages - Dolores Whitfield"
+    },
+    {
+     "role": "AXList",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Sam",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Messages - Dolores Whitfield"
+    },
+    {
+     "role": "AXList",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "see you at 7",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Messages - Dolores Whitfield"
+    },
+    {
+     "role": "AXList",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Noor",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Messages - Dolores Whitfield"
+    },
+    {
+     "role": "AXList",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "chapter nine was wild",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Messages - Dolores Whitfield"
+    },
+    {
+     "role": "AXList",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "",
+   "value": "Dolores Whitfield",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Messages - Dolores Whitfield"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Transcript",
+   "value": "Hi, your deposit of $1,200 will be returned by 5 November.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Messages - Dolores Whitfield"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": "Transcript"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Transcript",
+   "value": "Thanks. Please send it to the same account.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Messages - Dolores Whitfield"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": "Transcript"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Transcript",
+   "value": "Will do. Keys are due back on 31 October.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Messages - Dolores Whitfield"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": "Transcript"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Send",
+   "value": "Send",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Messages - Dolores Whitfield"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

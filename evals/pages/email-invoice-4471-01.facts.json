@@ -1,0 +1,36 @@
+{
+ "stem": "email-invoice-4471-01",
+ "html": "email-invoice-4471-01.html",
+ "observed_at": "2026-10-13T09:00:00Z",
+ "logical": {
+  "app_id": "com.apple.mail",
+  "title": "Invoice 4471 - Harbor Print",
+  "url": null,
+  "source_type": "app"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "email"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "Total due: €2,380.00."
+  },
+  {
+   "id": "f2",
+   "text": "Payment is due by 30 October 2026."
+  },
+  {
+   "id": "f3",
+   "text": "Bank transfer reference: HP-4471-2026."
+  }
+ ],
+ "noise_strings": [
+  "Archive",
+  "Reply All",
+  "Mailboxes",
+  "Your hold is ready",
+  "Monthly statement"
+ ]
+}

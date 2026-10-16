@@ -1,0 +1,266 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.google.Chrome",
+ "title": "New Tab - Google Chrome",
+ "url": "chrome://newtab/",
+ "source_type": "browser",
+ "observed_ms": 1792188000000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "chrome://newtab/",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "New Tab - Google Chrome",
+   "value": "New Tab - Google Chrome",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Most visited / Gmail",
+   "value": "Gmail",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Most visited"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Most visited / Calendar",
+   "value": "Calendar",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Most visited"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Most visited / Drive",
+   "value": "Drive",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Most visited"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Most visited / Maps",
+   "value": "Maps",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Most visited"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Most visited / YouTube",
+   "value": "YouTube",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Most visited"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Most visited / News",
+   "value": "News",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Most visited"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "New Tab - Google Chrome / Customize Chrome",
+   "value": "Customize Chrome",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "New Tab - Google Chrome"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "New Tab - Google Chrome"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

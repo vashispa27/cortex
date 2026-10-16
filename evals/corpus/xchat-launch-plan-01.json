@@ -1,0 +1,1231 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.Safari",
+ "title": "Launch crew / Chat / X",
+ "url": "https://x.com/i/chat/1893042-launch",
+ "source_type": "browser",
+ "observed_ms": 1792159500000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://x.com/i/chat/1893042-launch",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Launch crew / Chat / X",
+   "value": "Launch crew / Chat / X",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Home",
+   "value": "Home",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Explore",
+   "value": "Explore",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Notifications",
+   "value": "Notifications",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Messages",
+   "value": "Messages",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversations",
+   "value": "Messages",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Launch crew",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Mira: I'm out on Wednesday afternoon",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Weekend plans",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Sam: see you at 7",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Book club",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversations",
+   "value": "Noor: chapter nine was wild",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversations"
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "Launch crew",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lokesh 10:42 AM",
+   "value": "Beta goes out Thursday at 4 PM.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Lokesh 10:42 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lokesh 10:42 AM",
+   "value": "10:42 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Lokesh 10:42 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Mira 10:44 AM",
+   "value": "Budget for the launch video is 3,200 euros.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Mira 10:44 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Mira 10:44 AM",
+   "value": "10:44 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Mira 10:44 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lokesh 10:47 AM",
+   "value": "Can we move the press embargo to 9 AM Friday?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Lokesh 10:47 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lokesh 10:47 AM",
+   "value": "10:47 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Lokesh 10:47 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Mira 10:51 AM",
+   "value": "Yes. I'll tell the agency.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Mira 10:51 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Mira 10:51 AM",
+   "value": "10:51 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Mira 10:51 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lokesh 11:02 AM",
+   "value": "Also the new pricing page goes live with the beta.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Lokesh 11:02 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lokesh 11:02 AM",
+   "value": "11:02 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Lokesh 11:02 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Mira 11:03 AM",
+   "value": "I'm out on Wednesday afternoon.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Mira 11:03 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Mira 11:03 AM",
+   "value": "11:03 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Mira 11:03 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lokesh 11:10 AM",
+   "value": "No problem. Can you send the revised script to the agency before you leave?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Lokesh 11:10 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lokesh 11:10 AM",
+   "value": "11:10 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Lokesh 11:10 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Mira 11:12 AM",
+   "value": "Sure, I'll attach the storyboard frames as well so they can start on the animatic.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Mira 11:12 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Mira 11:12 AM",
+   "value": "11:12 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Mira 11:12 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lokesh 11:20 AM",
+   "value": "Legal still needs to review the claims on the pricing page, so please keep the copy generic until they sign off.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Lokesh 11:20 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lokesh 11:20 AM",
+   "value": "11:20 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Lokesh 11:20 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Mira 11:24 AM",
+   "value": "Understood. I'll mark the sections that need review in yellow.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Mira 11:24 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Mira 11:24 AM",
+   "value": "11:24 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Mira 11:24 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lokesh 11:31 AM",
+   "value": "Great. Let's do a quick run-through with the whole crew on Wednesday morning.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Lokesh 11:31 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Lokesh 11:31 AM",
+   "value": "11:31 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Lokesh 11:31 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Mira 11:33 AM",
+   "value": "Works for me. I'll book the small meeting room.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Mira 11:33 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Mira 11:33 AM",
+   "value": "11:33 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXList",
+     "name": "Messages"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Mira 11:33 AM"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message composer / Send",
+   "value": "Send",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Message composer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "To view keyboard shortcuts, press question mark",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Launch crew / Chat / X"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

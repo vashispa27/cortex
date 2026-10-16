@@ -1,0 +1,30 @@
+{
+ "stem": "terminal-cargo-test-01",
+ "html": "terminal-cargo-test-01.html",
+ "observed_at": "2026-10-16T16:20:00Z",
+ "logical": {
+  "app_id": "com.apple.Terminal",
+  "title": "Terminal - cargo test - 100x30",
+  "url": null,
+  "source_type": "app"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "terminal"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "error[E0382]: borrow of moved value: `config`"
+  },
+  {
+   "id": "f2",
+   "text": "41 passed; 2 failed"
+  },
+  {
+   "id": "f3",
+   "text": "billing::tests::rounds_half_up"
+  }
+ ],
+ "noise_strings": []
+}

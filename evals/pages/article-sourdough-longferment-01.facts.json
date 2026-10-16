@@ -1,0 +1,39 @@
+{
+ "stem": "article-sourdough-longferment-01",
+ "html": "article-sourdough-longferment-01.html",
+ "observed_at": "2026-10-11T08:00:00Z",
+ "logical": {
+  "app_id": "com.apple.Safari",
+  "title": "The Long Cold Ferment - Baker's Notebook",
+  "url": "https://bakersnotebook.example.org/posts/long-cold-ferment",
+  "source_type": "browser"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "article",
+  "distractor"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "Bulk ferment for 14 hours at 21 °C."
+  },
+  {
+   "id": "f2",
+   "text": "78% hydration"
+  },
+  {
+   "id": "f3",
+   "text": "245 °C for 20 minutes lid on"
+  }
+ ],
+ "noise_strings": [
+  "We use cookies to improve your experience.",
+  "Accept all cookies",
+  "Manage preferences",
+  "Subscribe to the newsletter",
+  "© 2026 Baker's Notebook. All rights reserved.",
+  "Techniques",
+  "Equipment"
+ ]
+}

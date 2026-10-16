@@ -1,0 +1,36 @@
+{
+ "stem": "notes-groceries-01",
+ "html": "notes-groceries-01.html",
+ "observed_at": "2026-10-17T08:15:00Z",
+ "logical": {
+  "app_id": "com.apple.Notes",
+  "title": "Groceries and errands",
+  "url": null,
+  "source_type": "app"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "notes",
+  "today"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "oat milk, 2 L"
+  },
+  {
+   "id": "f2",
+   "text": "basmati rice, 5 kg"
+  },
+  {
+   "id": "f3",
+   "text": "pick up dry cleaning before 6 PM"
+  }
+ ],
+ "noise_strings": [
+  "Recently Deleted",
+  "iCloud",
+  "Book list",
+  "New Note"
+ ]
+}

@@ -1,0 +1,33 @@
+{
+ "stem": "article-terminal-velocity-01",
+ "html": "article-terminal-velocity-01.html",
+ "observed_at": "2026-10-09T12:00:00Z",
+ "logical": {
+  "app_id": "com.apple.Safari",
+  "title": "What is terminal velocity? - Physics Daily",
+  "url": "https://physicsdaily.example.org/skydiving/terminal-velocity",
+  "source_type": "browser"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "article",
+  "filter_trap"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "terminal velocity of about 55 m/s (200 km/h)"
+  },
+  {
+   "id": "f2",
+   "text": "roughly 90 m/s"
+  }
+ ],
+ "noise_strings": [
+  "We use cookies to improve your experience.",
+  "Accept all cookies",
+  "© 2026 Physics Daily.",
+  "Quizzes",
+  "Advertise"
+ ]
+}

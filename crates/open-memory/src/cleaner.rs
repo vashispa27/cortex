@@ -4,7 +4,7 @@ use serde::Serialize;
 use std::sync::OnceLock;
 
 pub const VERSION: i64 = 3;
-const CHUNK_TARGET_BYTES: usize = 1_600;
+pub const CHUNK_TARGET_BYTES: usize = 1_600;
 
 #[derive(Clone, Debug, Serialize)]
 pub struct Decision {
@@ -219,6 +219,11 @@ fn normalize_parts(parts: &[Part]) -> String {
 }
 
 pub fn chunks(body: &str) -> Vec<(usize, usize, String)> {
+    chunks_with(body, CHUNK_TARGET_BYTES)
+}
+
+/// `target` is the byte size at which a chunk closes (see tests for the exact bound).
+pub fn chunks_with(body: &str, target: usize) -> Vec<(usize, usize, String)> {
     if body.trim().is_empty() { return Vec::new(); }
     let mut chunks = Vec::new();
     let mut start = 0_usize;
@@ -226,7 +231,7 @@ pub fn chunks(body: &str) -> Vec<(usize, usize, String)> {
     let mut cursor = 0;
     for line in body.split_inclusive('\n') {
         let line_end = cursor + line.len();
-        if line.len() <= CHUNK_TARGET_BYTES {
+        if line.len() <= target {
             units.push((cursor,line_end));
         } else {
             let mut unit_start = cursor;
@@ -237,7 +242,7 @@ pub fn chunks(body: &str) -> Vec<(usize, usize, String)> {
                     && line[offset + character.len_utf8()..].starts_with(char::is_whitespace) {
                     last_boundary = absolute;
                 }
-                if absolute - unit_start > CHUNK_TARGET_BYTES && last_boundary > unit_start {
+                if absolute - unit_start > target && last_boundary > unit_start {
                     units.push((unit_start,last_boundary));
                     unit_start = last_boundary;
                 }
@@ -249,7 +254,7 @@ pub fn chunks(body: &str) -> Vec<(usize, usize, String)> {
     for (unit_start, next) in units {
         let speaker = matches!(body[unit_start..next].trim_end(), "You said:" | "ChatGPT said:")
             || body[unit_start..next].trim_end().ends_with(" sent the following message:");
-        if unit_start > start && (speaker || next - start > CHUNK_TARGET_BYTES) {
+        if unit_start > start && (speaker || next - start > target) {
             let text = body[start..unit_start].trim().to_owned();
             if !text.is_empty() { chunks.push((start, unit_start, text)); }
             start = unit_start;

@@ -1,0 +1,36 @@
+{
+ "stem": "article-hindi-dal-01",
+ "html": "article-hindi-dal-01.html",
+ "observed_at": "2026-10-12T07:30:00Z",
+ "logical": {
+  "app_id": "com.apple.Safari",
+  "title": "दाल तड़का बनाने की आसान विधि - रसोई",
+  "url": "https://rasoi.example.in/recipes/dal-tadka",
+  "source_type": "browser"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "article",
+  "non_english"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "दाल को 25 मिनट तक उबालें"
+  },
+  {
+   "id": "f2",
+   "text": "एक छोटी कड़ाही में 2 चम्मच घी गरम करें।"
+  },
+  {
+   "id": "f3",
+   "text": "आधा चम्मच जीरा"
+  }
+ ],
+ "noise_strings": [
+  "हम कुकीज़ का उपयोग करते हैं।",
+  "सभी स्वीकार करें",
+  "© 2026 रसोई। सर्वाधिकार सुरक्षित।",
+  "संपर्क करें"
+ ]
+}

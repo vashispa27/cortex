@@ -1,0 +1,2240 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.google.Chrome",
+ "title": "Monthly budget planning - ChatGPT",
+ "url": "https://chatgpt.com/c/c3d81f46-budget",
+ "source_type": "browser",
+ "observed_ms": 1791662700000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://chatgpt.com/c/c3d81f46-budget",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Monthly budget planning - ChatGPT",
+   "value": "Monthly budget planning - ChatGPT",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Sidebar / New chat",
+   "value": "New chat",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Search chats",
+   "value": "Search chats",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Weekly meal prep ideas",
+   "value": "Weekly meal prep ideas",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Python decorators explained",
+   "value": "Python decorators explained",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Cover letter feedback",
+   "value": "Cover letter feedback",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Weekend hike packing list",
+   "value": "Weekend hike packing list",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Monthly budget planning",
+   "value": "Monthly budget planning",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Monthly budget planning - ChatGPT / ChatGPT",
+   "value": "ChatGPT",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Monthly budget planning - ChatGPT / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "I take home $6,200 a month. Help me set a sensible rent cap.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "A common guideline is 30 percent of take-home pay, which would be $1,860 for you. Given your savings goals I recommend a monthly rent budget capped at $1,850 per month.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "What else should I count besides rent?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Utilities and internet usually add $180 to $240 a month, so keep that out of the rent figure.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Okay. Let's lock it in.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Decision recorded: renew the lease on the Maple Street apartment for 12 months.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "What should I do about an emergency fund?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Aim for three months of essential expenses in a separate savings account. Automate a transfer on payday so you never have to decide each month whether to save.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Start with a small automatic amount and raise it whenever your income rises. Keep the fund in an account that is easy to reach but not linked to your everyday card.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "And groceries?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "A typical single-person grocery budget runs between $400 and $550 a month. Plan meals around what is on sale and buy staples in bulk when the price per unit is clearly lower.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Review your actual spending at the end of the month and adjust the next month's plan instead of aiming for perfection.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Add files and more",
+   "value": "Add files and more",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Dictate",
+   "value": "Dictate",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Send",
+   "value": "Send",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Monthly budget planning - ChatGPT",
+   "value": "ChatGPT can make mistakes. Check important info.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Monthly budget planning - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

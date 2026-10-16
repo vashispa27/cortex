@@ -1,0 +1,37 @@
+{
+ "stem": "email-flight-confirmation-01",
+ "html": "email-flight-confirmation-01.html",
+ "observed_at": "2026-10-14T09:10:00Z",
+ "logical": {
+  "app_id": "com.apple.mail",
+  "title": "Your booking confirmation - MR 1347",
+  "url": null,
+  "source_type": "app"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "email",
+  "multi_snapshot"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "Booking reference: QK7M2P."
+  },
+  {
+   "id": "f2",
+   "text": "flight MR 1347 departs 07:55 and arrives 10:25"
+  },
+  {
+   "id": "f3",
+   "text": "Baggage: one cabin bag up to 8 kg is included."
+  }
+ ],
+ "noise_strings": [
+  "Archive",
+  "Reply All",
+  "Mailboxes",
+  "Your hold is ready",
+  "Monthly statement"
+ ]
+}

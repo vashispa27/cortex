@@ -1,0 +1,27 @@
+{
+ "stem": "slack-standup-mon-01",
+ "html": "slack-standup-mon-01.html",
+ "observed_at": "2026-10-12T09:50:00Z",
+ "logical": {
+  "app_id": "com.tinyspeck.slackmacgap",
+  "title": "# standup - Northwind - Slack",
+  "url": null,
+  "source_type": "app"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "slack",
+  "contradiction"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "Reminder: standup moved to 9:30 AM starting this week."
+  }
+ ],
+ "noise_strings": [
+  "# launch-crew",
+  "Direct messages",
+  "Message # standup"
+ ]
+}

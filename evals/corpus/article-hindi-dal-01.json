@@ -1,0 +1,815 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.Safari",
+ "title": "दाल तड़का बनाने की आसान विधि - रसोई",
+ "url": "https://rasoi.example.in/recipes/dal-tadka",
+ "source_type": "browser",
+ "observed_ms": 1791790200000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://rasoi.example.in/recipes/dal-tadka",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Cookie consent",
+   "value": "हम कुकीज़ का उपयोग करते हैं।",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / सभी स्वीकार करें",
+   "value": "सभी स्वीकार करें",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / प्राथमिकताएँ",
+   "value": "प्राथमिकताएँ",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site header / रसोई",
+   "value": "रसोई",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / व्यंजन",
+   "value": "व्यंजन",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / सब्ज़ियाँ",
+   "value": "सब्ज़ियाँ",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / मिठाई",
+   "value": "मिठाई",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / हमारे बारे में",
+   "value": "हमारे बारे में",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "दाल तड़का बनाने की आसान विधि",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "लेखिका: मीना जोशी · 8 अक्टूबर 2026",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "दाल तड़का भारतीय घरों की सबसे लोकप्रिय दालों में से एक है। इसे चावल या रोटी के साथ परोसा जाता है और यह बनाने में बहुत आसान है।",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "दाल उबालना",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "अरहर की दाल को दो बार धोकर कुकर में डालें, तीन कप पानी और आधा चम्मच हल्दी मिलाएँ। दाल को 25 मिनट तक उबालें, या कुकर की चार सीटी आने तक पकाएँ।",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "उबालने के बाद दाल को चम्मच से हल्का मसल लें ताकि वह गाढ़ी और मुलायम हो जाए। यदि दाल बहुत गाढ़ी लगे तो थोड़ा गरम पानी मिला दें।",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "तड़का लगाना",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "एक छोटी कड़ाही में 2 चम्मच घी गरम करें।",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "आधा चम्मच जीरा और 4 लहसुन की कलियाँ डालें।",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "सूखी लाल मिर्च और एक कटा हुआ टमाटर डालकर दो मिनट भूनें।",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "ऊपर से तड़का दाल में डालें और 5 मिनट पकाएँ।",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "तड़का डालते समय आँच तेज रखें ताकि मसालों की खुशबू अच्छी तरह दाल में मिल जाए। तड़का डालने के बाद बर्तन को तुरंत ढक दें, इससे दाल में धुएँ जैसी सोंधी महक आती है।",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "परोसने का तरीका",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "परोसने से पहले ताज़ा हरा धनिया और नींबू का रस डालें। गरम चावल, पापड़ और सलाद के साथ परोसें। बची हुई दाल को फ्रिज में दो दिन तक रखा जा सकता है।",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "दाल तड़का बनाने की आसान विधि - रसोई",
+   "value": "यदि आप दाल को और स्वादिष्ट बनाना चाहते हैं तो अंत में एक चम्मच देसी घी ऊपर से डालें। बच्चों के लिए मिर्च कम रखें और थोड़ा सा गुड़ मिला सकते हैं।",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site footer",
+   "value": "© 2026 रसोई। सर्वाधिकार सुरक्षित।",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / गोपनीयता",
+   "value": "गोपनीयता",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / संपर्क करें",
+   "value": "संपर्क करें",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "दाल तड़का बनाने की आसान विधि - रसोई"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

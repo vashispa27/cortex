@@ -1,0 +1,1486 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.google.Chrome",
+ "title": "Autumn vegetable garden plan - ChatGPT",
+ "url": "https://chatgpt.com/c/f7a2de09-garden",
+ "source_type": "browser",
+ "observed_ms": 1791885600000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://chatgpt.com/c/f7a2de09-garden",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "Autumn vegetable garden plan - ChatGPT",
+   "value": "Autumn vegetable garden plan - ChatGPT",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Sidebar / New chat",
+   "value": "New chat",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Search chats",
+   "value": "Search chats",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Weekly meal prep ideas",
+   "value": "Weekly meal prep ideas",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Python decorators explained",
+   "value": "Python decorators explained",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Cover letter feedback",
+   "value": "Cover letter feedback",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Weekend hike packing list",
+   "value": "Weekend hike packing list",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Chat history / Autumn vegetable garden plan",
+   "value": "Autumn vegetable garden plan",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Chat history"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Autumn vegetable garden plan - ChatGPT / ChatGPT",
+   "value": "ChatGPT",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Autumn vegetable garden plan - ChatGPT / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "What should I plant in my raised beds this autumn? I'm in zone 8b.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "In zone 8b you can still plant spinach, kale and radishes through October. Sow radishes 3 cm apart and thin them to 5 cm once they sprout. Spinach prefers cool soil, so sow it in a lightly shaded corner and keep the bed evenly moist. Kale tolerates frost and gets sweeter after the first cold nights.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "And tomatoes for next spring?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Start tomato seedlings indoors in February and plant tomatoes 60 cm apart once the last frost has passed. Stake them at planting time. Choose a sunny bed with at least eight hours of direct light, and mix compost into the soil a few weeks beforehand so the roots find plenty of nutrients when they go in.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "You said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "How do I protect the beds over winter?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Edit message",
+   "value": "Edit message",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Conversation",
+   "value": "ChatGPT said:",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Conversation",
+   "value": "Cover bare soil with 5 cm of straw mulch so rain does not compact it. A layer of leaves works too, but straw is lighter and lets the soil breathe. Water the beds once before mulching so the moisture is locked in underneath.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Copy",
+   "value": "Copy",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Rate response",
+   "value": "Rate response",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Share",
+   "value": "Share",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Conversation / Read aloud",
+   "value": "Read aloud",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Conversation"
+    },
+    {
+     "role": "AXArticle",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Add files and more",
+   "value": "Add files and more",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Dictate",
+   "value": "Dictate",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Send",
+   "value": "Send",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Autumn vegetable garden plan - ChatGPT",
+   "value": "ChatGPT can make mistakes. Check important info.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "Autumn vegetable garden plan - ChatGPT"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

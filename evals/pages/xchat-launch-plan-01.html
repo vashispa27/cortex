@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Launch crew / Chat / X</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+button{font:inherit;cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+body{background:#000;color:#e7e9ea;display:flex}
+.rail{width:88px;border-right:1px solid #2f3336;padding:12px;display:flex;flex-direction:column;gap:12px}
+.rail a{color:#e7e9ea;text-decoration:none;font-weight:600}
+.convs{width:340px;border-right:1px solid #2f3336;height:100vh;overflow:auto}
+.convs h2{padding:14px 16px;margin:0;font-size:20px}
+.convs li{list-style:none;padding:12px 16px;border-bottom:1px solid #16181c}
+.convs ul{margin:0;padding:0}
+.convs .prev{color:#71767b;font-size:14px}
+.thread{flex:1;display:flex;flex-direction:column;height:100vh}
+.thread header{padding:14px 16px;border-bottom:1px solid #2f3336;font-weight:700}
+.msgs{flex:1;overflow:auto;padding:16px;margin:0;list-style:none}
+.msgs li{margin:0 0 14px;max-width:70%}
+.msgs li .meta{color:#71767b;font-size:12px}
+.msgs li .bubble{background:#16181c;border-radius:16px;padding:8px 14px;display:inline-block}
+.compose{display:flex;gap:8px;padding:12px 16px;border-top:1px solid #2f3336}
+.compose textarea{flex:1;background:#202327;border:0;border-radius:20px;color:#e7e9ea;padding:10px 14px;font:inherit}
+.compose button{background:#1d9bf0;color:#fff;border:0;border-radius:18px;padding:0 18px}
+.kbd{color:#71767b;font-size:12px;padding:6px 16px}
+</style>
+</head>
+<body>
+  <nav class="rail" aria-label="Primary">
+    <a href="#">Home</a>
+    <a href="#">Explore</a>
+    <a href="#">Notifications</a>
+    <a href="#">Messages</a>
+  </nav>
+  <section class="convs" aria-label="Conversations">
+    <h2>Messages</h2>
+    <ul>
+      <li>
+        <span>Launch crew</span>
+        <span class="prev">Mira: I&#x27;m out on Wednesday afternoon</span>
+      </li>
+      <li>
+        <span>Weekend plans</span>
+        <span class="prev">Sam: see you at 7</span>
+      </li>
+      <li>
+        <span>Book club</span>
+        <span class="prev">Noor: chapter nine was wild</span>
+      </li>
+    </ul>
+  </section>
+  <section class="thread" aria-label="Conversation">
+    <header>
+      <h2>Launch crew</h2>
+    </header>
+    <ul class="msgs" aria-label="Messages">
+      <li aria-label="Lokesh 10:42 AM">
+        <p class="bubble">Beta goes out Thursday at 4 PM.</p>
+        <span class="meta">10:42 AM</span>
+      </li>
+      <li aria-label="Mira 10:44 AM">
+        <p class="bubble">Budget for the launch video is 3,200 euros.</p>
+        <span class="meta">10:44 AM</span>
+      </li>
+      <li aria-label="Lokesh 10:47 AM">
+        <p class="bubble">Can we move the press embargo to 9 AM Friday?</p>
+        <span class="meta">10:47 AM</span>
+      </li>
+      <li aria-label="Mira 10:51 AM">
+        <p class="bubble">Yes. I&#x27;ll tell the agency.</p>
+        <span class="meta">10:51 AM</span>
+      </li>
+      <li aria-label="Lokesh 11:02 AM">
+        <p class="bubble">Also the new pricing page goes live with the beta.</p>
+        <span class="meta">11:02 AM</span>
+      </li>
+      <li aria-label="Mira 11:03 AM">
+        <p class="bubble">I&#x27;m out on Wednesday afternoon.</p>
+        <span class="meta">11:03 AM</span>
+      </li>
+      <li aria-label="Lokesh 11:10 AM">
+        <p class="bubble">No problem. Can you send the revised script to the agency before you leave?</p>
+        <span class="meta">11:10 AM</span>
+      </li>
+      <li aria-label="Mira 11:12 AM">
+        <p class="bubble">Sure, I&#x27;ll attach the storyboard frames as well so they can start on the animatic.</p>
+        <span class="meta">11:12 AM</span>
+      </li>
+      <li aria-label="Lokesh 11:20 AM">
+        <p class="bubble">Legal still needs to review the claims on the pricing page, so please keep the copy generic until they sign off.</p>
+        <span class="meta">11:20 AM</span>
+      </li>
+      <li aria-label="Mira 11:24 AM">
+        <p class="bubble">Understood. I&#x27;ll mark the sections that need review in yellow.</p>
+        <span class="meta">11:24 AM</span>
+      </li>
+      <li aria-label="Lokesh 11:31 AM">
+        <p class="bubble">Great. Let&#x27;s do a quick run-through with the whole crew on Wednesday morning.</p>
+        <span class="meta">11:31 AM</span>
+      </li>
+      <li aria-label="Mira 11:33 AM">
+        <p class="bubble">Works for me. I&#x27;ll book the small meeting room.</p>
+        <span class="meta">11:33 AM</span>
+      </li>
+    </ul>
+    <form class="compose" aria-label="Message composer">
+      <textarea aria-label="Start a new message" placeholder="Start a new message"></textarea>
+      <button aria-label="Send">Send</button>
+    </form>
+    <p class="kbd">To view keyboard shortcuts, press question mark</p>
+  </section>
+</body>
+</html>

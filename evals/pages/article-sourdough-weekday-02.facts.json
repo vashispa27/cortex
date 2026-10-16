@@ -1,0 +1,38 @@
+{
+ "stem": "article-sourdough-weekday-02",
+ "html": "article-sourdough-weekday-02.html",
+ "observed_at": "2026-10-09T17:30:00Z",
+ "logical": {
+  "app_id": "com.apple.Safari",
+  "title": "A Weekday Sourdough in 6 Hours - Crumb & Crust",
+  "url": "https://crumbandcrust.example.com/weekday-loaf",
+  "source_type": "browser"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "article",
+  "distractor"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "Bulk ferment for 6 hours at 27 °C."
+  },
+  {
+   "id": "f2",
+   "text": "68% hydration"
+  },
+  {
+   "id": "f3",
+   "text": "230 °C for 25 minutes lid on"
+  }
+ ],
+ "noise_strings": [
+  "We use cookies to improve your experience.",
+  "Accept all cookies",
+  "Manage preferences",
+  "© 2026 Crumb & Crust Media.",
+  "Advertise",
+  "Shop"
+ ]
+}

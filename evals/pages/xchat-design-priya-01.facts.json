@@ -1,0 +1,32 @@
+{
+ "stem": "xchat-design-priya-01",
+ "html": "xchat-design-priya-01.html",
+ "observed_at": "2026-10-14T11:00:00Z",
+ "logical": {
+  "app_id": "com.apple.Safari",
+  "title": "Priya Raman / Chat / X",
+  "url": "https://x.com/i/chat/2201177-design",
+  "source_type": "browser"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "xchat",
+  "speaker",
+  "same_first_name"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "The logo kerning fix landed in commit a4f9c21."
+  },
+  {
+   "id": "f2",
+   "text": "the favicon ships Monday."
+  }
+ ],
+ "noise_strings": [
+  "To view keyboard shortcuts, press question mark",
+  "Weekend plans",
+  "Book club"
+ ]
+}

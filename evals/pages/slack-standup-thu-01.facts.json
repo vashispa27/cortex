@@ -1,0 +1,27 @@
+{
+ "stem": "slack-standup-thu-01",
+ "html": "slack-standup-thu-01.html",
+ "observed_at": "2026-10-15T09:40:00Z",
+ "logical": {
+  "app_id": "com.tinyspeck.slackmacgap",
+  "title": "# standup - Northwind - Slack",
+  "url": null,
+  "source_type": "app"
+ },
+ "expect_searchable": true,
+ "tags": [
+  "slack",
+  "contradiction"
+ ],
+ "facts": [
+  {
+   "id": "f1",
+   "text": "Update: standup is now 10:15 AM because of the vendor call."
+  }
+ ],
+ "noise_strings": [
+  "# launch-crew",
+  "Direct messages",
+  "Message # standup"
+ ]
+}

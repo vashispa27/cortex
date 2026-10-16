@@ -1,0 +1,910 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.tinyspeck.slackmacgap",
+ "title": "# standup - Northwind - Slack",
+ "url": null,
+ "source_type": "app",
+ "observed_ms": 1792057200000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXStaticText",
+   "name": "# standup - Northwind - Slack",
+   "value": "Northwind",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Sidebar",
+   "value": "Northwind",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Sidebar",
+   "value": "Channels",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / # general",
+   "value": "# general",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / # launch-crew",
+   "value": "# launch-crew",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / # design",
+   "value": "# design",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / # standup",
+   "value": "# standup",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Sidebar",
+   "value": "Direct messages",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Lokesh Mehta",
+   "value": "Lokesh Mehta",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Priya Nair",
+   "value": "Priya Nair",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Sidebar / Priya Raman",
+   "value": "Priya Raman",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Sidebar"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "Channel",
+   "value": "# standup",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Thursday, October 15",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message list / Lokesh Mehta",
+   "value": "Lokesh Mehta",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Message list / 8:55 AM",
+   "value": "8:55 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Update: standup is now 10:15 AM because of the vendor call.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message list / Priya Raman",
+   "value": "Priya Raman",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Message list / 8:58 AM",
+   "value": "8:58 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Ok, 10:15 AM it is.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message list / Dev Anand",
+   "value": "Dev Anand",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Message list / 9:01 AM",
+   "value": "9:01 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "Same call link as before.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message list / Lokesh Mehta",
+   "value": "Lokesh Mehta",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Message list / 9:05 AM",
+   "value": "9:05 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "The vendor wants to walk through the integration checklist, so please have your estimates ready.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message list / Priya Raman",
+   "value": "Priya Raman",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Message list / 9:07 AM",
+   "value": "9:07 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "I will bring the updated mockups for the settings screen.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Message list / Dev Anand",
+   "value": "Dev Anand",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Message list / 9:12 AM",
+   "value": "9:12 AM",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Message list",
+   "value": "I will share the performance numbers from last night's load test.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXList",
+     "name": "Message list"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Composer / Send",
+   "value": "Send",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "# standup - Northwind - Slack"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Channel"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Composer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

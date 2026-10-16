@@ -1,0 +1,726 @@
+{
+ "provenance": "hand_authored",
+ "app_id": "com.apple.Safari",
+ "title": "What is terminal velocity? - Physics Daily",
+ "url": "https://physicsdaily.example.org/skydiving/terminal-velocity",
+ "source_type": "browser",
+ "observed_ms": 1791547200000,
+ "focus_role": "",
+ "focus_name": "",
+ "limitations": [],
+ "notes": "AX tree synthesized by evals/tools/corpus_lib.py from the page structure, following the emission rules in crates/platform-mac/native/Capture.swift (collectText). Role choices for <article>, <nav>, aria-labels and for non-browser apps (Terminal, Notes, Mail, Slack, Messages) are assumptions about what the real app exposes; replace with a real capture (see evals/CAPTURE.md).",
+ "roots": [
+  {
+   "role": "AXButton",
+   "name": "Back",
+   "value": "Back",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Forward",
+   "value": "Forward",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Reload",
+   "value": "Reload",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXTextField",
+   "name": "Address and search bar",
+   "value": "https://physicsdaily.example.org/skydiving/terminal-velocity",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXToolbar",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXRadioButton",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "What is terminal velocity? - Physics Daily",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXTabGroup",
+     "name": "Tab Strip"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Cookie consent",
+   "value": "We use cookies to improve your experience.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / Accept all cookies",
+   "value": "Accept all cookies",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXButton",
+   "name": "Cookie consent / Manage preferences",
+   "value": "Manage preferences",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Cookie consent"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site header / Physics Daily",
+   "value": "Physics Daily",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Mechanics",
+   "value": "Mechanics",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Optics",
+   "value": "Optics",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Quantum",
+   "value": "Quantum",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Primary / Quizzes",
+   "value": "Quizzes",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site header"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Primary"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "What is terminal velocity?",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "By Ines Duarte · 4 October 2026 · 6 min read",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "Terminal velocity is the constant speed a falling object reaches when air resistance balances its weight. The object stops accelerating at that point.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "Skydivers",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "A belly-down skydiver reaches a terminal velocity of about 55 m/s (200 km/h). Pulling into a head-down position can raise that to roughly 90 m/s.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "A small steel ball has a much higher terminal velocity than a feather because its weight is large compared with the drag it experiences.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXHeading",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "Why shape matters",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "Drag depends on the cross-sectional area facing the air and on a drag coefficient that captures how streamlined the body is. A flat, spread-out body presents a large area and falls slowly; a narrow, pointed body falls much faster.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "Air density also changes the answer. In thinner air at high altitude the same body falls faster, which is why a jump from very high up begins with extreme speeds before the atmosphere thickens.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "Parachute open: a few metres per second",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "Cat in a curled posture: slower than most small animals expect",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "What is terminal velocity? - Physics Daily",
+   "value": "Raindrop: roughly 9 m/s depending on size",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXList",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "Site footer",
+   "value": "© 2026 Physics Daily.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / Newsletter",
+   "value": "Newsletter",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXLink",
+   "name": "Site footer / Advertise",
+   "value": "Advertise",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "What is terminal velocity? - Physics Daily"
+    },
+    {
+     "role": "AXGroup",
+     "name": "Site footer"
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  }
+ ]
+}

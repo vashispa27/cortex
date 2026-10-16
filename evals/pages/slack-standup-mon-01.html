@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title># standup - Northwind - Slack</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+button{font:inherit;cursor:pointer}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+body{background:#fff;color:#1d1c1d;display:flex}
+.ws{width:70px;background:#3f0e40;color:#fff;padding:12px 0;text-align:center}
+.side{width:250px;background:#4a154b;color:#e8d8e8;padding:14px;height:100vh;overflow:auto}
+.side h3{font-size:13px;text-transform:uppercase;letter-spacing:.04em;margin:14px 0 6px;color:#cfc3cf}
+.side a{display:block;color:#e8d8e8;text-decoration:none;padding:3px 6px}
+.chan{flex:1;display:flex;flex-direction:column;height:100vh}
+.chan header{padding:12px 20px;border-bottom:1px solid #ddd;font-weight:800;font-size:18px}
+.mlist{flex:1;overflow:auto;padding:12px 20px;margin:0;list-style:none}
+.mlist li{margin:0 0 14px}
+.mlist .who{font-weight:800;background:none;border:0;padding:0;margin-right:8px}
+.mlist .ts{color:#616061;font-size:12px;text-decoration:none}
+.mlist .day{color:#616061;font-size:12px;font-weight:700;border-top:1px solid #ddd;padding-top:6px}
+.cmp{padding:0 20px 20px}
+.cmp textarea{width:100%;height:64px;border:1px solid #999;border-radius:8px;padding:8px;font:inherit}
+</style>
+</head>
+<body>
+  <div class="ws">
+    <div>Northwind</div>
+  </div>
+  <aside class="side" aria-label="Sidebar">
+    <h3>Northwind</h3>
+    <h3>Channels</h3>
+    <a href="#"># general</a>
+    <a href="#"># launch-crew</a>
+    <a href="#"># design</a>
+    <a href="#"># standup</a>
+    <h3>Direct messages</h3>
+    <a href="#">Lokesh Mehta</a>
+    <a href="#">Priya Nair</a>
+    <a href="#">Priya Raman</a>
+  </aside>
+  <section class="chan" aria-label="Channel">
+    <header>
+      <h1># standup</h1>
+    </header>
+    <ul class="mlist" aria-label="Message list">
+      <li>
+        <div class="day">Monday, October 12</div>
+      </li>
+      <li>
+        <button class="who" aria-label="Lokesh Mehta">L</button>
+        <a class="ts" href="#">9:12 AM</a>
+        <div>Reminder: standup moved to 9:30 AM starting this week.</div>
+      </li>
+      <li>
+        <button class="who" aria-label="Priya Raman">P</button>
+        <a class="ts" href="#">9:14 AM</a>
+        <div>Works for me.</div>
+      </li>
+      <li>
+        <button class="who" aria-label="Dev Anand">D</button>
+        <a class="ts" href="#">9:20 AM</a>
+        <div>I will join from the Pune office.</div>
+      </li>
+      <li>
+        <button class="who" aria-label="Lokesh Mehta">L</button>
+        <a class="ts" href="#">9:25 AM</a>
+        <div>Please keep updates to the three usual questions: what you did, what you will do, and anything blocking you.</div>
+      </li>
+      <li>
+        <button class="who" aria-label="Priya Raman">P</button>
+        <a class="ts" href="#">9:27 AM</a>
+        <div>I will post the design review notes in the thread after lunch.</div>
+      </li>
+      <li>
+        <button class="who" aria-label="Dev Anand">D</button>
+        <a class="ts" href="#">9:31 AM</a>
+        <div>Build is green again after the dependency bump.</div>
+      </li>
+    </ul>
+    <form class="cmp" aria-label="Composer">
+      <textarea aria-label="Message # standup" placeholder="Message # standup"></textarea>
+      <button aria-label="Send">Send</button>
+    </form>
+  </section>
+</body>
+</html>
