@@ -1,8 +1,8 @@
 # Retrieval eval: mode=bm25_only
 
-- commit `017fce468f` (dirty) · model `minishlab/potion-base-32M@1e5a03f8eeb2c98b928fbbd846f22f816360919f:model2vec-rs-0.3.0:default-512` · cleaner v3 · chunk target 1600 B
+- commit `9eb3aca58b` · model `minishlab/potion-base-32M@1e5a03f8eeb2c98b928fbbd846f22f816360919f:model2vec-rs-0.3.0:default-512` · cleaner v3 · chunk target 1600 B
 - params: `{"prefetch":80,"fused_limit":40,"rrf_k":60,"final_k":8,"use_filters":true,"use_rerank_bonus":true,"include_derived":true,"mode":"bm25_only","now_ms":1792238400000}`
-- corpus: 24 fixtures {"hand_authored":24} · gold: 59 evaluated of 59 ("all" split) · clock fixed at 2026-10-17T12:00Z, TZ=UTC
+- corpus: 24 fixtures {"hand_authored":24} · gold: 61 evaluated of 61 ("all" split) · clock fixed at 2026-10-17T12:00Z, TZ=UTC
 
 Counts are queries; small n means wide intervals, so differences of a few queries are within noise.
 
@@ -10,23 +10,23 @@ Counts are queries; small n means wide intervals, so differences of a few querie
 
 | level | metric | value |
 |---|---|---|
-| chunk | hit@1 | 33/54 (61%) |
-| chunk | hit@5 | 44/54 (81%) |
-| chunk | hit@8 | 45/54 (83%) |
-| chunk | hit@10 | 45/54 (83%) |
-| chunk | hit@40 | 45/54 (83%) |
-| chunk | MRR / nDCG@10 | 0.6856 / 0.7157 |
-| final | hit@1 | 35/54 (65%) |
-| final | hit@8 | 41/54 (76%) |
-| final | MRR | 0.6929 |
-| final | chunk found but lost by final stage | 4/54 (7%) |
+| chunk | hit@1 | 34/55 (62%) |
+| chunk | hit@5 | 45/55 (82%) |
+| chunk | hit@8 | 46/55 (84%) |
+| chunk | hit@10 | 46/55 (84%) |
+| chunk | hit@40 | 46/55 (84%) |
+| chunk | MRR / nDCG@10 | 0.6914 / 0.7209 |
+| final | hit@1 | 36/55 (65%) |
+| final | hit@8 | 42/55 (76%) |
+| final | MRR | 0.6985 |
+| final | chunk found but lost by final stage | 4/55 (7%) |
 | final | stale/wrong text above the answer | 1/8 (12%) |
-| crowding | final slots near-duplicate (Jaccard ≥0.8 / ≥0.5) | 9/266 (3%) / 21/266 (8%) |
-| derived | top-10 slots held by derived points | 138/362 (38%) |
-| filters | filter excluded every relevant snapshot | 4/54 (7%) |
-| filters | zero-result queries | 6/59 (10%) |
-| abstention | absent queries that still returned results | 2/5 (40%) |
-| abstention | AUROC answerable vs absent by top score (chunk / final) | 0.5 / 0.652 |
+| crowding | final slots near-duplicate (Jaccard ≥0.8 / ≥0.5) | 9/271 (3%) / 20/271 (7%) |
+| derived | top-10 slots held by derived points | 138/369 (37%) |
+| filters | filter excluded every relevant snapshot | 4/55 (7%) |
+| filters | zero-result queries | 6/61 (10%) |
+| abstention | absent queries that still returned results | 3/6 (50%) |
+| abstention | AUROC answerable vs absent by top score (chunk / final) | 0.5 / 0.7179 |
 
 ## By query type
 
@@ -44,7 +44,7 @@ Counts are queries; small n means wide intervals, so differences of a few querie
 | non_english | 4 | 2/4 (50%) | 3/4 (75%) | 3/4 (75%) | 0.625 | 2/4 (50%) | 2/4 (50%) | 0.5 | 0/4 (0%) |
 | paraphrase | 7 | 5/7 (71%) | 6/7 (86%) | 6/7 (86%) | 0.7429 | 4/7 (57%) | 6/7 (86%) | 0.6905 | 0/7 (0%) |
 | speaker | 4 | 3/4 (75%) | 4/4 (100%) | 4/4 (100%) | 0.8125 | 4/4 (100%) | 4/4 (100%) | 1.0 | 0/4 (0%) |
-| time_scoped | 6 | 5/6 (83%) | 6/6 (100%) | 6/6 (100%) | 0.9167 | 4/6 (67%) | 5/6 (83%) | 0.7222 | 0/6 (0%) |
+| time_scoped | 7 | 6/7 (86%) | 7/7 (100%) | 7/7 (100%) | 0.9286 | 5/7 (71%) | 6/7 (86%) | 0.7619 | 0/8 (0%) |
 
 ## Chunking
 
@@ -56,9 +56,9 @@ Counts are queries; small n means wide intervals, so differences of a few querie
 ## Cleaner
 
 - planted facts surviving cleaning: 66/66 (100%)
-- noise strings leaked into bodies: 36/105 (34%) (fixtures with any leak: 16/24 (67%))
+- noise strings leaked into bodies: 35/105 (33%) (fixtures with any leak: 15/24 (62%))
 - navigation-only fixtures: [{"fixture":"nav-only-newtab-01","quality":"navigation_only","body_bytes":0,"ok":true}]
 
 ## Cost
 
-- ingest 756.7654 ms · query latency p50 6.5311 ms / p95 8.7148 ms · index on disk 175127117 bytes
+- ingest 839.8842 ms · query latency p50 6.0771 ms / p95 7.8121 ms · index on disk 175118901 bytes

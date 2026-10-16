@@ -4,16 +4,16 @@ Answerable questions only (absent questions have no answer to rank). Bootstrap: 
 
 ### mode=dense_only vs base
 
-#### all answerable queries (n=54)
+#### all answerable queries (n=55)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
-| chunk hit@8 | 0.815 | 0.796 | -0.019 | [-0.074, +0.037] | within noise (3 queries differ) |
-| chunk hit@40 | 0.852 | 0.852 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| chunk MRR | 0.669 | 0.624 | -0.044 | [-0.106, +0.010] | within noise (12 queries differ) |
-| final hit@1 | 0.611 | 0.611 | +0.000 | [-0.056, +0.056] | within noise (2 queries differ) |
-| final hit@8 | 0.741 | 0.741 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final MRR | 0.668 | 0.665 | -0.003 | [-0.031, +0.025] | within noise (3 queries differ) |
+| chunk hit@8 | 0.818 | 0.800 | -0.018 | [-0.073, +0.036] | within noise (3 queries differ) |
+| chunk hit@40 | 0.855 | 0.855 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| chunk MRR | 0.675 | 0.631 | -0.044 | [-0.104, +0.009] | within noise (12 queries differ) |
+| final hit@1 | 0.618 | 0.618 | +0.000 | [-0.055, +0.055] | within noise (2 queries differ) |
+| final hit@8 | 0.745 | 0.745 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final MRR | 0.674 | 0.671 | -0.003 | [-0.030, +0.024] | within noise (3 queries differ) |
 
 #### type: paraphrase (n=7)
 
@@ -21,7 +21,7 @@ Answerable questions only (absent questions have no answer to rank). Bootstrap: 
 |---|---|---|---|---|---|
 | chunk hit@8 | 0.857 | 0.857 | +0.000 | [-0.429, +0.429] | within noise (2 queries differ) |
 | chunk hit@40 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| chunk MRR | 0.633 | 0.547 | -0.087 | [-0.396, +0.160] | within noise (3 queries differ) |
+| chunk MRR | 0.633 | 0.547 | -0.087 | [-0.408, +0.160] | within noise (3 queries differ) |
 | final hit@1 | 0.429 | 0.429 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final hit@8 | 0.714 | 0.714 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.571 | 0.548 | -0.024 | [-0.071, +0.000] | within noise (1 queries differ) |
@@ -48,16 +48,16 @@ Answerable questions only (absent questions have no answer to rank). Bootstrap: 
 | final hit@8 | 0.800 | 0.800 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.700 | 0.800 | +0.100 | [+0.000, +0.300] | within noise (1 queries differ) |
 
-#### type: time_scoped (n=6)
+#### type: time_scoped (n=7)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
 | chunk hit@8 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | chunk hit@40 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| chunk MRR | 0.806 | 0.806 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final hit@1 | 0.667 | 0.667 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final hit@8 | 0.833 | 0.833 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final MRR | 0.722 | 0.722 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| chunk MRR | 0.833 | 0.833 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final hit@1 | 0.714 | 0.714 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final hit@8 | 0.857 | 0.857 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final MRR | 0.762 | 0.762 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
 #### type: filter_trap (n=4)
 
@@ -92,20 +92,20 @@ Answerable questions only (absent questions have no answer to rank). Bootstrap: 
 | final hit@8 | 0.500 | 0.500 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.500 | 0.500 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
-Absent questions that still returned results: base 5/5, variant 5/5.
+Absent questions that still returned results: base 6/6, variant 6/6.
 
 ### mode=bm25_only vs base
 
-#### all answerable queries (n=54)
+#### all answerable queries (n=55)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
-| chunk hit@8 | 0.815 | 0.833 | +0.019 | [+0.000, +0.056] | within noise (1 queries differ) |
-| chunk hit@40 | 0.852 | 0.833 | -0.019 | [-0.056, +0.000] | within noise (1 queries differ) |
-| chunk MRR | 0.669 | 0.686 | +0.017 | [-0.031, +0.065] | within noise (13 queries differ) |
-| final hit@1 | 0.611 | 0.648 | +0.037 | [+0.000, +0.093] | within noise (2 queries differ) |
-| final hit@8 | 0.741 | 0.759 | +0.019 | [-0.037, +0.074] | within noise (3 queries differ) |
-| final MRR | 0.668 | 0.693 | +0.025 | [-0.022, +0.083] | within noise (4 queries differ) |
+| chunk hit@8 | 0.818 | 0.836 | +0.018 | [+0.000, +0.055] | within noise (1 queries differ) |
+| chunk hit@40 | 0.855 | 0.836 | -0.018 | [-0.055, +0.000] | within noise (1 queries differ) |
+| chunk MRR | 0.675 | 0.691 | +0.017 | [-0.031, +0.064] | within noise (13 queries differ) |
+| final hit@1 | 0.618 | 0.655 | +0.036 | [+0.000, +0.091] | within noise (2 queries differ) |
+| final hit@8 | 0.745 | 0.764 | +0.018 | [-0.036, +0.091] | within noise (3 queries differ) |
+| final MRR | 0.674 | 0.698 | +0.024 | [-0.021, +0.088] | within noise (4 queries differ) |
 
 #### type: paraphrase (n=7)
 
@@ -140,16 +140,16 @@ Absent questions that still returned results: base 5/5, variant 5/5.
 | final hit@8 | 0.800 | 0.600 | -0.200 | [-0.600, +0.000] | within noise (1 queries differ) |
 | final MRR | 0.700 | 0.600 | -0.100 | [-0.300, +0.000] | within noise (1 queries differ) |
 
-#### type: time_scoped (n=6)
+#### type: time_scoped (n=7)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
 | chunk hit@8 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | chunk hit@40 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| chunk MRR | 0.806 | 0.917 | +0.111 | [+0.000, +0.278] | within noise (2 queries differ) |
-| final hit@1 | 0.667 | 0.667 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final hit@8 | 0.833 | 0.833 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final MRR | 0.722 | 0.722 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| chunk MRR | 0.833 | 0.929 | +0.095 | [+0.000, +0.238] | within noise (2 queries differ) |
+| final hit@1 | 0.714 | 0.714 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final hit@8 | 0.857 | 0.857 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final MRR | 0.762 | 0.762 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
 #### type: filter_trap (n=4)
 
@@ -184,20 +184,20 @@ Absent questions that still returned results: base 5/5, variant 5/5.
 | final hit@8 | 0.500 | 0.500 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.500 | 0.500 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
-Absent questions that still returned results: base 5/5, variant 2/5.
+Absent questions that still returned results: base 6/6, variant 3/6.
 
 ### rerank_bonus=off vs base
 
-#### all answerable queries (n=54)
+#### all answerable queries (n=55)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
-| chunk hit@8 | 0.815 | 0.815 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| chunk hit@40 | 0.852 | 0.852 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| chunk MRR | 0.669 | 0.669 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final hit@1 | 0.611 | 0.667 | +0.056 | [-0.037, +0.148] | within noise (7 queries differ) |
-| final hit@8 | 0.741 | 0.741 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final MRR | 0.668 | 0.701 | +0.032 | [-0.020, +0.090] | within noise (8 queries differ) |
+| chunk hit@8 | 0.818 | 0.818 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| chunk hit@40 | 0.855 | 0.855 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| chunk MRR | 0.675 | 0.675 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final hit@1 | 0.618 | 0.673 | +0.055 | [-0.036, +0.145] | within noise (7 queries differ) |
+| final hit@8 | 0.745 | 0.745 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final MRR | 0.674 | 0.706 | +0.032 | [-0.018, +0.088] | within noise (8 queries differ) |
 
 #### type: paraphrase (n=7)
 
@@ -232,16 +232,16 @@ Absent questions that still returned results: base 5/5, variant 2/5.
 | final hit@8 | 0.800 | 0.800 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.700 | 0.700 | +0.000 | [-0.300, +0.300] | within noise (2 queries differ) |
 
-#### type: time_scoped (n=6)
+#### type: time_scoped (n=7)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
 | chunk hit@8 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | chunk hit@40 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| chunk MRR | 0.806 | 0.806 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final hit@1 | 0.667 | 0.833 | +0.167 | [+0.000, +0.500] | within noise (1 queries differ) |
-| final hit@8 | 0.833 | 0.833 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final MRR | 0.722 | 0.833 | +0.111 | [+0.000, +0.333] | within noise (1 queries differ) |
+| chunk MRR | 0.833 | 0.833 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final hit@1 | 0.714 | 0.857 | +0.143 | [+0.000, +0.429] | within noise (1 queries differ) |
+| final hit@8 | 0.857 | 0.857 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final MRR | 0.762 | 0.857 | +0.095 | [+0.000, +0.286] | within noise (1 queries differ) |
 
 #### type: filter_trap (n=4)
 
@@ -276,20 +276,20 @@ Absent questions that still returned results: base 5/5, variant 2/5.
 | final hit@8 | 0.500 | 0.500 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.500 | 0.500 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
-Absent questions that still returned results: base 5/5, variant 5/5.
+Absent questions that still returned results: base 6/6, variant 6/6.
 
 ### filters=off vs base
 
-#### all answerable queries (n=54)
+#### all answerable queries (n=55)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
-| chunk hit@8 | 0.815 | 0.889 | +0.074 | [+0.019, +0.148] | better (4 queries differ) |
-| chunk hit@40 | 0.852 | 0.926 | +0.074 | [+0.019, +0.148] | better (4 queries differ) |
-| chunk MRR | 0.669 | 0.702 | +0.034 | [-0.032, +0.108] | within noise (11 queries differ) |
-| final hit@1 | 0.611 | 0.630 | +0.019 | [-0.074, +0.111] | within noise (7 queries differ) |
-| final hit@8 | 0.741 | 0.796 | +0.056 | [-0.019, +0.130] | within noise (5 queries differ) |
-| final MRR | 0.668 | 0.705 | +0.037 | [-0.037, +0.120] | within noise (8 queries differ) |
+| chunk hit@8 | 0.818 | 0.891 | +0.073 | [+0.018, +0.145] | better (4 queries differ) |
+| chunk hit@40 | 0.855 | 0.927 | +0.073 | [+0.018, +0.145] | better (4 queries differ) |
+| chunk MRR | 0.675 | 0.708 | +0.033 | [-0.029, +0.105] | within noise (11 queries differ) |
+| final hit@1 | 0.618 | 0.636 | +0.018 | [-0.073, +0.109] | within noise (7 queries differ) |
+| final hit@8 | 0.745 | 0.800 | +0.055 | [-0.018, +0.145] | within noise (5 queries differ) |
+| final MRR | 0.674 | 0.711 | +0.036 | [-0.036, +0.121] | within noise (8 queries differ) |
 
 #### type: paraphrase (n=7)
 
@@ -324,16 +324,16 @@ Absent questions that still returned results: base 5/5, variant 5/5.
 | final hit@8 | 0.800 | 0.800 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.700 | 0.700 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
-#### type: time_scoped (n=6)
+#### type: time_scoped (n=7)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
 | chunk hit@8 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | chunk hit@40 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| chunk MRR | 0.806 | 0.639 | -0.167 | [-0.375, -0.014] | worse (3 queries differ) |
-| final hit@1 | 0.667 | 0.333 | -0.333 | [-0.667, +0.000] | within noise (2 queries differ) |
-| final hit@8 | 0.833 | 0.667 | -0.167 | [-0.500, +0.000] | within noise (1 queries differ) |
-| final MRR | 0.722 | 0.472 | -0.250 | [-0.472, -0.056] | worse (3 queries differ) |
+| chunk MRR | 0.833 | 0.690 | -0.143 | [-0.333, -0.012] | worse (3 queries differ) |
+| final hit@1 | 0.714 | 0.429 | -0.286 | [-0.571, +0.000] | within noise (2 queries differ) |
+| final hit@8 | 0.857 | 0.714 | -0.143 | [-0.429, +0.000] | within noise (1 queries differ) |
+| final MRR | 0.762 | 0.548 | -0.214 | [-0.405, -0.048] | worse (3 queries differ) |
 
 #### type: filter_trap (n=4)
 
@@ -368,20 +368,20 @@ Absent questions that still returned results: base 5/5, variant 5/5.
 | final hit@8 | 0.500 | 0.500 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.500 | 0.500 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
-Absent questions that still returned results: base 5/5, variant 5/5.
+Absent questions that still returned results: base 6/6, variant 6/6.
 
 ### derived=off vs base
 
-#### all answerable queries (n=54)
+#### all answerable queries (n=55)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
-| chunk hit@8 | 0.815 | 0.833 | +0.019 | [+0.000, +0.056] | within noise (1 queries differ) |
-| chunk hit@40 | 0.852 | 0.870 | +0.019 | [+0.000, +0.056] | within noise (1 queries differ) |
-| chunk MRR | 0.669 | 0.677 | +0.008 | [+0.000, +0.020] | better (5 queries differ) |
-| final hit@1 | 0.611 | 0.593 | -0.019 | [-0.056, +0.000] | within noise (1 queries differ) |
-| final hit@8 | 0.741 | 0.741 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final MRR | 0.668 | 0.659 | -0.009 | [-0.028, +0.000] | within noise (1 queries differ) |
+| chunk hit@8 | 0.818 | 0.836 | +0.018 | [+0.000, +0.055] | within noise (1 queries differ) |
+| chunk hit@40 | 0.855 | 0.873 | +0.018 | [+0.000, +0.055] | within noise (1 queries differ) |
+| chunk MRR | 0.675 | 0.682 | +0.008 | [+0.000, +0.019] | better (5 queries differ) |
+| final hit@1 | 0.618 | 0.600 | -0.018 | [-0.055, +0.000] | within noise (1 queries differ) |
+| final hit@8 | 0.745 | 0.745 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final MRR | 0.674 | 0.665 | -0.009 | [-0.027, +0.000] | within noise (1 queries differ) |
 
 #### type: paraphrase (n=7)
 
@@ -416,16 +416,16 @@ Absent questions that still returned results: base 5/5, variant 5/5.
 | final hit@8 | 0.800 | 0.800 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.700 | 0.700 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
-#### type: time_scoped (n=6)
+#### type: time_scoped (n=7)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
 | chunk hit@8 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | chunk hit@40 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| chunk MRR | 0.806 | 0.806 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final hit@1 | 0.667 | 0.667 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final hit@8 | 0.833 | 0.833 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final MRR | 0.722 | 0.722 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| chunk MRR | 0.833 | 0.833 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final hit@1 | 0.714 | 0.714 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final hit@8 | 0.857 | 0.857 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final MRR | 0.762 | 0.762 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
 #### type: filter_trap (n=4)
 
@@ -460,20 +460,20 @@ Absent questions that still returned results: base 5/5, variant 5/5.
 | final hit@8 | 0.500 | 0.500 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.500 | 0.500 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
-Absent questions that still returned results: base 5/5, variant 5/5.
+Absent questions that still returned results: base 6/6, variant 6/6.
 
 ### chunk_target=800 vs base
 
-#### all answerable queries (n=54)
+#### all answerable queries (n=55)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
-| chunk hit@8 | 0.815 | 0.870 | +0.056 | [+0.000, +0.130] | within noise (3 queries differ) |
-| chunk hit@40 | 0.852 | 0.926 | +0.074 | [+0.019, +0.148] | better (4 queries differ) |
-| chunk MRR | 0.669 | 0.706 | +0.037 | [-0.017, +0.092] | within noise (11 queries differ) |
-| final hit@1 | 0.611 | 0.630 | +0.019 | [+0.000, +0.056] | within noise (1 queries differ) |
-| final hit@8 | 0.741 | 0.778 | +0.037 | [+0.000, +0.093] | within noise (2 queries differ) |
-| final MRR | 0.668 | 0.696 | +0.028 | [+0.000, +0.074] | within noise (2 queries differ) |
+| chunk hit@8 | 0.818 | 0.873 | +0.055 | [+0.000, +0.127] | within noise (3 queries differ) |
+| chunk hit@40 | 0.855 | 0.927 | +0.073 | [+0.018, +0.145] | better (4 queries differ) |
+| chunk MRR | 0.675 | 0.699 | +0.024 | [-0.033, +0.084] | within noise (12 queries differ) |
+| final hit@1 | 0.618 | 0.618 | +0.000 | [-0.055, +0.055] | within noise (2 queries differ) |
+| final hit@8 | 0.745 | 0.764 | +0.018 | [-0.036, +0.091] | within noise (3 queries differ) |
+| final MRR | 0.674 | 0.683 | +0.009 | [-0.045, +0.064] | within noise (3 queries differ) |
 
 #### type: paraphrase (n=7)
 
@@ -508,16 +508,16 @@ Absent questions that still returned results: base 5/5, variant 5/5.
 | final hit@8 | 0.800 | 0.800 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.700 | 0.700 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
-#### type: time_scoped (n=6)
+#### type: time_scoped (n=7)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
 | chunk hit@8 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | chunk hit@40 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| chunk MRR | 0.806 | 0.806 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final hit@1 | 0.667 | 0.667 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final hit@8 | 0.833 | 0.833 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final MRR | 0.722 | 0.722 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| chunk MRR | 0.833 | 0.738 | -0.095 | [-0.286, +0.000] | within noise (1 queries differ) |
+| final hit@1 | 0.714 | 0.571 | -0.143 | [-0.429, +0.000] | within noise (1 queries differ) |
+| final hit@8 | 0.857 | 0.714 | -0.143 | [-0.429, +0.000] | within noise (1 queries differ) |
+| final MRR | 0.762 | 0.619 | -0.143 | [-0.429, +0.000] | within noise (1 queries differ) |
 
 #### type: filter_trap (n=4)
 
@@ -552,20 +552,20 @@ Absent questions that still returned results: base 5/5, variant 5/5.
 | final hit@8 | 0.500 | 0.500 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.500 | 0.500 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
-Absent questions that still returned results: base 5/5, variant 5/5.
+Absent questions that still returned results: base 6/6, variant 6/6.
 
 ### chunk_target=3200 vs base
 
-#### all answerable queries (n=54)
+#### all answerable queries (n=55)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
-| chunk hit@8 | 0.815 | 0.870 | +0.056 | [+0.000, +0.130] | within noise (3 queries differ) |
-| chunk hit@40 | 0.852 | 0.907 | +0.056 | [+0.000, +0.130] | within noise (3 queries differ) |
-| chunk MRR | 0.669 | 0.727 | +0.059 | [+0.019, +0.105] | better (7 queries differ) |
-| final hit@1 | 0.611 | 0.648 | +0.037 | [+0.000, +0.093] | within noise (2 queries differ) |
-| final hit@8 | 0.741 | 0.796 | +0.056 | [+0.000, +0.130] | within noise (3 queries differ) |
-| final MRR | 0.668 | 0.715 | +0.046 | [+0.000, +0.111] | within noise (3 queries differ) |
+| chunk hit@8 | 0.818 | 0.873 | +0.055 | [+0.000, +0.127] | within noise (3 queries differ) |
+| chunk hit@40 | 0.855 | 0.909 | +0.055 | [+0.000, +0.127] | within noise (3 queries differ) |
+| chunk MRR | 0.675 | 0.732 | +0.058 | [+0.018, +0.103] | better (7 queries differ) |
+| final hit@1 | 0.618 | 0.655 | +0.036 | [+0.000, +0.091] | within noise (2 queries differ) |
+| final hit@8 | 0.745 | 0.800 | +0.055 | [+0.000, +0.127] | within noise (3 queries differ) |
+| final MRR | 0.674 | 0.720 | +0.045 | [+0.000, +0.100] | within noise (3 queries differ) |
 
 #### type: paraphrase (n=7)
 
@@ -600,16 +600,16 @@ Absent questions that still returned results: base 5/5, variant 5/5.
 | final hit@8 | 0.800 | 0.800 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | final MRR | 0.700 | 0.700 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
-#### type: time_scoped (n=6)
+#### type: time_scoped (n=7)
 
 | metric | base | variant | diff | 95% CI | verdict |
 |---|---|---|---|---|---|
 | chunk hit@8 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 | chunk hit@40 | 1.000 | 1.000 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| chunk MRR | 0.806 | 0.806 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final hit@1 | 0.667 | 0.667 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final hit@8 | 0.833 | 0.833 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
-| final MRR | 0.722 | 0.722 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| chunk MRR | 0.833 | 0.833 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final hit@1 | 0.714 | 0.714 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final hit@8 | 0.857 | 0.857 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
+| final MRR | 0.762 | 0.762 | +0.000 | [+0.000, +0.000] | within noise (0 queries differ) |
 
 #### type: filter_trap (n=4)
 
@@ -644,5 +644,5 @@ Absent questions that still returned results: base 5/5, variant 5/5.
 | final hit@8 | 0.500 | 0.750 | +0.250 | [+0.000, +0.750] | within noise (1 queries differ) |
 | final MRR | 0.500 | 0.750 | +0.250 | [+0.000, +0.750] | within noise (1 queries differ) |
 
-Absent questions that still returned results: base 5/5, variant 5/5.
+Absent questions that still returned results: base 6/6, variant 6/6.
 

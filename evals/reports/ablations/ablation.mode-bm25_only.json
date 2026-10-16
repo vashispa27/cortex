@@ -1,8 +1,8 @@
 {
   "meta": {
     "variant": "mode=bm25_only",
-    "git_commit": "017fce468f866ea50256e7d702f6046533bb8b43",
-    "git_dirty_in_inputs": true,
+    "git_commit": "9eb3aca58b02cf2089a384d5df2d092577076981",
+    "git_dirty_in_inputs": false,
     "model_version": "minishlab/potion-base-32M@1e5a03f8eeb2c98b928fbbd846f22f816360919f:model2vec-rs-0.3.0:default-512",
     "cleaner_version": 3,
     "params": {
@@ -21,81 +21,82 @@
     "timezone": "UTC",
     "injected_now_ms": 1792238400000,
     "corpus_fixtures": 24,
+    "corpus_sightings": 25,
     "corpus_provenance": {
       "hand_authored": 24
     },
-    "gold_total": 59,
-    "gold_evaluated": 59,
+    "gold_total": 61,
+    "gold_evaluated": 61,
     "gold_by_split": {
-      "dev": 32,
-      "test": 27
+      "dev": 33,
+      "test": 28
     }
   },
   "overall": {
-    "n_queries": 59,
-    "n_answerable": 54,
-    "n_absent": 5,
+    "n_queries": 61,
+    "n_answerable": 55,
+    "n_absent": 6,
     "chunk_level": {
       "hit": {
         "@1": {
-          "count": 33,
-          "of": 54,
-          "rate": 0.6111
+          "count": 34,
+          "of": 55,
+          "rate": 0.6182
         },
         "@10": {
-          "count": 45,
-          "of": 54,
-          "rate": 0.8333
+          "count": 46,
+          "of": 55,
+          "rate": 0.8364
         },
         "@40": {
-          "count": 45,
-          "of": 54,
-          "rate": 0.8333
+          "count": 46,
+          "of": 55,
+          "rate": 0.8364
         },
         "@5": {
-          "count": 44,
-          "of": 54,
-          "rate": 0.8148
+          "count": 45,
+          "of": 55,
+          "rate": 0.8182
         },
         "@8": {
-          "count": 45,
-          "of": 54,
-          "rate": 0.8333
+          "count": 46,
+          "of": 55,
+          "rate": 0.8364
         }
       },
       "recall": {
-        "@1": 0.5833,
-        "@10": 0.8333,
-        "@40": 0.8333,
-        "@5": 0.7963,
-        "@8": 0.8333
+        "@1": 0.5909,
+        "@10": 0.8364,
+        "@40": 0.8364,
+        "@5": 0.8,
+        "@8": 0.8364
       },
-      "mrr": 0.6856,
-      "ndcg@10": 0.7157
+      "mrr": 0.6914,
+      "ndcg@10": 0.7209
     },
     "final_level": {
       "k": 8,
       "hit@1": {
-        "count": 35,
-        "of": 54,
-        "rate": 0.6481
+        "count": 36,
+        "of": 55,
+        "rate": 0.6545
       },
       "hit@k": {
-        "count": 41,
-        "of": 54,
-        "rate": 0.7593
+        "count": 42,
+        "of": 55,
+        "rate": 0.7636
       },
       "all_relevant_found": {
-        "count": 41,
-        "of": 54,
-        "rate": 0.7593
+        "count": 42,
+        "of": 55,
+        "rate": 0.7636
       },
-      "recall@k": 0.7593,
-      "mrr": 0.6929,
+      "recall@k": 0.7636,
+      "mrr": 0.6985,
       "chunk_hit_but_final_miss": {
         "count": 4,
-        "of": 54,
-        "rate": 0.0741
+        "of": 55,
+        "rate": 0.0727
       },
       "stale_or_wrong_text_ranked_above_answer": {
         "count": 1,
@@ -107,74 +108,74 @@
       "jaccard_0.8": {
         "slots_near_duplicate": {
           "count": 9,
-          "of": 266,
-          "rate": 0.0338
+          "of": 271,
+          "rate": 0.0332
         },
         "queries_with_any": {
           "count": 9,
-          "of": 53,
-          "rate": 0.1698
+          "of": 55,
+          "rate": 0.1636
         },
-        "mean_slots_per_query": 0.1698
+        "mean_slots_per_query": 0.1636
       },
       "jaccard_0.5": {
         "slots_near_duplicate": {
-          "count": 21,
-          "of": 266,
-          "rate": 0.0789
+          "count": 20,
+          "of": 271,
+          "rate": 0.0738
         },
         "queries_with_any": {
-          "count": 17,
-          "of": 53,
-          "rate": 0.3208
+          "count": 16,
+          "of": 55,
+          "rate": 0.2909
         },
-        "mean_slots_per_query": 0.3962
+        "mean_slots_per_query": 0.3636
       }
     },
     "derived_pollution_top10": {
       "derived_slots": {
         "count": 138,
-        "of": 362,
-        "rate": 0.3812
+        "of": 369,
+        "rate": 0.374
       },
-      "mean_per_query": 0.2658
+      "mean_per_query": 0.2571
     },
     "filters": {
       "queries_with_filter": {
-        "count": 18,
-        "of": 59,
-        "rate": 0.3051
+        "count": 20,
+        "of": 61,
+        "rate": 0.3279
       },
       "queries_with_app_filter": {
         "count": 8,
-        "of": 59,
-        "rate": 0.1356
+        "of": 61,
+        "rate": 0.1311
       },
       "excluded_all_relevant": {
         "count": 4,
-        "of": 54,
-        "rate": 0.0741
+        "of": 55,
+        "rate": 0.0727
       },
       "excluded_some_relevant": {
         "count": 4,
-        "of": 54,
-        "rate": 0.0741
+        "of": 55,
+        "rate": 0.0727
       },
       "zero_result_queries": {
         "count": 6,
-        "of": 59,
-        "rate": 0.1017
+        "of": 61,
+        "rate": 0.0984
       },
-      "observation_check_dropped_hits": 0
+      "observation_check_dropped_hits": 2
     },
     "abstention": {
       "absent_queries_returning_results": {
-        "count": 2,
-        "of": 5,
-        "rate": 0.4
+        "count": 3,
+        "of": 6,
+        "rate": 0.5
       },
       "top_chunk_score_absent": {
-        "n": 2,
+        "n": 3,
         "mean": 0.0167,
         "p50": 0.0167,
         "p95": 0.0167,
@@ -182,7 +183,7 @@
         "max": 0.0167
       },
       "top_chunk_score_answerable": {
-        "n": 51,
+        "n": 52,
         "mean": 0.0167,
         "p50": 0.0167,
         "p95": 0.0167,
@@ -190,15 +191,15 @@
         "max": 0.0167
       },
       "top_final_score_absent": {
-        "n": 2,
+        "n": 3,
         "mean": 0.0164,
-        "p50": 0.0161,
+        "p50": 0.0164,
         "p95": 0.0167,
         "min": 0.0161,
         "max": 0.0167
       },
       "top_final_score_answerable": {
-        "n": 51,
+        "n": 52,
         "mean": 0.0165,
         "p50": 0.0167,
         "p95": 0.0167,
@@ -206,7 +207,7 @@
         "max": 0.0167
       },
       "auroc_answerable_vs_absent_chunk_score": 0.5,
-      "auroc_answerable_vs_absent_final_score": 0.652
+      "auroc_answerable_vs_absent_final_score": 0.7179
     }
   },
   "by_type": {
@@ -2256,16 +2257,16 @@
         },
         "jaccard_0.5": {
           "slots_near_duplicate": {
-            "count": 2,
+            "count": 1,
             "of": 24,
-            "rate": 0.0833
+            "rate": 0.0417
           },
           "queries_with_any": {
-            "count": 2,
+            "count": 1,
             "of": 4,
-            "rate": 0.5
+            "rate": 0.25
           },
-          "mean_slots_per_query": 0.5
+          "mean_slots_per_query": 0.25
         }
       },
       "derived_pollution_top10": {
@@ -2347,70 +2348,70 @@
       }
     },
     "time_scoped": {
-      "n_queries": 6,
-      "n_answerable": 6,
-      "n_absent": 0,
+      "n_queries": 8,
+      "n_answerable": 7,
+      "n_absent": 1,
       "chunk_level": {
         "hit": {
           "@1": {
-            "count": 5,
-            "of": 6,
-            "rate": 0.8333
+            "count": 6,
+            "of": 7,
+            "rate": 0.8571
           },
           "@10": {
-            "count": 6,
-            "of": 6,
+            "count": 7,
+            "of": 7,
             "rate": 1.0
           },
           "@40": {
-            "count": 6,
-            "of": 6,
+            "count": 7,
+            "of": 7,
             "rate": 1.0
           },
           "@5": {
-            "count": 6,
-            "of": 6,
+            "count": 7,
+            "of": 7,
             "rate": 1.0
           },
           "@8": {
-            "count": 6,
-            "of": 6,
+            "count": 7,
+            "of": 7,
             "rate": 1.0
           }
         },
         "recall": {
-          "@1": 0.8333,
+          "@1": 0.8571,
           "@10": 1.0,
           "@40": 1.0,
           "@5": 1.0,
           "@8": 1.0
         },
-        "mrr": 0.9167,
-        "ndcg@10": 0.9385
+        "mrr": 0.9286,
+        "ndcg@10": 0.9473
       },
       "final_level": {
         "k": 8,
         "hit@1": {
-          "count": 4,
-          "of": 6,
-          "rate": 0.6667
+          "count": 5,
+          "of": 7,
+          "rate": 0.7143
         },
         "hit@k": {
-          "count": 5,
-          "of": 6,
-          "rate": 0.8333
+          "count": 6,
+          "of": 7,
+          "rate": 0.8571
         },
         "all_relevant_found": {
-          "count": 5,
-          "of": 6,
-          "rate": 0.8333
+          "count": 6,
+          "of": 7,
+          "rate": 0.8571
         },
-        "recall@k": 0.8333,
-        "mrr": 0.7222,
+        "recall@k": 0.8571,
+        "mrr": 0.7619,
         "chunk_hit_but_final_miss": {
           "count": 1,
-          "of": 6,
-          "rate": 0.1667
+          "of": 7,
+          "rate": 0.1429
         },
         "stale_or_wrong_text_ranked_above_answer": {
           "count": 0,
@@ -2422,12 +2423,12 @@
         "jaccard_0.8": {
           "slots_near_duplicate": {
             "count": 0,
-            "of": 14,
+            "of": 19,
             "rate": 0.0
           },
           "queries_with_any": {
             "count": 0,
-            "of": 6,
+            "of": 8,
             "rate": 0.0
           },
           "mean_slots_per_query": 0.0
@@ -2435,12 +2436,12 @@
         "jaccard_0.5": {
           "slots_near_duplicate": {
             "count": 0,
-            "of": 14,
+            "of": 19,
             "rate": 0.0
           },
           "queries_with_any": {
             "count": 0,
-            "of": 6,
+            "of": 8,
             "rate": 0.0
           },
           "mean_slots_per_query": 0.0
@@ -2449,55 +2450,55 @@
       "derived_pollution_top10": {
         "derived_slots": {
           "count": 0,
-          "of": 23,
+          "of": 30,
           "rate": 0.0
         },
         "mean_per_query": 0.0
       },
       "filters": {
         "queries_with_filter": {
-          "count": 6,
-          "of": 6,
+          "count": 8,
+          "of": 8,
           "rate": 1.0
         },
         "queries_with_app_filter": {
           "count": 0,
-          "of": 6,
+          "of": 8,
           "rate": 0.0
         },
         "excluded_all_relevant": {
           "count": 0,
-          "of": 6,
+          "of": 7,
           "rate": 0.0
         },
         "excluded_some_relevant": {
           "count": 0,
-          "of": 6,
+          "of": 7,
           "rate": 0.0
         },
         "zero_result_queries": {
           "count": 0,
-          "of": 6,
+          "of": 8,
           "rate": 0.0
         },
-        "observation_check_dropped_hits": 0
+        "observation_check_dropped_hits": 2
       },
       "abstention": {
         "absent_queries_returning_results": {
-          "count": 0,
-          "of": 0,
-          "rate": 0.0
+          "count": 1,
+          "of": 1,
+          "rate": 1.0
         },
         "top_chunk_score_absent": {
-          "n": 0,
-          "mean": 0.0,
-          "p50": 0.0,
-          "p95": 0.0,
-          "min": 0.0,
-          "max": 0.0
+          "n": 1,
+          "mean": 0.0167,
+          "p50": 0.0167,
+          "p95": 0.0167,
+          "min": 0.0167,
+          "max": 0.0167
         },
         "top_chunk_score_answerable": {
-          "n": 6,
+          "n": 7,
           "mean": 0.0167,
           "p50": 0.0167,
           "p95": 0.0167,
@@ -2505,31 +2506,31 @@
           "max": 0.0167
         },
         "top_final_score_absent": {
-          "n": 0,
-          "mean": 0.0,
-          "p50": 0.0,
-          "p95": 0.0,
-          "min": 0.0,
-          "max": 0.0
+          "n": 1,
+          "mean": 0.0164,
+          "p50": 0.0164,
+          "p95": 0.0164,
+          "min": 0.0164,
+          "max": 0.0164
         },
         "top_final_score_answerable": {
-          "n": 6,
+          "n": 7,
           "mean": 0.0166,
           "p50": 0.0167,
           "p95": 0.0167,
           "min": 0.0164,
           "max": 0.0167
         },
-        "auroc_answerable_vs_absent_chunk_score": null,
-        "auroc_answerable_vs_absent_final_score": null
+        "auroc_answerable_vs_absent_chunk_score": 0.5,
+        "auroc_answerable_vs_absent_final_score": 0.9286
       }
     }
   },
   "by_split": {
     "dev": {
-      "n_queries": 32,
+      "n_queries": 33,
       "n_answerable": 29,
-      "n_absent": 3,
+      "n_absent": 4,
       "chunk_level": {
         "hit": {
           "@1": {
@@ -2602,48 +2603,48 @@
         "jaccard_0.8": {
           "slots_near_duplicate": {
             "count": 4,
-            "of": 151,
-            "rate": 0.0265
+            "of": 153,
+            "rate": 0.0261
           },
           "queries_with_any": {
             "count": 4,
-            "of": 29,
-            "rate": 0.1379
+            "of": 30,
+            "rate": 0.1333
           },
-          "mean_slots_per_query": 0.1379
+          "mean_slots_per_query": 0.1333
         },
         "jaccard_0.5": {
           "slots_near_duplicate": {
             "count": 10,
-            "of": 151,
-            "rate": 0.0662
+            "of": 153,
+            "rate": 0.0654
           },
           "queries_with_any": {
             "count": 9,
-            "of": 29,
-            "rate": 0.3103
+            "of": 30,
+            "rate": 0.3
           },
-          "mean_slots_per_query": 0.3448
+          "mean_slots_per_query": 0.3333
         }
       },
       "derived_pollution_top10": {
         "derived_slots": {
           "count": 80,
-          "of": 203,
-          "rate": 0.3941
+          "of": 206,
+          "rate": 0.3883
         },
-        "mean_per_query": 0.2837
+        "mean_per_query": 0.2751
       },
       "filters": {
         "queries_with_filter": {
-          "count": 9,
-          "of": 32,
-          "rate": 0.2813
+          "count": 10,
+          "of": 33,
+          "rate": 0.303
         },
         "queries_with_app_filter": {
           "count": 4,
-          "of": 32,
-          "rate": 0.125
+          "of": 33,
+          "rate": 0.1212
         },
         "excluded_all_relevant": {
           "count": 2,
@@ -2657,19 +2658,19 @@
         },
         "zero_result_queries": {
           "count": 3,
-          "of": 32,
-          "rate": 0.0938
+          "of": 33,
+          "rate": 0.0909
         },
-        "observation_check_dropped_hits": 0
+        "observation_check_dropped_hits": 1
       },
       "abstention": {
         "absent_queries_returning_results": {
-          "count": 2,
-          "of": 3,
-          "rate": 0.6667
+          "count": 3,
+          "of": 4,
+          "rate": 0.75
         },
         "top_chunk_score_absent": {
-          "n": 2,
+          "n": 3,
           "mean": 0.0167,
           "p50": 0.0167,
           "p95": 0.0167,
@@ -2685,9 +2686,9 @@
           "max": 0.0167
         },
         "top_final_score_absent": {
-          "n": 2,
+          "n": 3,
           "mean": 0.0164,
-          "p50": 0.0161,
+          "p50": 0.0164,
           "p95": 0.0167,
           "min": 0.0161,
           "max": 0.0167
@@ -2701,74 +2702,74 @@
           "max": 0.0167
         },
         "auroc_answerable_vs_absent_chunk_score": 0.5,
-        "auroc_answerable_vs_absent_final_score": 0.6759
+        "auroc_answerable_vs_absent_final_score": 0.7407
       }
     },
     "test": {
-      "n_queries": 27,
-      "n_answerable": 25,
+      "n_queries": 28,
+      "n_answerable": 26,
       "n_absent": 2,
       "chunk_level": {
         "hit": {
           "@1": {
-            "count": 16,
-            "of": 25,
-            "rate": 0.64
+            "count": 17,
+            "of": 26,
+            "rate": 0.6538
           },
           "@10": {
-            "count": 22,
-            "of": 25,
-            "rate": 0.88
+            "count": 23,
+            "of": 26,
+            "rate": 0.8846
           },
           "@40": {
-            "count": 22,
-            "of": 25,
-            "rate": 0.88
+            "count": 23,
+            "of": 26,
+            "rate": 0.8846
           },
           "@5": {
-            "count": 22,
-            "of": 25,
-            "rate": 0.88
+            "count": 23,
+            "of": 26,
+            "rate": 0.8846
           },
           "@8": {
-            "count": 22,
-            "of": 25,
-            "rate": 0.88
+            "count": 23,
+            "of": 26,
+            "rate": 0.8846
           }
         },
         "recall": {
-          "@1": 0.62,
-          "@10": 0.88,
-          "@40": 0.88,
-          "@5": 0.86,
-          "@8": 0.88
+          "@1": 0.6346,
+          "@10": 0.8846,
+          "@40": 0.8846,
+          "@5": 0.8654,
+          "@8": 0.8846
         },
-        "mrr": 0.716,
-        "ndcg@10": 0.751
+        "mrr": 0.7269,
+        "ndcg@10": 0.7605
       },
       "final_level": {
         "k": 8,
         "hit@1": {
-          "count": 15,
-          "of": 25,
-          "rate": 0.6
+          "count": 16,
+          "of": 26,
+          "rate": 0.6154
         },
         "hit@k": {
-          "count": 20,
-          "of": 25,
-          "rate": 0.8
+          "count": 21,
+          "of": 26,
+          "rate": 0.8077
         },
         "all_relevant_found": {
-          "count": 20,
-          "of": 25,
-          "rate": 0.8
+          "count": 21,
+          "of": 26,
+          "rate": 0.8077
         },
-        "recall@k": 0.8,
-        "mrr": 0.6767,
+        "recall@k": 0.8077,
+        "mrr": 0.6891,
         "chunk_hit_but_final_miss": {
           "count": 2,
-          "of": 25,
-          "rate": 0.08
+          "of": 26,
+          "rate": 0.0769
         },
         "stale_or_wrong_text_ranked_above_answer": {
           "count": 0,
@@ -2780,65 +2781,65 @@
         "jaccard_0.8": {
           "slots_near_duplicate": {
             "count": 5,
-            "of": 115,
-            "rate": 0.0435
+            "of": 118,
+            "rate": 0.0424
           },
           "queries_with_any": {
             "count": 5,
-            "of": 24,
-            "rate": 0.2083
+            "of": 25,
+            "rate": 0.2
           },
-          "mean_slots_per_query": 0.2083
+          "mean_slots_per_query": 0.2
         },
         "jaccard_0.5": {
           "slots_near_duplicate": {
-            "count": 11,
-            "of": 115,
-            "rate": 0.0957
+            "count": 10,
+            "of": 118,
+            "rate": 0.0847
           },
           "queries_with_any": {
-            "count": 8,
-            "of": 24,
-            "rate": 0.3333
+            "count": 7,
+            "of": 25,
+            "rate": 0.28
           },
-          "mean_slots_per_query": 0.4583
+          "mean_slots_per_query": 0.4
         }
       },
       "derived_pollution_top10": {
         "derived_slots": {
           "count": 58,
-          "of": 159,
-          "rate": 0.3648
+          "of": 163,
+          "rate": 0.3558
         },
-        "mean_per_query": 0.2446
+        "mean_per_query": 0.2359
       },
       "filters": {
         "queries_with_filter": {
-          "count": 9,
-          "of": 27,
-          "rate": 0.3333
+          "count": 10,
+          "of": 28,
+          "rate": 0.3571
         },
         "queries_with_app_filter": {
           "count": 4,
-          "of": 27,
-          "rate": 0.1481
+          "of": 28,
+          "rate": 0.1429
         },
         "excluded_all_relevant": {
           "count": 2,
-          "of": 25,
-          "rate": 0.08
+          "of": 26,
+          "rate": 0.0769
         },
         "excluded_some_relevant": {
           "count": 2,
-          "of": 25,
-          "rate": 0.08
+          "of": 26,
+          "rate": 0.0769
         },
         "zero_result_queries": {
           "count": 3,
-          "of": 27,
-          "rate": 0.1111
+          "of": 28,
+          "rate": 0.1071
         },
-        "observation_check_dropped_hits": 0
+        "observation_check_dropped_hits": 1
       },
       "abstention": {
         "absent_queries_returning_results": {
@@ -2855,7 +2856,7 @@
           "max": 0.0
         },
         "top_chunk_score_answerable": {
-          "n": 24,
+          "n": 25,
           "mean": 0.0167,
           "p50": 0.0167,
           "p95": 0.0167,
@@ -2871,7 +2872,7 @@
           "max": 0.0
         },
         "top_final_score_answerable": {
-          "n": 24,
+          "n": 25,
           "mean": 0.0165,
           "p50": 0.0167,
           "p95": 0.0167,
@@ -2921,6 +2922,18 @@
         "max": 300.0
       },
       "tokens": "not available: Model2Vec's tokenizer is not exposed by model2vec-rs; words reported instead",
+      "context": {
+        "chunks_sharing_no_word_with_their_page_title": {
+          "count": 29,
+          "of": 83,
+          "rate": 0.3494
+        },
+        "chunks_under_100_bytes": {
+          "count": 31,
+          "of": 83,
+          "rate": 0.3735
+        }
+      },
       "chars_per_chunk_non_english": {
         "n": 3,
         "mean": 418.0,
@@ -2993,7 +3006,7 @@
           },
           "multi_snapshot": {
             "count": 0,
-            "of": 6,
+            "of": 5,
             "rate": 0.0
           },
           "near_duplicate_version": {
@@ -3018,7 +3031,7 @@
           },
           "time_scoped": {
             "count": 0,
-            "of": 6,
+            "of": 7,
             "rate": 0.0
           }
         },
@@ -3026,17 +3039,17 @@
           {
             "fixture": "chatgpt-bikewheel-long-01",
             "answer_text": "Torque specification for the rear axle nut: 85 Nm (63 lb-ft)",
-            "query_id": "q053"
+            "query_id": "q055"
           },
           {
             "fixture": "chatgpt-bikewheel-long-01",
             "answer_text": "Q: How long should the sealant cure before riding? A: Wait 24 hours before riding.",
-            "query_id": "q054"
+            "query_id": "q056"
           },
           {
             "fixture": "article-sourdough-longferment-01",
             "answer_text": "Baking Bake in a preheated Dutch oven at 245 °C for 20 minutes lid on",
-            "query_id": "q055"
+            "query_id": "q057"
           }
         ]
       },
@@ -3165,14 +3178,14 @@
         "rate": 1.0
       },
       "noise_strings_leaked_into_body": {
-        "count": 36,
+        "count": 35,
         "of": 105,
-        "rate": 0.3429
+        "rate": 0.3333
       },
       "fixtures_with_any_noise_leak": {
-        "count": 16,
+        "count": 15,
         "of": 24,
-        "rate": 0.6667
+        "rate": 0.625
       },
       "navigation_only_fixtures": [
         {
@@ -3384,9 +3397,7 @@
           "body_bytes": 162,
           "chunks": 1,
           "planted_facts_lost": [],
-          "noise_leaked": [
-            "Send"
-          ]
+          "noise_leaked": []
         },
         {
           "fixture": "chatgpt-bikewheel-long-01",
@@ -3705,6 +3716,16 @@
         },
         {
           "rank": 4,
+          "snapshot_id": 7,
+          "fixtures": [
+            "email-invoice-4471-01"
+          ],
+          "best_chunk_id": null,
+          "score": 0.0151515,
+          "hit": false
+        },
+        {
+          "rank": 5,
           "snapshot_id": 10,
           "fixtures": [
             "xchat-finance-priya-01"
@@ -3714,7 +3735,7 @@
           "hit": false
         },
         {
-          "rank": 5,
+          "rank": 6,
           "snapshot_id": 9,
           "fixtures": [
             "chatgpt-garden-scrolled-01"
@@ -3724,20 +3745,10 @@
           "hit": false
         },
         {
-          "rank": 6,
+          "rank": 7,
           "snapshot_id": 8,
           "fixtures": [
             "chatgpt-garden-top-01"
-          ],
-          "best_chunk_id": null,
-          "score": 0.0151515,
-          "hit": false
-        },
-        {
-          "rank": 7,
-          "snapshot_id": 7,
-          "fixtures": [
-            "email-invoice-4471-01"
           ],
           "best_chunk_id": null,
           "score": 0.0151515,
@@ -6206,7 +6217,7 @@
       "derived_in_top10": 7,
       "near_duplicate_slots": {
         "jaccard_0.8": 0,
-        "jaccard_0.5": 1,
+        "jaccard_0.5": 0,
         "final_slots": 8
       },
       "top5_chunks": [
@@ -6358,9 +6369,9 @@
         },
         {
           "rank": 7,
-          "snapshot_id": 9,
+          "snapshot_id": 7,
           "fixtures": [
-            "chatgpt-garden-scrolled-01"
+            "email-invoice-4471-01"
           ],
           "best_chunk_id": null,
           "score": 0.0138889,
@@ -6368,9 +6379,9 @@
         },
         {
           "rank": 8,
-          "snapshot_id": 8,
+          "snapshot_id": 9,
           "fixtures": [
-            "chatgpt-garden-top-01"
+            "chatgpt-garden-scrolled-01"
           ],
           "best_chunk_id": null,
           "score": 0.0138889,
@@ -6752,9 +6763,9 @@
       "filter_excluded_all_relevant": false,
       "filter_excluded_any_relevant": false,
       "excluded_by": [],
-      "observation_dropped": 0,
+      "observation_dropped": 1,
       "zero_results": false,
-      "n_ranked": 5,
+      "n_ranked": 6,
       "n_collapsed": 3,
       "n_final": 3,
       "chunk_first_hit_rank": [
@@ -6842,17 +6853,17 @@
           "rank": 5,
           "kind": "chunk",
           "derived_kind": null,
-          "chunk_id": 40,
+          "chunk_id": 19,
           "snapshot_ids": [
-            13
+            7
           ],
           "fixtures": [
-            "chatgpt-lisbon-trip-01"
+            "email-invoice-4471-01"
           ],
           "score": 0.015625,
-          "passed_time_check": true,
+          "passed_time_check": false,
           "hit": false,
-          "text": "ChatGPT said:\nTram 28 is crowded after 10:00. Ride it before 9:00 or skip it and walk the Alfama hills instead."
+          "text": "Harbor Print Billing\nInvoice 4471\nPlease find invoice 4471 attached.\nCampus Library\nYour hold is ready\nThe book you requested is waiting at the desk.\nOrbit Bank\nMonthly statement\nYour October statemen"
         }
       ],
       "final": [
@@ -7013,6 +7024,254 @@
       "id": "q022",
       "type": "time_scoped",
       "split": "test",
+      "query": "which invoice email did I open yesterday",
+      "expect_abstain": false,
+      "filter": [
+        {
+          "key": "capture_time",
+          "range": {
+            "lt": 1792195200000
+          }
+        },
+        {
+          "key": "last_seen",
+          "range": {
+            "gte": 1792108800000
+          }
+        }
+      ],
+      "time_bounds": [
+        1792108800000,
+        1792195200000
+      ],
+      "filter_excluded_all_relevant": false,
+      "filter_excluded_any_relevant": false,
+      "excluded_by": [],
+      "observation_dropped": 0,
+      "zero_results": false,
+      "n_ranked": 3,
+      "n_collapsed": 3,
+      "n_final": 3,
+      "chunk_first_hit_rank": [
+        1
+      ],
+      "final_first_hit_rank": [
+        1
+      ],
+      "chunk_found_final_lost": false,
+      "wrong_before_right": null,
+      "top_score_chunk": 0.0166666675,
+      "top_score_final": 0.0166666675,
+      "derived_in_top10": 0,
+      "near_duplicate_slots": {
+        "jaccard_0.8": 0,
+        "jaccard_0.5": 0,
+        "final_slots": 3
+      },
+      "top5_chunks": [
+        {
+          "rank": 1,
+          "kind": "chunk",
+          "derived_kind": null,
+          "chunk_id": 19,
+          "snapshot_ids": [
+            7
+          ],
+          "fixtures": [
+            "email-invoice-4471-01"
+          ],
+          "score": 0.0166667,
+          "passed_time_check": true,
+          "hit": true,
+          "text": "Harbor Print Billing\nInvoice 4471\nPlease find invoice 4471 attached.\nCampus Library\nYour hold is ready\nThe book you requested is waiting at the desk.\nOrbit Bank\nMonthly statement\nYour October statemen"
+        },
+        {
+          "rank": 2,
+          "kind": "chunk",
+          "derived_kind": null,
+          "chunk_id": 69,
+          "snapshot_ids": [
+            18
+          ],
+          "fixtures": [
+            "notes-q4-plan-01"
+          ],
+          "score": 0.0163934,
+          "passed_time_check": true,
+          "hit": false,
+          "text": "Groceries and errands\nToday\nQ4 planning notes\nYesterday\nBook list\nLast week\nQ4 planning notes\n\nGoals\n- Ship v2 onboarding by 20 November\n- Cut the support backlog below 40 tickets\n- Hire one more back"
+        },
+        {
+          "rank": 3,
+          "kind": "chunk",
+          "derived_kind": null,
+          "chunk_id": 82,
+          "snapshot_ids": [
+            22
+          ],
+          "fixtures": [
+            "terminal-cargo-test-01"
+          ],
+          "score": 0.016129,
+          "passed_time_check": true,
+          "hit": false,
+          "text": "Last login: Fri Oct 16 16:02:11 on ttys003\ndev@orbit-mbp invoice-svc % cargo test\n   Compiling invoice-svc v0.4.2 (/Users/dev/invoice-svc)\nerror[E0382]: borrow of moved value: `config`\n  --> src/billi"
+        }
+      ],
+      "final": [
+        {
+          "rank": 1,
+          "snapshot_id": 7,
+          "fixtures": [
+            "email-invoice-4471-01"
+          ],
+          "best_chunk_id": 19,
+          "score": 0.0166667,
+          "hit": true
+        },
+        {
+          "rank": 2,
+          "snapshot_id": 22,
+          "fixtures": [
+            "terminal-cargo-test-01"
+          ],
+          "best_chunk_id": 82,
+          "score": 0.016129,
+          "hit": false
+        },
+        {
+          "rank": 3,
+          "snapshot_id": 18,
+          "fixtures": [
+            "notes-q4-plan-01"
+          ],
+          "best_chunk_id": 69,
+          "score": 0.0163934,
+          "hit": false
+        }
+      ]
+    },
+    {
+      "id": "q023",
+      "type": "time_scoped",
+      "split": "dev",
+      "query": "which invoice email did I look at on 2026-10-15",
+      "expect_abstain": true,
+      "filter": [
+        {
+          "key": "capture_time",
+          "range": {
+            "lt": 1792108800000
+          }
+        },
+        {
+          "key": "last_seen",
+          "range": {
+            "gte": 1792022400000
+          }
+        }
+      ],
+      "time_bounds": [
+        1792022400000,
+        1792108800000
+      ],
+      "filter_excluded_all_relevant": false,
+      "filter_excluded_any_relevant": false,
+      "excluded_by": [],
+      "observation_dropped": 1,
+      "zero_results": false,
+      "n_ranked": 3,
+      "n_collapsed": 2,
+      "n_final": 2,
+      "chunk_first_hit_rank": [],
+      "final_first_hit_rank": [],
+      "chunk_found_final_lost": false,
+      "wrong_before_right": null,
+      "top_score_chunk": 0.0166666675,
+      "top_score_final": 0.0163934417,
+      "derived_in_top10": 0,
+      "near_duplicate_slots": {
+        "jaccard_0.8": 0,
+        "jaccard_0.5": 0,
+        "final_slots": 2
+      },
+      "top5_chunks": [
+        {
+          "rank": 1,
+          "kind": "chunk",
+          "derived_kind": null,
+          "chunk_id": 19,
+          "snapshot_ids": [
+            7
+          ],
+          "fixtures": [
+            "email-invoice-4471-01"
+          ],
+          "score": 0.0166667,
+          "passed_time_check": false,
+          "hit": false,
+          "text": "Harbor Print Billing\nInvoice 4471\nPlease find invoice 4471 attached.\nCampus Library\nYour hold is ready\nThe book you requested is waiting at the desk.\nOrbit Bank\nMonthly statement\nYour October statemen"
+        },
+        {
+          "rank": 2,
+          "kind": "chunk",
+          "derived_kind": null,
+          "chunk_id": 55,
+          "snapshot_ids": [
+            15
+          ],
+          "fixtures": [
+            "slack-standup-thu-01"
+          ],
+          "score": 0.0163934,
+          "passed_time_check": true,
+          "hit": false,
+          "text": "Northwind\n# standup\nThursday, October 15\n8:55 AM\nUpdate: standup is now 10:15 AM because of the vendor call.\n8:58 AM\nOk, 10:15 AM it is.\n9:01 AM\nSame call link as before.\n9:05 AM\nThe vendor wants to w"
+        },
+        {
+          "rank": 3,
+          "kind": "chunk",
+          "derived_kind": null,
+          "chunk_id": 60,
+          "snapshot_ids": [
+            17
+          ],
+          "fixtures": [
+            "chatgpt-bikewheel-long-01"
+          ],
+          "score": 0.016129,
+          "passed_time_check": true,
+          "hit": false,
+          "text": "ChatGPT said:\nThought for 21 seconds\nWork around the wheel in quarter turns. Lateral true comes first, then radial true, then dish. Resist the urge to chase one wobble with a single big adjustment bec"
+        }
+      ],
+      "final": [
+        {
+          "rank": 1,
+          "snapshot_id": 15,
+          "fixtures": [
+            "slack-standup-thu-01"
+          ],
+          "best_chunk_id": 55,
+          "score": 0.0163934,
+          "hit": false
+        },
+        {
+          "rank": 2,
+          "snapshot_id": 17,
+          "fixtures": [
+            "chatgpt-bikewheel-long-01"
+          ],
+          "best_chunk_id": 60,
+          "score": 0.016129,
+          "hit": false
+        }
+      ]
+    },
+    {
+      "id": "q024",
+      "type": "time_scoped",
+      "split": "test",
       "query": "how many tests failed yesterday",
       "expect_abstain": false,
       "filter": [
@@ -7141,7 +7400,7 @@
       ]
     },
     {
-      "id": "q023",
+      "id": "q025",
       "type": "app_scoped",
       "split": "dev",
       "query": "In Slack, when is the standup now?",
@@ -7237,7 +7496,7 @@
       ]
     },
     {
-      "id": "q024",
+      "id": "q026",
       "type": "app_scoped",
       "split": "test",
       "query": "in Notes what are my Q4 goals",
@@ -7333,7 +7592,7 @@
       ]
     },
     {
-      "id": "q025",
+      "id": "q027",
       "type": "app_scoped",
       "split": "dev",
       "query": "in the terminal which error mentions a moved value",
@@ -7403,7 +7662,7 @@
       ]
     },
     {
-      "id": "q026",
+      "id": "q028",
       "type": "app_scoped",
       "split": "test",
       "query": "in Safari what hydration did the long cold ferment loaf use",
@@ -7567,7 +7826,7 @@
       ]
     },
     {
-      "id": "q027",
+      "id": "q029",
       "type": "domain_scoped",
       "split": "dev",
       "query": "on bakersnotebook.example.org what temperature do I bake the loaf at",
@@ -7653,7 +7912,7 @@
       ]
     },
     {
-      "id": "q028",
+      "id": "q030",
       "type": "domain_scoped",
       "split": "test",
       "query": "what does crumbandcrust.example.com say about hydration",
@@ -7723,7 +7982,7 @@
       ]
     },
     {
-      "id": "q029",
+      "id": "q031",
       "type": "domain_scoped",
       "split": "dev",
       "query": "on qa.example.org which error code is shown for a quantity of 10,000",
@@ -7793,7 +8052,7 @@
       ]
     },
     {
-      "id": "q030",
+      "id": "q032",
       "type": "domain_scoped",
       "split": "test",
       "query": "on chatgpt.com what spoke tension target did it suggest",
@@ -7987,7 +8246,7 @@
       ]
     },
     {
-      "id": "q031",
+      "id": "q033",
       "type": "multi_snapshot",
       "split": "dev",
       "query": "what is the invoice 4471 amount and how overdue is it",
@@ -8192,7 +8451,7 @@
       ]
     },
     {
-      "id": "q032",
+      "id": "q034",
       "type": "multi_snapshot",
       "split": "test",
       "query": "what are the flight details for the Lisbon trip",
@@ -8345,7 +8604,7 @@
       ]
     },
     {
-      "id": "q033",
+      "id": "q035",
       "type": "multi_snapshot",
       "split": "dev",
       "query": "what standup times have been announced this week",
@@ -8544,7 +8803,7 @@
       ]
     },
     {
-      "id": "q034",
+      "id": "q036",
       "type": "multi_snapshot",
       "split": "test",
       "query": "when do I need to pay Harbor Print",
@@ -8751,7 +9010,7 @@
       ]
     },
     {
-      "id": "q035",
+      "id": "q037",
       "type": "absent",
       "split": "dev",
       "query": "what is the capital city of Mongolia",
@@ -8782,7 +9041,7 @@
       "final": []
     },
     {
-      "id": "q036",
+      "id": "q038",
       "type": "absent",
       "split": "test",
       "query": "what is the wifi network name at my parents house",
@@ -8813,7 +9072,7 @@
       "final": []
     },
     {
-      "id": "q037",
+      "id": "q039",
       "type": "absent",
       "split": "dev",
       "query": "which hotel did I book in Tokyo",
@@ -9006,7 +9265,7 @@
       ]
     },
     {
-      "id": "q038",
+      "id": "q040",
       "type": "absent",
       "split": "test",
       "query": "how many calories are in a pepperoni pizza",
@@ -9037,7 +9296,7 @@
       "final": []
     },
     {
-      "id": "q039",
+      "id": "q041",
       "type": "absent",
       "split": "dev",
       "query": "what is the date of my dentist appointment",
@@ -9122,7 +9381,7 @@
       ]
     },
     {
-      "id": "q040",
+      "id": "q042",
       "type": "ambiguous_entity",
       "split": "dev",
       "query": "what did Priya say about the invoice",
@@ -9329,7 +9588,7 @@
       ]
     },
     {
-      "id": "q041",
+      "id": "q043",
       "type": "ambiguous_entity",
       "split": "test",
       "query": "what did Priya say about the logo",
@@ -9485,6 +9744,16 @@
         },
         {
           "rank": 5,
+          "snapshot_id": 7,
+          "fixtures": [
+            "email-invoice-4471-01"
+          ],
+          "best_chunk_id": null,
+          "score": 0.0144928,
+          "hit": false
+        },
+        {
+          "rank": 6,
           "snapshot_id": 9,
           "fixtures": [
             "chatgpt-garden-scrolled-01"
@@ -9494,20 +9763,10 @@
           "hit": false
         },
         {
-          "rank": 6,
+          "rank": 7,
           "snapshot_id": 8,
           "fixtures": [
             "chatgpt-garden-top-01"
-          ],
-          "best_chunk_id": null,
-          "score": 0.0144928,
-          "hit": false
-        },
-        {
-          "rank": 7,
-          "snapshot_id": 7,
-          "fixtures": [
-            "email-invoice-4471-01"
           ],
           "best_chunk_id": null,
           "score": 0.0144928,
@@ -9516,7 +9775,7 @@
       ]
     },
     {
-      "id": "q042",
+      "id": "q044",
       "type": "ambiguous_entity",
       "split": "dev",
       "query": "what did Priya say about the favicon",
@@ -9672,6 +9931,16 @@
         },
         {
           "rank": 5,
+          "snapshot_id": 7,
+          "fixtures": [
+            "email-invoice-4471-01"
+          ],
+          "best_chunk_id": null,
+          "score": 0.0144928,
+          "hit": false
+        },
+        {
+          "rank": 6,
           "snapshot_id": 9,
           "fixtures": [
             "chatgpt-garden-scrolled-01"
@@ -9681,20 +9950,10 @@
           "hit": false
         },
         {
-          "rank": 6,
+          "rank": 7,
           "snapshot_id": 8,
           "fixtures": [
             "chatgpt-garden-top-01"
-          ],
-          "best_chunk_id": null,
-          "score": 0.0144928,
-          "hit": false
-        },
-        {
-          "rank": 7,
-          "snapshot_id": 7,
-          "fixtures": [
-            "email-invoice-4471-01"
           ],
           "best_chunk_id": null,
           "score": 0.0144928,
@@ -9703,7 +9962,7 @@
       ]
     },
     {
-      "id": "q043",
+      "id": "q045",
       "type": "ambiguous_entity",
       "split": "test",
       "query": "what did Priya say about the standup time",
@@ -9902,7 +10161,7 @@
       ]
     },
     {
-      "id": "q044",
+      "id": "q046",
       "type": "filter_trap",
       "split": "dev",
       "query": "what is an edge case in this test plan",
@@ -9946,7 +10205,7 @@
       "final": []
     },
     {
-      "id": "q045",
+      "id": "q047",
       "type": "filter_trap",
       "split": "test",
       "query": "what is the terminal velocity of a skydiver",
@@ -9990,7 +10249,7 @@
       "final": []
     },
     {
-      "id": "q046",
+      "id": "q048",
       "type": "filter_trap",
       "split": "dev",
       "query": "what did the messages from the landlord say about the deposit",
@@ -10034,7 +10293,7 @@
       "final": []
     },
     {
-      "id": "q047",
+      "id": "q049",
       "type": "filter_trap",
       "split": "test",
       "query": "what do the notes in the recipe say about the baking temperature for the cold ferment loaf",
@@ -10132,7 +10391,7 @@
       ]
     },
     {
-      "id": "q048",
+      "id": "q050",
       "type": "near_duplicate_version",
       "split": "dev",
       "query": "what is my current monthly rent budget",
@@ -10329,7 +10588,7 @@
       ]
     },
     {
-      "id": "q049",
+      "id": "q051",
       "type": "near_duplicate_version",
       "split": "test",
       "query": "what did I decide about the apartment",
@@ -10486,7 +10745,7 @@
       ]
     },
     {
-      "id": "q050",
+      "id": "q052",
       "type": "near_duplicate_version",
       "split": "dev",
       "query": "how far apart should I plant tomatoes",
@@ -10650,9 +10909,9 @@
         },
         {
           "rank": 5,
-          "snapshot_id": 10,
+          "snapshot_id": 7,
           "fixtures": [
-            "xchat-finance-priya-01"
+            "email-invoice-4471-01"
           ],
           "best_chunk_id": null,
           "score": 0.015625,
@@ -10660,9 +10919,9 @@
         },
         {
           "rank": 6,
-          "snapshot_id": 7,
+          "snapshot_id": 10,
           "fixtures": [
-            "email-invoice-4471-01"
+            "xchat-finance-priya-01"
           ],
           "best_chunk_id": null,
           "score": 0.015625,
@@ -10691,7 +10950,7 @@
       ]
     },
     {
-      "id": "q051",
+      "id": "q053",
       "type": "near_duplicate_version",
       "split": "test",
       "query": "when should I sow garlic",
@@ -10838,7 +11097,7 @@
       ]
     },
     {
-      "id": "q052",
+      "id": "q054",
       "type": "near_duplicate_version",
       "split": "dev",
       "query": "what was my original rent cap before I changed it",
@@ -11025,7 +11284,7 @@
       ]
     },
     {
-      "id": "q053",
+      "id": "q055",
       "type": "boundary_fact",
       "split": "dev",
       "query": "what is the torque for the rear axle nut",
@@ -11188,7 +11447,7 @@
       ]
     },
     {
-      "id": "q054",
+      "id": "q056",
       "type": "boundary_fact",
       "split": "test",
       "query": "how long should the tubeless sealant cure before riding",
@@ -11365,7 +11624,7 @@
       ]
     },
     {
-      "id": "q055",
+      "id": "q057",
       "type": "boundary_fact",
       "split": "dev",
       "query": "what oven temperature does the Baking section give",
@@ -11562,7 +11821,7 @@
       ]
     },
     {
-      "id": "q056",
+      "id": "q058",
       "type": "non_english",
       "split": "dev",
       "query": "दाल को कितनी देर तक उबालना चाहिए",
@@ -11701,7 +11960,7 @@
       ]
     },
     {
-      "id": "q057",
+      "id": "q059",
       "type": "non_english",
       "split": "test",
       "query": "तड़के के लिए कितना घी चाहिए",
@@ -11840,7 +12099,7 @@
       ]
     },
     {
-      "id": "q058",
+      "id": "q060",
       "type": "non_english",
       "split": "dev",
       "query": "how long should I boil the dal for the tadka recipe",
@@ -12017,7 +12276,7 @@
       ]
     },
     {
-      "id": "q059",
+      "id": "q061",
       "type": "non_english",
       "split": "test",
       "query": "जीरा कितना डालें",
@@ -12097,15 +12356,15 @@
     }
   ],
   "timing": {
-    "ingest_ms": 756.7654,
+    "ingest_ms": 839.8842,
     "query_latency_ms": {
-      "n": 59,
-      "mean": 6.4498,
-      "p50": 6.5311,
-      "p95": 8.7148,
-      "min": 4.4375,
-      "max": 10.4471
+      "n": 61,
+      "mean": 5.9333,
+      "p50": 6.0771,
+      "p95": 7.8121,
+      "min": 4.0326,
+      "max": 9.7476
     },
-    "index_size_bytes": 175127117
+    "index_size_bytes": 175118901
   }
 }

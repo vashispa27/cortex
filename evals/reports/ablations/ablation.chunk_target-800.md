@@ -1,8 +1,8 @@
 # Retrieval eval: chunk_target=800
 
-- commit `017fce468f` (dirty) · model `minishlab/potion-base-32M@1e5a03f8eeb2c98b928fbbd846f22f816360919f:model2vec-rs-0.3.0:default-512` · cleaner v3 · chunk target 800 B
+- commit `9eb3aca58b` · model `minishlab/potion-base-32M@1e5a03f8eeb2c98b928fbbd846f22f816360919f:model2vec-rs-0.3.0:default-512` · cleaner v3 · chunk target 800 B
 - params: `{"prefetch":80,"fused_limit":40,"rrf_k":60,"final_k":8,"use_filters":true,"use_rerank_bonus":true,"include_derived":true,"mode":"hybrid","now_ms":1792238400000}`
-- corpus: 24 fixtures {"hand_authored":24} · gold: 59 evaluated of 59 ("all" split) · clock fixed at 2026-10-17T12:00Z, TZ=UTC
+- corpus: 24 fixtures {"hand_authored":24} · gold: 61 evaluated of 61 ("all" split) · clock fixed at 2026-10-17T12:00Z, TZ=UTC
 
 Counts are queries; small n means wide intervals, so differences of a few queries are within noise.
 
@@ -10,23 +10,23 @@ Counts are queries; small n means wide intervals, so differences of a few querie
 
 | level | metric | value |
 |---|---|---|
-| chunk | hit@1 | 32/54 (59%) |
-| chunk | hit@5 | 46/54 (85%) |
-| chunk | hit@8 | 47/54 (87%) |
-| chunk | hit@10 | 49/54 (91%) |
-| chunk | hit@40 | 50/54 (93%) |
-| chunk | MRR / nDCG@10 | 0.7058 / 0.7433 |
-| final | hit@1 | 34/54 (63%) |
-| final | hit@8 | 42/54 (78%) |
-| final | MRR | 0.696 |
-| final | chunk found but lost by final stage | 8/54 (15%) |
+| chunk | hit@1 | 32/55 (58%) |
+| chunk | hit@5 | 47/55 (85%) |
+| chunk | hit@8 | 48/55 (87%) |
+| chunk | hit@10 | 50/55 (91%) |
+| chunk | hit@40 | 51/55 (93%) |
+| chunk | MRR / nDCG@10 | 0.699 / 0.7389 |
+| final | hit@1 | 34/55 (62%) |
+| final | hit@8 | 42/55 (76%) |
+| final | MRR | 0.6833 |
+| final | chunk found but lost by final stage | 9/55 (16%) |
 | final | stale/wrong text above the answer | 2/8 (25%) |
-| crowding | final slots near-duplicate (Jaccard ≥0.8 / ≥0.5) | 15/375 (4%) / 29/375 (8%) |
-| derived | top-10 slots held by derived points | 150/497 (30%) |
-| filters | filter excluded every relevant snapshot | 4/54 (7%) |
-| filters | zero-result queries | 2/59 (3%) |
-| abstention | absent queries that still returned results | 5/5 (100%) |
-| abstention | AUROC answerable vs absent by top score (chunk / final) | 0.7731 / 0.9442 |
+| crowding | final slots near-duplicate (Jaccard ≥0.8 / ≥0.5) | 15/388 (4%) / 27/388 (7%) |
+| derived | top-10 slots held by derived points | 150/517 (29%) |
+| filters | filter excluded every relevant snapshot | 4/55 (7%) |
+| filters | zero-result queries | 2/61 (3%) |
+| abstention | absent queries that still returned results | 6/6 (100%) |
+| abstention | AUROC answerable vs absent by top score (chunk / final) | 0.6824 / 0.9292 |
 
 ## By query type
 
@@ -44,7 +44,7 @@ Counts are queries; small n means wide intervals, so differences of a few querie
 | non_english | 4 | 2/4 (50%) | 3/4 (75%) | 4/4 (100%) | 0.5694 | 2/4 (50%) | 2/4 (50%) | 0.5 | 0/4 (0%) |
 | paraphrase | 7 | 3/7 (43%) | 6/7 (86%) | 7/7 (100%) | 0.6333 | 3/7 (43%) | 5/7 (71%) | 0.5714 | 0/7 (0%) |
 | speaker | 4 | 3/4 (75%) | 4/4 (100%) | 4/4 (100%) | 0.8125 | 4/4 (100%) | 4/4 (100%) | 1.0 | 0/4 (0%) |
-| time_scoped | 6 | 4/6 (67%) | 6/6 (100%) | 6/6 (100%) | 0.8056 | 4/6 (67%) | 5/6 (83%) | 0.7222 | 0/6 (0%) |
+| time_scoped | 7 | 4/7 (57%) | 7/7 (100%) | 7/7 (100%) | 0.7381 | 4/7 (57%) | 5/7 (71%) | 0.619 | 0/8 (0%) |
 
 ## Chunking
 
@@ -56,9 +56,9 @@ Counts are queries; small n means wide intervals, so differences of a few querie
 ## Cleaner
 
 - planted facts surviving cleaning: 66/66 (100%)
-- noise strings leaked into bodies: 36/105 (34%) (fixtures with any leak: 16/24 (67%))
+- noise strings leaked into bodies: 35/105 (33%) (fixtures with any leak: 15/24 (62%))
 - navigation-only fixtures: [{"fixture":"nav-only-newtab-01","quality":"navigation_only","body_bytes":0,"ok":true}]
 
 ## Cost
 
-- ingest 753.772 ms · query latency p50 9.9076 ms / p95 13.6979 ms · index on disk 174635885 bytes
+- ingest 819.9364 ms · query latency p50 9.2302 ms / p95 13.235 ms · index on disk 175111021 bytes
