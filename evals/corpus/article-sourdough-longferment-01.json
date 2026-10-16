@@ -414,6 +414,33 @@
    "children": []
   },
   {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Most of the work happens while you are asleep or at your desk. You mix the dough in the evening, let it rise slowly at room temperature, and then park it in the refrigerator so the flavor keeps developing without the dough over-proofing.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
    "role": "AXHeading",
    "name": "The Long Cold Ferment - Baker's Notebook",
    "value": "The schedule",
@@ -548,7 +575,34 @@
   {
    "role": "AXStaticText",
    "name": "The Long Cold Ferment - Baker's Notebook",
-   "value": "If your kitchen runs warmer, shorten the bulk rather than raising the starter percentage. A warm kitchen can finish the same job in half the time.",
+   "value": "If your kitchen runs warmer, shorten the bulk rather than raising the starter percentage. A warm kitchen can finish the same job in half the time, so watch the dough rather than the clock.",
+   "ancestor_path": [
+    {
+     "role": "AXWindow",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXWebArea",
+     "name": "The Long Cold Ferment - Baker's Notebook"
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    },
+    {
+     "role": "AXGroup",
+     "name": ""
+    }
+   ],
+   "visible": true,
+   "protected": false,
+   "excluded": false,
+   "children": []
+  },
+  {
+   "role": "AXStaticText",
+   "name": "The Long Cold Ferment - Baker's Notebook",
+   "value": "Use a clear container so you can see the bubbles forming along the sides. The dough is ready when it has grown by about half and the surface looks domed and slightly glossy. Trust the dough more than the schedule and adjust the timing to your own kitchen. Different flours drink water at different rates, so treat the hydration as a starting point. Write down the room temperature each time; it explains most surprises. A cooler kitchen simply means a longer rise, not a worse loaf. Keep the starter at a steady feeding routine so the timings stay repeatable. If the dough looks slack after the first hour, add one extra set of stretch and folds.",
    "ancestor_path": [
     {
      "role": "AXWindow",

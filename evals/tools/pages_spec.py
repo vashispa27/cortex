@@ -277,33 +277,72 @@ add(slack_page("slack-standup-thu-01", "# standup",
 
 _BAKER_FOOT = ["© 2026 Baker's Notebook. All rights reserved.", ("Privacy",), ("Terms",),
                ("Subscribe to the newsletter",)]
+_BAKER_NAV = ["Recipes", "Techniques", "Equipment", "Newsletter", "About"]
+_BAKER_PRE = ["We use cookies to improve your experience.", "Baker's Notebook"] + _BAKER_NAV + [
+    "The Long Cold Ferment", "By Anika Rao · 9 October 2026 · 7 min read"]
+_BAKER_BLOCKS_1 = [
+    ("p", "A slow, cold ferment is the simplest way to build flavor in a sourdough loaf without adding more starter. It trades your attention for time."),
+    ("p", "Most of the work happens while you are asleep or at your desk. You mix the dough in the evening, let it rise slowly at room temperature, and then park it in the refrigerator so the flavor keeps developing without the dough over-proofing."),
+    ("h", "The schedule"),
+    ("ul", ["Mix flour, water and 20 percent starter at 78% hydration.",
+            "Bulk ferment for 14 hours at 21 °C.",
+            "Shape, then retard in the refrigerator for 12 hours at 4 °C."]),
+    ("p", "If your kitchen runs warmer, shorten the bulk rather than raising the starter percentage. A warm kitchen can finish the same job in half the time, so watch the dough rather than the clock."),
+    ("p", "Use a clear container so you can see the bubbles forming along the sides. The dough is ready when it has grown by about half and the surface looks domed and slightly glossy."),
+]
+
+
+def _fit_article(blocks, heading, target=1598, lo=1480):
+    """Append whole sentences to the last paragraph so `heading` is the last line that fits in
+    1,600 bytes (the next paragraph is ~140 bytes, so it then opens the second chunk)."""
+    lines = list(_BAKER_PRE)
+    for kind, val in blocks:
+        lines.extend(val if kind == "ul" else [val])
+    base = sum(len(l.encode()) + 1 for l in lines) + len(heading.encode()) + 1
+    sentences = [
+        " Trust the dough more than the schedule and adjust the timing to your own kitchen.",
+        " Different flours drink water at different rates, so treat the hydration as a starting point.",
+        " Write down the room temperature each time; it explains most surprises.",
+        " A cooler kitchen simply means a longer rise, not a worse loaf.",
+        " Keep the starter at a steady feeding routine so the timings stay repeatable.",
+        " If the dough looks slack after the first hour, add one extra set of stretch and folds.",
+        " Cold dough scores more cleanly, so slash the loaf straight from the refrigerator.",
+        " Resist the urge to rush the final proof; a slightly under-proofed loaf is better than a collapsed one.",
+    ]
+    pad = ""
+    for sentence in sentences:
+        if base + len(pad.encode()) + len(sentence.encode()) <= target:
+            pad += sentence
+    assert base + len(pad.encode()) >= lo, (base, len(pad.encode()))
+    kind, val = blocks[-1]
+    return blocks[:-1] + [(kind, val + pad)]
+
+
+_BAKER_BLOCKS_1 = _fit_article(_BAKER_BLOCKS_1, "Baking")
+_BAKER_BLOCKS_2 = [
+    ("h", "Baking"),
+    ("p", "Bake in a preheated Dutch oven at 245 °C for 20 minutes lid on, then 22 minutes lid off. Let the loaf cool for an hour before slicing."),
+    ("h", "Why the cold works"),
+    ("p", "Cold fermentation slows yeast activity more than it slows the bacteria that make acid, so the dough develops tang and aroma without over-proofing. The longer the dough sits, the more the enzymes break down starch into sugars that brown beautifully in the oven."),
+    ("p", "A dough that has chilled overnight is also firmer and easier to shape. If the surface feels sticky when you pull it from the refrigerator, dust the top lightly with rice flour before turning it out."),
+    ("h", "Troubleshooting"),
+    ("ul", ["Flat loaf: the dough was probably over-proofed before it went into the cold.",
+            "Dense crumb: extend the stretch and fold sequence during the first two hours.",
+            "Pale crust: bake the second stage a few minutes longer until it is deep brown."]),
+]
 add(article_page(
     "article-sourdough-longferment-01", "Baker's Notebook",
     "The Long Cold Ferment - Baker's Notebook",
     "https://bakersnotebook.example.org/posts/long-cold-ferment",
-    ["Recipes", "Techniques", "Equipment", "Newsletter", "About"],
+    _BAKER_NAV,
     "The Long Cold Ferment", "By Anika Rao · 9 October 2026 · 7 min read",
-    [("p", "A slow, cold ferment is the simplest way to build flavor in a sourdough loaf without adding more starter. It trades your attention for time."),
-     ("h", "The schedule"),
-     ("ul", ["Mix flour, water and 20 percent starter at 78% hydration.",
-             "Bulk ferment for 14 hours at 21 °C.",
-             "Shape, then retard in the refrigerator for 12 hours at 4 °C."]),
-     ("p", "If your kitchen runs warmer, shorten the bulk rather than raising the starter percentage. A warm kitchen can finish the same job in half the time."),
-     ("h", "Baking"),
-     ("p", "Bake in a preheated Dutch oven at 245 °C for 20 minutes lid on, then 22 minutes lid off. Let the loaf cool for an hour before slicing."),
-     ("h", "Why the cold works"),
-     ("p", "Cold fermentation slows yeast activity more than it slows the bacteria that make acid, so the dough develops tang and aroma without over-proofing. The longer the dough sits, the more the enzymes break down starch into sugars that brown beautifully in the oven."),
-     ("p", "A dough that has chilled overnight is also firmer and easier to shape. If the surface feels sticky when you pull it from the refrigerator, dust the top lightly with rice flour before turning it out."),
-     ("h", "Troubleshooting"),
-     ("ul", ["Flat loaf: the dough was probably over-proofed before it went into the cold.",
-             "Dense crumb: extend the stretch and fold sequence during the first two hours.",
-             "Pale crust: bake the second stage a few minutes longer until it is deep brown."])],
+    _BAKER_BLOCKS_1 + _BAKER_BLOCKS_2,
     _BAKER_FOOT),
     "2026-10-11T08:00:00Z",
     ["Bulk ferment for 14 hours at 21 °C.", "78% hydration", "245 °C for 20 minutes lid on"],
     ["We use cookies to improve your experience.", "Accept all cookies", "Manage preferences",
      "Subscribe to the newsletter", "© 2026 Baker's Notebook. All rights reserved.",
-     "Techniques", "Equipment"], tags=["article", "distractor"])
+     "Techniques", "Equipment"], tags=["article", "distractor", "boundary"])
 
 add(article_page(
     "article-sourdough-weekday-02", "Crumb & Crust",

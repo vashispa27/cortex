@@ -11,7 +11,8 @@
  "expect_searchable": true,
  "tags": [
   "article",
-  "distractor"
+  "distractor",
+  "boundary"
  ],
  "facts": [
   {

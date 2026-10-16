@@ -20,6 +20,7 @@ pub struct Fixture {
     #[serde(default)]
     pub provenance: String,
     #[serde(default)]
+    #[allow(dead_code)]
     pub notes: String,
     pub roots: Vec<AxNode>,
 }
