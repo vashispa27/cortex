@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Open Memory",
+  "version": "0.1.0",
+  "identifier": "app.open-memory.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [{
+      "title": "Open Memory",
+      "width": 1160,
+      "height": 770,
+      "minWidth": 760,
+      "minHeight": 560,
+      "backgroundColor": "#f6f4ee"
+    }],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data:; media-src 'self' blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": { "active": true, "targets": "all" }
+}

@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '26'
+          package-manager-cache: false
+      - name: Test service, prompt, website, and release contracts
+        run: node --test packages/prompts/test/*.test.mjs services/control/test/*.test.mjs services/gateway/test/*.test.mjs apps/website/test/*.test.mjs infra/test/*.test.mjs
+      - name: Install desktop dependencies
+        run: npm ci --prefix apps/desktop
+      - name: Test and build desktop frontend
+        run: npm test --prefix apps/desktop && npm run build --prefix apps/desktop
+      - name: Install MCP dependencies
+        run: npm ci --prefix crates/mcp
+      - name: Test MCP bridge
+        run: npm test --prefix crates/mcp
+
+  rust:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Test Rust workspace
+        run: cargo test --workspace --locked
+      - name: Build local daemon for MCP integration
+        if: runner.os == 'Linux'
+        run: cargo build -p goldfish-daemon --locked
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        with:
+          node-version: '26'
+          package-manager-cache: false
+      - name: Test MCP against the local daemon
+        if: runner.os == 'Linux'
+        run: npm ci --prefix crates/mcp && OPEN_MEMORY_DAEMON_BIN="$PWD/target/debug/goldfish-daemon" npm test --prefix crates/mcp
+      - name: Build and test native desktop shell
+        if: runner.os == 'macOS'
+        run: npm ci --prefix apps/desktop && npm run build --prefix apps/desktop && cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml --locked && npm --prefix apps/desktop run tauri build -- --no-bundle
