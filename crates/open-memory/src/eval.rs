@@ -209,6 +209,7 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, index_pref
         "abstain_support" => params.abstain_support = value.parse()?,
         "abstain_dense" => params.abstain_dense = value.parse()?,
         "abstain_chunk" => params.abstain_chunk = value.parse()?,
+        "obs_prefilter" => params.obs_prefilter = flag(value)?,
         "abstain_ident" => params.abstain_ident = value.parse()?,
         "abstain_time_support" => params.abstain_time_support = value.parse()?,
         "abstain_unseen" => params.abstain_unseen = value.parse()?,
@@ -222,7 +223,7 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, index_pref
             }
         }
         "app_fallback_ratio" => params.app_fallback_ratio = value.parse()?,
-        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, chunk_unit, chunk_overlap, chunk_boundaries, chunk_mode, prefix, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support)"),
+        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, chunk_unit, chunk_overlap, chunk_boundaries, chunk_mode, prefix, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support, obs_prefilter)"),
     }
     Ok(())
 }

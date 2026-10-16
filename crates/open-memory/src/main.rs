@@ -5,6 +5,7 @@ mod cleaner;
 mod eval;
 mod fixtures;
 mod prefix;
+mod timewin;
 
 use anyhow::{anyhow, bail, Context, Result};
 use chrono::{DateTime, Local, TimeZone, Utc};
@@ -944,49 +945,21 @@ fn filter_clauses(db: &Connection, question: &str, now_ms: Option<i64>, apps: Ap
     Ok(must)
 }
 
-/// `now_ms` injects the clock for "today"/"yesterday"; `None` uses the real clock.
+/// `now_ms` injects the clock; `None` uses the real clock. Phrases are defined in `timewin`.
 fn time_bounds(question: &str, now_ms: Option<i64>) -> Result<Option<(i64, i64)>> {
-    let q = question.to_lowercase();
-    let date_re = Regex::new(r"\b\d{4}-\d{2}-\d{2}\b")?;
-    let today = || -> Result<chrono::NaiveDate> {
-        match now_ms {
-            Some(ms) => Ok(DateTime::<Utc>::from_timestamp_millis(ms)
-                .context("invalid injected clock")?
-                .with_timezone(&Local)
-                .date_naive()),
-            None => Ok(Local::now().date_naive()),
-        }
+    let today = match now_ms {
+        Some(ms) => DateTime::<Utc>::from_timestamp_millis(ms)
+            .context("invalid injected clock")?
+            .with_timezone(&Local)
+            .date_naive(),
+        None => Local::now().date_naive(),
     };
-    let date = if q.contains("yesterday") {
-        Some(today()?.pred_opt().context("invalid yesterday")?)
-    } else if q.contains("today") {
-        Some(today()?)
-    } else {
-        date_re
-            .find(question)
-            .and_then(|m| chrono::NaiveDate::parse_from_str(m.as_str(), "%Y-%m-%d").ok())
+    let Some((start, end)) = timewin::bounds(question, today) else {
+        return Ok(None);
     };
-    if let Some(date) = date {
-        let start = Local
-            .from_local_datetime(&date.and_hms_opt(0, 0, 0).context("invalid date")?)
-            .earliest()
-            .context("invalid local date")?
-            .timestamp_millis();
-        let end = Local
-            .from_local_datetime(
-                &date
-                    .succ_opt()
-                    .context("invalid next day")?
-                    .and_hms_opt(0, 0, 0)
-                    .context("invalid next day")?,
-            )
-            .earliest()
-            .context("invalid next day")?
-            .timestamp_millis();
-        Ok(Some((start, end)))
-    } else {
-        Ok(None)
-    }
+    // A local time that does not exist (a DST gap) or cannot be resolved yields no filter.
+    let ms = |t: chrono::NaiveDateTime| Local.from_local_datetime(&t).earliest().map(|t| t.timestamp_millis());
+    Ok(ms(start).zip(ms(end)))
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
@@ -1053,6 +1026,9 @@ struct Params {
     abstain_ident: f64,
     /// With a date window in the question, results that share too few of its terms are not an answer.
     abstain_time_support: f64,
+    /// With a date window, restrict chunk points to snapshots actually observed in it inside Qdrant,
+    /// instead of dropping them after the top-`fused_limit` cut.
+    obs_prefilter: bool,
 }
 
 impl Default for Params {
@@ -1079,8 +1055,10 @@ impl Default for Params {
             abstain_unseen: 0.33,
             abstain_unseen_sim: 0.23,
             abstain_ident: 1.0,
-            // Midpoint between the dev time-scoped absent (0.0) and the lowest dev time-scoped answerable (0.33).
-            abstain_time_support: 0.25,
+            // Re-selected on dev after Fix 6 gave more questions a window: dev dated absents sit at support 0.0,
+            // the lowest dev dated answerable at 0.25, so 'none of the question's terms appear' (< 0.1).
+            abstain_time_support: 0.1,
+            obs_prefilter: true,
         }
     }
 }
@@ -1195,6 +1173,20 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
     let reported_clauses = clauses.clone();
     if !params.include_derived {
         clauses.push(json!({"key":"point_type","match":{"value":"chunk"}}));
+    }
+    if let (Some((start, end)), true) = (time, params.obs_prefilter) {
+        // Exact: chunk points of snapshots never observed in the window cannot take a slot in the
+        // fused list. Derived points have no snapshot_id; they are checked after the query.
+        let ids: Vec<i64> = {
+            let mut stmt = runtime.db.prepare("SELECT DISTINCT snapshot_id FROM observations WHERE observed_ms>=?1 AND observed_ms<?2")?;
+            let found = stmt.query_map(params![start, end], |r| r.get::<_, i64>(0))?.collect::<rusqlite::Result<Vec<_>>>()?;
+            found
+        };
+        let ids = if ids.is_empty() { vec![-1] } else { ids };
+        clauses.push(json!({"should":[
+            {"key":"snapshot_id","match":{"any":ids}},
+            {"key":"point_type","match":{"value":"derived"}}
+        ]}));
     }
     let filter: Option<Filter> = if clauses.is_empty() {
         None
@@ -1679,14 +1671,44 @@ mod tests {
     }
 
     #[test]
-    fn time_bounds_use_the_injected_clock() {
-        // The local timezone decides day edges; pin it like the eval does.
+    fn time_bounds_use_the_injected_clock_and_local_days() {
         env::set_var("TZ", "UTC");
         let now = at(17, 12);
         assert_eq!(time_bounds("what did I do today", Some(now)).unwrap(), Some((at(17, 0), at(18, 0))));
         assert_eq!(time_bounds("what did I do yesterday", Some(now)).unwrap(), Some((at(16, 0), at(17, 0))));
         assert_eq!(time_bounds("notes from 2026-10-14", Some(now)).unwrap(), Some((at(14, 0), at(15, 0))));
         assert_eq!(time_bounds("no date here", Some(now)).unwrap(), None);
+        assert_eq!(time_bounds("what did I read last week", Some(now)).unwrap(), Some((at(5, 0), at(12, 0))));
+        assert_eq!(time_bounds("this morning", Some(now)).unwrap(), Some((at(17, 0), at(17, 12))));
+    }
+
+    /// Daylight saving needs another timezone than the one this process already resolved (chrono
+    /// caches it), so the check runs in a child process of this test binary with TZ set.
+    #[test]
+    fn local_days_are_25_and_23_hours_on_dst_change_days() {
+        if env::var("OM_DST_CHILD").is_ok() {
+            let hour = 3_600_000;
+            let fall_back = Utc.with_ymd_and_hms(2026, 11, 2, 17, 0, 0).unwrap().timestamp_millis();
+            let (s, e) = time_bounds("yesterday", Some(fall_back)).unwrap().unwrap();
+            assert_eq!(e - s, 25 * hour, "2026-11-01 has 25 hours in New York");
+            assert_eq!(s, Utc.with_ymd_and_hms(2026, 11, 1, 4, 0, 0).unwrap().timestamp_millis(), "midnight EDT");
+            let spring = Utc.with_ymd_and_hms(2026, 3, 9, 16, 0, 0).unwrap().timestamp_millis();
+            let (s, e) = time_bounds("yesterday", Some(spring)).unwrap().unwrap();
+            assert_eq!(e - s, 23 * hour, "2026-03-08 has 23 hours in New York");
+            let (s, e) = time_bounds("last week", Some(fall_back)).unwrap().unwrap();
+            assert_eq!(e - s, 7 * 24 * hour + hour, "the week 2026-10-26..11-02 contains the 25-hour Sunday");
+            let (s, e) = time_bounds("this week", Some(fall_back)).unwrap().unwrap();
+            assert_eq!(e - s, 24 * hour, "this week so far is Monday 2026-11-02 alone");
+            return;
+        }
+        let exe = env::current_exe().unwrap();
+        let out = Command::new(exe)
+            .args(["--exact", "tests::local_days_are_25_and_23_hours_on_dst_change_days", "--nocapture"])
+            .env("OM_DST_CHILD", "1")
+            .env("TZ", "America/New_York")
+            .output()
+            .unwrap();
+        assert!(out.status.success(), "{}{}", String::from_utf8_lossy(&out.stdout), String::from_utf8_lossy(&out.stderr));
     }
 
     fn hit_with(body: &str, chunks: &[&str]) -> Hit {
@@ -1757,7 +1779,6 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "known weakness: time_bounds only understands today, yesterday and ISO dates; 'last week' is silently ignored"]
     fn last_week_is_a_time_filter() {
         assert!(time_bounds("what did I read last week", Some(at(17, 12))).unwrap().is_some());
     }

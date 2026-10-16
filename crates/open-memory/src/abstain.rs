@@ -23,6 +23,9 @@ const GENERIC: &[&str] = &[
     "many", "long", "need", "know", "give", "show", "wrote", "write", "read", "look", "looked",
     "their", "they", "them", "your", "mine", "into", "than", "then", "some", "also", "right", "last",
     "week", "today", "yesterday", "month", "morning", "days", "ago",
+    // Words that name the kind of source rather than its content ("the gym email", "that chat").
+    "email", "emails", "mail", "text", "message", "messages", "chat", "page", "pages", "note", "notes",
+    "article", "thread", "document", "file", "site", "website", "post",
 ];
 
 pub fn support_terms(question: &str) -> Vec<String> {
@@ -168,6 +171,7 @@ mod tests {
     #[test]
     fn terms_drop_generic_words_and_keep_numbers() {
         assert_eq!(support_terms("what is the total on invoice 4472"), vec!["4472", "invoice", "total"]);
+        assert_eq!(support_terms("what did the gym email say"), Vec::<String>::new(), "email names the source kind");
         assert!(support_terms("what did I read last week").is_empty());
     }
 
