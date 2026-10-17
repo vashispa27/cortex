@@ -17,6 +17,7 @@ use anyhow::{bail, Context, Result};
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::os::unix::net::UnixStream;
 use std::time::SystemTime;
 
 pub const FILE_NAME: &str = "blocked_apps.json";
@@ -133,7 +134,6 @@ impl Blocklist {
         Ok(())
     }
 
-    #[allow(dead_code)] // the capture loop uses `matching` (it reports the label); kept for UI code and tests
     pub fn is_blocked(&self, app_id: &str) -> bool {
         self.matching(app_id).is_some()
     }
@@ -245,10 +245,88 @@ pub fn run_cli(state: &Path, args: &[String]) -> Result<()> {
         "enable" => list.set_enabled(args.get(1).context("usage: blocklist enable <app id>")?, true)?,
         "disable" => list.set_enabled(args.get(1).context("usage: blocklist disable <app id>")?, false)?,
         "reset" => list.reset(),
-        other => bail!("unknown blocklist command '{other}' (list, check, add, remove, enable, disable, reset)"),
+        "purge" => {
+            let apply = args.iter().any(|a| a == "--yes");
+            if let Some(bad) = args[1..].iter().find(|a| *a != "--yes") {
+                bail!("unknown purge option '{bad}' (only --yes)");
+            }
+            return purge(state, &list, apply);
+        }
+        other => bail!("unknown blocklist command '{other}' (list, check, add, remove, enable, disable, reset, purge)"),
     }
     list.save(state)?;
     println!("saved {}", Blocklist::path(state).display());
+    Ok(())
+}
+
+/// Deletes already-saved snapshots of blocked apps (SQLite rows, derived points that only they supported,
+/// then rebuilds the Qdrant index from SQLite, which also drops their points and the WAL).
+/// Without `apply` it only reports what would go. Old backups in the state directory
+/// (`memory.pre-clean-*.sqlite3`) are not touched.
+fn purge(state: &Path, list: &Blocklist, apply: bool) -> Result<()> {
+    if UnixStream::connect(state.join("capture.sock")).is_ok() {
+        bail!("stop the capture process before purging");
+    }
+    let mut db = super::open_db(state)?;
+    let apps: Vec<String> = {
+        let mut stmt = db.prepare("SELECT DISTINCT app_id FROM snapshots ORDER BY app_id")?;
+        let found = stmt.query_map([], |r| r.get::<_, String>(0))?.collect::<rusqlite::Result<Vec<_>>>()?;
+        found
+    };
+    let blocked: Vec<&String> = apps.iter().filter(|a| list.is_blocked(a)).collect();
+    if blocked.is_empty() {
+        println!("Nothing to purge: no saved snapshot belongs to a blocked app.");
+        return Ok(());
+    }
+    let (mut snaps, mut sightings, mut chunks, mut bytes) = (0_i64, 0_i64, 0_i64, 0_i64);
+    println!("{:<34} {:>9} {:>10} {:>8} {:>10}", "blocked app with saved data", "snapshots", "sightings", "chunks", "raw MB");
+    for app in &blocked {
+        let one = |sql: &str| -> Result<i64> { Ok(db.query_row(sql, [app], |r| r.get(0))?) };
+        let s = one("SELECT COUNT(*) FROM snapshots WHERE app_id=?1")?;
+        let o = one("SELECT COUNT(*) FROM observations WHERE snapshot_id IN (SELECT id FROM snapshots WHERE app_id=?1)")?;
+        let c = one("SELECT COUNT(*) FROM chunks WHERE snapshot_id IN (SELECT id FROM snapshots WHERE app_id=?1)")?;
+        let b = one("SELECT COALESCE(SUM(LENGTH(CAST(ax_nodes_json AS BLOB))),0) + COALESCE((SELECT SUM(LENGTH(CAST(ax_nodes_json AS BLOB))) FROM raw_versions WHERE snapshot_id IN (SELECT id FROM snapshots WHERE app_id=?1)),0) FROM snapshots WHERE app_id=?1")?;
+        println!("{:<34} {:>9} {:>10} {:>8} {:>10.1}", app, s, o, c, b as f64 / 1e6);
+        snaps += s; sightings += o; chunks += c; bytes += b;
+    }
+    println!("{:<34} {:>9} {:>10} {:>8} {:>10.1}", "total", snaps, sightings, chunks, bytes as f64 / 1e6);
+    if !apply {
+        println!("\nNothing deleted. Run `open-memory blocklist purge --yes` to delete these snapshots for good.");
+        return Ok(());
+    }
+    let tx = db.transaction()?;
+    let derived_touched: Vec<i64> = {
+        let mut stmt = tx.prepare("SELECT DISTINCT derived_id FROM derived_sources WHERE snapshot_id IN (SELECT id FROM snapshots WHERE app_id=?1)")?;
+        let mut all = Vec::new();
+        for app in &blocked {
+            let ids = stmt.query_map([app], |r| r.get::<_, i64>(0))?.collect::<rusqlite::Result<Vec<_>>>()?;
+            all.extend(ids);
+        }
+        all
+    };
+    for app in &blocked {
+        for table in ["observations", "raw_versions", "chunks", "derived_sources"] {
+            tx.execute(&format!("DELETE FROM {table} WHERE snapshot_id IN (SELECT id FROM snapshots WHERE app_id=?1)"), [app])?;
+        }
+        tx.execute("DELETE FROM snapshots WHERE app_id=?1", [app])?;
+    }
+    let mut derived_gone = 0;
+    for id in derived_touched {
+        derived_gone += tx.execute("DELETE FROM derived WHERE id=?1 AND NOT EXISTS (SELECT 1 FROM derived_sources WHERE derived_id=?1)", [id])?;
+    }
+    tx.commit()?;
+    db.execute_batch("PRAGMA wal_checkpoint(TRUNCATE); VACUUM;")?;
+    drop(db);
+    let mut runtime = super::open_runtime(state, true)?;
+    let mut points = 0;
+    loop {
+        let n = runtime.index_pending()?;
+        points += n;
+        if n == 0 {
+            break;
+        }
+    }
+    println!("\nDeleted {snaps} snapshots, {chunks} chunks, {derived_gone} derived points. Rebuilt the vector index from what is left (reindexed {points} points after opening).");
     Ok(())
 }
 

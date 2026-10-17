@@ -148,7 +148,7 @@ unsafe fn libc_umask(mask: u32) {
     umask(mask);
 }
 fn usage() {
-    eprintln!("Usage: open-memory capture [--print] [--rebuild-index]\n       open-memory capture --clean-dry-run\n       open-memory capture --apply-cleaning\n       open-memory blocklist [list|check <app id>|add <app id> [label]|remove <app id>|enable <app id>|disable <app id>|reset]\n       open-memory ask \"natural-language question\"\n       OPEN_MEMORY_STATE_DIR=<tmp> open-memory ingest-fixtures --corpus evals/corpus\n       open-memory eval --corpus evals/corpus --gold evals/gold/gold.jsonl --out evals/reports/<name>.json");
+    eprintln!("Usage: open-memory capture [--print] [--rebuild-index]\n       open-memory capture --clean-dry-run\n       open-memory capture --apply-cleaning\n       open-memory blocklist [purge [--yes]|list|check <app id>|add <app id> [label]|remove <app id>|enable <app id>|disable <app id>|reset]\n       open-memory ask \"natural-language question\"\n       OPEN_MEMORY_STATE_DIR=<tmp> open-memory ingest-fixtures --corpus evals/corpus\n       open-memory eval --corpus evals/corpus --gold evals/gold/gold.jsonl --out evals/reports/<name>.json");
 }
 fn state_dir() -> Result<PathBuf> {
     if let Some(path) = env::var_os("OPEN_MEMORY_STATE_DIR") {
