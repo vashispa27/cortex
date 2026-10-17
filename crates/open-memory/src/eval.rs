@@ -181,6 +181,7 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, index_pref
         "prefetch" => params.prefetch = value.parse()?,
         "fused_limit" => params.fused_limit = value.parse()?,
         "final_k" => params.final_k = value.parse()?,
+        "page_cap" => params.page_cap = value.parse()?,
         "chunk_target" => chunking.target = value.parse()?,
         "chunk_unit" => {
             chunking.chars = match value {
@@ -247,7 +248,7 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, index_pref
             }
         }
         "app_fallback_ratio" => params.app_fallback_ratio = value.parse()?,
-        _ => bail!("unknown --param key {key} (mode, rerank_bonus, rerank_weight, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, chunk_unit, chunk_overlap, chunk_boundaries, chunk_mode, prefix, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support, obs_prefilter, dedup_jaccard, version_order, version_margin)"),
+        _ => bail!("unknown --param key {key} (mode, rerank_bonus, rerank_weight, filters, derived, rrf_k, prefetch, fused_limit, final_k, page_cap, chunk_target, chunk_unit, chunk_overlap, chunk_boundaries, chunk_mode, prefix, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support, obs_prefilter, dedup_jaccard, version_order, version_margin)"),
     }
     Ok(())
 }

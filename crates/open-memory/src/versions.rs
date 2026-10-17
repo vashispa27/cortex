@@ -131,6 +131,41 @@ pub fn apply(mut entries: Vec<Entry>, question: &str, params: &Params) -> Vec<En
     entries
 }
 
+/// A page is a URL within an app, or a window title when no valid URL is available.
+/// Keep paths and query parameters: different pages on one site can supply different evidence.
+fn page_key(source: &Source) -> (String, String) {
+    let page = source.url.as_deref().and_then(|s| url::Url::parse(s.trim()).ok()).map(|mut url| {
+        url.set_fragment(None);
+        let path = url.path().trim_end_matches('/').to_owned();
+        url.set_path(&path);
+        format!("url:{url}")
+    }).unwrap_or_else(|| format!("title:{}", source.title.split_whitespace().collect::<Vec<_>>().join(" ").to_lowercase()));
+    (source.app_id.clone(), page)
+}
+
+/// Run after version ordering so the intended old/new version keeps its slot. Overflow remains
+/// discoverable through the first retained member's version pointers, even beyond the final cut.
+pub fn cap_pages(entries: Vec<Entry>, cap: usize) -> Vec<Entry> {
+    if cap == 0 { return entries; }
+    let mut groups = std::collections::HashMap::<(String, String), (usize, usize)>::new();
+    let mut kept: Vec<Entry> = Vec::new();
+    for entry in entries {
+        let group = groups.entry(page_key(&entry.1 .0)).or_insert((kept.len(), 0));
+        if group.1 < cap {
+            group.1 += 1;
+            kept.push(entry);
+        } else {
+            let representative = &mut kept[group.0].1;
+            for id in std::iter::once(entry.1 .0.id).chain(entry.1 .3) {
+                if id != representative.0.id && !representative.3.contains(&id) {
+                    representative.3.push(id);
+                }
+            }
+        }
+    }
+    kept
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -205,4 +240,41 @@ mod tests {
         let changed = entry(3, "Quote copy", "Quote 2209. Total: 5,350 euros. Valid until 15 November. Accept by phone.", 300, 0.0300);
         assert_eq!(ids(&apply(vec![a, changed], "quote total", &p)).len(), 2, "a revised amount and date stay distinct");
     }
+    #[test]
+    fn page_cap_preserves_version_intent_and_overflow_pointers() {
+        let old = entry(1, "Budget", "Rent is $1,800.", 100, 0.032);
+        let new = entry(2, "Budget", "Rent is $2,000.", 200, 0.031);
+        let mut other = entry(3, "Other", "Different evidence.", 300, 0.030);
+        other.1 .0.url = Some("https://x.example/other".into());
+        for (question, expected) in [("current rent", 2), ("original rent", 1)] {
+            let ordered = apply(vec![old.clone(), new.clone(), other.clone()], question, &Params::default());
+            let capped = cap_pages(ordered, 1);
+            assert_eq!(ids(&capped), vec![expected, 3]);
+            assert!(capped[0].1 .3.contains(&(3 - expected)));
+        }
+        let entries = vec![old, new, other];
+        assert_eq!(ids(&cap_pages(entries.clone(), 0)), vec![1, 2, 3]);
+        assert_eq!(ids(&cap_pages(entries, 2)), vec![1, 2, 3]);
+    }
+
+    #[test]
+    fn page_identity_normalises_urls_and_titles_without_grouping_a_whole_site() {
+        let mut a = entry(1, "Title", "a", 0, 1.0);
+        let mut b = a.clone();
+        a.1 .0.url = Some("https://X.example:443/p/#first".into());
+        b.1 .0.url = Some("https://x.example/p#second".into());
+        assert_eq!(page_key(&a.1 .0), page_key(&b.1 .0));
+        b.1 .0.url = Some("https://x.example/p?q=other".into());
+        assert_ne!(page_key(&a.1 .0), page_key(&b.1 .0));
+        b.1 .0.url = Some("https://x.example/another".into());
+        assert_ne!(page_key(&a.1 .0), page_key(&b.1 .0));
+        a.1 .0.url = None;
+        b.1 .0.url = None;
+        a.1 .0.title = "  Window   TITLE ".into();
+        b.1 .0.title = "window title".into();
+        assert_eq!(page_key(&a.1 .0), page_key(&b.1 .0));
+        b.1 .0.app_id = "another.app".into();
+        assert_ne!(page_key(&a.1 .0), page_key(&b.1 .0));
+    }
+
 }

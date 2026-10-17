@@ -1168,6 +1168,8 @@ struct Params {
     rrf_k: usize,
     /// Results kept after collapsing and re-ranking.
     final_k: usize,
+    /// Maximum results for one app/page after version ordering; 0 disables the cap.
+    page_cap: usize,
     /// Regex-derived app/domain/private/date filters (and the observation-time check).
     use_filters: bool,
     /// Keyword-count bonus added to the fused score before the final sort.
@@ -1212,6 +1214,7 @@ impl Default for Params {
             fused_limit: 40,
             rrf_k: 60,
             final_k: 8,
+            page_cap: 2,
             use_filters: true,
             rerank_bonus: RerankBonus::Off,
             rerank_weight: 1.0,
@@ -1544,7 +1547,7 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
         b.0.total_cmp(&a.0)
             .then_with(|| b.1 .0.last_seen_ms.cmp(&a.1 .0.last_seen_ms))
     });
-    let mut keyed = versions::apply(keyed, question, params);
+    let mut keyed = versions::cap_pages(versions::apply(keyed, question, params), params.page_cap);
     keyed.truncate(params.final_k);
     Ok(Retrieval {
         score_norm: 0.0,
