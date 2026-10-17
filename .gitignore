@@ -13,3 +13,4 @@ dist/
 # real-data eval material (exports, private gold set, reports with real text)
 evals/private/
 evals/scale/out/
+evals/reports/runs/
