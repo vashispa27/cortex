@@ -70,6 +70,7 @@ Everything below is opt-in; the default `eval` run is unchanged.
   `dedup_potential.py` produce aggregate-only tables from the reports.
 * `evals/run_all.sh` builds and runs the invented and real evals, saves timestamped reports and prints the key numbers against the previous run.
 * Ingest-time dedup switches (env): `OPEN_MEMORY_NO_INGEST_DEDUP=1` (all off), `OPEN_MEMORY_NO_NEAR_DUP_MERGE=1`, `OPEN_MEMORY_CHUNK_SHARING=1` (on; off by default); results in `reports/real/dedup.md`.
+* Raw Accessibility trees are deleted 7 days after a snapshot was last seen (`raw-trees` command, automatic in `capture`); evals and `export_real.py` need them, so set `OPEN_MEMORY_RAW_TREE_DAYS=forever` while collecting data for evals.
 * Scale test: see `evals/scale/README.md` (generator, runner, summariser).
 
 ## Definitions

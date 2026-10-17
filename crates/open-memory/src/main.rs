@@ -7,6 +7,7 @@ mod dedup;
 mod eval;
 mod fixtures;
 mod prefix;
+mod rawtrees;
 mod timewin;
 mod versions;
 
@@ -112,6 +113,7 @@ fn main() -> Result<()> {
     fs::set_permissions(&state, fs::Permissions::from_mode(0o700))?;
     match args.as_slice() {
         [command, rest @ ..] if command == "blocklist" => blocklist::run_cli(&state, rest),
+        [command, rest @ ..] if command == "raw-trees" => rawtrees::run_cli(&state, rest),
         [command, flags @ ..] if command == "capture" => {
             if flags
                 .iter()
@@ -297,6 +299,12 @@ fn file_hash(path: &Path) -> Result<String> {
     Ok(hex::encode(hash.finalize()))
 }
 
+/// Snapshots cleaned by an older cleaner that can still be re-cleaned. Snapshots whose raw tree was deleted
+/// (rawtrees.rs) keep their body and stay searchable; they are not stale.
+fn stale_count(db: &Connection) -> Result<i64> {
+    Ok(db.query_row("SELECT COUNT(*) FROM snapshots WHERE cleaner_version<?1 AND ax_nodes_json!='[]'", [cleaner::VERSION], |r| r.get(0))?)
+}
+
 fn open_runtime(state: &Path, rebuild: bool) -> Result<Runtime> {
     open_runtime_with(state, rebuild, None, prefix::Prefix::DEFAULT)
 }
@@ -304,7 +312,7 @@ fn open_runtime(state: &Path, rebuild: bool) -> Result<Runtime> {
 /// `model` lets offline evals reuse one loaded embedding model across state directories.
 fn open_runtime_with(state: &Path, rebuild: bool, model: Option<StaticModel>, prefix_mode: prefix::Prefix) -> Result<Runtime> {
     let db = open_db(state)?;
-    let stale: i64 = db.query_row("SELECT COUNT(*) FROM snapshots WHERE cleaner_version<?1", [cleaner::VERSION], |r| r.get(0))?;
+    let stale = stale_count(&db)?;
     if stale > 0 {
         bail!("{stale} captures still use the old text format; run `open-memory capture --clean-dry-run` then `open-memory capture --apply-cleaning`");
     }
@@ -583,6 +591,7 @@ fn capture(state: &Path, print: bool, rebuild: bool) -> Result<()> {
         }
     });
     let mut last_status = String::new();
+    let mut last_purge: Option<std::time::Instant> = None;
     let mut blocked_apps = blocklist::Watcher::new(state)?;
     println!("Not saving windows of {} blocked app entries (open-memory blocklist list).", blocked_apps.list.apps.iter().filter(|e| e.enabled).count());
     loop {
@@ -602,6 +611,23 @@ fn capture(state: &Path, print: bool, rebuild: bool) -> Result<()> {
                 println!("Model2Vec and Qdrant Edge ready ({MODEL_VERSION}).");
             }
             let rt = runtime.as_mut().unwrap();
+            // Raw Accessibility trees older than the retention window are deleted at start and then daily.
+            if last_purge.map_or(true, |t| t.elapsed() >= Duration::from_secs(24 * 3600)) {
+                let startup = last_purge.is_none();
+                last_purge = Some(std::time::Instant::now());
+                match rawtrees::purge_expired(&mut rt.db, now_ms()) {
+                    Ok(report) if report.snapshots > 0 => println!("Deleted {} raw trees ({:.1} MB) of snapshots not seen for {} days; bodies and search are unchanged.", report.snapshots, report.bytes as f64 / 1e6, rawtrees::retention_days().unwrap_or(0)),
+                    Ok(_) => {}
+                    Err(error) => eprintln!("raw tree cleanup skipped: {error:#}"),
+                }
+                if startup {
+                    match rawtrees::reclaim(&rt.db, 64_000_000) {
+                        Ok(true) => println!("Database file compacted."),
+                        Ok(false) => {}
+                        Err(error) => eprintln!("database compaction skipped: {error:#}"),
+                    }
+                }
+            }
             let reply = run_helper(&helper, "--read-frontmost")?;
             if reply.status.as_deref() == Some("ok") {
                 if let Some(window) = reply.window.filter(|w| {
@@ -782,12 +808,18 @@ fn reprocess(state: &Path, apply: bool) -> Result<()> {
     };
     let mut prepared = Vec::new();
     let mut unavailable = 0_usize;
+    let mut kept_without_tree = std::collections::HashSet::<i64>::new();
     let mut navigation_only = 0_usize;
     let mut reason_counts = std::collections::BTreeMap::<&'static str, usize>::new();
     for (id, app, title, url, domain, source_type, old_body, json_nodes) in records {
         let nodes: Vec<AxNode> = serde_json::from_str(&json_nodes).with_context(|| format!("invalid AX JSON for snapshot #{id}"))?;
         if nodes.is_empty() {
-            unavailable += 1;
+            if !old_body.is_empty() {
+                // The raw tree was deleted (rawtrees.rs): keep the body, chunks and searchability as they are.
+                kept_without_tree.insert(id);
+            } else {
+                unavailable += 1;
+            }
             prepared.push((id, app, title, url, domain, source_type, old_body, json_nodes, None));
             continue;
         }
@@ -809,7 +841,7 @@ fn reprocess(state: &Path, apply: bool) -> Result<()> {
         }
         prepared.push((id, app, title, url, domain, source_type, old_body, json_nodes, Some(cleaned)));
     }
-    println!("Cleaning preview: {} snapshots; {navigation_only} navigation-only; {unavailable} without AX nodes (original retained).", prepared.len());
+    println!("Cleaning preview: {} snapshots; {navigation_only} navigation-only; {unavailable} without AX nodes (original retained); {} with a deleted raw tree (kept as they are).", prepared.len(), kept_without_tree.len());
     println!("Removed-node reasons: {reason_counts:?}");
     if !apply {
         println!("No snapshot text or Qdrant index changed. Run `open-memory capture --apply-cleaning` to apply.");
@@ -824,8 +856,11 @@ fn reprocess(state: &Path, apply: bool) -> Result<()> {
     }
     let tx = db.transaction()?;
     tx.execute("DELETE FROM derived", [])?;
-    tx.execute("DELETE FROM chunks", [])?;
+    tx.execute("DELETE FROM chunks WHERE snapshot_id IN (SELECT id FROM snapshots WHERE ax_nodes_json!='[]')", [])?;
     for (id, _, _, _, _, _, _, json_nodes, _) in &prepared {
+        if kept_without_tree.contains(id) {
+            continue;
+        }
         if json_nodes != "[]" {
             let first_seen: i64 = tx.query_row("SELECT first_seen_ms FROM snapshots WHERE id=?1",[id],|r|r.get(0))?;
             tx.execute("INSERT OR IGNORE INTO raw_versions(snapshot_id,ax_hash,ax_nodes_json,observed_ms) VALUES(?1,?2,?3,?4)",params![id,digest(json_nodes),json_nodes,first_seen])?;
@@ -835,6 +870,9 @@ fn reprocess(state: &Path, apply: bool) -> Result<()> {
     let mut merged = 0_usize;
     for (id, app, title, url, domain, source_type, _old_body, _json_nodes, cleaned) in prepared {
         let Some(cleaned) = cleaned else {
+            if kept_without_tree.contains(&id) {
+                continue;
+            }
             tx.execute("UPDATE snapshots SET cleaner_version=?2,cleaner_quality='content_unavailable',cleaner_coverage=0,searchable=0,indexed=0,embedding_model=NULL WHERE id=?1",params![id,cleaner::VERSION])?;
             continue;
         };
