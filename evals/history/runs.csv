@@ -1,0 +1,19 @@
+date,commit,dirty,corpus,dataset_id,answerable,hit1,hit8,mrr,chunk_hit40,lost_at_final,absent,absent_abstained,wrongly_abstained,near_dup_share,lat_p50_ms,lat_p95_ms,lat_p99_ms,latency_basis,ingest_s,index_mb,note
+2026-10-17 10:57,6391653,1,invented,inv122,100,56,76,0.6517,84,8,22,0,0,0.0449,0.992,1.4281,,all_samples,0.8,178,122-question gold (before the 2 later questions); backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,6391653,1,real,e5239c9d66ba,99,36,55,0.4368,76,22,26,0,0,0.4876,6.3476,18.4691,,all_samples,45.1,672,backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,98c5f39,1,invented,inv122,100,66,86,0.7517,94,8,22,0,0,0.0405,1.0557,1.4308,,all_samples,0.8,178,122-question gold (before the 2 later questions); backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,98c5f39,1,real,e5239c9d66ba,99,38,58,0.4621,80,23,26,0,0,0.4942,6.2285,17.2875,,all_samples,44.7,672,backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,ac72e68,1,invented,inv122,100,69,91,0.7917,94,3,22,0,0,0.0405,1.0324,1.3778,,all_samples,0.8,178,122-question gold (before the 2 later questions); backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,ac72e68,1,real,e5239c9d66ba,99,42,66,0.5158,80,14,26,0,0,0.4963,6.5723,18.8409,,all_samples,68.0,672,backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,3f2e0a9,1,invented,inv122,100,69,91,0.7917,94,3,22,7,2,0.041,2.0543,2.9455,,all_samples,0.9,178,122-question gold (before the 2 later questions); backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,3f2e0a9,1,real,e5239c9d66ba,99,42,65,0.5142,80,15,26,2,4,0.4984,11.039,23.5851,,all_samples,52.4,672,backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,2f66f80,1,invented,inv122,100,71,96,0.8225,99,3,22,7,2,0.0423,2.134,3.023,,all_samples,0.8,178,122-question gold (before the 2 later questions); backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,2f66f80,0,real,e5239c9d66ba,99,42,67,0.521,84,17,26,2,4,0.4995,18.0837,41.3212,,all_samples,54.0,672,backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,c4fdb07,0,invented,inv122,100,70,96,0.82,99,3,22,7,2,0.041,3.2974,4.7212,,all_samples,0.9,178,122-question gold (before the 2 later questions); backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,c4fdb07,0,real,e5239c9d66ba,99,42,67,0.521,84,17,26,2,4,0.4962,13.4184,29.4546,,all_samples,45.5,672,backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,11dc4ad,0,invented,inv122,100,75,96,0.8492,99,3,22,10,2,0.032,2.3401,3.3945,,all_samples,0.8,14,122-question gold (before the 2 later questions); backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,11dc4ad,0,real,e5239c9d66ba,99,42,67,0.5212,84,17,26,5,4,0.5028,11.7029,30.6304,,all_samples,46.0,542,backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,cce16e6,0,invented,inv122,100,81,96,0.8792,99,3,22,10,2,0.032,17.6446,29.0772,,all_samples,0.9,178,122-question gold (before the 2 later questions); backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,cce16e6,0,real,e5239c9d66ba,99,43,72,0.5409,84,13,26,5,4,0.4591,206.7676,522.7438,,all_samples,74.8,672,backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,a075fe0,0,invented,inv122,100,81,96,0.8792,99,3,22,10,2,0.032,19.6003,35.6555,62.5306,all_samples,0.9,14,122-question gold (before the 2 later questions); backfilled; latency measured on a loaded/swapping machine
+2026-10-17 10:57,a075fe0,0,real,e5239c9d66ba,99,43,72,0.5413,84,13,26,5,4,0.4613,141.8513,370.7089,1511.9283,all_samples,62.3,537,backfilled; latency measured on a loaded/swapping machine

@@ -16,7 +16,11 @@ def load(p):
         "absent abstained": ab["count"] if ab else 0, "absent total": o["n_absent"],
         "answerable wrongly abstained": a.get("answerable_wrongly_abstained", {}).get("count", 0),
         "near-duplicate final slots": o["near_duplicate_crowding"]["jaccard_0.8"]["slots_near_duplicate"]["rate"],
-        "latency p50 ms": r["timing"]["query_latency_ms"]["p50"],
+        "latency p50 ms": (r["timing"].get("query_latency_best_of_repeats_ms") or r["timing"]["query_latency_ms"])["p50"],
+        "latency p95 ms": (r["timing"].get("query_latency_best_of_repeats_ms") or r["timing"]["query_latency_ms"])["p95"],
+        "latency p99 ms": (r["timing"].get("query_latency_best_of_repeats_ms") or r["timing"]["query_latency_ms"]).get("p99", ""),
+        "ingest s": round(r["timing"]["ingest_ms"] / 1000, 1),
+        "index MB (allocated)": round((r["timing"].get("index_allocated_bytes") or r["timing"]["index_size_bytes"]) / 1e6),
         "commit": r["meta"].get("git_commit"),
     }, r
 
@@ -29,7 +33,7 @@ for k in ["final hit@1", "final hit@8", "chunk hit@40", "answer in chunk list, l
     d = f"   ({new[k]-old[k]:+d} vs previous)" if old else ""
     tot = n if "absent" not in k else new["absent total"]
     print(f"   {k:<38} {new[k]}/{tot}{d}")
-for k in ["final MRR", "near-duplicate final slots", "latency p50 ms"]:
-    d = f"   ({new[k]-old[k]:+.3f} vs previous)" if old else ""
+for k in ["final MRR", "near-duplicate final slots", "latency p50 ms", "latency p95 ms", "latency p99 ms", "ingest s", "index MB (allocated)"]:
+    d = f"   ({new[k]-old[k]:+.3f} vs previous)" if old and new[k] != "" and old.get(k, "") != "" else ""
     print(f"   {k:<38} {new[k]}{d}")
 print("   by type (final hit@8):", ", ".join(f"{t} {v['final_level']['hit@k']['count']}/{v['final_level']['hit@k']['of']}" for t, v in nr["by_type"].items() if v["n_answerable"]))
