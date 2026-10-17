@@ -9,3 +9,7 @@ dist/
 *.db-shm
 *.db-wal
 
+
+# real-data eval material (exports, private gold set, reports with real text)
+evals/private/
+evals/scale/out/

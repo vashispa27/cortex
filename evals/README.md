@@ -52,6 +52,24 @@ Determinism: the clock is injected (2026-10-17T12:00Z), the timezone is forced t
 is by (observed time, fixture id), and exact RRF ties are broken by point id. Two runs differ only
 in the `timing` block.
 
+## Real-data eval and scale test (additive tooling)
+
+Everything below is opt-in; the default `eval` run is unchanged.
+
+* `--extra-corpus DIR`: ingest a second directory of fixtures (streamed, merged by observed time) and score
+  only the gold questions. Reports gain `scale` (counts), `distractors` (final slots held by extra / `hard-`
+  snapshots), the ingest curve, apparent vs allocated index bytes and a per-file `index_size` breakdown.
+* `--query-repeats N`: re-run each query N times; `query_latency_ms` covers all samples and
+  `query_latency_best_of_repeats_ms` the per-query fastest run (robust against machine load).
+* `open-memory ingest-fixtures --corpus DIR --dump-bodies OUT` writes every fixture's cleaned body and an index.
+* Real data (never committed): `evals/tools/export_real.py` exports the real database as fixtures into
+  `evals/private/corpus`; `evals/tools/gold_author.py` browses cleaned bodies and appends gold questions with
+  the answer-string check; gold goes in `evals/private/gold.jsonl` (types as above plus `terminal_output`,
+  `code`, `long_document`, `short_snapshot`, `repeat_capture`, `mixed_language`, `table`). `evals/private/` is
+  git-ignored. `evals/tools/transfer_table.py`, `transfer_types.py`, `ablation_table.py` and
+  `dedup_potential.py` produce aggregate-only tables from the reports.
+* Scale test: see `evals/scale/README.md` (generator, runner, summariser).
+
 ## Definitions
 
 * **Gold labels are answer text, not chunk ids.** A returned item is a hit if its normalised text

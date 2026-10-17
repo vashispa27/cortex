@@ -13,10 +13,12 @@ use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 /// relative to it so "today"/"yesterday" are deterministic.
 const EVAL_NOW: (i32, u32, u32, u32) = (2026, 10, 17, 12);
 const KS: [usize; 5] = [1, 5, 8, 10, 40];
-const GOLD_TYPES: [&str; 13] = [
+const GOLD_TYPES: [&str; 20] = [
     "keyword", "paraphrase", "speaker", "time_scoped", "app_scoped", "domain_scoped",
     "multi_snapshot", "absent", "ambiguous_entity", "filter_trap", "near_duplicate_version",
     "boundary_fact", "non_english",
+    // Additive: types the real-data gold set (evals/private) needs; empty groups are not reported.
+    "terminal_output", "code", "long_document", "short_snapshot", "repeat_capture", "mixed_language", "table",
 ];
 const CROWD_THRESHOLDS: [f64; 2] = [0.8, 0.5];
 
@@ -82,6 +84,11 @@ struct Args {
     sweeps: Vec<(String, Vec<String>)>,
     out: PathBuf,
     keep_state: bool,
+    /// Additive: a directory of distractor fixtures ingested with the base corpus. Gold is still
+    /// scored against the base corpus only.
+    extra_corpus: Option<PathBuf>,
+    /// Re-runs each query this many times in total for latency percentiles; scoring uses the first.
+    query_repeats: usize,
 }
 
 fn parse_args(args: &[String]) -> Result<Args> {
@@ -93,6 +100,8 @@ fn parse_args(args: &[String]) -> Result<Args> {
     let mut sweeps = Vec::new();
     let mut out = None;
     let mut keep_state = false;
+    let mut extra_corpus = None;
+    let mut query_repeats = 1_usize;
     let mut iter = args.iter();
     while let Some(arg) = iter.next() {
         let mut value = |name: &str| -> Result<String> {
@@ -105,6 +114,8 @@ fn parse_args(args: &[String]) -> Result<Args> {
             "--split" => split = value("--split")?,
             "--out" => out = Some(PathBuf::from(value("--out")?)),
             "--keep-state" => keep_state = true,
+            "--extra-corpus" => extra_corpus = Some(PathBuf::from(value("--extra-corpus")?)),
+            "--query-repeats" => query_repeats = value("--query-repeats")?.parse::<usize>().ok().filter(|n| *n >= 1).context("--query-repeats needs an integer >= 1")?,
             "--param" => {
                 let kv = value("--param")?;
                 let (k, v) = kv.split_once('=').with_context(|| format!("--param expects key=value, got {kv}"))?;
@@ -122,7 +133,7 @@ fn parse_args(args: &[String]) -> Result<Args> {
         bail!("--split must be dev, test or all");
     }
     let facts = facts.unwrap_or_else(|| corpus.parent().map(|p| p.join("pages")).unwrap_or_else(|| PathBuf::from("evals/pages")));
-    Ok(Args { corpus, gold, facts, split, base, sweeps, out: out.context("--out is required")?, keep_state })
+    Ok(Args { corpus, gold, facts, split, base, sweeps, out: out.context("--out is required")?, keep_state, extra_corpus, query_repeats })
 }
 
 /// One eval configuration. `chunk_target` changes ingest; everything else is query-time.
@@ -288,7 +299,7 @@ fn dist(values: &[f64]) -> Value {
     v.sort_by(|a, b| a.total_cmp(b));
     json!({
         "n": v.len(), "mean": round(mean(&v)), "p50": round(percentile(&v, 0.5)),
-        "p95": round(percentile(&v, 0.95)), "min": round(v.first().copied().unwrap_or(0.0)),
+        "p95": round(percentile(&v, 0.95)), "p99": round(percentile(&v, 0.99)), "min": round(v.first().copied().unwrap_or(0.0)),
         "max": round(v.last().copied().unwrap_or(0.0)),
     })
 }
@@ -326,6 +337,99 @@ fn dir_size(path: &Path) -> u64 {
         }
     }
     total
+}
+
+/// Bytes actually allocated on disk (st_blocks), which differs from the apparent length for sparse
+/// or preallocated files.
+fn dir_allocated(path: &Path) -> u64 {
+    use std::os::unix::fs::MetadataExt;
+    let mut total = 0;
+    if let Ok(entries) = fs::read_dir(path) {
+        for entry in entries.flatten() {
+            match entry.metadata() {
+                Ok(m) if m.is_dir() => total += dir_allocated(&entry.path()),
+                Ok(m) => total += m.blocks() * 512,
+                _ => {}
+            }
+        }
+    }
+    total
+}
+
+fn walk_files(root: &Path, dir: &Path, out: &mut Vec<(String, u64, u64)>) {
+    use std::os::unix::fs::MetadataExt;
+    if let Ok(entries) = fs::read_dir(dir) {
+        for entry in entries.flatten() {
+            let p = entry.path();
+            match entry.metadata() {
+                Ok(m) if m.is_dir() => walk_files(root, &p, out),
+                Ok(m) => out.push((p.strip_prefix(root).unwrap_or(&p).display().to_string(), m.len(), m.blocks() * 512)),
+                _ => {}
+            }
+        }
+    }
+}
+
+/// Where the bytes of a finished index live: top-level entries of the state directory (apparent vs
+/// allocated), the largest files under the vector shard, and the payload bytes SQLite holds.
+fn size_breakdown(state: &Path, db: &Connection) -> Result<Value> {
+    let mut top = BTreeMap::new();
+    for entry in fs::read_dir(state)?.flatten() {
+        let p = entry.path();
+        let name = entry.file_name().to_string_lossy().into_owned();
+        let (apparent, allocated) = if p.is_dir() { (dir_size(&p), dir_allocated(&p)) } else {
+            use std::os::unix::fs::MetadataExt;
+            let m = entry.metadata()?;
+            (m.len(), m.blocks() * 512)
+        };
+        top.insert(name, json!({"apparent_bytes": apparent, "allocated_bytes": allocated}));
+    }
+    let mut files = Vec::new();
+    walk_files(state, &state.join("qdrant-edge"), &mut files);
+    // Group by the directory under qdrant-edge and the file's own kind.
+    let mut groups: BTreeMap<String, (usize, u64, u64)> = BTreeMap::new();
+    for (path, apparent, allocated) in &files {
+        let parts: Vec<&str> = path.split('/').collect();
+        let kind = parts.last().map(|f| f.rsplit_once('.').map_or(*f, |(_, ext)| ext)).unwrap_or("?");
+        let dir = parts.get(1..parts.len().saturating_sub(1)).map(|d| d.iter().map(|x| if x.chars().all(|c| c.is_ascii_hexdigit() || c == '-') && x.len() > 8 { "<id>" } else { *x }).collect::<Vec<_>>().join("/")).unwrap_or_default();
+        let e = groups.entry(format!("{dir}/*.{kind}")).or_default();
+        e.0 += 1;
+        e.1 += apparent;
+        e.2 += allocated;
+    }
+    let mut largest: Vec<&(String, u64, u64)> = files.iter().collect();
+    largest.sort_by(|a, b| b.2.cmp(&a.2).then(a.0.cmp(&b.0)));
+    let mut tables = BTreeMap::new();
+    let names: Vec<String> = {
+        let mut stmt = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name")?;
+        let rows = stmt.query_map([], |r| r.get::<_, String>(0))?;
+        rows.collect::<rusqlite::Result<Vec<_>>>()?
+    };
+    for name in names {
+        let rows: i64 = db.query_row(&format!("SELECT COUNT(*) FROM \"{name}\""), [], |r| r.get(0))?;
+        tables.insert(name, rows);
+    }
+    let payload = |sql: &str| -> i64 { db.query_row(sql, [], |r| r.get(0)).unwrap_or(-1) };
+    Ok(json!({
+        "state_dir_entries": top,
+        "vector_shard": {
+            "files": files.len(),
+            "apparent_bytes": files.iter().map(|f| f.1).sum::<u64>(),
+            "allocated_bytes": files.iter().map(|f| f.2).sum::<u64>(),
+            "by_group": groups.iter().map(|(k, (n, a, b))| (k.clone(), json!({"files": n, "apparent_bytes": a, "allocated_bytes": b}))).collect::<BTreeMap<_, _>>(),
+            "largest_files": largest.iter().take(25).map(|(p, a, b)| json!({"path": p, "apparent_bytes": a, "allocated_bytes": b})).collect::<Vec<_>>(),
+        },
+        "sqlite": {
+            "rows": tables,
+            "page_bytes": payload("SELECT page_count*page_size FROM pragma_page_count, pragma_page_size"),
+            "snapshots_ax_nodes_json_bytes": payload("SELECT COALESCE(SUM(length(CAST(ax_nodes_json AS BLOB))),0) FROM snapshots"),
+            "snapshots_body_bytes": payload("SELECT COALESCE(SUM(length(CAST(body AS BLOB))),0) FROM snapshots"),
+            "snapshots_cleaning_trace_bytes": payload("SELECT COALESCE(SUM(length(CAST(cleaning_trace_json AS BLOB))),0) FROM snapshots"),
+            "raw_versions_ax_nodes_json_bytes": payload("SELECT COALESCE(SUM(length(CAST(ax_nodes_json AS BLOB))),0) FROM raw_versions"),
+            "chunks_body_bytes": payload("SELECT COALESCE(SUM(length(CAST(body AS BLOB))),0) FROM chunks"),
+            "derived_body_bytes": payload("SELECT COALESCE(SUM(length(CAST(body AS BLOB))),0) FROM derived"),
+        },
+    }))
 }
 
 fn git(args: &[&str]) -> Option<String> {
@@ -371,6 +475,12 @@ struct QueryResult {
     obs_dropped: usize,
     wrong_before_right: Option<bool>,
     chunk_found_final_lost: bool,
+    /// Final slots held by `--extra-corpus` snapshots, and by the hard ones (`hard-` fixture ids).
+    extra_slots: usize,
+    hard_slots: usize,
+    /// For a query whose answer was found in the final list: did a distractor rank above it?
+    extra_above_answer: Option<bool>,
+    extra_rank1: bool,
     json: Value,
 }
 
@@ -420,6 +530,8 @@ fn excluded_by(clauses: &[Value], time: Option<(i64, i64)>, snap: &SnapRow) -> V
 }
 
 struct EvalCtx<'a> {
+    /// Snapshot ids that came from `--extra-corpus` (empty without it).
+    extra_snapshots: &'a HashSet<i64>,
     fixture_snapshots: &'a BTreeMap<String, i64>,
     snapshot_fixtures: &'a BTreeMap<i64, Vec<String>>,
 }
@@ -469,6 +581,13 @@ fn evaluate_query(rt: &mut Runtime, index: usize, gold: &Gold, params: &Params, 
             }
         }
     }
+
+    let is_extra = |sid: i64| ctx.extra_snapshots.contains(&sid);
+    let is_hard = |sid: i64| ctx.snapshot_fixtures.get(&sid).is_some_and(|f| f.iter().any(|n| n.starts_with("hard-")));
+    let extra_slots = retrieval.hits.iter().filter(|h| is_extra(h.source.id)).count();
+    let hard_slots = retrieval.hits.iter().filter(|h| is_hard(h.source.id)).count();
+    let extra_above_answer = right_rank.map(|r| retrieval.hits.iter().take(r - 1).any(|h| is_extra(h.source.id)));
+    let extra_rank1 = retrieval.hits.first().is_some_and(|h| is_extra(h.source.id));
 
     let top10 = &retrieval.ranked[..retrieval.ranked.len().min(10)];
     let derived_top10 = top10.iter().filter(|p| p.kind == "derived").count();
@@ -545,6 +664,7 @@ fn evaluate_query(rt: &mut Runtime, index: usize, gold: &Gold, params: &Params, 
         "top_score_chunk": top_chunk_score.map(|s| round(s * 1e6) / 1e6 * 1.0),
         "top_score_final": top_final_score.map(|s| round(s * 1e6) / 1e6 * 1.0),
         "derived_in_top10": derived_top10,
+        "distractor_slots": {"extra": extra_slots, "hard": hard_slots, "above_answer": extra_above_answer, "rank1": extra_rank1},
         "near_duplicate_slots": {"jaccard_0.8": crowd[0].0, "jaccard_0.5": crowd[1].0, "final_slots": shown.len()},
         "top5_chunks": top5, "final": final_view,
     });
@@ -554,7 +674,7 @@ fn evaluate_query(rt: &mut Runtime, index: usize, gold: &Gold, params: &Params, 
             derived_top10, top10_len: top10.len(), top_chunk_score, top_final_score,
             zero: retrieval.hits.is_empty(), has_filter: !retrieval.filter.is_empty(), has_app_filter, app_fallback,
             excluded_all, excluded_any, obs_dropped: retrieval.observation_dropped, wrong_before_right,
-            chunk_found_final_lost, json,
+            chunk_found_final_lost, extra_slots, hard_slots, extra_above_answer, extra_rank1, json,
         },
         latency_ms,
     ))
@@ -613,6 +733,16 @@ fn aggregate(results: &[&QueryResult], golds: &[Gold], final_k: usize) -> Value 
             "stale_or_wrong_text_ranked_above_answer": rate(wrong.iter().filter(|r| r.wrong_before_right == Some(true)).count(), wrong.len()),
         },
         "near_duplicate_crowding": {"jaccard_0.8": crowd(0), "jaccard_0.5": crowd(1)},
+        "distractors": {
+            "final_slots_held_by_extra_snapshots": rate(with_results.iter().map(|r| r.extra_slots).sum(), slots),
+            "final_slots_held_by_hard_distractors": rate(with_results.iter().map(|r| r.hard_slots).sum(), slots),
+            "rank1_is_extra": rate(with_results.iter().filter(|r| r.extra_rank1).count(), with_results.len()),
+            "extra_ranked_above_found_answer": rate(
+                answerable.iter().filter(|r| r.extra_above_answer == Some(true)).count(),
+                answerable.iter().filter(|r| r.extra_above_answer.is_some()).count()),
+            "absent_queries_whose_top_result_is_extra": rate(
+                absent.iter().filter(|r| r.extra_rank1).count(), absent.iter().filter(|r| r.n_final > 0).count()),
+        },
         "derived_pollution_top10": {
             "derived_slots": rate(derived_slots, top10_slots),
             "mean_per_query": round(mean(&results.iter().map(|r| if r.top10_len == 0 { 0.0 } else { r.derived_top10 as f64 / r.top10_len as f64 }).collect::<Vec<_>>())),
@@ -927,6 +1057,17 @@ pub fn run(args: &[String]) -> Result<()> {
             facts.insert(loaded.id.clone(), serde_json::from_str(&fs::read_to_string(&path)?).with_context(|| format!("invalid {}", path.display()))?);
         }
     }
+    let extra = match &args.extra_corpus {
+        Some(dir) => {
+            let list = fixtures::list_lazy(dir)?;
+            let base_ids: BTreeSet<&str> = corpus.iter().map(|l| l.id.as_str()).collect();
+            if let Some(clash) = list.iter().find(|l| base_ids.contains(l.id.as_str())) {
+                bail!("extra corpus fixture {} has the same id as a base fixture", clash.id);
+            }
+            list
+        }
+        None => Vec::new(),
+    };
     let variants = variants(&args, now_ms)?;
     let selected: Vec<usize> = golds.iter().enumerate().filter(|(_, g)| args.split == "all" || g.split == args.split).map(|(i, _)| i).collect();
 
@@ -944,7 +1085,7 @@ pub fn run(args: &[String]) -> Result<()> {
         }
         fs::create_dir_all(&state)?;
         fs::set_permissions(&state, fs::Permissions::from_mode(0o700))?;
-        let outcome = run_group(&args, &state, target.0, target.1, model.take(), &variants, &corpus, &golds, &selected, &facts, now_ms);
+        let outcome = run_group(&args, &state, target.0, target.1, model.take(), &variants, &corpus, &extra, &golds, &selected, &facts, now_ms);
         let cleanup = |state: &Path| if !args.keep_state { let _ = fs::remove_dir_all(state); } else { eprintln!("kept state dir {}", state.display()); };
         match outcome {
             Ok(m) => {
@@ -969,6 +1110,7 @@ fn run_group(
     model: Option<StaticModel>,
     all_variants: &[Variant],
     corpus: &[Loaded],
+    extra: &[fixtures::Lazy],
     golds: &[Gold],
     selected: &[usize],
     facts: &BTreeMap<String, Facts>,
@@ -979,7 +1121,8 @@ fn run_group(
     }
     let mut runtime = open_runtime_with(state, false, model, index_prefix)?;
     let ingest_started = std::time::Instant::now();
-    let ingested = fixtures::ingest(&mut runtime, state, corpus, &chunking)?;
+    let mut ingest_curve = Vec::new();
+    let ingested = fixtures::ingest_merged(&mut runtime, state, corpus, extra, &chunking, &mut ingest_curve)?;
     let ingest_ms = ingest_started.elapsed().as_secs_f64() * 1000.0;
 
     // Every gold answer must be an exact (whitespace/case-normalised) substring of its cleaned body.
@@ -1008,18 +1151,45 @@ fn run_group(
             names.push(i.fixture.clone());
         }
     }
-    let ctx = EvalCtx { fixture_snapshots: &fixture_snapshots, snapshot_fixtures: &snapshot_fixtures };
-    let static_part = intrinsics(&runtime, corpus, &ingested, facts, golds)?;
+    let extra_snapshots: HashSet<i64> = ingested.iter().filter(|i| i.extra).map(|i| i.snapshot_id).collect();
+    let ctx = EvalCtx { extra_snapshots: &extra_snapshots, fixture_snapshots: &fixture_snapshots, snapshot_fixtures: &snapshot_fixtures };
+    // Per-fixture cleaner/redundancy intrinsics are about the base corpus; chunk statistics still
+    // cover everything in the index.
+    let base_ingested: Vec<Ingested> = ingested.iter().filter(|i| !i.extra).cloned().collect();
+    let static_part = intrinsics(&runtime, corpus, &base_ingested, facts, golds)?;
     let probe_part = probes(&runtime.db, now_ms, &all_variants[0].params)?;
     let index_bytes = dir_size(state);
+    let index_allocated = dir_allocated(state);
+    let breakdown = size_breakdown(state, &runtime.db)?;
+    let count = |sql: &str| -> i64 { runtime.db.query_row(sql, [], |r| r.get(0)).unwrap_or(-1) };
+    let scale = json!({
+        "extra_corpus": args.extra_corpus.as_ref().map(|p| p.display().to_string()),
+        "extra_sightings": extra.len(),
+        "extra_fixtures": extra.iter().map(|l| l.id.as_str()).collect::<BTreeSet<_>>().len(),
+        "snapshots": count("SELECT COUNT(*) FROM snapshots"),
+        "searchable_snapshots": count("SELECT COUNT(*) FROM snapshots WHERE searchable=1"),
+        "chunks": count("SELECT COUNT(*) FROM chunks"),
+        "derived_points": count("SELECT COUNT(*) FROM derived"),
+        "vector_points": count("SELECT COUNT(*) FROM chunks WHERE indexed=1") + count("SELECT COUNT(*) FROM derived WHERE indexed=1"),
+    });
 
     for variant in all_variants.iter().filter(|v| v.chunking == chunking && v.prefix == index_prefix) {
         let mut results = Vec::new();
         let mut latencies = Vec::new();
+        let mut best_of = Vec::new();
         for &i in selected {
             let (result, ms) = evaluate_query(&mut runtime, i, &golds[i], &variant.params, &ctx)?;
             results.push(result);
             latencies.push(ms);
+            let mut best = ms;
+            for _ in 1..args.query_repeats {
+                let started = std::time::Instant::now();
+                retrieve(&mut runtime, &golds[i].query, &variant.params)?;
+                let ms = started.elapsed().as_secs_f64() * 1000.0;
+                best = best.min(ms);
+                latencies.push(ms);
+            }
+            best_of.push(best);
         }
         let refs: Vec<&QueryResult> = results.iter().collect();
         let final_k = variant.params.final_k;
@@ -1068,8 +1238,16 @@ fn run_group(
             "queries": results.iter().map(|r| r.json.clone()).collect::<Vec<_>>(),
             "timing": {
                 "ingest_ms": round(ingest_ms), "query_latency_ms": dist(&latencies),
+                // Per query, the fastest of --query-repeats runs: robust against paging/other load on the machine.
+                "query_latency_best_of_repeats_ms": dist(&best_of),
+                "query_latency_samples": latencies.len(),
                 "index_size_bytes": index_bytes,
+                "index_allocated_bytes": index_allocated,
+                "ingest_curve_ms": ingest_curve.iter().map(|(n, ms)| json!([n, round(*ms)])).collect::<Vec<_>>(),
+                "ingest_snapshots_per_second": round(ingested.len() as f64 / (ingest_ms / 1000.0).max(1e-9)),
             },
+            "scale": scale,
+            "index_size": breakdown,
         });
         let path = variant_path(&args.out, variant);
         if let Some(parent) = path.parent() {
