@@ -1,6 +1,7 @@
 #![cfg(target_os = "macos")]
 mod abstain;
 mod appscope;
+mod blocklist;
 mod cleaner;
 mod eval;
 mod fixtures;
@@ -109,6 +110,7 @@ fn main() -> Result<()> {
     fs::create_dir_all(&state)?;
     fs::set_permissions(&state, fs::Permissions::from_mode(0o700))?;
     match args.as_slice() {
+        [command, rest @ ..] if command == "blocklist" => blocklist::run_cli(&state, rest),
         [command, flags @ ..] if command == "capture" => {
             if flags
                 .iter()
@@ -146,7 +148,7 @@ unsafe fn libc_umask(mask: u32) {
     umask(mask);
 }
 fn usage() {
-    eprintln!("Usage: open-memory capture [--print] [--rebuild-index]\n       open-memory capture --clean-dry-run\n       open-memory capture --apply-cleaning\n       open-memory ask \"natural-language question\"\n       OPEN_MEMORY_STATE_DIR=<tmp> open-memory ingest-fixtures --corpus evals/corpus\n       open-memory eval --corpus evals/corpus --gold evals/gold/gold.jsonl --out evals/reports/<name>.json");
+    eprintln!("Usage: open-memory capture [--print] [--rebuild-index]\n       open-memory capture --clean-dry-run\n       open-memory capture --apply-cleaning\n       open-memory blocklist [list|check <app id>|add <app id> [label]|remove <app id>|enable <app id>|disable <app id>|reset]\n       open-memory ask \"natural-language question\"\n       OPEN_MEMORY_STATE_DIR=<tmp> open-memory ingest-fixtures --corpus evals/corpus\n       open-memory eval --corpus evals/corpus --gold evals/gold/gold.jsonl --out evals/reports/<name>.json");
 }
 fn state_dir() -> Result<PathBuf> {
     if let Some(path) = env::var_os("OPEN_MEMORY_STATE_DIR") {
@@ -511,7 +513,14 @@ fn capture(state: &Path, print: bool, rebuild: bool) -> Result<()> {
         }
     });
     let mut last_status = String::new();
+    let mut blocked_apps = blocklist::Watcher::new(state)?;
+    println!("Not saving windows of {} blocked app entries (open-memory blocklist list).", blocked_apps.list.apps.iter().filter(|e| e.enabled).count());
     loop {
+        match blocked_apps.refresh() {
+            Ok(true) => println!("Blocklist reloaded: {} enabled entries.", blocked_apps.list.apps.iter().filter(|e| e.enabled).count()),
+            Ok(false) => {}
+            Err(error) => eprintln!("blocklist not reloaded, keeping the previous one: {error:#}"),
+        }
         if run_helper(&helper, "--permission")?.permission.as_deref() != Some("granted") {
             if last_status != "accessibility_not_granted" {
                 println!("Skipped: accessibility_not_granted");
@@ -525,7 +534,18 @@ fn capture(state: &Path, print: bool, rebuild: bool) -> Result<()> {
             let rt = runtime.as_mut().unwrap();
             let reply = run_helper(&helper, "--read-frontmost")?;
             if reply.status.as_deref() == Some("ok") {
-                if let Some(window) = reply.window {
+                if let Some(window) = reply.window.filter(|w| {
+                    if let Some(entry) = blocked_apps.list.matching(&w.app_id) {
+                        let status = format!("blocked_app {} ({})", w.app_id, entry.label);
+                        if status != last_status {
+                            println!("Skipped: {status}");
+                            last_status = status;
+                        }
+                        false
+                    } else {
+                        true
+                    }
+                }) {
                     let (id, is_new, source) = record(
                         &mut rt.db,
                         &window,
