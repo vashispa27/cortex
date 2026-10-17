@@ -3,6 +3,7 @@ mod abstain;
 mod appscope;
 mod blocklist;
 mod cleaner;
+mod dedup;
 mod eval;
 mod fixtures;
 mod prefix;
@@ -207,6 +208,20 @@ fn open_db(state: &Path) -> Result<Connection> {
             db.execute(&format!("ALTER TABLE snapshots ADD COLUMN {column} {definition}"), [])?;
         }
     }
+    // Chunk-level sharing (dedup.rs): `dup_of` points at the chunk whose vector point serves this one.
+    let chunk_columns = {
+        let mut statement = db.prepare("PRAGMA table_info(chunks)")?;
+        let found = statement
+            .query_map([], |row| row.get::<_, String>(1))?
+            .collect::<rusqlite::Result<Vec<_>>>()?;
+        found
+    };
+    for (column, definition) in [("dup_of", "INTEGER"), ("text_hash", "TEXT")] {
+        if !chunk_columns.iter().any(|existing| existing == column) {
+            db.execute(&format!("ALTER TABLE chunks ADD COLUMN {column} {definition}"), [])?;
+        }
+    }
+    db.execute_batch("CREATE INDEX IF NOT EXISTS chunks_text_hash ON chunks(text_hash); CREATE INDEX IF NOT EXISTS chunks_dup_of ON chunks(dup_of);")?;
     Ok(db)
 }
 
@@ -307,12 +322,12 @@ fn open_runtime_with(state: &Path, rebuild: bool, model: Option<StaticModel>, pr
             fs::remove_dir_all(&shard_dir)?;
         }
         db.execute("UPDATE snapshots SET indexed=0,embedding_model=NULL", [])?;
-        db.execute("UPDATE chunks SET indexed=0", [])?;
+        db.execute("UPDATE chunks SET indexed=0,dup_of=NULL,text_hash=NULL", [])?;
         db.execute("UPDATE derived SET indexed=0", [])?;
     } else if !shard_dir.join("edge_config.json").exists() {
         // SQLite is authoritative if the disposable vector directory vanished.
         db.execute("UPDATE snapshots SET indexed=0,embedding_model=NULL", [])?;
-        db.execute("UPDATE chunks SET indexed=0", [])?;
+        db.execute("UPDATE chunks SET indexed=0,dup_of=NULL,text_hash=NULL", [])?;
         db.execute("UPDATE derived SET indexed=0", [])?;
     }
     let model = match model {
@@ -395,25 +410,29 @@ impl Runtime {
         ))?;
         Ok(())
     }
-    /// A re-sighting of a known snapshot only advances the `last_seen` payload of its chunk points.
+    /// A re-sighting of a known snapshot only advances the `last_seen` payload of the chunk points that
+    /// serve it (its own, or the ones its shared chunks point at).
     fn refresh_seen(&self, id: i64, source: &Source) -> Result<()> {
-        let chunk_ids = {
-            let mut stmt = self.db.prepare("SELECT id FROM chunks WHERE snapshot_id=?1")?;
+        let canonicals = {
+            let mut stmt = self.db.prepare("SELECT DISTINCT COALESCE(dup_of,id) FROM chunks WHERE snapshot_id=?1")?;
             let found = stmt.query_map([id], |r| r.get::<_, i64>(0))?.collect::<rusqlite::Result<Vec<_>>>()?;
             found
         };
-        if !chunk_ids.is_empty() {
-            let payload: Payload = serde_json::from_value(
-                json!({"last_seen":source.last_seen_ms,"source_type":source.source_type}),
-            )?;
-            self.shard.update(UpdateOperation::PayloadOperation(
-                PayloadOps::SetPayload(SetPayloadOp {
-                    payload,
-                    points: Some(chunk_ids.into_iter().map(|chunk_id| PointId::NumId((1_u64 << 61) + chunk_id as u64)).collect()),
-                    filter: None,
-                    key: None,
-                }),
-            ))?;
+        // Points are grouped by the value to set: a point shared with other snapshots keeps the latest
+        // sighting among all of them.
+        let mut by_last: std::collections::BTreeMap<i64, Vec<PointId>> = std::collections::BTreeMap::new();
+        for canonical in canonicals {
+            let last: i64 = if dedup::enabled() { dedup::sharing(&self.db, canonical)?.1.max(source.last_seen_ms) } else { source.last_seen_ms };
+            by_last.entry(last).or_default().push(PointId::NumId((1_u64 << 61) + canonical as u64));
+        }
+        for (last, points) in by_last {
+            let payload: Payload = serde_json::from_value(json!({"last_seen":last,"source_type":source.source_type}))?;
+            self.shard.update(UpdateOperation::PayloadOperation(PayloadOps::SetPayload(SetPayloadOp {
+                payload,
+                points: Some(points),
+                filter: None,
+                key: None,
+            })))?;
         }
         Ok(())
     }
@@ -453,9 +472,55 @@ impl Runtime {
             rows.collect::<rusqlite::Result<Vec<_>>>()?
         };
         let version = prefix::index_version(self.prefix);
+        // Chunks whose text is already indexed (same app and domain, same embedded context) get no point of
+        // their own; they point at the one that exists. The context prefix puts the capture date in the
+        // embedded text, so that mode never shares.
+        let share = dedup::chunk_sharing_enabled() && self.prefix != prefix::Prefix::Context;
+        let mut batch: std::collections::HashMap<String, i64> = std::collections::HashMap::new();
+        let mut keys: Vec<(i64, String)> = Vec::new();
+        let mut shared: Vec<(i64, i64, String)> = Vec::new();
         for (chunk_id, snapshot_id, app, title, url, domain, source_type, body, start, end, first, last, snapshot_body) in &chunks {
+            let key = dedup::chunk_key(self.prefix, app, domain.as_deref(), title, body);
+            if share {
+                let canonical = match batch.get(&key) {
+                    Some(c) => Some(*c),
+                    None => self.db.query_row("SELECT id FROM chunks WHERE text_hash=?1 AND indexed=1 AND dup_of IS NULL LIMIT 1", [&key], |r| r.get::<_, i64>(0)).optional()?,
+                };
+                if let Some(canonical) = canonical {
+                    shared.push((*chunk_id, canonical, key));
+                    continue;
+                }
+                batch.insert(key.clone(), *chunk_id);
+            }
+            keys.push((*chunk_id, key));
             let text = prefix::embed_text(self.prefix, &prefix::ChunkContext { title, app_id: app, domain: domain.as_deref(), first_seen_ms: *first, snapshot_body, start_byte: *start as usize }, body);
-            self.upsert_point((1_u64 << 61) + *chunk_id as u64, &text, json!({"snapshot_id":snapshot_id,"chunk_id":chunk_id,"start_byte":start,"end_byte":end,"point_type":"chunk","app":app,"domain":domain,"url":url,"capture_time":first,"last_seen":last,"source_type":source_type,"model":version}))?;
+            self.upsert_point((1_u64 << 61) + *chunk_id as u64, &text, json!({"snapshot_id":snapshot_id,"snapshot_ids":[snapshot_id],"chunk_id":chunk_id,"start_byte":start,"end_byte":end,"point_type":"chunk","app":app,"domain":domain,"url":url,"capture_time":first,"last_seen":last,"source_type":source_type,"model":version}))?;
+        }
+        // A shared point must be findable through every snapshot that shares it, and its time window must
+        // cover all of them (the exact per-snapshot observation check runs after the query).
+        let sharers: std::collections::HashMap<i64, (i64, i64, i64)> = chunks.iter().map(|c| (c.0, (c.1, c.10, c.11))).collect();
+        let mut canonicals: std::collections::BTreeMap<i64, (i64, i64, std::collections::BTreeSet<i64>)> = std::collections::BTreeMap::new();
+        for (chunk_id, canonical, _) in &shared {
+            let entry = match canonicals.entry(*canonical) {
+                std::collections::btree_map::Entry::Occupied(e) => e.into_mut(),
+                std::collections::btree_map::Entry::Vacant(e) => {
+                    let (first, last, ids) = dedup::sharing(&self.db, *canonical)?;
+                    e.insert((first, last, ids.into_iter().collect()))
+                }
+            };
+            let (snapshot_id, first, last) = sharers[chunk_id];
+            entry.0 = entry.0.min(first);
+            entry.1 = entry.1.max(last);
+            entry.2.insert(snapshot_id);
+        }
+        for (canonical, (first, last, ids)) in &canonicals {
+            let payload: Payload = serde_json::from_value(json!({"capture_time":first,"last_seen":last,"snapshot_ids":ids.iter().collect::<Vec<_>>()}))?;
+            self.shard.update(UpdateOperation::PayloadOperation(PayloadOps::SetPayload(SetPayloadOp {
+                payload,
+                points: Some(vec![PointId::NumId((1_u64 << 61) + *canonical as u64)]),
+                filter: None,
+                key: None,
+            })))?;
         }
         for (id, kind, body) in &derived {
             self.upsert_point(
@@ -468,8 +533,13 @@ impl Runtime {
         if added > 0 {
             self.shard.flush()?;
             let tx = self.db.transaction()?;
-            for (id, snapshot_id, _, _, _, _, _, _, _, _, _, _, _) in chunks {
-                tx.execute("UPDATE chunks SET indexed=1 WHERE id=?1", [id])?;
+            for (id, key) in &keys {
+                tx.execute("UPDATE chunks SET indexed=1,text_hash=?2 WHERE id=?1", params![id, key])?;
+            }
+            for (id, canonical, key) in &shared {
+                tx.execute("UPDATE chunks SET indexed=1,dup_of=?2,text_hash=?3 WHERE id=?1", params![id, canonical, key])?;
+            }
+            for (_, snapshot_id, _, _, _, _, _, _, _, _, _, _, _) in &chunks {
                 tx.execute("UPDATE snapshots SET indexed=1,embedding_model=?2 WHERE id=?1", params![snapshot_id, version])?;
             }
             for (id, _, body) in derived {
@@ -636,16 +706,25 @@ fn record_with_target(
     limitations: Option<Vec<String>>,
     chunking: &cleaner::ChunkCfg,
 ) -> Result<(i64, bool, Source)> {
+    let dedup = dedup::enabled();
+    let tree_key = dedup::tree_key(window, url.as_deref());
+    let source_type = source_type.unwrap_or_else(|| "app".into());
+    let limitations = serde_json::to_string(&limitations.unwrap_or_default())?;
+    // Same Accessibility text as an earlier capture of this page: nothing to clean, store or embed.
+    if dedup {
+        if let Some(id) = dedup::snapshot_for_tree(db, &tree_key)? {
+            let source = dedup::touch(db, id, window, &source_type, &limitations, &tree_key)?;
+            return Ok((id, false, source));
+        }
+    }
     let cleaned = cleaner::clean(&window.roots, &window.app_id, url.as_deref(), &window.title);
     let body = &cleaned.body;
     let domain = url
         .as_deref()
         .and_then(|u| url::Url::parse(u).ok())
         .and_then(|u| u.host_str().map(str::to_owned));
-    let source_type = source_type.unwrap_or_else(|| "app".into());
     let fingerprint = content_fingerprint(&window.app_id, url.as_deref(), &window.title, body);
     let evidence_fingerprint = evidence_key(&window.app_id, domain.as_deref(), &source_type, &body);
-    let limitations = serde_json::to_string(&limitations.unwrap_or_default())?;
     let ax_nodes_json = serde_json::to_string(&window.roots)?;
     let cleaning_trace_json = serde_json::to_string(&cleaned.decisions)?;
     let existing: Option<i64> = db
@@ -655,6 +734,14 @@ fn record_with_target(
             |r| r.get(0),
         )
         .optional()?;
+    // A near-identical copy of the page's latest snapshot (same numbers, names and negations) is one more
+    // sighting of it, not a new snapshot.
+    if dedup::near_dup_enabled() && existing.is_none() {
+        if let Some(id) = dedup::find_near_duplicate(db, window, url.as_deref(), body)? {
+            let source = dedup::touch(db, id, window, &source_type, &limitations, &tree_key)?;
+            return Ok((id, false, source));
+        }
+    }
     let transaction = db.transaction()?;
     transaction.execute("INSERT INTO snapshots(fingerprint,evidence_fingerprint,app_id,title,url,domain,source_type,body,first_seen_ms,last_seen_ms,focus_role,focus_name,limitations,ax_nodes_json,cleaner_version,cleaner_quality,cleaner_coverage,cleaning_trace_json,searchable) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?9,?10,?11,?12,?13,?14,?15,?16,?17,?18) ON CONFLICT(fingerprint) DO UPDATE SET last_seen_ms=excluded.last_seen_ms,duration_ms=MAX(0,excluded.last_seen_ms-snapshots.first_seen_ms),sightings=snapshots.sightings+1,limitations=excluded.limitations,source_type=excluded.source_type",
         params![fingerprint,evidence_fingerprint,window.app_id,window.title,url,domain,source_type,body,window.observed_ms,window.focus_role,window.focus_name,limitations,ax_nodes_json,cleaner::VERSION,cleaned.quality,cleaned.coverage,cleaning_trace_json,i64::from(!body.is_empty())])?;
@@ -664,6 +751,7 @@ fn record_with_target(
         |r| r.get(0),
     )?;
     transaction.execute("INSERT OR IGNORE INTO raw_versions(snapshot_id,ax_hash,ax_nodes_json,observed_ms) VALUES(?1,?2,?3,?4)",params![id,digest(&ax_nodes_json),ax_nodes_json,window.observed_ms])?;
+    transaction.execute("INSERT OR IGNORE INTO tree_keys(tree_key,snapshot_id) VALUES(?1,?2)", params![tree_key,id])?;
     if existing.is_none() {
         for (start, end, text) in cleaner::chunks_cfg(body, chunking) {
             transaction.execute("INSERT INTO chunks(snapshot_id,start_byte,end_byte,body) VALUES(?1,?2,?3,?4)", params![id,start as i64,end as i64,text])?;
@@ -1230,7 +1318,8 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
         };
         let ids = if ids.is_empty() { vec![-1] } else { ids };
         clauses.push(json!({"should":[
-            {"key":"snapshot_id","match":{"any":ids}},
+            {"key":"snapshot_id","match":{"any":ids.clone()}},
+            {"key":"snapshot_ids","match":{"any":ids}},
             {"key":"point_type","match":{"value":"derived"}}
         ]}));
     }
@@ -1316,14 +1405,16 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
         } else if point_id >= (1_u64 << 61) {
             let id = (point_id - (1_u64 << 61)) as i64;
             chunk_id = Some(id);
-            let row: Option<(i64, String)> = runtime.db.query_row("SELECT snapshot_id,body FROM chunks WHERE id=?1", [id], |r| Ok((r.get::<_, i64>(0)?, r.get::<_, String>(1)?))).optional()?;
-            match row {
-                Some((snapshot_id, body)) => {
-                    point_text = body.clone();
-                    vec![(snapshot_id, Some(body), Some(id))]
-                }
-                None => Vec::new(),
+            // The point's own chunk first, then the chunks that share it (dedup.rs): same text, other snapshots.
+            let rows: Vec<(i64, String, i64)> = {
+                let mut stmt = runtime.db.prepare("SELECT snapshot_id,body,id FROM chunks WHERE id=?1 UNION ALL SELECT snapshot_id,body,id FROM chunks WHERE dup_of=?1")?;
+                let found = stmt.query_map([id], |r| Ok((r.get::<_, i64>(0)?, r.get::<_, String>(1)?, r.get::<_, i64>(2)?)))?.collect::<rusqlite::Result<Vec<_>>>()?;
+                found
+            };
+            if let Some(first) = rows.first() {
+                point_text = first.1.clone();
             }
+            rows.into_iter().map(|(snapshot_id, body, chunk)| (snapshot_id, Some(body), Some(chunk))).collect()
         } else {
             vec![(point_id as i64, None, None)]
         };

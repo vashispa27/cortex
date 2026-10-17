@@ -73,3 +73,9 @@ CREATE TABLE IF NOT EXISTS derived_sources (
  PRIMARY KEY(derived_id,snapshot_id)
 );
 CREATE TABLE IF NOT EXISTS index_meta (key TEXT PRIMARY KEY,value TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS snapshots_page ON snapshots(app_id,title,url,last_seen_ms);
+CREATE TABLE IF NOT EXISTS tree_keys (
+ tree_key TEXT PRIMARY KEY,
+ snapshot_id INTEGER NOT NULL REFERENCES snapshots(id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS tree_keys_snapshot ON tree_keys(snapshot_id);

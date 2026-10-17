@@ -68,6 +68,8 @@ Everything below is opt-in; the default `eval` run is unchanged.
   `code`, `long_document`, `short_snapshot`, `repeat_capture`, `mixed_language`, `table`). `evals/private/` is
   git-ignored. `evals/tools/transfer_table.py`, `transfer_types.py`, `ablation_table.py` and
   `dedup_potential.py` produce aggregate-only tables from the reports.
+* `evals/run_all.sh` builds and runs the invented and real evals, saves timestamped reports and prints the key numbers against the previous run.
+* Ingest-time dedup switches (env): `OPEN_MEMORY_NO_INGEST_DEDUP=1` (all off), `OPEN_MEMORY_NO_NEAR_DUP_MERGE=1`, `OPEN_MEMORY_CHUNK_SHARING=1` (on; off by default); results in `reports/real/dedup.md`.
 * Scale test: see `evals/scale/README.md` (generator, runner, summariser).
 
 ## Definitions

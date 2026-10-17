@@ -1170,7 +1170,9 @@ fn run_group(
         "searchable_snapshots": count("SELECT COUNT(*) FROM snapshots WHERE searchable=1"),
         "chunks": count("SELECT COUNT(*) FROM chunks"),
         "derived_points": count("SELECT COUNT(*) FROM derived"),
-        "vector_points": count("SELECT COUNT(*) FROM chunks WHERE indexed=1") + count("SELECT COUNT(*) FROM derived WHERE indexed=1"),
+        "vector_points": count("SELECT COUNT(*) FROM chunks WHERE indexed=1 AND dup_of IS NULL") + count("SELECT COUNT(*) FROM derived WHERE indexed=1"),
+        "chunks_sharing_a_point": count("SELECT COUNT(*) FROM chunks WHERE dup_of IS NOT NULL"),
+        "tree_keys": count("SELECT COUNT(*) FROM tree_keys"),
     });
 
     for variant in all_variants.iter().filter(|v| v.chunking == chunking && v.prefix == index_prefix) {
