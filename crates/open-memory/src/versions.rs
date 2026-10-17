@@ -116,7 +116,7 @@ pub fn apply(mut entries: Vec<Entry>, question: &str, params: &Params) -> Vec<En
             // score is within `version_margin` of every other member's.
             let top = members.iter().map(|m| m.0).fold(f32::MIN, f32::max) as f64;
             let low = members.iter().map(|m| m.0).fold(f32::MAX, f32::min) as f64;
-            let scale = if params.mode == Mode::Hybrid { 2.0 } else { 1.0 } / params.rrf_k as f64;
+            let scale = params.rrf_max_score();
             if (top - low) / scale > params.version_margin {
                 continue;
             }

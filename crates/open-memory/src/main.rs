@@ -1127,6 +1127,8 @@ enum Mode {
     Hybrid,
     DenseOnly,
     Bm25Only,
+    /// Dense retrieval only reorders the BM25 candidate set.
+    Bm25DenseRerank,
 }
 
 /// How an app mention in the question becomes an `app` filter.
@@ -1166,6 +1168,8 @@ struct Params {
     /// Fused candidates returned by Qdrant before collapsing.
     fused_limit: usize,
     rrf_k: usize,
+    /// BM25 list weight in hybrid RRF; mono-retriever modes keep unit weight.
+    bm25_weight: f32,
     /// Results kept after collapsing and re-ranking.
     final_k: usize,
     /// Maximum results for one app/page after version ordering; 0 disables the cap.
@@ -1213,6 +1217,7 @@ impl Default for Params {
             prefetch: 80,
             fused_limit: 40,
             rrf_k: 60,
+            bm25_weight: 1.0,
             final_k: 8,
             page_cap: 2,
             use_filters: true,
@@ -1243,6 +1248,14 @@ impl Default for Params {
             version_order: true,
             version_margin: 0.3,
         }
+    }
+}
+
+impl Params {
+    /// Qdrant RRF counts ranks from zero: each list's maximum is its weight divided by k.
+    fn rrf_max_score(&self) -> f64 {
+        let weight = if self.mode == Mode::Hybrid { 1.0 + self.bm25_weight as f64 } else { 1.0 };
+        weight / self.rrf_k as f64
     }
 }
 
@@ -1379,47 +1392,55 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
     } else {
         Some(serde_json::from_value(json!({"must":clauses}))?)
     };
-    let mut builder = QueryRequestBuilder::new(params.fused_limit);
-    if params.mode != Mode::Bm25Only {
-        let dense = runtime.vector(question)?;
+    // RRF uses hash iteration for equal scores. Fetch its entire possible union so the
+    // point-id tie-break below runs BEFORE the fused limit, including ties at that boundary.
+    let fusion_limit = params.prefetch.saturating_mul(if params.mode == Mode::Hybrid { 2 } else { 1 }).max(params.fused_limit);
+    let mut builder = QueryRequestBuilder::new(fusion_limit);
+    let dense = if params.mode != Mode::Bm25Only {
+        Some(ScoringQuery::Vector(QueryEnum::Nearest(NamedQuery {
+            query: VectorInternal::from(runtime.vector(question)?),
+            using: Some("dense".into()),
+        })))
+    } else { None };
+    let sparse = if params.mode != Mode::DenseOnly {
+        Some(ScoringQuery::Vector(QueryEnum::Nearest(NamedQuery {
+            query: VectorInternal::from(runtime.bm25.embed_query(question)),
+            using: Some("bm25".into()),
+        })))
+    } else { None };
+    if params.mode == Mode::Bm25DenseRerank {
+        // Candidate generation is lexical; dense similarity can only reorder these candidates.
+        // The outer one-list RRF keeps scores on the same scale as the other single-list modes.
         builder = builder.add_prefetch(
             PrefetchBuilder::new(params.prefetch)
-                .query(ScoringQuery::Vector(QueryEnum::Nearest(NamedQuery {
-                    query: VectorInternal::from(dense),
-                    using: Some("dense".into()),
-                })))
-                .build(),
+                .add_prefetch(PrefetchBuilder::new(params.prefetch).query(sparse.unwrap()).build())
+                .query(dense.unwrap()).build(),
         );
-    }
-    if params.mode != Mode::DenseOnly {
-        let sparse = runtime.bm25.embed_query(question);
-        builder = builder.add_prefetch(
-            PrefetchBuilder::new(params.prefetch)
-                .query(ScoringQuery::Vector(QueryEnum::Nearest(NamedQuery {
-                    query: VectorInternal::from(sparse),
-                    using: Some("bm25".into()),
-                })))
-                .build(),
-        );
+    } else {
+        for query in dense.into_iter().chain(sparse) {
+            builder = builder.add_prefetch(PrefetchBuilder::new(params.prefetch).query(query).build());
+        }
     }
     let mut builder = builder
         .query(ScoringQuery::Fusion(Fusion::Rrf {
             k: params.rrf_k,
-            weights: None,
+            weights: if params.mode == Mode::Hybrid && params.bm25_weight != 1.0 {
+                Some(vec![1.0.into(), params.bm25_weight.into()])
+            } else { None },
         }))
         .with_payload(WithPayloadInterface::Bool(true));
     if let Some(filter) = filter {
         builder = builder.filter(filter);
     }
     let mut points = runtime.shard.query(builder.build())?;
-    // Qdrant Edge returns exactly tied RRF scores in arbitrary order; break ties by point id so
-    // results (and evals) are reproducible. Scores are already descending, so only ties move.
+    // Break all RRF ties before cutting, including candidates tied at the fused boundary.
     points.sort_by(|a, b| {
         b.score.total_cmp(&a.score).then_with(|| match (&a.id, &b.id) {
             (PointId::NumId(x), PointId::NumId(y)) => x.cmp(y),
             _ => std::cmp::Ordering::Equal,
         })
     });
+    points.truncate(params.fused_limit);
     // Insertion-ordered so equal scores resolve by Qdrant rank, not by hash order.
     let mut index_by_evidence = std::collections::HashMap::<String, usize>::new();
     let mut collapsed: Vec<(Source, Option<i64>, Vec<EvidenceChunk>)> = Vec::new();

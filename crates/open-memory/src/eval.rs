@@ -161,7 +161,8 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, index_pref
                 "hybrid" => Mode::Hybrid,
                 "dense_only" => Mode::DenseOnly,
                 "bm25_only" => Mode::Bm25Only,
-                _ => bail!("mode must be hybrid, dense_only or bm25_only"),
+                "bm25_dense_rerank" => Mode::Bm25DenseRerank,
+                _ => bail!("mode must be hybrid, dense_only, bm25_only or bm25_dense_rerank"),
             }
         }
         "rerank_bonus" => params.rerank_bonus = match value {
@@ -178,6 +179,11 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, index_pref
         "filters" => params.use_filters = flag(value)?,
         "derived" => params.include_derived = flag(value)?,
         "rrf_k" => params.rrf_k = value.parse()?,
+        "bm25_weight" => {
+            let weight: f32 = value.parse()?;
+            if !weight.is_finite() || weight <= 0.0 { bail!("bm25_weight must be finite and > 0"); }
+            params.bm25_weight = weight;
+        },
         "prefetch" => params.prefetch = value.parse()?,
         "fused_limit" => params.fused_limit = value.parse()?,
         "final_k" => params.final_k = value.parse()?,
@@ -248,7 +254,7 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, index_pref
             }
         }
         "app_fallback_ratio" => params.app_fallback_ratio = value.parse()?,
-        _ => bail!("unknown --param key {key} (mode, rerank_bonus, rerank_weight, filters, derived, rrf_k, prefetch, fused_limit, final_k, page_cap, chunk_target, chunk_unit, chunk_overlap, chunk_boundaries, chunk_mode, prefix, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support, obs_prefilter, dedup_jaccard, version_order, version_margin)"),
+        _ => bail!("unknown --param key {key} (mode, rerank_bonus, rerank_weight, bm25_weight, filters, derived, rrf_k, prefetch, fused_limit, final_k, page_cap, chunk_target, chunk_unit, chunk_overlap, chunk_boundaries, chunk_mode, prefix, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support, obs_prefilter, dedup_jaccard, version_order, version_margin)"),
     }
     Ok(())
 }

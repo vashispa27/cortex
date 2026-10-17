@@ -65,8 +65,7 @@ pub fn support(hits: &[Hit], question: &str) -> f64 {
 /// Best score divided by the best score any result can reach: rank 1 (reciprocal rank 1/k, ranks
 /// counted from 0 by Qdrant's fusion) in every retriever.
 pub fn score_norm(top: f64, params: &Params) -> f64 {
-    let lists = if params.mode == Mode::Hybrid { 2.0 } else { 1.0 };
-    top / (lists / params.rrf_k as f64)
+    top / params.rrf_max_score()
 }
 
 pub fn cosine(a: &[f32], b: &[f32]) -> f64 {
@@ -197,6 +196,10 @@ mod tests {
         assert!((score_norm(2.0 / 60.0, &p) - 1.0).abs() < 1e-9);
         let dense = Params { mode: Mode::DenseOnly, ..Params::default() };
         assert!((score_norm(1.0 / 60.0, &dense) - 1.0).abs() < 1e-9);
+        let weighted = Params { bm25_weight: 4.0, ..Params::default() };
+        assert!((score_norm(5.0 / 60.0, &weighted) - 1.0).abs() < 1e-9);
+        let rerank = Params { mode: Mode::Bm25DenseRerank, ..weighted };
+        assert!((score_norm(1.0 / 60.0, &rerank) - 1.0).abs() < 1e-9);
     }
 
     #[test]
