@@ -46,7 +46,7 @@ def main():
             print(f"| {n} | {sc.get('snapshots','?')} | {sc.get('chunks','?')} | {vp} | {cnt(f['hit@1'])} | {cnt(f['hit@k'])} | {f['mrr']:.3f} | {cnt(o['chunk_level']['hit']['@40'])} | "
                   f"{cnt(ab.get('absent_queries_returning_results'))} | {cnt(ab.get('answerable_wrongly_abstained'))} | "
                   f"{round(100*d['final_slots_held_by_extra_snapshots']['rate']) if d and d['final_slots_held_by_extra_snapshots']['of'] else 0}% | "
-                  f"{cnt(d.get('rank1_is_extra')) if d else '–'} | {q.get('p50')} / {q.get('p95')} / {q.get('p99','–')} | {round(t['ingest_ms']/1000)} | {t.get('ingest_snapshots_per_second')} | "
+                  f"{cnt(d.get('rank1_is_extra')) if d else '–'} | {q.get('p50')} / {q.get('p95')} / {q.get('p99','–')} (best-of: {(t.get('query_latency_best_of_repeats_ms') or {}).get('p50','–')} / {(t.get('query_latency_best_of_repeats_ms') or {}).get('p95','–')}) | {round(t['ingest_ms']/1000)} | {t.get('ingest_snapshots_per_second')} | "
                   f"{round(t['index_size_bytes']/1e6)} / {round(alloc/1e6)} | {round(alloc/1e6/max(vp,1)*1000,1)} | {rss_mb(os.path.join(a.dir, n + '.json'))} |")
         types = sorted({tn for n in ns for tn in reps[n]["by_type"]})
         print(f"\nPer type, final hit@8 (answerable) and absent questions still answered ({group}):\n")

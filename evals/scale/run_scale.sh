@@ -20,7 +20,7 @@ combo() {  # combo NAME DIR...  -> symlink farm
 run() {  # run NAME CORPUS GOLD [EXTRA]
   local name=$1 corpus=$2 gold=$3 extra=${4:-}
   echo "== $name $(date +%T)"
-  local args=(eval --corpus "$corpus" --gold "$gold" --query-repeats 5 --out "$OUT/$name.json")
+  local args=(eval --corpus "$corpus" --gold "$gold" --query-repeats 5 --out "$OUT/$name.json" ${EXTRA:-})
   [ -n "$extra" ] && args+=(--extra-corpus "$extra")
   /usr/bin/time -l "$BIN" "${args[@]}" > "$OUT/$name.log" 2> "$OUT/$name.time"
   grep -E "maximum resident|real" "$OUT/$name.time" | head -2

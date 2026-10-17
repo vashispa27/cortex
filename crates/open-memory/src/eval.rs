@@ -1176,15 +1176,20 @@ fn run_group(
     for variant in all_variants.iter().filter(|v| v.chunking == chunking && v.prefix == index_prefix) {
         let mut results = Vec::new();
         let mut latencies = Vec::new();
+        let mut best_of = Vec::new();
         for &i in selected {
             let (result, ms) = evaluate_query(&mut runtime, i, &golds[i], &variant.params, &ctx)?;
             results.push(result);
             latencies.push(ms);
+            let mut best = ms;
             for _ in 1..args.query_repeats {
                 let started = std::time::Instant::now();
                 retrieve(&mut runtime, &golds[i].query, &variant.params)?;
-                latencies.push(started.elapsed().as_secs_f64() * 1000.0);
+                let ms = started.elapsed().as_secs_f64() * 1000.0;
+                best = best.min(ms);
+                latencies.push(ms);
             }
+            best_of.push(best);
         }
         let refs: Vec<&QueryResult> = results.iter().collect();
         let final_k = variant.params.final_k;
@@ -1233,6 +1238,8 @@ fn run_group(
             "queries": results.iter().map(|r| r.json.clone()).collect::<Vec<_>>(),
             "timing": {
                 "ingest_ms": round(ingest_ms), "query_latency_ms": dist(&latencies),
+                // Per query, the fastest of --query-repeats runs: robust against paging/other load on the machine.
+                "query_latency_best_of_repeats_ms": dist(&best_of),
                 "query_latency_samples": latencies.len(),
                 "index_size_bytes": index_bytes,
                 "index_allocated_bytes": index_allocated,
