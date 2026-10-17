@@ -1150,7 +1150,15 @@ enum AppFallback {
     Weak,
 }
 
-/// Retrieval knobs. `Params::default()` is exactly what `ask` has always done.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+enum RerankBonus {
+    Off,
+    Body,
+    Chunks,
+}
+
+/// Retrieval knobs shared by `ask` and the offline eval.
 #[derive(Clone, Debug, Serialize)]
 struct Params {
     /// Per-retriever candidate depth (dense and BM25 prefetch).
@@ -1163,7 +1171,8 @@ struct Params {
     /// Regex-derived app/domain/private/date filters (and the observation-time check).
     use_filters: bool,
     /// Keyword-count bonus added to the fused score before the final sort.
-    use_rerank_bonus: bool,
+    rerank_bonus: RerankBonus,
+    rerank_weight: f32,
     /// Whether derived (topic/entity/hour/day) points may be retrieved.
     include_derived: bool,
     mode: Mode,
@@ -1204,7 +1213,8 @@ impl Default for Params {
             rrf_k: 60,
             final_k: 8,
             use_filters: true,
-            use_rerank_bonus: true,
+            rerank_bonus: RerankBonus::Off,
+            rerank_weight: 1.0,
             include_derived: true,
             mode: Mode::Hybrid,
             now_ms: None,
@@ -1511,17 +1521,20 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
         });
     }
     let collapsed_count = collapsed.len();
-    let mut keyed: Vec<(f32, (Source, Option<i64>, Vec<EvidenceChunk>, Vec<i64>))> = if params.use_rerank_bonus {
+    let mut keyed: Vec<(f32, (Source, Option<i64>, Vec<EvidenceChunk>, Vec<i64>))> = if params.rerank_bonus != RerankBonus::Off {
         let terms = content_terms(question);
         collapsed
             .into_iter()
             .map(|entry| {
-                let body = entry.0.body.to_lowercase();
+                let body = match params.rerank_bonus {
+                    RerankBonus::Chunks => entry.2.iter().map(|c| c.text.as_str()).collect::<Vec<_>>().join("\n").to_lowercase(),
+                    _ => entry.0.body.to_lowercase(),
+                };
                 let matches: usize = terms
                     .iter()
                     .map(|term| body.matches(term).count().min(5))
                     .sum();
-                (entry.0.score + (matches as f32) / (body.len().max(100) as f32).sqrt(), (entry.0, entry.1, entry.2, Vec::new()))
+                (entry.0.score + params.rerank_weight * (matches as f32) / (body.len().max(100) as f32).sqrt(), (entry.0, entry.1, entry.2, Vec::new()))
             })
             .collect()
     } else {
@@ -1947,10 +1960,11 @@ mod tests {
     }
 
     #[test]
-    fn retrieval_defaults_match_the_original_constants() {
+    fn retrieval_defaults() {
         let p = Params::default();
         assert_eq!((p.prefetch, p.fused_limit, p.rrf_k, p.final_k), (80, 40, 60, 8));
-        assert!(p.use_filters && p.use_rerank_bonus && p.include_derived);
+        assert!(p.use_filters && p.include_derived);
+        assert_eq!(p.rerank_bonus, RerankBonus::Off);
         assert_eq!(p.mode, Mode::Hybrid);
         assert_eq!(p.now_ms, None);
     }

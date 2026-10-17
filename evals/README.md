@@ -30,7 +30,7 @@ revision, else downloaded once into `target/eval-cache`. A run takes about 10 s.
 Options: `--split dev|test|all` (default all), `--param key=value` (repeatable, changes the base),
 `--sweep key=v1,v2` (repeatable; each value is an extra variant written next to `--out` as
 `<name>.<key>-<value>.json` and shares the base's index unless it changes `chunk_target`).
-Keys: `mode` (hybrid | dense_only | bm25_only), `rerank_bonus`, `filters`, `derived` (on | off),
+Keys: `mode` (hybrid | dense_only | bm25_only), `rerank_bonus` (off | body/on | chunks), `rerank_weight` (finite, nonnegative), `filters`, `derived` (on | off),
 `rrf_k`, `prefetch`, `fused_limit`, `final_k`, `chunk_target`, `chunk_unit` (chars | bytes), `chunk_overlap` (percent), `chunk_boundaries` (on | off),
 `chunk_mode=legacy` (the pre-Fix-4 chunker), `prefix` (none | title | context: text embedded with each chunk), `app_filter` (phrase | legacy),
 `app_fallback` (empty | weak | off), `app_fallback_ratio`, `chunks_per_result`, `obs_prefilter`, `dedup_jaccard`, `version_order`, `version_margin`, `abstain=off` (zeroes every

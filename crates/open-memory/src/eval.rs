@@ -164,7 +164,17 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, index_pref
                 _ => bail!("mode must be hybrid, dense_only or bm25_only"),
             }
         }
-        "rerank_bonus" => params.use_rerank_bonus = flag(value)?,
+        "rerank_bonus" => params.rerank_bonus = match value {
+            "on" | "body" => RerankBonus::Body,
+            "off" => RerankBonus::Off,
+            "chunks" => RerankBonus::Chunks,
+            _ => bail!("rerank_bonus must be on, body, off or chunks"),
+        },
+        "rerank_weight" => {
+            let weight: f32 = value.parse()?;
+            if !weight.is_finite() || weight < 0.0 { bail!("rerank_weight must be finite and >= 0"); }
+            params.rerank_weight = weight;
+        },
         "filters" => params.use_filters = flag(value)?,
         "derived" => params.include_derived = flag(value)?,
         "rrf_k" => params.rrf_k = value.parse()?,
@@ -237,7 +247,7 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, index_pref
             }
         }
         "app_fallback_ratio" => params.app_fallback_ratio = value.parse()?,
-        _ => bail!("unknown --param key {key} (mode, rerank_bonus, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, chunk_unit, chunk_overlap, chunk_boundaries, chunk_mode, prefix, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support, obs_prefilter, dedup_jaccard, version_order, version_margin)"),
+        _ => bail!("unknown --param key {key} (mode, rerank_bonus, rerank_weight, filters, derived, rrf_k, prefetch, fused_limit, final_k, chunk_target, chunk_unit, chunk_overlap, chunk_boundaries, chunk_mode, prefix, app_filter, app_fallback, app_fallback_ratio, chunks_per_result, abstain_score, abstain_support, abstain_dense, abstain_chunk, abstain_unseen, abstain_unseen_sim, abstain_ident, abstain_time_support, obs_prefilter, dedup_jaccard, version_order, version_margin)"),
     }
     Ok(())
 }
