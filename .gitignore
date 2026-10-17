@@ -15,3 +15,5 @@ evals/private/
 evals/scale/out/
 evals/reports/runs/
 evals/.work/
+# Answer eval records contain exact prompts and responses.
+evals/answers/out/

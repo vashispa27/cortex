@@ -1,8 +1,12 @@
 #![cfg(target_os = "macos")]
 mod abstain;
+mod answer_checks;
+mod answer_pipeline;
+mod answer_eval;
 mod appscope;
 mod blocklist;
 mod cleaner;
+mod cloud_redaction;
 mod dedup;
 mod eval;
 mod fixtures;
@@ -105,6 +109,7 @@ fn main() -> Result<()> {
     // Offline commands never touch the default state directory.
     match args.first().map(String::as_str) {
         Some("eval") => return eval::run(&args[1..]),
+        Some("eval-answers") => return answer_eval::run(&args[1..]),
         Some("ingest-fixtures") => return fixtures::run_cli(&args[1..]),
         _ => {}
     }
@@ -151,7 +156,7 @@ unsafe fn libc_umask(mask: u32) {
     umask(mask);
 }
 fn usage() {
-    eprintln!("Usage: open-memory capture [--print] [--rebuild-index]\n       open-memory capture --clean-dry-run\n       open-memory capture --apply-cleaning\n       open-memory blocklist [purge [--yes]|list|check <app id>|add <app id> [label]|remove <app id>|enable <app id>|disable <app id>|reset]\n       open-memory ask \"natural-language question\"\n       OPEN_MEMORY_STATE_DIR=<tmp> open-memory ingest-fixtures --corpus evals/corpus\n       open-memory eval --corpus evals/corpus --gold evals/gold/gold.jsonl --out evals/reports/<name>.json");
+    eprintln!("Usage: open-memory capture [--print] [--rebuild-index]\n       open-memory capture --clean-dry-run\n       open-memory capture --apply-cleaning\n       open-memory blocklist [purge [--yes]|list|check <app id>|add <app id> [label]|remove <app id>|enable <app id>|disable <app id>|reset]\n       open-memory ask \"natural-language question\"\n       OPEN_MEMORY_STATE_DIR=<tmp> open-memory ingest-fixtures --corpus evals/corpus\n       open-memory eval --corpus evals/corpus --gold evals/gold/gold.jsonl --out evals/reports/<name>.json\n       open-memory eval-answers --mock --corpus evals/corpus --gold evals/gold/gold.jsonl --out evals/answers/out/mock.json");
 }
 fn state_dir() -> Result<PathBuf> {
     if let Some(path) = env::var_os("OPEN_MEMORY_STATE_DIR") {
@@ -1218,7 +1223,7 @@ impl Default for Params {
             fused_limit: 40,
             rrf_k: 60,
             bm25_weight: 1.0,
-            final_k: 8,
+            final_k: answer_pipeline::SOURCE_LIMIT,
             page_cap: 2,
             use_filters: true,
             rerank_bonus: RerankBonus::Off,
@@ -1669,7 +1674,7 @@ fn answer(runtime: &mut Runtime, question: &str) -> Result<String> {
             }
             Err(error) => {
                 output.push_str(&format!(
-                    "LLM unavailable ({error:#}); showing ranked evidence.\n\n"
+                    "LLM unavailable or answer invalid ({error:#}); showing ranked evidence.\n\n"
                 ));
             }
         }
@@ -1773,75 +1778,14 @@ fn content_terms(question: &str) -> Vec<String> {
 }
 
 fn redact_cloud(text: &str) -> Result<String> {
-    let mut value = text.to_owned();
-    for (pattern, replacement) in [
-        (r"(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", "[EMAIL]"),
-        (r"\b(?:\+?\d[\d ()-]{8,}\d)\b", "[PHONE]"),
-        (
-            r"(?i)\b(?:sk-|ghp_|github_pat_|xox[baprs]-|AKIA)[A-Za-z0-9_\-]{12,}\b",
-            "[SECRET]",
-        ),
-        (
-            r"(?i)(?:api[_ -]?key|access[_ -]?token|password|secret)\s*[:=]\s*\S+",
-            "[SECRET]",
-        ),
-        (r"https?://[^\s?#]+(?:\?[^\s#]+)?", "[URL]"),
-    ] {
-        value = Regex::new(pattern)?
-            .replace_all(&value, replacement)
-            .into_owned();
-    }
-    // Redact likely person names while preserving the same placeholder in the
-    // question and evidence. This is deliberately conservative for cloud mode.
-    value = Regex::new(r"\b[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,})?\b")?
-        .replace_all(&value, "[PERSON_OR_TITLE]")
-        .into_owned();
-    Ok(value)
+    cloud_redaction::redact_sensitive(text)
 }
 
 fn llm_answer(question: &str, hits: &[Hit], chunks_per_result: usize) -> Result<String> {
-    let endpoint = env::var("OPEN_MEMORY_LLM_URL")?;
-    let parsed = url::Url::parse(&endpoint)?;
-    if parsed.scheme() != "https"
-        && !(parsed.scheme() == "http"
-            && matches!(parsed.host_str(), Some("localhost" | "127.0.0.1")))
-    {
-        bail!("LLM endpoint must be HTTPS or local HTTP");
-    }
-    let model = env::var("OPEN_MEMORY_LLM_MODEL").context("OPEN_MEMORY_LLM_MODEL is required")?;
-    let key = env::var("OPEN_MEMORY_LLM_API_KEY").ok();
-    let context = hits
-        .iter()
-        .take(6)
-        .map(|h| {
-            let s = &h.source;
-            format!(
-                "Source #{} app={} observed={} title={} URL={}\nRelevant excerpt: {}\nRetrieved chunks: {}",
-                s.id,
-                s.app_id,
-                time_string(s.first_seen_ms),
-                s.title,
-                s.url.as_deref().unwrap_or(""),
-                evidence_snippet(h, question, chunks_per_result),
-                evidence_text(h)
-            )
-        })
-        .collect::<Vec<_>>()
-        .join("\n\n");
-    let redacted = redact_cloud(&format!("Question: {question}\n\nEvidence:\n{context}"))?;
-    let client = Client::builder().timeout(Duration::from_secs(40)).build()?;
-    let mut request = client.post(endpoint).json(&json!({"model":model,"messages":[
-        {"role":"system","content":"Answer only from the supplied evidence. Cite snapshot IDs in square brackets. Distinguish observation time from any message time displayed in text. If evidence is insufficient, say so."},
-        {"role":"user","content":redacted}
-    ]}));
-    if let Some(key) = key {
-        request = request.bearer_auth(key);
-    }
-    let response: Value = request.send()?.error_for_status()?.json()?;
-    Ok(response["choices"][0]["message"]["content"]
-        .as_str()
-        .context("LLM response lacked content")?
-        .to_owned())
+    let prepared = answer_pipeline::prepare(question, hits, chunks_per_result)?;
+    let response = answer_pipeline::call_provider(&prepared.messages)?;
+    answer_pipeline::validate(&response.content, &prepared)?;
+    Ok(response.content)
 }
 
 #[cfg(test)]

@@ -49,7 +49,7 @@ export OPEN_MEMORY_LLM_API_KEY='your-key'
 target/debug/open-memory ask "What did I ask Saurav?"
 ```
 
-No capture is sent to a cloud service during ingestion. Before an optional LLM request, the query and retrieved context pass through pattern-based redaction for likely names, email addresses, phone numbers, URLs, and common credential forms. Credentials are read from environment variables and never hardcoded. Pattern redaction can miss uncommon PII or secrets; leave the LLM variables unset if the source is too sensitive to send. Original local SQLite text is unredacted.
+No capture is sent to a cloud service during ingestion. Before an optional LLM request, the query and retrieved context pass through pattern-based redaction for common credentials, payment cards, financial identifiers, and monetary amounts. Names, places, email addresses, phone numbers, dates, and ordinary URLs may be sent to the configured provider. Credentials are read from environment variables and never hardcoded. Pattern redaction can miss uncommon PII or secrets; leave the LLM variables unset if the source is too sensitive to send. Original local SQLite text is unredacted.
 
 Capture includes normal and private browser windows when Accessibility exposes them, plus native apps, chats, editors, and terminals. It does not require a browser extension. A `browser_private` source type is inferred only when the window title says Incognito or Private Browsing; that label is heuristic. Protected controls are omitted before their values are queried. Canvas-rendered text, virtualized or hidden chat messages, apps that expose no text, missing window geometry, and unavailable browser URLs can leave gaps. Traversal is bounded to 5,000 nodes, 128 KiB of text, and 750 ms per observation; `--print` displays reported limitations. The CLI prints skip reasons such as `accessibility_not_granted`, `session_inactive`, `no_focused_window`, and `no_visible_text`.
 
@@ -83,6 +83,10 @@ The browser-only preview is `npm run dev` from `apps/desktop`; select **Explore 
 fixtures, a 122-question gold set, `open-memory eval`, and a committed baseline with ablations. See
 [evals/README.md](evals/README.md); `evals/CAPTURE.md` explains how to replace the hand-authored AX trees
 with real captures. It uses temp state directories only and never enables capture.
+
+## Answer pipeline evaluation
+
+The shared answer pipeline sends up to eight sources after privacy redaction and checks model citations before displaying an answer. Run the offline, gold-aware mock and see the opt-in invented-data live instructions in [evals/answers/README.md](evals/answers/README.md). Mock scores verify the pipeline, not model quality. Detailed prompts and responses belong in the ignored `evals/answers/out/` directory.
 
 ## Components
 

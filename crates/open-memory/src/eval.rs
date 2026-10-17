@@ -1021,7 +1021,7 @@ fn probes(db: &Connection, now_ms: i64, params: &Params) -> Result<Value> {
 /// Where the pinned embedding model comes from when `OPEN_MEMORY_MODEL_DIR` is not set: an
 /// existing Hugging Face hub cache entry for the pinned revision, else a download (checksum
 /// verified) into `<repo>/target/eval-cache`, which later runs reuse. Never the user's state dir.
-fn resolve_model_dir() -> Result<PathBuf> {
+pub(crate) fn resolve_model_dir() -> Result<PathBuf> {
     if let Some(home) = env::var_os("HOME") {
         let hub = PathBuf::from(home)
             .join(".cache/huggingface/hub/models--minishlab--potion-base-32M/snapshots")

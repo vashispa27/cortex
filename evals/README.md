@@ -86,7 +86,7 @@ Everything below is opt-in; the default `eval` run is unchanged.
   top k; `hit@k` is "at least one found" (counts shown as `n/N`). MRR uses the first relevant item.
 * **Final level** is the 8 results `ask` shows. A result is a hit if its retrieved chunks (up to
   `chunks_per_result`, default 3, per snapshot; the first 2,500 characters of the body for derived
-  hits) plus the printed snippet contain the answer, which is the evidence an LLM receives. The snippet
+  hits) plus the printed snippet contain the answer, before redaction. The answer-eval separately measures the exact redacted context sent to the LLM. The snippet
   is taken from the retrieved chunks when they hold a query term, else from the whole page. Before
   Fix 2 the definition used one chunk and a whole-page snippet; `--param chunks_per_result=1`
   reproduces it, so earlier reports can be re-scored (`reports/fixes/02-multi-chunk.chunks_per_result-1.json`).
