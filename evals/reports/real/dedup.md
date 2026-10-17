@@ -26,3 +26,19 @@ Invented corpus (36 pages): identical results with and without (hit@1 82/102, hi
 
 Not done: step 5 (normalising volatile text such as counters and relative times before hashing), removing the raw Accessibility trees,
 `cleaning_trace_json`, or truncating the Qdrant write-ahead log.
+
+## Step 5 (ignore volatile text when comparing) measured, not built
+
+`evals/tools/volatile_gain.py` replays the 1,385 real snapshots through the ingest rule (it reproduces production: 1,094 survivors vs 1,092
+in the real run) and adds, in turn, title normalisation (counters like `(2)`, `High memory usage` and `Audio playing` suffixes, which fire on
+972 titles) and masking of relative times, notification counts and view/like counters in the bodies (which fire on thousands of bodies).
+
+| rule set | snapshots merged away |
+|---|---|
+| as shipped | 291 (21.0%) |
+| + title normalisation | 295 (21.3%) |
+| + volatile body masking | 295 (21.3%) |
+
+Gain: 4 more snapshots (0.3 points), 1 of them from body masking. No gold answer lives only in a snapshot that would be dropped. Not worth
+the added risk, so it is not built. The remaining near-copies are different pages in substance: of 146 kept snapshots with a same-page
+predecessor at word overlap ≥ 0.9, 83 differ by six or more numbers or names (a chat or document that grew) and only 17 differ in numbers alone.
