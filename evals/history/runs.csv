@@ -19,3 +19,6 @@ date,commit,dirty,corpus,dataset_id,answerable,hit1,hit8,mrr,chunk_hit40,lost_at
 2026-10-17 10:57,a075fe0,0,real,e5239c9d66ba,99,43,72,0.5413,84,13,26,5,4,0.4613,141.8513,370.7089,1511.9283,all_samples,62.3,537,backfilled; latency measured on a loaded/swapping machine
 2026-10-17 13:07,107ec227,1,invented,c2c26900d7e0,102,89,98,0.9121,101,3,22,10,2,0.0235,2.3198,3.0325,3.4328,best_of_repeats,0.9,14,"retrieval tuning: bonus off, page cap 2, hybrid 1/80, query-local version features; best of 5"
 2026-10-17 13:07,107ec227,1,real,e5239c9d66ba,99,58,75,0.6477,84,10,26,5,3,0.3155,16.2061,30.2043,41.2919,best_of_repeats,36.7,447,"retrieval tuning: bonus off, page cap 2, hybrid 1/80, query-local version features; best of 5"
+2026-10-17 13:30,605f7b0,0,invented,c2c26900d7e0,102,89,98,0.9121,101,3,22,10,2,0.0235,2.2722,2.9712,3.4025,best_of_repeats,0.8,14,status after tuning + dedup + blocklist
+2026-10-17 13:31,605f7b0,0,real,e5239c9d66ba,99,58,75,0.6477,84,10,26,5,3,0.3155,16.1078,30.1192,41.008,best_of_repeats,36.4,447,status after tuning + dedup + blocklist
+2026-10-17 13:32,605f7b0,0,bench,c2c26900d7e0+1k,102,54,71,0.5771,85,14,22,5,5,0.0734,24.3942,48.3248,57.545,best_of_repeats,36.9,275,status after tuning + dedup + blocklist
