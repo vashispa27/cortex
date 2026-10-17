@@ -67,24 +67,57 @@ pub fn mergeable(a: &str, b: &str, threshold: f64) -> bool {
 
 type Entry = (f32, (Source, Option<i64>, Vec<EvidenceChunk>, Vec<i64>));
 
-fn matches(question: &str, body: &str) -> usize {
-    let lower = body.to_lowercase();
-    content_terms(question).iter().filter(|t| lower.contains(t.as_str())).count()
+/// Query-local features follow the representative when it is replaced during a merge.
+struct Features {
+    words: BTreeSet<String>,
+    critical: BTreeSet<String>,
+    matches: usize,
+}
+
+impl Features {
+    fn new(body: &str, terms: &[String]) -> Self {
+        let lower = body.to_lowercase();
+        Self {
+            words: lower.split(|c: char| !c.is_alphanumeric()).filter(|w| !w.is_empty()).map(str::to_owned).collect(),
+            critical: critical_tokens(body),
+            matches: terms.iter().filter(|t| lower.contains(t.as_str())).count(),
+        }
+    }
+
+    fn mergeable(&self, other: &Self, threshold: f64) -> bool {
+        let small = self.words.len().min(other.words.len());
+        let large = self.words.len().max(other.words.len());
+        // Even complete containment cannot exceed this bound. Byte/body-length ratios cannot
+        // safely bound word-set overlap (repeated words and Unicode can change those lengths).
+        let upper = if large == 0 { 1.0 } else { small as f64 / large as f64 };
+        if threshold <= 0.0 || upper < threshold { return false; }
+        // Set equality stops at the first differing token; changed facts are never merged.
+        if self.critical != other.critical { return false; }
+        if large == 0 { return 1.0 >= threshold; }
+        let intersection = self.words.intersection(&other.words).count();
+        intersection as f64 / (self.words.len() + other.words.len() - intersection) as f64 >= threshold
+    }
 }
 
 /// `entries` must be sorted best first. Returns them merged and ordered, same type, still best first.
 pub fn apply(mut entries: Vec<Entry>, question: &str, params: &Params) -> Vec<Entry> {
+    // Optional aggregate-only profiling: no question text or source metadata is logged.
+    let started = env::var_os("OPEN_MEMORY_PROFILE_VERSIONS").map(|_| std::time::Instant::now());
+    let input_count = entries.len();
     // 1. Merge near-identical results.
     if params.dedup_jaccard > 0.0 {
-        let mut kept: Vec<Entry> = Vec::new();
+        let terms = content_terms(question);
+        let mut kept: Vec<(Entry, Features)> = Vec::new();
         'next: for entry in entries {
-            for k in kept.iter_mut() {
-                if mergeable(&k.1 .0.body, &entry.1 .0.body, params.dedup_jaccard) {
-                    let better_than_kept = (matches(question, &entry.1 .0.body), entry.1 .0.last_seen_ms)
-                        > (matches(question, &k.1 .0.body), k.1 .0.last_seen_ms);
+            let mut features = Features::new(&entry.1 .0.body, &terms);
+            for (k, cached) in kept.iter_mut() {
+                if cached.mergeable(&features, params.dedup_jaccard) {
+                    let better_than_kept = (features.matches, entry.1 .0.last_seen_ms)
+                        > (cached.matches, k.1 .0.last_seen_ms);
                     let mut other = entry;
                     if better_than_kept {
                         std::mem::swap(k, &mut other);
+                        std::mem::swap(cached, &mut features);
                         // Position of the better-ranked entry is kept; its score stays.
                         k.0 = other.0.max(k.0);
                     }
@@ -93,10 +126,12 @@ pub fn apply(mut entries: Vec<Entry>, question: &str, params: &Params) -> Vec<En
                     continue 'next;
                 }
             }
-            kept.push(entry);
+            kept.push((entry, features));
         }
-        entries = kept;
+        entries = kept.into_iter().map(|(entry, _)| entry).collect();
     }
+    let merged_count = input_count - entries.len();
+    let merge_us = started.map(|s| s.elapsed().as_micros());
     // 2. Order the remaining versions of the same page.
     if params.version_order {
         let want = intent(question);
@@ -105,28 +140,31 @@ pub fn apply(mut entries: Vec<Entry>, question: &str, params: &Params) -> Vec<En
             let s = &e.1 .0;
             groups.entry((s.app_id.clone(), s.title.clone(), s.url.clone().unwrap_or_default())).or_default().push(i);
         }
+        // Move members out and back; full bodies and evidence chunks are never cloned.
+        let mut owned: Vec<Option<Entry>> = entries.into_iter().map(Some).collect();
         for slots in groups.values().filter(|s| s.len() > 1) {
-            let mut members: Vec<Entry> = slots.iter().map(|&i| entries[i].clone()).collect();
+            let top = slots.iter().map(|&i| owned[i].as_ref().unwrap().0).fold(f32::MIN, f32::max) as f64;
+            let low = slots.iter().map(|&i| owned[i].as_ref().unwrap().0).fold(f32::MAX, f32::min) as f64;
+            if (top - low) / params.rrf_max_score() > params.version_margin {
+                continue;
+            }
+            let scores: Vec<f32> = slots.iter().map(|&i| owned[i].as_ref().unwrap().0).collect();
+            let mut members: Vec<Entry> = slots.iter().map(|&i| owned[i].take().unwrap()).collect();
             members.sort_by(|a, b| match want {
                 Recency::Newest => b.1 .0.last_seen_ms.cmp(&a.1 .0.last_seen_ms),
                 Recency::Oldest => a.1 .0.last_seen_ms.cmp(&b.1 .0.last_seen_ms),
             });
             let ids: Vec<i64> = members.iter().map(|m| m.1 .0.id).collect();
-            // Only reorder when the versions are about equally relevant: the best member's normalised
-            // score is within `version_margin` of every other member's.
-            let top = members.iter().map(|m| m.0).fold(f32::MIN, f32::max) as f64;
-            let low = members.iter().map(|m| m.0).fold(f32::MAX, f32::min) as f64;
-            let scale = params.rrf_max_score();
-            if (top - low) / scale > params.version_margin {
-                continue;
-            }
-            for (slot, mut member) in slots.iter().zip(members) {
-                // Hand each slot the score the slot had, so the list stays sorted.
-                member.0 = entries[*slot].0;
+            for ((slot, score), mut member) in slots.iter().zip(scores).zip(members) {
+                member.0 = score;
                 member.1 .3 = ids.iter().copied().filter(|id| *id != member.1 .0.id).collect();
-                entries[*slot] = member;
+                owned[*slot] = Some(member);
             }
         }
+        entries = owned.into_iter().map(Option::unwrap).collect();
+    }
+    if let (Some(started), Some(merge_us)) = (started, merge_us) {
+        eprintln!("versions_profile candidates={input_count} merged={merged_count} merge_us={merge_us} order_us={}", started.elapsed().as_micros().saturating_sub(merge_us));
     }
     entries
 }
@@ -275,6 +313,33 @@ mod tests {
         assert_eq!(page_key(&a.1 .0), page_key(&b.1 .0));
         b.1 .0.app_id = "another.app".into();
         assert_ne!(page_key(&a.1 .0), page_key(&b.1 .0));
+    }
+
+    #[test]
+    fn prepared_features_preserve_the_pairwise_rule_at_boundaries() {
+        let bodies = ["", "...", "alpha beta", "alpha alpha beta", "alpha gamma", "Alpha beta 10", "Alpha beta 11",
+            "We will go.", "We will not go.", "We won't go.", "हिंदी शब्द 10", "हिंदी शब्द 11", "€10,000.00 Monday"];
+        for a in bodies {
+            for b in bodies {
+                for threshold in [0.0, 0.3, 0.5, 2.0/3.0, 0.9, 1.0, 1.1] {
+                    assert_eq!(Features::new(a, &[]).mergeable(&Features::new(b, &[]), threshold),
+                        mergeable(a, b, threshold), "{a:?}, {b:?}, {threshold}");
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn replacing_a_representative_also_replaces_its_features() {
+        // A~B and B~C, but A!~C: C must compare with the newer representative B.
+        let a = entry(1, "One", "alpha beta gamma delta", 100, 0.032);
+        let b = entry(2, "Two", "alpha beta gamma delta epsilon", 200, 0.031);
+        let c = entry(3, "Three", "beta gamma delta epsilon", 300, 0.030);
+        let p = Params { dedup_jaccard: 0.75, version_order: false, ..Params::default() };
+        let merged = apply(vec![a, b, c], "unrelated question", &p);
+        assert_eq!(ids(&merged), vec![3]);
+        assert_eq!(merged[0].1 .3, vec![2, 1]);
+        assert_eq!(merged[0].0, 0.032);
     }
 
 }

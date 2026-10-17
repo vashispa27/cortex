@@ -44,7 +44,10 @@ target/debug/open-memory eval --out evals/reports/ablations/ablation.json \
   --sweep derived=off --sweep chunk_target=800,3200
 python3 evals/tools/compare.py evals/reports/ablations/ablation.json evals/reports/ablations/ablation.*-*.json \
   --out evals/reports/ablations.md          # paired bootstrap 95% CIs
-python3 evals/tools/diff_reports.py a.json b.json   # determinism: identical apart from `timing`
+python3 evals/tools/diff_reports.py a.json b.json   # strict: identical apart from `timing`
+# Scale reports also include random index file UUIDs and filesystem allocation/checkpoint costs.
+# Exclude those physical files explicitly; logical SQLite sizes, params and ALL retrieval fields still compare:
+python3 evals/tools/diff_reports.py a.json b.json --ignore-index-files
 evals/tools/ask_regression.sh <old-binary> <new-binary>   # `ask` output byte-identical?
 ```
 
@@ -114,3 +117,7 @@ Everything below is opt-in; the default `eval` run is unchanged.
 * Changes made to `main.rs` for this harness are behaviour-preserving: `retrieve()`/`Params` defaults
   reproduce `ask`, `ask` output is byte-identical (`ask_regression.sh`), and the only intentional
   difference is that exactly tied RRF scores are ordered by point id instead of arbitrarily.
+
+Aggregate-only version profiling: `OPEN_MEMORY_PROFILE_VERSIONS=1` logs candidate/merge counts and
+merge/order microseconds per retrieval pass to stderr; it never logs the question or source text.
+Features used for pairwise version merging are query-local; the public ingest merge rule is unchanged.
