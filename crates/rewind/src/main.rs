@@ -1658,32 +1658,43 @@ fn answer(runtime: &mut Runtime, question: &str) -> Result<String> {
     }
     let params = Params::default();
     let retrieval = retrieve(runtime, question, &params)?;
-    if retrieval.abstained && !retrieval.hits.is_empty() {
+    let llm = env::var("REWIND_LLM_URL").is_ok();
+    // With a model configured, it always sees the question (and any weak hits) and decides; the
+    // canned refusals below only serve the model-free ranked-evidence mode.
+    if !llm && retrieval.abstained && !retrieval.hits.is_empty() {
         let weak = retrieval.hits.iter().take(3).map(|h| format!("[{}] {}", h.source.id, h.source.title)).collect::<Vec<_>>().join("; ");
         return Ok(format!("No matching captured evidence for this question.\nClosest captured pages (weak matches, probably not what you asked): {weak}"));
     }
+    let abstained = retrieval.abstained;
     let hits: Vec<Hit> = retrieval.hits;
     let sources: Vec<&Source> = hits.iter().map(|hit| &hit.source).collect();
-    if sources.is_empty() {
+    if sources.is_empty() && !llm {
         return Ok("No matching captured evidence yet. Capture may be incomplete if the app did not expose text through Accessibility.".into());
     }
-    runtime.db.execute("INSERT INTO index_meta(key,value) VALUES('last_answer_snapshot',?1) ON CONFLICT(key) DO UPDATE SET value=excluded.value",[sources[0].id.to_string()])?;
     let mut output = String::new();
-    if env::var("REWIND_LLM_URL").is_ok() {
-        match llm_answer(question, &hits, params.chunks_per_result) {
-            Ok(response) => {
+    let mut show_evidence = !sources.is_empty();
+    if llm {
+        match llm_answer(question, &hits, params.chunks_per_result, abstained) {
+            Ok((response, source)) => {
+                if source == answer_pipeline::AnswerSource::General {
+                    output.push_str("(General knowledge, not from your captured activity)\n");
+                }
                 output.push_str(&response);
                 output.push_str("\n\n");
+                show_evidence &= source.uses_memory();
             }
             Err(error) => {
-                output.push_str(&format!(
-                    "LLM unavailable or answer invalid ({error:#}); showing ranked evidence.\n\n"
-                ));
+                let tail = if sources.is_empty() { "" } else { "; showing ranked evidence" };
+                output.push_str(&format!("LLM unavailable or answer invalid ({error:#}){tail}.\n\n"));
             }
         }
     } else {
         output.push_str("Ranked evidence (no LLM configured):\n\n");
     }
+    if !show_evidence {
+        return Ok(output.trim_end().to_owned());
+    }
+    runtime.db.execute("INSERT INTO index_meta(key,value) VALUES('last_answer_snapshot',?1) ON CONFLICT(key) DO UPDATE SET value=excluded.value",[sources[0].id.to_string()])?;
     for (rank, hit) in hits.iter().enumerate() {
         let source = &hit.source;
         let snippet = evidence_snippet(hit, question, params.chunks_per_result);
@@ -1784,11 +1795,15 @@ fn redact_cloud(text: &str) -> Result<String> {
     cloud_redaction::redact_sensitive(text)
 }
 
-fn llm_answer(question: &str, hits: &[Hit], chunks_per_result: usize) -> Result<String> {
-    let prepared = answer_pipeline::prepare(question, hits, chunks_per_result)?;
+fn llm_answer(question: &str, hits: &[Hit], chunks_per_result: usize, abstained: bool) -> Result<(String, answer_pipeline::AnswerSource)> {
+    let timezone = answer_pipeline::system_timezone();
+    let prepared = answer_pipeline::prepare(&answer_pipeline::Request {
+        timezone: &timezone,
+        ..answer_pipeline::Request::new(question, hits, chunks_per_result, abstained)
+    })?;
     let response = answer_pipeline::call_provider(&prepared.messages)?;
-    answer_pipeline::validate(&response.content, &prepared)?;
-    Ok(response.content)
+    let source = answer_pipeline::validate(&response.content, &prepared)?;
+    Ok((answer_pipeline::parse_source(&response.content).1.to_owned(), source))
 }
 
 #[cfg(test)]

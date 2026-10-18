@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import { invoke, isTauri } from "@tauri-apps/api/core";
+import type { AnswerSource } from "../lib/types";
 
 // Older answers and some models may still include internal reference numbers.
 export function cleanAnswer(text: string): string {
@@ -15,4 +16,12 @@ export function AnswerContent({ text }: { text: string }) {
       }
     }} target="_blank" rel="noreferrer noopener">{children}</a>,
   }}>{cleanAnswer(text)}</ReactMarkdown></div>;
+}
+
+const SOURCE_LABELS: Partial<Record<AnswerSource, string>> = { general: "General knowledge", mixed: "Your activity + general knowledge" };
+
+/** Marks answers that did not come purely from the user's captured activity. */
+export function AnswerSourceLabel({ source }: { source?: AnswerSource }) {
+  const label = source && SOURCE_LABELS[source];
+  return label ? <small className="answer-source" data-source={source}>{label}</small> : null;
 }

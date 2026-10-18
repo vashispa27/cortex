@@ -125,3 +125,5 @@ html[data-window="notch"] .rewind-history-form input:focus-visible { outline: no
 .rewind-assistant-body .answer-content ul, .rewind-assistant-body .answer-content ol { margin: .35em 0 .65em; padding-left: 1.4em; }
 .rewind-assistant-body .answer-content li + li { margin-top: .35em; }
 .rewind-assistant-body .answer-content a { color: #0875ca; overflow-wrap: anywhere; text-decoration: underline; }
+
+.rewind-assistant-body .answer-source { display: inline-block; margin-bottom: .35em; padding: .1em .55em; border-radius: 999px; font-size: 10.5px; letter-spacing: .02em; opacity: .7; border: 1px solid currentColor; }

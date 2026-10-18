@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Orbit, Plus, UserRound } from "lucide-react";
-import { AnswerContent } from "./AnswerContent";
+import { AnswerContent, AnswerSourceLabel } from "./AnswerContent";
 import { answerFromMemory } from "../lib/answer";
 import { demoSearch } from "../lib/demo";
 import { takeActiveSession } from "../lib/notch";
@@ -67,9 +67,9 @@ export default function AskChat({ sample, active, onSessionCount }: Props) {
     setBusyId(next.id);
     try {
       const answer = sample
-        ? (() => { const found = demoSearch(question); return { body: composeAnswer(question, found.results, true), hits: found.results.slice(0, 3) }; })()
+        ? (() => { const found = demoSearch(question); return { body: composeAnswer(question, found.results, true), hits: found.results.slice(0, 3), source: "memory" as const }; })()
         : await answerFromMemory(question, session?.messages ?? []);
-      commit(appendMessage(next, { role: "assistant", body: answer.body, hits: answer.hits }));
+      commit(appendMessage(next, { role: "assistant", body: answer.body, hits: answer.hits, source: answer.source }));
     } catch (error) {
       commit(appendMessage(next, { role: "assistant", body: `Rewind could not answer: ${error instanceof Error ? error.message : String(error)}` }));
     } finally {
@@ -80,7 +80,7 @@ export default function AskChat({ sample, active, onSessionCount }: Props) {
 
   const message = (item: ChatMessage, index: number) => <div key={index} className={`message ${item.role}`}>
     <div className="message-avatar">{item.role === "assistant" ? <Orbit size={17} /> : <UserRound size={17} />}</div>
-    <div className="message-content">{item.role === "assistant" ? <AnswerContent text={item.body} /> : <p>{item.body}</p>}</div>
+    <div className="message-content">{item.role === "assistant" ? <><AnswerSourceLabel source={item.source} /><AnswerContent text={item.body} /></> : <p>{item.body}</p>}</div>
   </div>;
 
   return <div className="chat-page ask-chat">

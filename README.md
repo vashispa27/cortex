@@ -90,6 +90,16 @@ with real captures. It uses temp state directories only and never enables captur
 
 The shared answer pipeline sends up to eight sources after privacy redaction and checks model citations before displaying an answer. Run the offline, gold-aware mock and see the opt-in invented-data live instructions in [evals/answers/README.md](evals/answers/README.md). Mock scores verify the pipeline, not model quality. Detailed prompts and responses belong in the ignored `evals/answers/out/` directory.
 
+## Assistant answers (memory, general knowledge, date)
+
+Rewind answers from your captured activity when a question is about your own life, and from the model's general knowledge when it is not. Every question goes to the model with the current local date, weekday, time and timezone, plus whatever evidence retrieval found. Weak or empty retrieval is flagged to the model, which decides; there is no canned "no match" reply.
+
+- One prompt (`answer_pipeline.rs`, `PROMPT_VERSION` `answer-v3`) serves the desktop app (through the local `POST /v1/assistant/prepare` route, which returns the finished messages) and the CLI `ask`. Evidence stays redacted exactly as before; the app only forwards the messages to OpenRouter (`openrouter_chat`).
+- **Source label.** The model's first line is `SOURCE: memory | general | mixed | none`. The app strips it and shows a small label for `general` ("General knowledge") and `mixed`, and keeps evidence only for `memory` and `mixed`. `none` means a personal question nothing answered. If the tag is missing it is inferred: cited snapshot IDs mean `memory`, and no evidence shown means `general`.
+- **Checks.** `memory` and `mixed` answers must cite snapshot IDs that were shown; `general` and `none` answers need no citation. Invented IDs fail under any label.
+- Follow-up questions are rewritten into a standalone search query (a second cloud call) only when the question is short or uses pronouns; self-contained questions skip it.
+- The CLI uses the model whenever `REWIND_LLM_URL` is set; without one it still prints ranked evidence.
+
 ## Components
 
 | Path | Current purpose |

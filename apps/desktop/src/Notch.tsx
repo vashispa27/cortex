@@ -1,4 +1,4 @@
-import { AnswerContent } from "./components/AnswerContent";
+import { AnswerContent, AnswerSourceLabel } from "./components/AnswerContent";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { CornerDownLeft, Maximize2, Plus, Settings2, X } from "lucide-react";
 import { listen } from "@tauri-apps/api/event";
@@ -27,7 +27,7 @@ function RewindThread({ session, busy }: { session: RewindSession; busy: boolean
       ? <div className="rewind-message user" key={`${session.id}-${index}`}><div className="rewind-user-bubble">{message.body}</div></div>
       : <div className="rewind-message assistant" key={`${session.id}-${index}`}>
         <span className="rewind-message-mark"><RewindMark /></span>
-        <div className="rewind-assistant-body"><AnswerContent text={message.body} /></div>
+        <div className="rewind-assistant-body"><AnswerSourceLabel source={message.source} /><AnswerContent text={message.body} /></div>
       </div>)}
     {busy && <div className="rewind-message assistant"><span className="rewind-message-mark"><RewindMark processing /></span><div className="rewind-assistant-body rewind-typing"><span /><span /><span /></div></div>}
   </>;
@@ -147,13 +147,14 @@ export default function NotchApp() {
     try {
       const delay = base ? 500 : 1350;
       const [answer] = await Promise.all([
-        sample ? Promise.resolve().then(() => { const found = demoSearch(question); return { body: composeAnswer(question, found.results, true), hits: found.results.slice(0, 3) }; }) : answerFromMemory(question, base?.messages ?? []),
+        sample ? Promise.resolve().then(() => { const found = demoSearch(question); return { body: composeAnswer(question, found.results, true), hits: found.results.slice(0, 3), source: "memory" as const }; }) : answerFromMemory(question, base?.messages ?? []),
         new Promise((resolve) => window.setTimeout(resolve, delay)),
       ]);
       const assistant: ChatMessage = {
         role: "assistant",
         body: answer.body,
         hits: answer.hits,
+        source: answer.source,
       };
       commit(appendMessage(session, assistant));
       if (target === "bar") {

@@ -17,4 +17,5 @@ export type SettingsPage =
   | "diagnostics"
   | "updates";
 
-export type ChatMessage = { role: "user" | "assistant"; body: string; hits?: MemoryHit[] };
+export type AnswerSource = "memory" | "general" | "mixed" | "none";
+export type ChatMessage = { role: "user" | "assistant"; body: string; hits?: MemoryHit[]; source?: AnswerSource };

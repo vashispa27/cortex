@@ -67,6 +67,14 @@ fn import_legacy(root: &Path, db: &mut Connection) -> Result<usize> {
         return Ok(0);
     }
     let old = Connection::open_with_flags(path, rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY)?;
+    let has_snapshots: bool = old.query_row(
+        "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type='table' AND name='snapshots')",
+        [],
+        |r| r.get(0),
+    )?;
+    if !has_snapshots {
+        return Ok(0);
+    }
     let mut stmt = old.prepare("SELECT id,app_id,title,url,body,first_seen_ms,last_seen_ms,window_session_id FROM snapshots ORDER BY id")?;
     let mut count = 0;
     for row in stmt.query_map([], |r| {
@@ -374,8 +382,9 @@ fn route(
         ("POST", "/v1/capture/request-permission") => {
             Ok(json!({"permission_state":run_helper(helper,"--request-permission")?.permission}))
         }
-        ("POST", "/v1/memory/search" | "/v1/memory/retrieve") => {
-            let question = body["query"]
+        ("POST", "/v1/memory/search" | "/v1/memory/retrieve" | "/v1/assistant/prepare") => {
+            let assistant = path == "/v1/assistant/prepare";
+            let query = body["query"]
                 .as_str()
                 .filter(|q| !q.trim().is_empty() && q.len() <= 4096)
                 .context("Invalid search question")?;
@@ -384,17 +393,31 @@ fn route(
                 .as_u64()
                 .unwrap_or(answer_pipeline::SOURCE_LIMIT as u64)
                 .clamp(1, 50) as usize;
-            let result = retrieve(rt, question, &params)?;
-            let prepared =
-                answer_pipeline::prepare(question, &result.hits, params.chunks_per_result)?;
+            let result = retrieve(rt, query, &params)?;
+            // The assistant route shows the user's own wording to the model; retrieval ran on `query`.
+            let question = body["question"]
+                .as_str()
+                .filter(|q| assistant && !q.trim().is_empty() && q.len() <= 4096)
+                .unwrap_or(query);
+            let timezone = answer_pipeline::system_timezone();
+            let history = body["history"].as_array().map(Vec::as_slice).unwrap_or(&[]);
+            let prepared = answer_pipeline::prepare(&answer_pipeline::Request {
+                query,
+                history: if assistant { history } else { &[] },
+                timezone: &timezone,
+                ..answer_pipeline::Request::new(question, &result.hits, params.chunks_per_result, result.abstained)
+            })?;
             let results: Vec<_> = result
                 .hits
                 .iter()
-                .map(|h| hit_json(h, question, params.chunks_per_result))
+                .map(|h| hit_json(h, query, params.chunks_per_result))
                 .collect();
-            Ok(
-                json!({"results":results,"sources":prepared.sources,"abstained":result.abstained,"coverage":{"state":"partial"},"next_cursor":null,"retrieval":{"engine":"qdrant_edge_hybrid","dense":true,"bm25":true,"fusion":"rrf","candidates":result.ranked.len(),"collapsed":result.collapsed,"embedding_model":MODEL_VERSION}}),
-            )
+            let mut response = json!({"results":results,"sources":prepared.sources,"abstained":result.abstained,"coverage":{"state":"partial"},"next_cursor":null,"retrieval":{"engine":"qdrant_edge_hybrid","dense":true,"bm25":true,"fusion":"rrf","candidates":result.ranked.len(),"collapsed":result.collapsed,"embedding_model":MODEL_VERSION}});
+            if assistant {
+                response["messages"] = json!(prepared.messages);
+                response["prompt_version"] = json!(answer_pipeline::PROMPT_VERSION);
+            }
+            Ok(response)
         }
         ("POST", "/v1/memory/snapshots") => {
             let ids: Vec<i64> = serde_json::from_value(body["ids"].clone())?;

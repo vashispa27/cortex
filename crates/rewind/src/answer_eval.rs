@@ -142,16 +142,16 @@ pub fn run(args: &[String]) -> Result<()> {
         let retrieval_ms = millis(t);
         let ids: Vec<i64> = retrieval.hits.iter().map(|h| h.source.id).collect();
         let t = Instant::now();
-        // Production never sends evidence after retrieval abstention or an empty result.
-        let prepared = if retrieval.abstained || retrieval.hits.is_empty() {
-            None
-        } else {
-            Some(pipeline::prepare(
-                &g.query,
-                &retrieval.hits,
-                params.chunks_per_result,
-            )?)
-        };
+        // Production always asks the model; weak or empty retrieval is flagged in the request.
+        let clock = DateTime::<Utc>::from_timestamp_millis(now)
+            .context("invalid eval clock")?
+            .with_timezone(&Local)
+            .fixed_offset();
+        let prepared = Some(pipeline::prepare(&pipeline::Request {
+            now: clock,
+            timezone: "eval",
+            ..pipeline::Request::new(&g.query, &retrieval.hits, params.chunks_per_result, retrieval.abstained)
+        })?);
         let prep_ms = millis(t);
         let groups: Vec<checks::FactGroup> = g
             .relevant
@@ -169,10 +169,7 @@ pub fn run(args: &[String]) -> Result<()> {
             !g.relevant.is_empty() && fact_state.iter().all(|f| f["sent_after_redaction"] == true);
         let t = Instant::now();
         let response = match &prepared {
-            None => Ok(pipeline::ModelResponse {
-                content: "No matching captured evidence.".into(),
-                usage: None,
-            }),
+            None => unreachable!("answers are always prepared"),
             Some(p) if live => pipeline::call_provider(&p.messages),
             Some(p) => {
                 // A gold-aware scripted provider verifies plumbing; never a model quality measurement.
@@ -195,12 +192,12 @@ pub fn run(args: &[String]) -> Result<()> {
                         })
                         .collect();
                     Ok(pipeline::ModelResponse {
-                        content: parts.join(" "),
+                        content: format!("SOURCE: memory\n{}", parts.join(" ")),
                         usage: None,
                     })
                 } else {
                     Ok(pipeline::ModelResponse {
-                        content: "The evidence is insufficient to answer.".into(),
+                        content: "SOURCE: none\nThe evidence is insufficient to answer.".into(),
                         usage: None,
                     })
                 }
@@ -216,6 +213,10 @@ pub fn run(args: &[String]) -> Result<()> {
                 .as_ref()
                 .and_then(|p| pipeline::validate(a, p).err().map(|e| e.to_string()))
         });
+        // Scoring looks at the answer text; the `SOURCE:` line is recorded separately.
+        let raw_answer = answer;
+        let answer = raw_answer.as_deref().map(|a| pipeline::parse_source(a).1.to_owned());
+        let source = raw_answer.as_deref().and_then(|a| pipeline::parse_source(a).0);
         let citations = answer.as_ref().map(|a| {
             checks::extract_citations(
                 a,
@@ -246,7 +247,7 @@ pub fn run(args: &[String]) -> Result<()> {
         records.push(json!({"id":g.id,"type":g.qtype,"split":g.split,"retrieved_ids":ids,"retrieval_abstained":retrieval.abstained,
             "fact_state":fact_state,"sufficient_evidence":sufficient,"sensitive_placeholders":prepared.as_ref().map_or(0, |p| p.messages.iter().map(|m| { let text = m["content"].as_str().unwrap_or(""); ["[SECRET]", "[FINANCIAL_ID]", "[FINANCIAL_AMOUNT]", "[PAYMENT_CARD]"].iter().map(|label| text.matches(label).count()).sum::<usize>() }).sum::<usize>()),"prepared":prepared,"prompt_version":pipeline::PROMPT_VERSION,
             "model":if live {env::var("REWIND_LLM_MODEL").unwrap_or_default()} else {"gold-aware-scripted-mock".into()},
-            "raw_answer":answer,"citations":citations,"validation_error":validation,"provider_error":error,"usage":usage,"scores":scores,
+            "raw_answer":raw_answer,"source":source,"citations":citations,"validation_error":validation,"provider_error":error,"usage":usage,"scores":scores,
             "latency_ms":{"retrieval":retrieval_ms,"preparation":prep_ms,"model":model_ms,"total":millis(total)}}));
     }
     let mut by_type: BTreeMap<String, usize> = BTreeMap::new();

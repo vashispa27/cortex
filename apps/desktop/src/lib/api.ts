@@ -93,11 +93,26 @@ export type RetrievalData = {
   retrieval: { engine: "qdrant_edge_hybrid"; dense: boolean; bm25: boolean; fusion: string; candidates: number };
 };
 
-export async function retrieveMemory(query: string): Promise<RetrievalData> {
-  const data = await request<RetrievalData>("POST", "/v1/memory/retrieve", { query });
+function assertSemanticEngine(data: RetrievalData): void {
   if (data.retrieval?.engine !== "qdrant_edge_hybrid" || !data.retrieval.dense || !data.retrieval.bm25) {
     throw new LocalApiError("The semantic memory engine is unavailable. Restart Rewind.", "WRONG_ENGINE");
   }
+}
+
+export async function retrieveMemory(query: string): Promise<RetrievalData> {
+  const data = await request<RetrievalData>("POST", "/v1/memory/retrieve", { query });
+  assertSemanticEngine(data);
+  return data;
+}
+
+export type HistoryTurn = { role: "user" | "assistant"; content: string };
+export type AssistantRequest = RetrievalData & { messages: { role: "system" | "user" | "assistant"; content: string }[]; prompt_version: string };
+
+/** Retrieves on `query`, then lets the local engine build the full model request: shared prompt,
+ *  current date and time, redacted evidence (or an explicit no-evidence marker) and chat history. */
+export async function prepareAssistantRequest(query: string, question: string, history: HistoryTurn[]): Promise<AssistantRequest> {
+  const data = await request<AssistantRequest>("POST", "/v1/assistant/prepare", { query, question, history });
+  assertSemanticEngine(data);
   return data;
 }
 
