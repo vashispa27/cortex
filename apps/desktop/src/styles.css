@@ -22,7 +22,10 @@ small { font-size: .78rem; }
 .brand-dot, .accent { color: #ed9a5b; }
 .edition { display: block; color: #8fa8a2; font-size: .57rem; letter-spacing: .22em; margin: 12px 0 0 43px; font-weight: 700; }
 .sidebar nav { display: flex; flex-direction: column; gap: 3px; }
-.nav-item { width: 100%; display: flex; align-items: center; gap: 13px; padding: 12px 14px; border-radius: 10px; border: 0; background: transparent; color: #b9cbc5; text-align: left; font-weight: 600; font-size: .88rem; transition: background .16s, color .16s; }
+.nav-group { display: flex; flex-direction: column; gap: 2px; margin-bottom: 13px; }
+.nav-group:last-child { margin-bottom: 0; }
+.nav-group-label { padding: 0 14px 5px; color: #708a83; font-size: .55rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; }
+.nav-item { width: 100%; display: flex; align-items: center; gap: 13px; padding: 10px 14px; border-radius: 10px; border: 0; background: transparent; color: #b9cbc5; text-align: left; font-weight: 600; font-size: .88rem; transition: background .16s, color .16s; }
 .nav-item:hover, .nav-item.active { color: #fff; background: #344a48; }
 .nav-item.active svg { color: #eda062; }
 .nav-count { margin-left: auto; border-radius: 999px; min-width: 19px; height: 19px; background: #d27946; color: #fff; text-align: center; font-size: .7rem; line-height: 19px; }
@@ -39,7 +42,10 @@ small { font-size: .78rem; }
 .topbar { height: 65px; flex: none; padding: 0 33px; display: flex; align-items: center; justify-content: space-between; background: #faf9f5; border-bottom: 1px solid #e9e6de; }
 .breadcrumb { display: flex; align-items: center; gap: 10px; font-size: .83rem; color: #66726d; font-weight: 600; }
 .breadcrumb svg { color: #de8e53; }
-.topbar-actions { display: flex; align-items: center; gap: 16px; }
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+.topbar-fish { width: 23px; height: 18px; }
+.button-fish { width: 17px; height: 13px; }
+.settings-fish { width: 20px; height: 15px; flex: none; }
 .top-status { display: flex; align-items: center; gap: 8px; border: 1px solid #e0ddd2; padding: 6px 11px; border-radius: 999px; font-size: .73rem; color: #68736d; background: #fff; }
 .top-status.online .status-light { background: #80ba8e; }
 .top-status.sample .status-light { background: #ec9b58; }
@@ -222,6 +228,8 @@ select, .stack-form input, .stack-form textarea, .inline-form input, .settings-c
 .onboarding-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 28px; background: radial-gradient(circle at 10% 5%, #ecd8c5, transparent 35%), radial-gradient(circle at 88% 90%, #d9e2d9, transparent 32%), #f4f1e9; }
 .onboarding-card { width: min(720px, 100%); min-height: 570px; display: flex; flex-direction: column; background: #fffefa; border: 1px solid #e9e2d5; box-shadow: 0 25px 80px rgba(49,50,36,.08); border-radius: 21px; padding: 28px 35px; }
 .onboarding-top { display: flex; justify-content: space-between; align-items: center; }
+.onboarding-top-right { display: flex; align-items: center; gap: 15px; }
+.onboarding-top-right .text-link { font-size: .67rem; }
 .brand-inline { color: #273832; font-size: 1.45rem; }
 .manage-actions { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
 .confirm-input { width: 100%; min-height: 39px; border: 1px solid #d7d1c5; background: #fffefa; border-radius: 8px; padding: 8px 11px; margin-bottom: 12px; }

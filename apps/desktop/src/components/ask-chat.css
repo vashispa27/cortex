@@ -1,0 +1,16 @@
+.chat-page.ask-chat { flex-direction: row; }
+.ask-sessions { flex: none; width: 250px; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid rgba(80, 105, 145, 0.16); padding: 24px 12px 16px 18px; }
+.ask-sessions-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.ask-new { border: 0; width: 28px; height: 28px; border-radius: 8px; background: transparent; color: inherit; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.ask-new:hover:not(:disabled) { background: rgba(57, 117, 213, 0.12); }
+.ask-session-scroll { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.ask-session { text-align: left; border: 1px solid transparent; border-radius: 11px; padding: 9px 11px; background: transparent; color: inherit; cursor: pointer; display: flex; flex-direction: column; gap: 3px; }
+.ask-session strong { font-size: .8rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ask-session small { font-size: .7rem; opacity: .6; }
+.ask-session:hover { background: rgba(57, 117, 213, 0.08); }
+.ask-session.active { background: rgba(57, 117, 213, 0.14); border-color: rgba(57, 117, 213, 0.3); }
+.ask-empty-list { font-size: .78rem; opacity: .6; margin: 6px 4px; }
+.ask-thread { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.ask-thread .chat-heading h1 { font-size: 1.6rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chat-host { flex: 1; min-height: 0; display: flex; }
+.chat-host[hidden] { display: none; }

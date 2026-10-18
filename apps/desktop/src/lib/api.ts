@@ -86,6 +86,21 @@ export async function getStatus(): Promise<ServiceStatus> {
   };
 }
 
+export type RetrievalData = {
+  results: MemoryHit[];
+  sources: { id: number; text: string }[];
+  abstained: boolean;
+  retrieval: { engine: "qdrant_edge_hybrid"; dense: boolean; bm25: boolean; fusion: string; candidates: number };
+};
+
+export async function retrieveMemory(query: string): Promise<RetrievalData> {
+  const data = await request<RetrievalData>("POST", "/v1/memory/retrieve", { query });
+  if (data.retrieval?.engine !== "qdrant_edge_hybrid" || !data.retrieval.dense || !data.retrieval.bm25) {
+    throw new LocalApiError("The semantic memory engine is unavailable. Restart Rewind.", "WRONG_ENGINE");
+  }
+  return data;
+}
+
 export async function searchMemory(query: string, limit = 20): Promise<SearchData> {
   const raw = object(await request<unknown>("POST", "/v1/memory/search", { query, limit }));
   const results = Array.isArray(raw.results) ? raw.results : [];

@@ -1,6 +1,6 @@
 # Open Memory
 
-The macOS local-memory CLI has two commands: `open-memory capture` and `open-memory ask "question"`. It reads foreground Accessibility text, stores original snapshots in local SQLite, and searches a persistent local Qdrant Edge index. The earlier desktop app remains in this repository; its capture settings and sanitized storage are a separate workflow. See [implementation status](docs/implementation-status.md) for verification notes.
+The macOS local-memory CLI has two commands: `open-memory capture` and `open-memory ask "question"`. It reads foreground Accessibility text, stores original snapshots in local SQLite, and searches a persistent local Qdrant Edge index. Rewind is the macOS UI for this same engine: the app bundles `open-memory desktop`, shares the canonical `local-memory` archive and Qdrant index with the CLI, and uses the same capture cleaner, chunking, embeddings, hybrid retrieval, deduplication, and evidence preparation. See [implementation status](docs/implementation-status.md) for verification notes.
 
 ## Local memory CLI (macOS only)
 
@@ -67,7 +67,9 @@ npm ci
 npm run tauri dev
 ```
 
-In **Settings → Capture & privacy**, record your capture choice, enter any excluded app bundle IDs, and press **Start capture**. The app requests macOS Accessibility access only after that action. Grant access to the Open Memory capture helper in System Settings, return to the app, and press Start capture again. Pause and Stop are in the same screen. Known browsers and credential apps are skipped before their Accessibility trees are read.
+In **Settings → Capture & privacy**, record your capture choice, enter any excluded app bundle IDs, and press **Start capture**. The app requests macOS Accessibility access only after that action. Grant access to the Rewind capture helper in System Settings, return to the app, and press Start capture again. Pause and Stop are in the same screen. Normal browser windows can be read; private/incognito and unknown browser contexts, credential apps, and protected fields are skipped. Rewind's own windows are excluded from capture.
+
+The desktop shell is notch-first: a neon Rewind logo sits at the top center of the primary display with settings and chat controls. Click the logo (or double-tap the configured key anywhere) for a single-entry rewind. The input collapses into the rewind animation and returns an answer with local sources plus an empty field for follow-ups. The chat control opens session history with a scrolling session list, per-session threads, and an undock button. Configure the trigger in **Settings → Rewind & notch**; macOS may ask for Input Monitoring or Accessibility permission for the global double-tap. In the browser preview, `/index.html?window=notch&preview=1&mode=compose` shows the same drop without the native shell.
 
 To build the development macOS app bundle:
 
@@ -93,7 +95,7 @@ The shared answer pipeline sends up to eight sources after privacy redaction and
 | Path | Current purpose |
 |---|---|
 | `crates/capture`, `crates/memory`, `crates/daemon` | Consent-gated sanitization, SQLite/FTS, macOS capture worker, authenticated local API, settings, and deletion |
-| `crates/platform-mac` | Bounded read-only foreground Accessibility helper; the desktop daemon skips browsers with `--skip-browsers`, while the CLI reads them; protected controls are omitted |
+| `crates/platform-mac` | Bounded read-only foreground Accessibility helper; the desktop daemon reads normal browser windows and skips private/unknown browser contexts; protected controls are omitted |
 | `crates/platform-win` | Earlier feasibility probe only; Windows implementation is out of scope |
 | `apps/desktop` | Tauri/React onboarding, privacy controls, sample writing, local search, evidence inspection, and preview reminders |
 | `crates/mcp` | Read-only stdio MCP bridge and safe explicit client-config helper |

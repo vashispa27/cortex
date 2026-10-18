@@ -16,6 +16,8 @@ evals/
   CAPTURE.md  export_fixtures.py   replace hand-authored trees with real Accessibility captures
 ```
 
+For answer-quality grading with Gemini and Jev, see [llm_judge/README.md](llm_judge/README.md).
+
 ## Run
 
 ```bash

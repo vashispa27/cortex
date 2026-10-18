@@ -1,1 +1,1 @@
-{"default":{"identifier":"default","description":"Main window may invoke approved local commands only","local":true,"windows":["main"],"permissions":["core:default"]}}
+{"default":{"identifier":"default","description":"Main workspace and notch drop may invoke approved local commands only","local":true,"windows":["main","notch"],"permissions":["core:default"]}}

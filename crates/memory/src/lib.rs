@@ -131,7 +131,7 @@ impl MemoryStore {
         if apps.len() > 20 || apps.iter().any(|x| x.len() > 200) { return Err(MemoryError::InvalidRequest("invalid app filter")); }
         let conn = self.lock()?;
         let mut stmt = conn.prepare(
-            "SELECT s.id,(SELECT MAX(o.observed_ms) FROM observations o WHERE o.snapshot_id=s.id AND (?2 IS NULL OR o.observed_ms>=?2) AND (?3 IS NULL OR o.observed_ms<=?3)),s.app_id,s.title,substr(s.body,1,360),s.truncated FROM snapshots_fts f JOIN snapshots s ON s.id=f.rowid WHERE snapshots_fts MATCH ?1 AND EXISTS (SELECT 1 FROM observations o WHERE o.snapshot_id=s.id AND (?2 IS NULL OR o.observed_ms>=?2) AND (?3 IS NULL OR o.observed_ms<=?3)) AND (?6='[]' OR s.app_id IN (SELECT value FROM json_each(?6))) ORDER BY bm25(snapshots_fts),s.last_seen_ms DESC LIMIT ?4 OFFSET ?5"
+            "WITH ranked AS MATERIALIZED (SELECT s.id,(SELECT MAX(o.observed_ms) FROM observations o WHERE o.snapshot_id=s.id AND (?2 IS NULL OR o.observed_ms>=?2) AND (?3 IS NULL OR o.observed_ms<=?3)) AS observed_ms,s.app_id,s.window_session_id,s.title,substr(s.body,1,360) AS excerpt,s.truncated,s.last_seen_ms,bm25(snapshots_fts) AS score FROM snapshots_fts f JOIN snapshots s ON s.id=f.rowid WHERE snapshots_fts MATCH ?1 AND EXISTS (SELECT 1 FROM observations o WHERE o.snapshot_id=s.id AND (?2 IS NULL OR o.observed_ms>=?2) AND (?3 IS NULL OR o.observed_ms<=?3)) AND (?6='[]' OR s.app_id IN (SELECT value FROM json_each(?6)))), diversified AS (SELECT *,row_number() OVER (PARTITION BY app_id,window_session_id ORDER BY score,last_seen_ms DESC) AS source_rank FROM ranked) SELECT id,observed_ms,app_id,title,excerpt,truncated FROM diversified ORDER BY source_rank,score,last_seen_ms DESC LIMIT ?4 OFFSET ?5"
         )?;
         let apps_json = serde_json::to_string(&apps).map_err(|_| MemoryError::InvalidRequest("invalid app filter"))?;
         let rows = stmt.query_map(params![terms,request.from_ms,request.to_ms,(limit + 1) as i64,offset as i64,apps_json], |r| {
@@ -272,6 +272,26 @@ impl MemoryStore {
         Ok(count)
     }
 
+    /// Removes captures made by Rewind itself. These are UI chrome, never user memory.
+    /// Unlike a user-initiated delete this does not pause capture or advance the epoch.
+    pub fn purge_app_snapshots(&self, app_id: &str, occurred_ms: i64) -> Result<usize, MemoryError> {
+        if app_id.is_empty() { return Err(MemoryError::InvalidRequest("invalid app id")); }
+        let mut conn = self.lock()?;
+        let tx = conn.transaction()?;
+        let count: i64 = tx.query_row("SELECT COUNT(*) FROM snapshots WHERE app_id=?1", params![app_id], |r| r.get(0))?;
+        if count == 0 {
+            tx.commit()?;
+            return Ok(0);
+        }
+        tx.execute("DELETE FROM derived_items WHERE id IN (SELECT derived_id FROM derived_sources WHERE snapshot_id IN (SELECT id FROM snapshots WHERE app_id=?1))", params![app_id])?;
+        tx.execute("DELETE FROM activity_segments WHERE app_id=?1", params![app_id])?;
+        tx.execute("DELETE FROM snapshots WHERE app_id=?1", params![app_id])?;
+        tx.execute("INSERT INTO privacy_events(operation,category,occurred_ms,count) VALUES('self_capture_cleanup','snapshots',?1,?2)", params![occurred_ms,count])?;
+        tx.commit()?;
+        conn.execute_batch("PRAGMA wal_checkpoint(TRUNCATE)")?;
+        Ok(count as usize)
+    }
+
     pub fn delete_snapshots(&self, ids: &[i64], occurred_ms: i64) -> Result<usize, MemoryError> {
         if ids.len() > 1000 { return Err(MemoryError::InvalidRequest("too many snapshot IDs")); }
         let mut conn = self.lock()?;
@@ -391,6 +411,17 @@ mod tests {
         assert!(db.snapshots(&[id]).unwrap().snapshots.is_empty());
     }
     #[test]
+    fn search_diversifies_repeated_captures_from_one_window() {
+        let db = MemoryStore::in_memory().unwrap();
+        for i in 0..10 { db.ingest(&capture(&format!("Saurav discussion version {i}"), 1_000 + i)).unwrap(); }
+        let mut x = capture("Saurav conversation Jul 5", 900);
+        x.app_id = "com.google.Chrome".into();
+        x.window_session_id = "browser-window".into();
+        let x_id = db.ingest(&x).unwrap();
+        let result = db.search(&SearchRequest { query: "Saurav".into(), from_ms: None, to_ms: None, apps: None, limit: Some(2), cursor: None }).unwrap();
+        assert!(result.results.iter().any(|hit| hit.snapshot_id == x_id));
+    }
+    #[test]
     fn fts_query_is_literal_and_redacted_text_is_only_stored_form() {
         let db = MemoryStore::in_memory().unwrap();
         db.ingest(&capture("token sk-abcdefghijklmnopqrstu launch",1)).unwrap();
@@ -398,6 +429,21 @@ mod tests {
         let latest = db.recent(None,None).unwrap();
         assert!(!latest.results[0].excerpt.contains("abcdefghijklmnopqrstu"));
     }
+    #[test]
+    fn self_capture_purge_removes_only_the_rewind_ui() {
+        let db = MemoryStore::in_memory().unwrap();
+        let real = db.ingest(&capture("Instagram Saurabh Thakur",1_000)).unwrap();
+        let mut self_capture = capture("Rewind home LOCAL PREVIEW",2_000);
+        self_capture.app_id = "app.open-memory.desktop".into();
+        self_capture.window_session_id = "rewind-window".into();
+        let self_id = db.ingest(&self_capture).unwrap();
+        assert_eq!(db.snapshot_count().unwrap(),2);
+        assert_eq!(db.purge_app_snapshots("app.open-memory.desktop",3_000).unwrap(),1);
+        assert_eq!(db.snapshots(&[self_id]).unwrap().snapshots.len(),0);
+        assert_eq!(db.snapshots(&[real]).unwrap().snapshots.len(),1);
+        assert_eq!(db.memory_epoch().unwrap(),0);
+    }
+
     #[test]
     fn deletion_advances_epoch() {
         let db = MemoryStore::in_memory().unwrap();

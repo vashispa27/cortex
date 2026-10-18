@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Open Memory",
+  "productName": "Rewind",
   "version": "0.1.0",
   "identifier": "app.open-memory.desktop",
   "build": {
@@ -10,17 +10,48 @@
     "frontendDist": "../dist"
   },
   "app": {
-    "windows": [{
-      "title": "Open Memory",
-      "width": 1160,
-      "height": 770,
-      "minWidth": 760,
-      "minHeight": 560,
-      "backgroundColor": "#f6f4ee"
-    }],
+    "macOSPrivateApi": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Rewind",
+        "width": 1160,
+        "height": 770,
+        "minWidth": 760,
+        "minHeight": 560,
+        "backgroundColor": "#00000000",
+        "visible": false,
+        "transparent": true,
+        "theme": "Light"
+      },
+      {
+        "label": "notch",
+        "url": "index.html?window=notch",
+        "title": "Rewind notch",
+        "width": 235,
+        "height": 32,
+        "resizable": false,
+        "maximizable": false,
+        "minimizable": false,
+        "closable": false,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "visibleOnAllWorkspaces": true,
+        "skipTaskbar": true,
+        "shadow": false,
+        "focus": false,
+        "acceptFirstMouse": true,
+        "visible": true,
+        "theme": "Light"
+      }
+    ],
     "security": {
       "csp": "default-src 'self'; img-src 'self' data:; media-src 'self' blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ipc: http://ipc.localhost"
     }
   },
-  "bundle": { "active": true, "targets": "all" }
+  "bundle": {
+    "active": true,
+    "targets": "all"
+  }
 }

@@ -237,10 +237,12 @@ private func collectText(from window: AXUIElement, visibleBounds: CGRect) -> ([[
         }
         if axBool(item.element, "AXHidden") == true || axBool(item.element, "AXVisible") == false { continue }
 
-        if url == nil {
+        // A page link's AXURL is not the address of the current tab. Only use
+        // the browser's address field or web area, never arbitrary page links.
+        let isAddress = (name + " " + placeholder).lowercased().contains("address")
+        if url == nil && (isAddress || role == "AXWebArea") {
             let candidate = axURL(item.element)
-                ?? (((name + " " + placeholder).lowercased().contains("address") || role == "AXWebArea")
-                    ? axString(item.element, kAXValueAttribute as String, bytes: 8_192) : nil)
+                ?? axString(item.element, kAXValueAttribute as String, bytes: 8_192)
             if let candidate, let parsed = URL(string: candidate),
                ["https", "http", "file"].contains(parsed.scheme?.lowercased() ?? "") {
                 url = candidate

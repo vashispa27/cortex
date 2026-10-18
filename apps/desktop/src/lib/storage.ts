@@ -1,10 +1,17 @@
+export type RewindTrigger = "rightOption" | "leftOption" | "fn" | "rightShift" | "leftShift" | "rightControl" | "leftControl";
+
 export type Preferences = {
   onboardingComplete: boolean;
+  captureSetupComplete: boolean;
   sampleMode: boolean;
   reduceMotion: boolean;
   textScale: number;
   edge: "left" | "right";
   hoverOpen: boolean;
+  hideDrop: boolean;
+  fishByText: boolean;
+  rewindHotkey: boolean;
+  rewindTrigger: RewindTrigger;
   proactive: boolean;
   backgroundInference: boolean;
   mcpConsent: boolean;
@@ -14,15 +21,21 @@ export type Preferences = {
   excludedApps: string;
   excludedDomains: string;
   identity: string;
+  openrouterModel: string;
 };
 
 export const defaultPreferences: Preferences = {
   onboardingComplete: false,
+  captureSetupComplete: false,
   sampleMode: false,
   reduceMotion: false,
   textScale: 100,
   edge: "right",
   hoverOpen: false,
+  hideDrop: false,
+  fishByText: true,
+  rewindHotkey: true,
+  rewindTrigger: "rightOption",
   proactive: false,
   backgroundInference: false,
   mcpConsent: false,
@@ -32,6 +45,7 @@ export const defaultPreferences: Preferences = {
   excludedApps: "",
   excludedDomains: "",
   identity: "",
+  openrouterModel: "",
 };
 
 const key = "open-memory.desktop.preferences.v1";

@@ -8,6 +8,7 @@ mod blocklist;
 mod cleaner;
 mod cloud_redaction;
 mod dedup;
+mod desktop;
 mod eval;
 mod fixtures;
 mod prefix;
@@ -117,6 +118,7 @@ fn main() -> Result<()> {
     fs::create_dir_all(&state)?;
     fs::set_permissions(&state, fs::Permissions::from_mode(0o700))?;
     match args.as_slice() {
+        [command] if command == "desktop" => desktop::serve(&state),
         [command, rest @ ..] if command == "blocklist" => blocklist::run_cli(&state, rest),
         [command, rest @ ..] if command == "raw-trees" => rawtrees::run_cli(&state, rest),
         [command, flags @ ..] if command == "capture" => {

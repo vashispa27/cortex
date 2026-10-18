@@ -43,6 +43,14 @@ async fn main() -> Result<(),Box<dyn std::error::Error>> {
     #[cfg(target_os="macos")]
     let _instance_lock = lock_instance(&state_dir.join("daemon.lock"))?;
     let store = Arc::new(MemoryStore::open(&state_dir.join("memory.sqlite3"))?);
+    // Older builds captured Rewind's own window while it was frontmost. Those
+    // rows are UI chrome, not memory, so remove them without touching user data.
+    #[cfg(target_os = "macos")]
+    for app_id in ["app.open-memory.desktop", "app.rewind.desktop"] {
+        if let Ok(count) = store.purge_app_snapshots(app_id, now_ms()) {
+            if count > 0 { eprintln!("Removed {count} Rewind UI captures from local memory."); }
+        }
+    }
     if env::args().any(|arg| arg == "--seed-synthetic") {
         seed_synthetic(&store)?;
         println!("Inserted synthetic fixture into {}",state_dir.display());
@@ -224,7 +232,7 @@ async fn update_settings(State(state): State<AppState>, headers: HeaderMap, Json
     if patch.capture_enabled == Some(true) {
         #[cfg(target_os="macos")]
         if mac_capture::permission(&state.capture_helper).await != "granted" {
-            return error(StatusCode::FORBIDDEN,ErrorCode::PermissionRequired,"macOS Accessibility permission is required.","Grant access to the Open Memory capture helper, then try again.",false);
+            return error(StatusCode::FORBIDDEN,ErrorCode::PermissionRequired,"macOS Accessibility permission is required.","Grant access to the current Rewind app, then try again.",false);
         }
         #[cfg(not(target_os="macos"))]
         return error(StatusCode::BAD_REQUEST,ErrorCode::InvalidRequest,"Capture is only available on macOS in this build.","Use the macOS app.",false);

@@ -106,6 +106,30 @@ pub enum SkipReason {
     AmbiguousBrowserContext,
 }
 
+// Keep recognizable conversation and post paths, but never persist query strings,
+// fragments, user info, or arbitrary paths that might contain access tokens.
+fn safe_browser_url(raw: &str, domain: &str) -> Option<String> {
+    let mut parsed = url::Url::parse(raw).ok()?;
+    if !matches!(parsed.scheme(), "http" | "https") || parsed.host_str()? != domain { return None; }
+    parsed.set_username("").ok()?;
+    parsed.set_password(None).ok()?;
+    parsed.set_query(None);
+    parsed.set_fragment(None);
+    let path = parsed.path().to_owned();
+    let segments: Vec<_> = path.split('/').filter(|s| !s.is_empty()).collect();
+    let valid = |s: &str| !s.is_empty() && s.len() <= 128 && s.bytes().all(|c| c.is_ascii_alphanumeric() || b"_-".contains(&c));
+    let allowed = match (domain, segments.as_slice()) {
+        ("x.com" | "twitter.com", ["messages", id]) => valid(id),
+        ("x.com" | "twitter.com", ["i", "chat", id]) => valid(id),
+        ("x.com" | "twitter.com", [user, "status", id]) => valid(user) && id.bytes().all(|c| c.is_ascii_digit()),
+        ("chatgpt.com" | "chat.openai.com", ["c", id]) => valid(id),
+        ("www.linkedin.com" | "linkedin.com", ["feed", "update", id]) => id.starts_with("urn:li:activity:") && id[16..].bytes().all(|c| c.is_ascii_digit()),
+        _ => false,
+    };
+    if !allowed { parsed.set_path("/"); }
+    Some(parsed.to_string())
+}
+
 impl CapturePolicy {
     pub fn sanitize(&self, window: &RawWindow) -> Result<SanitizedSnapshot, SkipReason> {
         // Gate metadata before walking any accessibility text.
@@ -130,8 +154,7 @@ impl CapturePolicy {
                 if self.excluded_domains.iter().any(|x| domain_matches(&d, x)) {
                     return Err(SkipReason::ExcludedDomain);
                 }
-                // Persist only origin; paths, user-info, queries, and fragments commonly contain secrets.
-                url.as_ref().map(|u| format!("{}://{}",if u.starts_with("https://") { "https" } else { "http" },d))
+                url.as_deref().and_then(|u| safe_browser_url(u, &d))
             }
         };
 
@@ -288,6 +311,14 @@ mod tests {
         assert_eq!(p.sanitize(&w).unwrap_err(), SkipReason::PrivateBrowsing);
         w.browser = BrowserContext::Unknown;
         assert_eq!(p.sanitize(&w).unwrap_err(), SkipReason::AmbiguousBrowserContext);
+    }
+    #[test]
+    fn conversation_links_keep_safe_paths_without_secrets() {
+        assert_eq!(safe_browser_url("https://alice:secret@x.com/messages/123-456?token=secret#part", "x.com").as_deref(), Some("https://x.com/messages/123-456"));
+        assert_eq!(safe_browser_url("https://chatgpt.com/c/abc-123?token=secret", "chatgpt.com").as_deref(), Some("https://chatgpt.com/c/abc-123"));
+        assert_eq!(safe_browser_url("https://x.com/i/chat/123-456?token=secret", "x.com").as_deref(), Some("https://x.com/i/chat/123-456"));
+        assert_eq!(safe_browser_url("https://example.com/reset/secret?token=secret", "example.com").as_deref(), Some("https://example.com/"));
+        assert!(safe_browser_url("https://evil.com/messages/123", "x.com").is_none());
     }
     #[test]
     fn exclusion_matches_subdomains_but_not_similar_domains() {

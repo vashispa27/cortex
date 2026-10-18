@@ -17,3 +17,6 @@ evals/reports/runs/
 evals/.work/
 # Answer eval records contain exact prompts and responses.
 evals/answers/out/
+# Judge runs include exact evidence and model answers.
+evals/llm_judge/out/
+evals/llm_judge/__pycache__/

@@ -1618,6 +1618,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2 0.10.9",
+ "url",
 ]
 
 [[package]]
@@ -1643,6 +1644,7 @@ dependencies = [
  "serde_json",
  "subtle",
  "tokio",
+ "url",
 ]
 
 [[package]]
@@ -2818,6 +2820,7 @@ dependencies = [
  "anyhow",
  "chrono",
  "hex",
+ "libc",
  "model2vec-rs",
  "qdrant-edge",
  "regex",

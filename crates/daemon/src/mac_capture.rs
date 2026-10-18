@@ -1,4 +1,4 @@
-use goldfish_capture::{CapturePolicy, RawWindow};
+use goldfish_capture::{BrowserContext, CapturePolicy, RawWindow};
 use goldfish_memory::MemoryStore;
 use serde::Deserialize;
 use std::{fs, io::{self, Write}, os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt}, path::{Path, PathBuf}, process::Stdio, sync::Arc, time::Duration};
@@ -13,23 +13,64 @@ pub struct HelperReply {
     pub permission: Option<String>,
     pub window: Option<RawWindow>,
     pub idle_ms: Option<i64>,
+    pub url: Option<String>,
+    pub source_type: Option<String>,
+}
+
+fn browser_context(source_type: Option<&str>, url: Option<&str>) -> BrowserContext {
+    match source_type.unwrap_or("app") {
+        "browser_private" => BrowserContext::Private,
+        "browser" => {
+            let domain = url
+                .and_then(|value| url::Url::parse(value).ok())
+                .and_then(|parsed| parsed.host_str().map(str::to_owned));
+            match domain {
+                Some(domain) => BrowserContext::Public { domain, url: url.map(str::to_owned) },
+                None => BrowserContext::Unknown,
+            }
+        }
+        _ => BrowserContext::NotBrowser,
+    }
 }
 
 pub fn install_helper(state_dir: &Path) -> io::Result<PathBuf> {
-    let path = state_dir.join("open-memory-ax-helper");
+    // TCC identifies the process that actually performs the Accessibility read.
+    // A named app bundle makes that process discoverable in System Settings.
+    let bundle = state_dir.join("Rewind Capture.app");
+    let path = bundle.join("Contents/MacOS/Rewind Capture");
+    let source = bundle.join("Contents/Resources/helper-source");
     if let Ok(meta) = fs::symlink_metadata(&path) {
         if meta.is_file() && meta.uid() == unsafe { libc::geteuid() }
-            && meta.mode() & 0o077 == 0 && fs::read(&path).map(|bytes| bytes == HELPER).unwrap_or(false) {
+            && meta.mode() & 0o077 == 0 && fs::read(&source).map(|bytes| bytes == HELPER).unwrap_or(false)
+            && bundle.join("Contents/Info.plist").is_file() {
             return Ok(path);
         }
     }
-    let temp = state_dir.join("open-memory-ax-helper.tmp");
-    if temp.exists() { fs::remove_file(&temp)?; }
-    let mut file = fs::OpenOptions::new().write(true).create_new(true).mode(0o700).open(&temp)?;
+    let temp = state_dir.join("Rewind Capture.tmp.app");
+    if temp.exists() { fs::remove_dir_all(&temp)?; }
+    fs::create_dir_all(temp.join("Contents/MacOS"))?;
+    fs::create_dir_all(temp.join("Contents/Resources"))?;
+    let executable = temp.join("Contents/MacOS/Rewind Capture");
+    let mut file = fs::OpenOptions::new().write(true).create_new(true).mode(0o700).open(&executable)?;
     file.write_all(HELPER)?;
     file.sync_all()?;
-    fs::set_permissions(&temp, fs::Permissions::from_mode(0o700))?;
-    fs::rename(&temp, &path)?;
+    fs::set_permissions(&executable, fs::Permissions::from_mode(0o700))?;
+    fs::write(temp.join("Contents/Resources/helper-source"), HELPER)?;
+    fs::write(temp.join("Contents/Info.plist"), br#"<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>CFBundleIdentifier</key><string>app.rewind.capture</string>
+<key>CFBundleName</key><string>Rewind Capture</string>
+<key>CFBundleDisplayName</key><string>Rewind Capture</string>
+<key>CFBundleExecutable</key><string>Rewind Capture</string>
+<key>CFBundlePackageType</key><string>APPL</string>
+<key>CFBundleVersion</key><string>1</string>
+<key>LSUIElement</key><true/>
+</dict></plist>"#)?;
+    let signed = std::process::Command::new("/usr/bin/codesign").args(["--force", "--sign", "-"]).arg(&temp).output()?;
+    if !signed.status.success() { return Err(io::Error::other("Could not sign the Rewind Capture helper")); }
+    if bundle.exists() { fs::remove_dir_all(&bundle)?; }
+    fs::rename(&temp, &bundle)?;
     Ok(path)
 }
 
@@ -67,11 +108,17 @@ pub async fn capture_loop(path: PathBuf, store: Arc<MemoryStore>) {
             continue;
         }
         let Ok(epoch) = store.memory_epoch() else { previous = None; continue; };
-        let mut excluded_args: Vec<String> = vec!["--skip-browsers".into()];
+        let mut excluded_args: Vec<String> = vec![
+            "--exclude-app=app.open-memory.desktop".into(),
+            "--exclude-app=app.rewind.desktop".into(),
+            "--exclude-app=app.rewind.capture".into(),
+            "--exclude-app=com.apple.securityagent".into(),
+        ];
         excluded_args.extend(settings.excluded_apps.iter().map(|app| format!("--exclude-app={app}")));
         let Ok(reply) = run_helper_with_args(&path,"--read-frontmost",&excluded_args).await else { previous = None; continue; };
         if reply.status.as_deref() != Some("ok") { previous = None; continue; }
-        let Some(window) = reply.window else { previous = None; continue; };
+        let Some(mut window) = reply.window else { previous = None; continue; };
+        window.browser = browser_context(reply.source_type.as_deref(), reply.url.as_deref());
         // An opt-out, exclusion change, pause, or deletion while AX was reading
         // invalidates the observation before anything is stored.
         let Ok(current) = store.settings() else { previous = None; continue; };

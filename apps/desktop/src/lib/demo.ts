@@ -39,7 +39,80 @@ export const sampleMemories: MemoryHit[] = [
     evidence_available: true,
     truncated: false,
   },
+  {
+    snapshot_id: 105,
+    observed_ms: time(5.2),
+    app_id: "Example Mail",
+    title: "Invoice follow-up",
+    excerpt: "The Friday Gang split is still open. Priya asked everyone to settle the shared expense before the weekend.",
+    evidence_available: true,
+    truncated: false,
+  },
+  {
+    snapshot_id: 106,
+    observed_ms: time(27),
+    app_id: "Example Chat",
+    title: "Standup notes",
+    excerpt: "Capture reliability is the top priority this week. Search latency and empty results are the two items to watch.",
+    evidence_available: true,
+    truncated: false,
+  },
+  {
+    snapshot_id: 107,
+    observed_ms: time(29.5),
+    app_id: "Example Docs",
+    title: "Copy review",
+    excerpt: "The onboarding copy should explain what stays local before asking for any permission.",
+    evidence_available: true,
+    truncated: false,
+  },
+  {
+    snapshot_id: 108,
+    observed_ms: time(53),
+    app_id: "Example Browser",
+    title: "Design references",
+    excerpt: "A few references for a quieter settings page: generous spacing, restrained color, and one clear action per section.",
+    evidence_available: true,
+    truncated: false,
+  },
+  {
+    snapshot_id: 109,
+    observed_ms: time(75),
+    app_id: "Example Notes",
+    title: "Interview prep",
+    excerpt: "Questions to ask about local-first storage, accessibility support, and how capture handles sensitive fields.",
+    evidence_available: true,
+    truncated: false,
+  },
+  {
+    snapshot_id: 110,
+    observed_ms: time(78),
+    app_id: "Example Calendar",
+    title: "Weekly planning",
+    excerpt: "Thursday afternoon is reserved for the design review. Friday morning is the only open block for the beta checklist.",
+    evidence_available: true,
+    truncated: false,
+  },
 ];
+
+export const sampleAppUsage: { appId: string; minutes: number }[] = [
+  { appId: "Example Mail", minutes: 167 },
+  { appId: "Example Docs", minutes: 68 },
+  { appId: "Example Chat", minutes: 56 },
+  { appId: "Example Browser", minutes: 38 },
+  { appId: "Example Notes", minutes: 21 },
+  { appId: "Example Calendar", minutes: 15 },
+];
+
+export const sampleActivity = {
+  actions: 84,
+  hours: 6.4,
+  rewrites: 12,
+  voiceNotes: 4,
+  chats: 18,
+  edits: 9,
+  mcpCalls: 3,
+};
 
 export function demoSearch(query: string): SearchData {
   const stopwords = new Set(["a", "about", "and", "did", "find", "for", "in", "is", "me", "of", "say", "the", "to", "was", "what"]);
