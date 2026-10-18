@@ -109,9 +109,10 @@ export type HistoryTurn = { role: "user" | "assistant"; content: string };
 export type AssistantRequest = RetrievalData & { messages: { role: "system" | "user" | "assistant"; content: string }[]; prompt_version: string };
 
 /** Retrieves on `query`, then lets the local engine build the full model request: shared prompt,
- *  current date and time, redacted evidence (or an explicit no-evidence marker) and chat history. */
+ *  current date and time, redacted evidence (or an explicit no-evidence marker), chat history and a
+ *  note that read-only tools (`search_memory`) are available. */
 export async function prepareAssistantRequest(query: string, question: string, history: HistoryTurn[]): Promise<AssistantRequest> {
-  const data = await request<AssistantRequest>("POST", "/v1/assistant/prepare", { query, question, history });
+  const data = await request<AssistantRequest>("POST", "/v1/assistant/prepare", { query, question, history, tools: true });
   assertSemanticEngine(data);
   return data;
 }

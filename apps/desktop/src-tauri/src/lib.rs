@@ -487,6 +487,11 @@ async fn daemon_request(method: String, path: String, body: Option<Value>) -> Re
     if body.as_ref().is_some_and(|value| value.to_string().len() > 65_536) {
         return Err("Local service request is too large".to_string());
     }
+    daemon_call(method, path, body).await.map(|data| serde_json::json!({"data":data}))
+}
+
+/// Calls the local memory engine over its private socket and returns the response `data`.
+async fn daemon_call(method: String, path: String, body: Option<Value>) -> Result<Value, String> {
     #[cfg(target_os = "macos")]
     {
         let state = state_dir()?;
@@ -504,7 +509,7 @@ async fn daemon_request(method: String, path: String, body: Option<Value>) -> Re
             if bytes.len()>MAX_RESPONSE_BYTES { return Err("Memory response is too large".into()); }
             let value:Value=serde_json::from_slice(&bytes).map_err(|_|"The memory engine returned invalid data".to_string())?;
             if value["ok"]!=true { return Err(value["error"].as_str().unwrap_or("The memory request failed").to_string()); }
-            Ok(serde_json::json!({"data":value["data"]}))
+            Ok(value["data"].clone())
         }).await.map_err(|e|e.to_string())?;
     }
     #[cfg(not(target_os = "macos"))]
@@ -600,10 +605,19 @@ fn open_external_link(url: String) -> Result<(), String> {
     Err("Opening links is only available on macOS".into())
 }
 
+struct LocalEngine;
+impl tools::Engine for LocalEngine {
+    async fn request(&self, path: &str, body: Value) -> Result<Value, String> {
+        daemon_call("POST".into(), path.into(), Some(body)).await
+    }
+}
+
 /// Sends messages built by the local engine (`/v1/assistant/prepare`: shared prompt, time anchor,
-/// redacted evidence) to the configured provider. The shell adds nothing to the prompt.
+/// redacted evidence) to the configured provider, running its read-only tool calls (at most
+/// `tools::MAX_ROUNDS` rounds). The shell adds nothing to the prompt. Returns the model's reply and
+/// the memory hits that tool calls found.
 #[tauri::command]
-async fn openrouter_chat(model: String, messages: Vec<Value>) -> Result<String, String> {
+async fn openrouter_chat(model: String, messages: Vec<Value>) -> Result<Value, String> {
     let model = model.trim();
     if model.is_empty() || model.len() > 160 || model.chars().any(char::is_whitespace) {
         return Err("Set an OpenRouter model name in Settings → AI model.".into());
@@ -615,7 +629,8 @@ async fn openrouter_chat(model: String, messages: Vec<Value>) -> Result<String, 
     if !valid || size > 120_000 {
         return Err("The question or conversation is too long.".into());
     }
-    Provider::openrouter()?.complete(model, messages, 800).await
+    let outcome = tools::run(&Provider::openrouter()?, &LocalEngine, &tools::NoCalendar, model, messages, 800, &tools::Limits::default()).await?;
+    Ok(serde_json::json!({"content": outcome.content, "hits": outcome.hits, "tool_rounds": outcome.tool_rounds}))
 }
 
 #[tauri::command]
@@ -645,17 +660,34 @@ impl Provider {
         Ok(Self { name: "OpenRouter", endpoint: "https://openrouter.ai/api/v1/chat/completions", key: Some(key) })
     }
 
-    async fn complete(&self, model: &str, messages: Vec<Value>, max_tokens: u32) -> Result<String, String> {
+    /// One round trip; returns the assistant `message` object. Errors never include the endpoint, response body or key.
+    async fn send(&self, model: &str, messages: &[Value], tools: Option<&[Value]>, max_tokens: u32) -> Result<Value, tools::ProviderError> {
         let name = self.name;
-        if model.is_empty() || model.len()>160 || model.chars().any(char::is_whitespace) { return Err(format!("Set a valid {name} model in Settings → AI model.")); }
-        let client = reqwest::Client::builder().timeout(std::time::Duration::from_secs(60)).redirect(reqwest::redirect::Policy::none()).build().map_err(|_| format!("Could not initialize {name} connection."))?;
-        let mut request = client.post(self.endpoint).json(&serde_json::json!({"model":model,"messages":messages,"max_tokens":max_tokens}));
+        let fail = |message: String| tools::ProviderError { status: None, message };
+        if model.is_empty() || model.len()>160 || model.chars().any(char::is_whitespace) { return Err(fail(format!("Set a valid {name} model in Settings → AI model."))); }
+        let client = reqwest::Client::builder().timeout(std::time::Duration::from_secs(60)).redirect(reqwest::redirect::Policy::none()).build().map_err(|_| fail(format!("Could not initialize {name} connection.")))?;
+        let mut body = serde_json::json!({"model":model,"messages":messages,"max_tokens":max_tokens});
+        if let Some(tools) = tools { body["tools"] = serde_json::json!(tools); }
+        let mut request = client.post(self.endpoint).json(&body);
         if let Some(key) = &self.key { request = request.bearer_auth(key); }
-        // Errors never include the endpoint, response body or key.
-        let response = request.send().await.map_err(|_| format!("Could not reach {name}. Check your internet connection."))?;
-        if !response.status().is_success() { return Err(format!("{name} returned HTTP {}. Check your API key, model name, and account balance.", response.status().as_u16())); }
-        let value: Value = response.json().await.map_err(|_| format!("{name} returned an invalid response."))?;
-        value["choices"][0]["message"]["content"].as_str().filter(|s| !s.trim().is_empty()).map(str::to_owned).ok_or_else(|| format!("{name} returned an empty answer."))
+        let response = request.send().await.map_err(|_| fail(format!("Could not reach {name}. Check your internet connection.")))?;
+        if !response.status().is_success() {
+            let status = response.status().as_u16();
+            return Err(tools::ProviderError { status: Some(status), message: format!("{name} returned HTTP {status}. Check your API key, model name, and account balance.") });
+        }
+        let value: Value = response.json().await.map_err(|_| fail(format!("{name} returned an invalid response.")))?;
+        value["choices"][0]["message"].as_object().map(|m| Value::Object(m.clone())).ok_or_else(|| fail(format!("{name} returned an empty answer.")))
+    }
+
+    async fn complete(&self, model: &str, messages: Vec<Value>, max_tokens: u32) -> Result<String, String> {
+        let message = self.send(model, &messages, None, max_tokens).await.map_err(|e| e.message)?;
+        message["content"].as_str().filter(|s| !s.trim().is_empty()).map(str::to_owned).ok_or_else(|| format!("{} returned an empty answer.", self.name))
+    }
+}
+
+impl tools::Chat for Provider {
+    async fn chat(&self, model: &str, messages: &[Value], tools: Option<&[Value]>, max_tokens: u32) -> Result<Value, tools::ProviderError> {
+        self.send(model, messages, tools, max_tokens).await
     }
 }
 
@@ -693,6 +725,8 @@ mod tests {
         assert!(!valid_route("GET", "/v1/assistant/prepare"));
     }
 }
+
+mod tools;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

@@ -1211,6 +1211,10 @@ struct Params {
     /// With a date window, restrict chunk points to snapshots actually observed in it inside Qdrant,
     /// instead of dropping them after the top-`fused_limit` cut.
     obs_prefilter: bool,
+    /// Explicit `[start, end)` observation window in ms (a tool call); replaces any window parsed from the question.
+    window: Option<(i64, i64)>,
+    /// Explicit app bundle ids (a tool call); replaces any app scope parsed from the question.
+    app_ids: Option<Vec<String>>,
     /// Word-set overlap above which two results with the same numbers, names and negations are one.
     dedup_jaccard: f64,
     /// Order versions of one page by what the question asks for (newest by default).
@@ -1250,6 +1254,8 @@ impl Default for Params {
             // the lowest dev dated answerable at 0.25, so 'none of the question's terms appear' (< 0.1).
             abstain_time_support: 0.1,
             obs_prefilter: true,
+            window: None,
+            app_ids: None,
             // dedup_jaccard changed nothing on dev or test (no mergeable pair exists in the corpus); 0.9 merges
             // only near-identical results. version_margin: dev cannot tell 0.05..1.0 apart; 0.3 is the safe tie.
             dedup_jaccard: 0.9,
@@ -1371,11 +1377,20 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
         if drop_app {
             c.retain(|clause| clause["key"] != "app");
         }
+        if let Some((start, end)) = params.window {
+            c.retain(|clause| clause["key"] != "capture_time" && clause["key"] != "last_seen");
+            c.push(json!({"key":"capture_time","range":{"lt":end}}));
+            c.push(json!({"key":"last_seen","range":{"gte":start}}));
+        }
+        if let (Some(ids), false) = (&params.app_ids, drop_app) {
+            c.retain(|clause| clause["key"] != "app");
+            c.push(json!({"key":"app","match":{"any":ids}}));
+        }
         c
     } else {
         Vec::new()
     };
-    let time = if params.use_filters { time_bounds(question, params.now_ms)? } else { None };
+    let time = if !params.use_filters { None } else if params.window.is_some() { params.window } else { time_bounds(question, params.now_ms)? };
     let reported_clauses = clauses.clone();
     if !params.include_derived {
         clauses.push(json!({"key":"point_type","match":{"value":"chunk"}}));

@@ -50,13 +50,17 @@ export async function answerFromMemory(question: string, history: ChatMessage[])
   const request = await prepareAssistantRequest(query, question, prior);
   const prepare = performance.now() - t;
   t = performance.now();
-  const raw = await invoke<string>("openrouter_chat", { model, messages: request.messages });
+  // The shell runs the model's read-only tool calls (a bounded loop) and returns the final reply.
+  const reply = await invoke<{ content: string; hits?: MemoryHit[] }>("openrouter_chat", { model, messages: request.messages });
+  const raw = reply.content;
   const model_ = performance.now() - t;
-  const { source, body } = parseSource(raw, request.sources.length > 0);
+  const toolHits = reply.hits ?? [];
+  const { source, body } = parseSource(raw, request.sources.length > 0 || toolHits.length > 0);
+  const found = [...request.results, ...toolHits];
   return {
     body,
     source,
-    hits: source === "memory" || source === "mixed" ? request.results : [],
+    hits: source === "memory" || source === "mixed" ? found.filter((hit, i) => found.findIndex((other) => other.snapshot_id === hit.snapshot_id) === i) : [],
     timings: { rewrite, prepare, model: model_ },
   };
 }

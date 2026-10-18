@@ -292,6 +292,20 @@ fn permission(helper: &Path) -> String {
         .and_then(|r| r.permission)
         .unwrap_or_else(|| "not_granted".into())
 }
+/// `YYYY-MM-DD` or `YYYY-MM-DDTHH:MM[:SS]` in local time, as milliseconds. A bare date means the
+/// start of that day, or with `end` the start of the next, so a range of dates is inclusive.
+fn parse_when(value: &str, end: bool) -> Option<i64> {
+    let value = value.trim();
+    let local = |t: chrono::NaiveDateTime| Local.from_local_datetime(&t).earliest().map(|t| t.timestamp_millis());
+    if let Ok(date) = chrono::NaiveDate::parse_from_str(value, "%Y-%m-%d") {
+        let day = if end { date.succ_opt()? } else { date };
+        return local(day.and_hms_opt(0, 0, 0)?);
+    }
+    ["%Y-%m-%dT%H:%M:%S", "%Y-%m-%dT%H:%M"]
+        .iter()
+        .find_map(|f| chrono::NaiveDateTime::parse_from_str(value, f).ok())
+        .and_then(local)
+}
 fn hit_json(hit: &Hit, question: &str, chunks: usize) -> Value {
     let s = &hit.source;
     json!({"snapshot_id":s.id,"observed_ms":s.last_seen_ms,"app_id":s.app_id,"title":s.title,"url":s.url,"excerpt":evidence_snippet(hit,question,chunks),"evidence_available":true,"truncated":false,"score":s.score})
@@ -405,6 +419,7 @@ fn route(
                 query,
                 history: if assistant { history } else { &[] },
                 timezone: &timezone,
+                tools: assistant && body["tools"] == true,
                 ..answer_pipeline::Request::new(question, &result.hits, params.chunks_per_result, result.abstained)
             })?;
             let results: Vec<_> = result
@@ -418,6 +433,56 @@ fn route(
                 response["prompt_version"] = json!(answer_pipeline::PROMPT_VERSION);
             }
             Ok(response)
+        }
+        ("POST", "/v1/assistant/search") => {
+            // The `search_memory` tool: a second, targeted retrieval with an explicit time window and app.
+            let query = body["query"]
+                .as_str()
+                .filter(|q| !q.trim().is_empty() && q.len() <= 1000)
+                .context("search_memory needs a non-empty query")?;
+            let mut params = Params::default();
+            params.final_k = body["limit"].as_u64().unwrap_or(5).clamp(1, answer_pipeline::SOURCE_LIMIT as u64) as usize;
+            let when = |key: &str, end: bool| -> Result<Option<i64>> {
+                match body[key].as_str().filter(|v| !v.trim().is_empty()) {
+                    None => Ok(None),
+                    Some(v) => parse_when(v, end).map(Some).with_context(|| format!("`{key}` must be YYYY-MM-DD or YYYY-MM-DDTHH:MM local time")),
+                }
+            };
+            params.window = match (when("from", false)?, when("to", true)?) {
+                (None, None) => None,
+                (from, to) => {
+                    let (from, to) = (from.unwrap_or(0), to.unwrap_or(i64::MAX / 2));
+                    if from >= to {
+                        bail!("`from` must be before `to`");
+                    }
+                    Some((from, to))
+                }
+            };
+            if let Some(app) = body["app"].as_str().filter(|a| !a.trim().is_empty()) {
+                let ids = appscope::app_scope(&format!("in {}", app.trim()))
+                    .context("Unknown app name for search_memory")?;
+                params.app_ids = Some(ids.iter().map(|id| id.to_string()).collect());
+            }
+            let result = retrieve(rt, query, &params)?;
+            let timezone = answer_pipeline::system_timezone();
+            let prepared = answer_pipeline::prepare(&answer_pipeline::Request {
+                timezone: &timezone,
+                ..answer_pipeline::Request::new(query, &result.hits, params.chunks_per_result, result.abstained)
+            })?;
+            let text = if prepared.sources.is_empty() {
+                "No captured evidence matched.".to_owned()
+            } else {
+                let note = if result.abstained { "Retrieval was weak: these are probably unrelated.\n\n" } else { "" };
+                let body = prepared.sources.iter().map(|s| format!("Source #{}\n{}", s.id, s.text)).collect::<Vec<_>>().join("\n\n");
+                format!("{note}{body}")
+            };
+            let results: Vec<_> = result.hits.iter().map(|h| hit_json(h, query, params.chunks_per_result)).collect();
+            Ok(json!({"text":text,"results":results,"abstained":result.abstained}))
+        }
+        ("POST", "/v1/assistant/redact") => {
+            // Tool output from outside the engine is redacted the same way as evidence before it leaves the Mac.
+            let text = body["text"].as_str().context("text missing")?;
+            Ok(json!({"text":redact_cloud(text)?}))
         }
         ("POST", "/v1/memory/snapshots") => {
             let ids: Vec<i64> = serde_json::from_value(body["ids"].clone())?;
@@ -686,6 +751,17 @@ mod tests {
         ));
         fs::create_dir_all(&root).unwrap();
         root
+    }
+    #[test]
+    fn tool_dates_are_local_and_inclusive_of_the_end_day() {
+        let day = |ms: i64| DateTime::<Utc>::from_timestamp_millis(ms).unwrap().with_timezone(&Local).format("%Y-%m-%d %H:%M").to_string();
+        assert_eq!(day(parse_when("2026-10-17", false).unwrap()), "2026-10-17 00:00");
+        assert_eq!(day(parse_when("2026-10-17", true).unwrap()), "2026-10-18 00:00");
+        assert_eq!(day(parse_when("2026-10-17T09:30", true).unwrap()), "2026-10-17 09:30");
+        assert_eq!(day(parse_when(" 2026-10-17T09:30:15 ", false).unwrap()), "2026-10-17 09:30");
+        for bad in ["yesterday", "2026-13-01", "17/10/2026", ""] {
+            assert!(parse_when(bad, false).is_none(), "{bad}");
+        }
     }
     #[test]
     fn legacy_import_is_idempotent_and_preserves_observation_times_and_urls() {

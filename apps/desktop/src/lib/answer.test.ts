@@ -10,7 +10,7 @@ const retrieval = { engine: "qdrant_edge_hybrid" as const, dense: true, bm25: tr
 const messages = [{ role: "system" as const, content: "prompt" }, { role: "user" as const, content: "Question: q" }];
 const prepared = (over: Record<string, unknown> = {}) => ({ results: [hit], sources: [{ id: 42, text: "Launch is on Monday." }], abstained: false, retrieval, messages, prompt_version: "answer-v3", ...over });
 /** Scripts the Tauri commands: the model reply and, optionally, the follow-up rewrite. */
-const script = (reply: string, rewrite = "rewritten") => vi.mocked(invoke).mockImplementation(async (command) => command === "openrouter_has_key" ? true : command === "openrouter_search_query" ? rewrite : reply);
+const script = (reply: string, rewrite = "rewritten", hits: unknown[] = []) => vi.mocked(invoke).mockImplementation(async (command) => command === "openrouter_has_key" ? true : command === "openrouter_search_query" ? rewrite : { content: reply, hits });
 
 describe("assistant answers", () => {
   beforeEach(() => { vi.resetAllMocks(); });
@@ -51,6 +51,15 @@ describe("assistant answers", () => {
     const answer = await answerFromMemory("Unknown person", []);
     expect(invoke).toHaveBeenCalledWith("openrouter_chat", expect.anything());
     expect(answer).toMatchObject({ source: "none", hits: [] });
+  });
+
+  it("adds hits found by tool calls, without duplicates, and labels them as memory", async () => {
+    const extra = { ...hit, snapshot_id: 43 };
+    script("SOURCE: memory\nHe asked for 5pm. [43]", "rewritten", [hit, extra]);
+    vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared({ results: [hit], sources: [], abstained: true }));
+    const answer = await answerFromMemory("Book what Saurav asked for yesterday", []);
+    expect(answer.hits).toEqual([hit, extra]);
+    expect(answer.source).toBe("memory");
   });
 
   it("keeps evidence for mixed answers only", async () => {
