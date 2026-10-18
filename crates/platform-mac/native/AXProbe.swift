@@ -12,7 +12,7 @@ guard arguments.contains("--synthetic") else { exit(0) }
 let app = NSApplication.shared
 app.setActivationPolicy(.regular)
 let window = NSWindow(contentRect: NSRect(x: 100, y: 100, width: 420, height: 140), styleMask: [.titled, .closable], backing: .buffered, defer: false)
-window.title = "Goldfish Independent Synthetic AX Fixture"
+window.title = "Rewind Independent Synthetic AX Fixture"
 let field = NSTextField(frame: NSRect(x: 20, y: 55, width: 360, height: 28))
 field.stringValue = "Synthetic hello 👋"
 field.isEditable = true

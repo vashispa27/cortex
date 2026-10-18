@@ -61,9 +61,9 @@ pub fn parse_response(value: Value) -> Result<ModelResponse> {
     })
 }
 pub fn call_provider(messages: &[Value]) -> Result<ModelResponse> {
-    let endpoint = env::var("OPEN_MEMORY_LLM_URL").context("OPEN_MEMORY_LLM_URL is required")?;
-    let model = env::var("OPEN_MEMORY_LLM_MODEL").context("OPEN_MEMORY_LLM_MODEL is required")?;
-    let key = env::var("OPEN_MEMORY_LLM_API_KEY").ok();
+    let endpoint = env::var("REWIND_LLM_URL").context("REWIND_LLM_URL is required")?;
+    let model = env::var("REWIND_LLM_MODEL").context("REWIND_LLM_MODEL is required")?;
+    let key = env::var("REWIND_LLM_API_KEY").ok();
     send(&endpoint, &model, key.as_deref(), messages)
 }
 fn send(

@@ -1,12 +1,12 @@
-# Task: cut query latency in open-memory without losing retrieval quality
+# Task: cut query latency in rewind without losing retrieval quality
 
-You are working in `/Users/abhinavvashisht/workspace/goldfish-implementation` (Rust workspace, macOS-only crate `crates/open-memory`, branch `main`).
+You are working in `/Users/abhinavvashisht/workspace/rewind` (Rust workspace, macOS-only crate `crates/rewind`, branch `main`).
 Retrieval was fixed one weakness at a time and then measured on real data and at larger sizes. Quality is acceptable; **query latency is not**,
 and part of it is a single known cause. Your job is to make queries much faster, prove quality did not drop, and report what each change bought.
 
 Read first: `evals/README.md`, `evals/reports/real/transfer.md`, `evals/reports/real/dedup.md`, `evals/reports/scale/analysis.md`, then the code:
-`crates/open-memory/src/versions.rs` (`apply`, `mergeable`, `critical_tokens`), `crates/open-memory/src/main.rs` (`retrieve_with`, the keyword rerank
-bonus and the `versions::apply` call after it, `evidence_text`, `answer`), `crates/open-memory/src/abstain.rs`, and `crates/open-memory/src/eval.rs`
+`crates/rewind/src/versions.rs` (`apply`, `mergeable`, `critical_tokens`), `crates/rewind/src/main.rs` (`retrieve_with`, the keyword rerank
+bonus and the `versions::apply` call after it, `evidence_text`, `answer`), `crates/rewind/src/abstain.rs`, and `crates/rewind/src/eval.rs`
 (latency fields).
 
 ## What was measured
@@ -65,11 +65,11 @@ was swapping, so treat them as ratios, not absolutes. Re-measure everything your
 
 * Work on `main` in small commits, one change each, message stating the measured before/after (latency and hit counts). Pull first; if the tree has uncommitted
   changes you did not make, stop and ask.
-* The user's live state (`~/Library/Application Support/Open Memory/local-memory`) is not to be opened or changed. Evals use throwaway state directories.
+* The user's live state (`~/Library/Application Support/Rewind/local-memory`) is not to be opened or changed. Evals use throwaway state directories.
   No network calls or LLM calls; no new dependency without asking; do not start live capture or ask for Accessibility permission.
 * Do not edit `evals/gold/gold.jsonl`, `evals/private/gold.jsonl` or the corpora. Real-data reports stay under `evals/private/` (git-ignored); committed reports are
   aggregates only.
-* Dedup layers 2–3 and the 7-day raw-tree purge are on by default; chunk sharing is off (`OPEN_MEMORY_CHUNK_SHARING=1`). Do not turn it on; it is slower and was left off for exactly that reason.
+* Dedup layers 2–3 and the 7-day raw-tree purge are on by default; chunk sharing is off (`REWIND_CHUNK_SHARING=1`). Do not turn it on; it is slower and was left off for exactly that reason.
 
 ## Deliverables
 

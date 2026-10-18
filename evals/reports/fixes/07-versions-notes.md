@@ -1,6 +1,6 @@
 # Fix 7: versions of the same page (notes)
 
-Two mechanisms, `crates/open-memory/src/versions.rs`, applied after ranking and before the cut to 8:
+Two mechanisms, `crates/rewind/src/versions.rs`, applied after ranking and before the cut to 8:
 
 1. **Collapse near-identical results** (`dedup_jaccard`, default 0.9): two results become one only when they share the
    same numbers, capitalised words (names, months, weekdays) and negations *and* have word-set Jaccard overlap above the

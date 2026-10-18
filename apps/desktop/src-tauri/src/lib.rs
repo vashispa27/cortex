@@ -376,7 +376,7 @@ mod macos_notch {
     define_class!(
         #[unsafe(super(NSWindow))]
         #[thread_kind = MainThreadOnly]
-        #[name = "OpenMemoryNotchWindow"]
+        #[name = "RewindNotchWindow"]
         #[ivars = ()]
         struct NotchWindow;
 
@@ -431,28 +431,30 @@ fn configure_notch_window(window: &tauri::WebviewWindow) -> tauri::Result<()> {
 
 
 fn state_dir() -> Result<PathBuf, String> {
-    if let Some(path) = env::var_os("OPEN_MEMORY_STATE_DIR").or_else(|| env::var_os("GOLDFISH_STATE_DIR")) {
+    if let Some(path) = env::var_os("REWIND_STATE_DIR") {
         return Ok(PathBuf::from(path));
     }
     #[cfg(target_os = "macos")]
     {
-        return dirs::home_dir()
-            .map(|home| home.join("Library/Application Support/Open Memory"))
-            .ok_or_else(|| "Cannot find user home directory".to_string());
+        let home = dirs::home_dir().ok_or_else(|| "Cannot find user home directory".to_string())?;
+        let current = home.join("Library/Application Support/Rewind");
+        let legacy = home.join("Library/Application Support/Open Memory");
+        if !current.exists() && legacy.exists() { let _ = fs::rename(&legacy, &current); }
+        return Ok(current);
     }
     #[cfg(target_os = "windows")]
     {
         return env::var_os("LOCALAPPDATA")
-            .map(|root| PathBuf::from(root).join("OpenMemory"))
+            .map(|root| PathBuf::from(root).join("Rewind"))
             .ok_or_else(|| "Cannot find local application data directory".to_string());
     }
     #[cfg(not(any(target_os = "macos", target_os = "windows")))]
     {
         if let Some(root) = env::var_os("XDG_STATE_HOME") {
-            return Ok(PathBuf::from(root).join("open-memory"));
+            return Ok(PathBuf::from(root).join("rewind"));
         }
         dirs::home_dir()
-            .map(|home| home.join(".local/state/open-memory"))
+            .map(|home| home.join(".local/state/rewind"))
             .ok_or_else(|| "Cannot find user home directory".to_string())
     }
 }
@@ -694,9 +696,9 @@ pub fn run() {
                 let log=fs::OpenOptions::new().create(true).append(true).mode(0o600).open(root.join("rewind-engine.log"))?;
                 let child = Command::new(executable)
                     .arg("desktop")
-                    .env("OPEN_MEMORY_STATE_DIR", root.join("local-memory"))
+                    .env("REWIND_STATE_DIR", root.join("local-memory"))
                     .env("REWIND_SETTINGS_DIR", &root)
-                    .env("OPEN_MEMORY_EXIT_ON_STDIN_EOF", "1")
+                    .env("REWIND_EXIT_ON_STDIN_EOF", "1")
                     .stdin(Stdio::piped()).stdout(Stdio::null()).stderr(Stdio::from(log))
                     .spawn()?;
                 *daemon_on_start.lock().map_err(|_| io::Error::other("daemon lock poisoned"))? = Some(child);
@@ -761,7 +763,7 @@ pub fn run() {
 
 #[cfg(target_os = "macos")]
 fn install_bundled_daemon() -> io::Result<PathBuf> {
-    const DAEMON: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/open-memory-daemon"));
+    const DAEMON: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/rewind-daemon"));
     let state = state_dir().map_err(io::Error::other)?;
     fs::create_dir_all(&state)?;
     fs::set_permissions(&state,fs::Permissions::from_mode(0o700))?;

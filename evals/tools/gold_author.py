@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Browse cleaned bodies of the real corpus and add gold questions with the answer-string check.
 
-Bodies come from `open-memory ingest-fixtures --corpus evals/private/corpus --dump-bodies evals/private/bodies`
-(with OPEN_MEMORY_STATE_DIR pointing at a throwaway dir), so they are what the current cleaner makes.
+Bodies come from `rewind ingest-fixtures --corpus evals/private/corpus --dump-bodies evals/private/bodies`
+(with REWIND_STATE_DIR pointing at a throwaway dir), so they are what the current cleaner makes.
 
   gold_author.py list [--app chrome] [--grep TEXT] [--min-bytes N]     one line per snapshot
   gold_author.py show real-chrome-0042 [--grep TEXT] [--context 200]   print the cleaned body

@@ -3,7 +3,7 @@
 //! Terminals and code editors hold commands, file paths, tokens and source code that nobody asks a
 //! "memory of my life" question about, and they fill the index with self-referential noise. The list is
 //! a small JSON file in the state directory (`blocked_apps.json`) so that a settings UI, the CLI
-//! (`open-memory blocklist ...`) or a person with a text editor can all change it. The capture loop
+//! (`rewind blocklist ...`) or a person with a text editor can all change it. The capture loop
 //! re-reads the file when it changes, so edits apply without a restart.
 //!
 //! Matching is on the app bundle id, case-insensitively: an exact id, or a prefix when the entry ends
@@ -291,7 +291,7 @@ fn purge(state: &Path, list: &Blocklist, apply: bool) -> Result<()> {
     }
     println!("{:<34} {:>9} {:>10} {:>8} {:>10.1}", "total", snaps, sightings, chunks, bytes as f64 / 1e6);
     if !apply {
-        println!("\nNothing deleted. Run `open-memory blocklist purge --yes` to delete these snapshots for good.");
+        println!("\nNothing deleted. Run `rewind blocklist purge --yes` to delete these snapshots for good.");
         return Ok(());
     }
     let tx = db.transaction()?;

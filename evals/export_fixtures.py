@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Turn a capture database into evals/corpus/<page-stem>.json fixtures.
 
-    python3 evals/export_fixtures.py "$OPEN_MEMORY_STATE_DIR"          # write fixtures
-    python3 evals/export_fixtures.py "$OPEN_MEMORY_STATE_DIR" --list   # coverage only, write nothing
+    python3 evals/export_fixtures.py "$REWIND_STATE_DIR"          # write fixtures
+    python3 evals/export_fixtures.py "$REWIND_STATE_DIR" --list   # coverage only, write nothing
 
 Reads <state>/memory.sqlite3 (read-only), matches every captured snapshot back to
 evals/pages/<stem>.html by the last path segment of its URL, and writes one fixture per page
@@ -93,13 +93,13 @@ def stem_of(url):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("state_dir", help="the temporary OPEN_MEMORY_STATE_DIR used for capture")
+    ap.add_argument("state_dir", help="the temporary REWIND_STATE_DIR used for capture")
     ap.add_argument("--pages", default=os.path.join(HERE, "pages"))
     ap.add_argument("--out", default=os.path.join(HERE, "corpus"))
     ap.add_argument("--list", action="store_true", help="report which pages were captured; write nothing")
     args = ap.parse_args()
 
-    default_state = os.path.expanduser("~/Library/Application Support/Open Memory/local-memory")
+    default_state = os.path.expanduser("~/Library/Application Support/Rewind/local-memory")
     if os.path.realpath(args.state_dir) == os.path.realpath(default_state):
         sys.exit("refusing to read the default state directory; capture into a temp dir")
     db_path = os.path.join(args.state_dir, "memory.sqlite3")

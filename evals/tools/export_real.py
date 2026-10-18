@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export the user's real open-memory database as eval fixtures (one per snapshot).
+"""Export the user's real rewind database as eval fixtures (one per snapshot).
 
 Reads memory.sqlite3 read-only. Writes evals/private/corpus/<id>.json in the same format as
 evals/corpus (app id, title, url, source type, observed time, `roots` = the stored ax_nodes_json so
@@ -13,7 +13,7 @@ source_type browser_private.
 import argparse, collections, json, os, re, sqlite3, statistics, sys
 from urllib.parse import urlparse
 
-DEFAULT_DB = os.path.expanduser("~/Library/Application Support/Open Memory/local-memory/memory.sqlite3")
+DEFAULT_DB = os.path.expanduser("~/Library/Application Support/Rewind/local-memory/memory.sqlite3")
 SHORT = {"com.google.Chrome": "chrome", "ai.opencode.desktop": "opencode", "com.anthropic.claudefordesktop": "claude",
          "dev.warp.Warp-Stable": "warp", "net.whatsapp.WhatsApp": "whatsapp", "com.apple.Safari": "safari",
          "com.openai.codex": "codex", "com.apple.systempreferences": "sysprefs", "com.microsoft.VSCode": "vscode"}

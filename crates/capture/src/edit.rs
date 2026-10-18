@@ -1,4 +1,4 @@
-use goldfish_contracts::{EditDraft,ErrorCode,Selection,TargetRevision};
+use rewind_contracts::{EditDraft,ErrorCode,Selection,TargetRevision};
 use sha2::{Digest,Sha256};
 
 #[derive(Clone, Debug)]
@@ -25,8 +25,8 @@ pub enum EditOutcome {
     Recovery { reason: String },
 }
 
-pub fn classify_operation(text: &str, selection: &Selection) -> goldfish_contracts::EditOperation {
-    use goldfish_contracts::EditOperation;
+pub fn classify_operation(text: &str, selection: &Selection) -> rewind_contracts::EditOperation {
+    use rewind_contracts::EditOperation;
     if selection.start < selection.end { EditOperation::RewriteSelection }
     else if text.trim_start().starts_with("/g") { EditOperation::DirectAnswer }
     else if text.trim().is_empty() { EditOperation::DraftResponse }
@@ -113,7 +113,7 @@ fn replace_utf16(text: &str, selection: &Selection, replacement: &str) -> Option
 #[cfg(test)]
 mod tests {
     use super::*;
-    use goldfish_contracts::EditOperation;
+    use rewind_contracts::EditOperation;
 
     struct MockEditor { state: EditableState, writes: usize, mutate_after_write: bool }
     impl NativeEditor for MockEditor {

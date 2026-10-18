@@ -1,8 +1,8 @@
 [package]
-name = "goldfish-platform-win"
+name = "rewind-platform-win"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-goldfish-contracts = { path = "../contracts" }
+rewind-contracts = { path = "../contracts" }
 

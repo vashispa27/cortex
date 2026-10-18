@@ -66,4 +66,4 @@ Within noise or not adopted:
 * 124 questions: per-type rows are decided by a handful of queries; the corpus is engineered to expose weaknesses.
 * Abstention remains weak on near-miss questions and has a small measured cost; the dated-question rule cost one hit on test.
 * Cleaner and chunker changes apply to newly captured snapshots only; existing data is unchanged until the user runs
-  `open-memory capture --apply-cleaning`. `cleaner::VERSION` was deliberately not bumped (it would force that on first start).
+  `rewind capture --apply-cleaning`. `cleaner::VERSION` was deliberately not bumped (it would force that on first start).

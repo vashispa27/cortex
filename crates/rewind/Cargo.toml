@@ -1,5 +1,5 @@
 [package]
-name = "open-memory"
+name = "rewind"
 version = "0.1.0"
 edition = "2021"
 build = "build.rs"
@@ -20,5 +20,5 @@ sha2 = "0.10"
 url = "2"
 
 [[bin]]
-name = "open-memory"
+name = "rewind"
 path = "src/main.rs"

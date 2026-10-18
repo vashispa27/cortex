@@ -1,11 +1,11 @@
-# Handover: what is done in open-memory retrieval, and what is left to improve
+# Handover: what is done in rewind retrieval, and what is left to improve
 
-Read this first if you are picking up work on `crates/open-memory` (Rust, macOS only, branch `main`). It says where things
+Read this first if you are picking up work on `crates/rewind` (Rust, macOS only, branch `main`). It says where things
 stand, how to measure a change in two commands, and lists the remaining improvements in priority order with the
 evidence behind each one. "Measured" means a number from our evals; "hypothesis" means we have not tested it.
 
 ## Product direction (from the owner)
-Goldfish customers ask about their *lives*: "did I miss a meeting", "did I miss a message", "what was the post about
+Rewind customers ask about their *lives*: "did I miss a meeting", "did I miss a message", "what was the post about
 books yesterday". They do not ask what command they typed or what code they read. So capture should favour messages,
 mail, calendar, posts and documents, and skip terminals and code editors. When a trade-off is unclear, optimise for
 those questions.
@@ -13,7 +13,7 @@ those questions.
 ## Where things stand (all on `main`)
 | area | state | commit / file |
 |---|---|---|
-| App blocklist | Terminals and code editors are never saved; list is a JSON file in the state dir, editable via `open-memory blocklist ...` (live reload), `blocklist purge --yes` removes already-saved ones. Coding-agent apps (OpenCode, Codex) are listed but off. AI chat apps are never blocked. | `030e730`, `18b2ddb`, `crates/open-memory/src/blocklist.rs` |
+| App blocklist | Terminals and code editors are never saved; list is a JSON file in the state dir, editable via `rewind blocklist ...` (live reload), `blocklist purge --yes` removes already-saved ones. Coding-agent apps (OpenCode, Codex) are listed but off. AI chat apps are never blocked. | `030e730`, `18b2ddb`, `crates/rewind/src/blocklist.rs` |
 | Ingest-time dedup | Unchanged trees skipped, near-identical captures merged. Shared chunk points exist behind a flag (off). | `c8ab98d`, `dedup.rs`, `evals/reports/real/dedup.md` |
 | Raw trees | Deleted 7 days after a snapshot was last seen (live DB only; eval fixtures are unaffected). | `06ee2a6`, `rawtrees.rs` |
 | Retrieval tuning | Keyword rerank bonus off by default (hit@1 +14 real, +7 invented); at most 2 results per page; BM25 weighting and dense-rerank tested and rejected (no setting beats hybrid on both corpora); version-compare latency fixed. | `eaee3a4`, `7ea1b09`, `107ec22`, `605f7b0`, `evals/reports/tuning/*.md` |
@@ -35,7 +35,7 @@ Run `python3 evals/history.py` for the full trend.
 * One change per commit, message with the measured delta on both corpora and which differences are noise. Pick constants on the `dev`
   split and report `test`. Do not edit existing gold questions to improve numbers. With 99 real questions, 3 to 4 questions is noise.
 * Ask the owner before: adding a dependency, changing the embedding model, sending any data off the machine (no network or LLM calls in the
-  eval path), starting live capture, or touching `~/Library/Application Support/Open Memory`.
+  eval path), starting live capture, or touching `~/Library/Application Support/Rewind`.
 * Environment traps: release builds of this crate take from seconds to about 15 minutes; the Mac may sleep or swap during long runs (the harness
   uses best-of-repeats latency for that reason); another agent may be editing `main` at the same time, so commit only your own paths.
 
@@ -75,7 +75,7 @@ days, export with `evals/tools/export_real.py` (reads the live DB read-only), re
 Also review ambiguous existing real questions (same fact on two sites; relevance-by-text accepts one answer only).
 
 ### 6. Answer quality, not just retrieval
-Retrieval hit@8 is not what users feel; correct answers are. There is a branch/worktree for this at `../goldfish-answer-eval` (branch `evals-answer-quality`,
+Retrieval hit@8 is not what users feel; correct answers are. There is a branch/worktree for this at `../rewind-answer-eval` (branch `evals-answer-quality`,
 prompt `docs/rag-answer-quality-agent-prompt.md`); check its state before duplicating work. Needs the owner's consent for any LLM call.
 
 ### 7. Embedding model (hypothesis; needs a dependency decision)
@@ -84,7 +84,7 @@ A stronger small embedder may help paraphrase (real `paraphrase` 12/19). Evaluat
 
 ### 8. Privacy defaults for the blocklist (cheap)
 Add password managers, Keychain Access and banking/payment domains to the default list (`blocklist.rs`), and add domain/window matching, which the spec
-asks for (`goldfish-end-to-end-spec.md`, exclusions section). The AX helper still reads a blocked window before the app id is known; consider a
+asks for (`rewind-end-to-end-spec.md`, exclusions section). The AX helper still reads a blocked window before the app id is known; consider a
 frontmost-app check before the read (needs helper changes; ask first).
 
 ### 9. Storage still on the table

@@ -1,16 +1,16 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Evidence-based end-to-end implementation specification for a Goldfish-style desktop memory assistant."><title>Goldfish — End-to-end Implementation Spec</title><style>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Evidence-based end-to-end implementation specification for a Rewind-style desktop memory assistant."><title>Rewind — End-to-end Implementation Spec</title><style>
 :root {color-scheme:light;--ink:#192526;--muted:#5e6e6e;--accent:#c54723;--rule:#dce3df;--paper:#fffefa}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:28px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:#a53a1b;text-decoration-thickness:1px;text-underline-offset:3px}aside{position:fixed;width:290px;inset:0 auto 0 0;background:#f0f3ed;border-right:1px solid var(--rule);padding:30px 24px;overflow:auto}aside .brand{font-size:13px;letter-spacing:.13em;font-weight:750;color:var(--accent)}aside p{color:var(--muted);font-size:13px;line-height:1.5}nav a{display:block;font-size:12px;line-height:1.45;padding:6px 0;color:#384b49;text-decoration:none}nav a:hover{text-decoration:underline;color:var(--accent)}main{margin-left:290px;max-width:1190px;padding:56px 64px 90px}h1{font-family:Georgia,serif;font-size:46px;line-height:1.14;letter-spacing:-.035em;margin:0 0 18px}h2{font-size:28px;line-height:1.25;margin:62px 0 22px;padding-top:22px;border-top:1px solid var(--rule);letter-spacing:-.02em}h1+h2{font-size:20px;color:var(--muted);font-weight:400;border:0;margin:0 0 28px;padding:0}h3{font-size:20px;line-height:1.35;margin:32px 0 15px}p,ul,ol{margin:0 0 18px}li{margin:7px 0}table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.55;margin:22px 0 30px}td,th{text-align:left;vertical-align:top;padding:12px;border:1px solid var(--rule);overflow-wrap:anywhere}th{background:#edf1e9;font-weight:650}tr:nth-child(even) td{background:#f9faf5}pre{background:#15272b;color:#e9f1ed;padding:22px;overflow:auto;border-radius:8px;font-size:12px;line-height:1.65;margin:22px 0 28px}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.88em}p code,li code,td code{background:#edf1e9;border-radius:3px;padding:2px 4px}strong{font-weight:650}.download{display:inline-block;margin-top:10px;font-size:13px}.mobile-title{display:none}footer{margin-top:54px;padding-top:20px;border-top:1px solid var(--rule);font-size:12px;color:var(--muted)}
 @media(max-width:1050px){aside{width:240px;padding:24px 18px}main{margin-left:240px;padding:42px 30px}h1{font-size:38px}}
 @media(max-width:760px){aside{position:static;width:auto;max-height:300px;border-right:0;border-bottom:1px solid var(--rule);padding:20px}aside nav{columns:2;column-gap:20px}nav a{break-inside:avoid}main{margin:0;padding:32px 20px}h1{font-size:34px}h2{font-size:24px}table{font-size:12px}td,th{padding:8px}pre{padding:14px}}
 @media print{aside{display:none}main{margin:0;padding:0;max-width:none}body{font-size:10pt;line-height:1.5;background:white}h1{font-size:28pt}h2{font-size:18pt;margin-top:26pt}h3{font-size:13pt}h1,h2,h3{break-after:avoid}tr,pre{break-inside:avoid}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f1f1;color:#111;font-size:8pt}table{font-size:8pt}a{color:inherit}td,th{padding:6pt}@page{margin:16mm}}
-</style></head><body><aside><div class="brand">IMPLEMENTATION SPEC</div><p>Goldfish-style desktop memory assistant<br>Research · 16 October 2026</p><nav aria-label="Table of contents"><a href="#1-executive-assessment">1. Executive assessment</a><a href="#2-evidence-ledger-and-product-boundaries">2. Evidence ledger and product boundaries</a><a href="#3-product-requirements-and-journeys">3. Product requirements and journeys</a><a href="#4-architecture-and-technology-decisions">4. Architecture and technology decisions</a><a href="#5-capture-engine">5. Capture engine</a><a href="#6-privacy-deletion-and-security-requirements">6. Privacy, deletion, and security requirements</a><a href="#7-local-data-model">7. Local data model</a><a href="#8-memory-construction-and-retrieval">8. Memory construction and retrieval</a><a href="#9-inline-editing-as-a-validated-transaction">9. Inline editing as a validated transaction</a><a href="#10-voice-pipeline">10. Voice pipeline</a><a href="#11-chat-reminders-and-proactive-behavior">11. Chat, reminders, and proactive behavior</a><a href="#12-local-api-and-mcp">12. Local API and MCP</a><a href="#13-cloud-services-inference-and-account-lifecycle">13. Cloud services, inference, and account lifecycle</a><a href="#14-distribution-updates-and-operations">14. Distribution, updates, and operations</a><a href="#15-public-website-specification">15. Public website specification</a><a href="#16-quality-targets-and-verification-plan">16. Quality targets and verification plan</a><a href="#17-delivery-plan-and-staffing">17. Delivery plan and staffing</a><a href="#18-key-unresolved-decisions-and-validation-backlog">18. Key unresolved decisions and validation backlog</a><a href="#19-research-provenance">19. Research provenance</a></nav><a class="download" href="goldfish-end-to-end-spec.md">Markdown source ↗</a></aside><main><h1 id="goldfish-style-desktop-memory-assistant">Goldfish-style desktop memory assistant</h1>
+</style></head><body><aside><div class="brand">IMPLEMENTATION SPEC</div><p>Rewind-style desktop memory assistant<br>Research · 16 October 2026</p><nav aria-label="Table of contents"><a href="#1-executive-assessment">1. Executive assessment</a><a href="#2-evidence-ledger-and-product-boundaries">2. Evidence ledger and product boundaries</a><a href="#3-product-requirements-and-journeys">3. Product requirements and journeys</a><a href="#4-architecture-and-technology-decisions">4. Architecture and technology decisions</a><a href="#5-capture-engine">5. Capture engine</a><a href="#6-privacy-deletion-and-security-requirements">6. Privacy, deletion, and security requirements</a><a href="#7-local-data-model">7. Local data model</a><a href="#8-memory-construction-and-retrieval">8. Memory construction and retrieval</a><a href="#9-inline-editing-as-a-validated-transaction">9. Inline editing as a validated transaction</a><a href="#10-voice-pipeline">10. Voice pipeline</a><a href="#11-chat-reminders-and-proactive-behavior">11. Chat, reminders, and proactive behavior</a><a href="#12-local-api-and-mcp">12. Local API and MCP</a><a href="#13-cloud-services-inference-and-account-lifecycle">13. Cloud services, inference, and account lifecycle</a><a href="#14-distribution-updates-and-operations">14. Distribution, updates, and operations</a><a href="#15-public-website-specification">15. Public website specification</a><a href="#16-quality-targets-and-verification-plan">16. Quality targets and verification plan</a><a href="#17-delivery-plan-and-staffing">17. Delivery plan and staffing</a><a href="#18-key-unresolved-decisions-and-validation-backlog">18. Key unresolved decisions and validation backlog</a><a href="#19-research-provenance">19. Research provenance</a></nav><a class="download" href="rewind-end-to-end-spec.md">Markdown source ↗</a></aside><main><h1 id="rewind-style-desktop-memory-assistant">Rewind-style desktop memory assistant</h1>
 <h2 id="reverse-engineered-product-specification-and-end-to-end-implementation-plan">Reverse-engineered product specification and end-to-end implementation plan</h2>
 <p><strong>Research date:</strong> 16 October 2026<br />
 <strong>Scope:</strong> macOS and Windows desktop product, local memory engine, inline writing, voice, chat, MCP, cloud services, distribution, and public website.<br />
-<strong>Status:</strong> engineering specification for an independently implemented equivalent; no claim to possess Goldfish’s source code.</p>
+<strong>Status:</strong> engineering specification for an independently implemented equivalent; no claim to possess Rewind’s source code.</p>
 <h2 id="1-executive-assessment">1. Executive assessment</h2>
-<p>Goldfish combines a continuously maintained personal memory with an assistant that can write into the application the user is already using. Its useful unit of interaction is a focused text field plus surrounding work context. The public documentation identifies operating-system accessibility text as the capture source and local storage as the memory boundary. It does not describe screenshot recording as the underlying mechanism. <a href="https://docs.goldfish.sh/">Product introduction</a></p>
+<p>Rewind combines a continuously maintained personal memory with an assistant that can write into the application the user is already using. Its useful unit of interaction is a focused text field plus surrounding work context. The public documentation identifies operating-system accessibility text as the capture source and local storage as the memory boundary. It does not describe screenshot recording as the underlying mechanism. <a href="https://docs.rewind.sh/">Product introduction</a></p>
 <p>The implementation proposed here has five cooperating components:</p>
 <ol>
 <li>A native platform adapter reads permitted foreground UI text and safely edits supported fields.</li>
@@ -23,9 +23,9 @@
 <h3 id="evidence-labels">Evidence labels</h3>
 <ul>
 <li><strong>OBSERVED:</strong> inspected in the public website’s rendered UI or computed styles.</li>
-<li><strong>DOCUMENTED:</strong> stated by Goldfish’s public documentation or policy; not independently verified in the desktop binary.</li>
-<li><strong>LOCAL CONTRACT:</strong> described by the installed Goldfish integration guide; no private memory records were accessed.</li>
-<li><strong>PROPOSED:</strong> an engineering decision for this implementation, not a claim about Goldfish internals.</li>
+<li><strong>DOCUMENTED:</strong> stated by Rewind’s public documentation or policy; not independently verified in the desktop binary.</li>
+<li><strong>LOCAL CONTRACT:</strong> described by the installed Rewind integration guide; no private memory records were accessed.</li>
+<li><strong>PROPOSED:</strong> an engineering decision for this implementation, not a claim about Rewind internals.</li>
 <li><strong>UNKNOWN:</strong> not established by the available evidence.</li>
 </ul>
 <p>All architecture, algorithms, thresholds, schemas, sample APIs, estimates, and acceptance targets below are <strong>PROPOSED unless expressly labeled otherwise</strong>. The distinction is important: a public feature description does not establish its private implementation.</p>
@@ -42,79 +42,79 @@
 <tr>
 <td>Capture</td>
 <td>DOCUMENTED: reads foreground accessibility text on macOS and Windows; no screenshot or screen-recording pipeline</td>
-<td><a href="https://docs.goldfish.sh/">Introduction</a></td>
+<td><a href="https://docs.rewind.sh/">Introduction</a></td>
 </tr>
 <tr>
 <td>Inline writing</td>
 <td>DOCUMENTED: a key can transform an instruction, rewrite a selection, infer a reply in an empty field, or answer a <code>/g</code> request</td>
-<td><a href="https://docs.goldfish.sh/guides/the-goldfish-key/">Goldfish key</a></td>
+<td><a href="https://docs.rewind.sh/guides/the-rewind-key/">Rewind key</a></td>
 </tr>
 <tr>
 <td>Editing</td>
 <td>DOCUMENTED: hold or double-tap opens iterative editing with typed or spoken instructions</td>
-<td><a href="https://docs.goldfish.sh/guides/edit-mode/">Edit mode</a></td>
+<td><a href="https://docs.rewind.sh/guides/edit-mode/">Edit mode</a></td>
 </tr>
 <tr>
 <td>Speech</td>
 <td>DOCUMENTED: hold-to-dictate, release to insert, and hands-free gestures</td>
-<td><a href="https://docs.goldfish.sh/guides/voice-dictation/">Voice dictation</a></td>
+<td><a href="https://docs.rewind.sh/guides/voice-dictation/">Voice dictation</a></td>
 </tr>
 <tr>
 <td>Chat</td>
 <td>DOCUMENTED: movable edge panel, memory questions, reminders, briefs, nudges, and desktop pet</td>
-<td><a href="https://docs.goldfish.sh/guides/chat/">Chat</a></td>
+<td><a href="https://docs.rewind.sh/guides/chat/">Chat</a></td>
 </tr>
 <tr>
 <td>Local memory</td>
 <td>DOCUMENTED: local SQLite plus related files; selected context is sent for AI processing</td>
-<td><a href="https://goldfish.sh/privacy">Privacy policy</a></td>
+<td><a href="https://rewind.sh/privacy">Privacy policy</a></td>
 </tr>
 <tr>
 <td>Cloud route</td>
 <td>DOCUMENTED: Cloudflare routes requests to a private Azure OpenAI deployment; the vendor states zero retention</td>
-<td><a href="https://goldfish.sh/privacy">Privacy policy</a></td>
+<td><a href="https://rewind.sh/privacy">Privacy policy</a></td>
 </tr>
 <tr>
 <td>Privacy controls</td>
 <td>DOCUMENTED: pause, exclusion rules, secret masking, protected-field avoidance, local token protection, deletion</td>
-<td><a href="https://docs.goldfish.sh/privacy/">Privacy guide</a></td>
+<td><a href="https://docs.rewind.sh/privacy/">Privacy guide</a></td>
 </tr>
 <tr>
 <td>Personalization</td>
 <td>DOCUMENTED: editable identity and browsable entity wiki</td>
-<td><a href="https://docs.goldfish.sh/reference/settings/">Settings</a></td>
+<td><a href="https://docs.rewind.sh/reference/settings/">Settings</a></td>
 </tr>
 <tr>
 <td>External assistants</td>
 <td>DOCUMENTED: local stdio MCP executable and supported-client registration</td>
-<td><a href="https://docs.goldfish.sh/guides/ai-clients/">MCP guide</a></td>
+<td><a href="https://docs.rewind.sh/guides/ai-clients/">MCP guide</a></td>
 </tr>
 <tr>
 <td>Packaging</td>
 <td>DOCUMENTED: universal macOS app, Windows x64, separate helper, login startup, automatic updates</td>
-<td><a href="https://docs.goldfish.sh/get-started/managed-installations/">Managed installations</a></td>
+<td><a href="https://docs.rewind.sh/get-started/managed-installations/">Managed installations</a></td>
 </tr>
 <tr>
 <td>Enterprise policy</td>
 <td>DOCUMENTED: managed capture exclusions and auto-update policy on macOS</td>
-<td><a href="https://docs.goldfish.sh/get-started/configure-with-mdm/">MDM</a></td>
+<td><a href="https://docs.rewind.sh/get-started/configure-with-mdm/">MDM</a></td>
 </tr>
 <tr>
 <td>Website</td>
 <td>OBSERVED: serif hero, orange emphasis, two download buttons, privacy popover, three demo tabs, testimonials, FAQ</td>
-<td><a href="https://goldfish.sh/">Homepage</a></td>
+<td><a href="https://rewind.sh/">Homepage</a></td>
 </tr>
 </tbody>
 </table>
 <h3 id="what-is-not-established">What is not established</h3>
 <p>Exact native languages, desktop framework, schema, chunking, embedding model, ranking formula, prompts, model versions, provider agreement details, measured latency, battery consumption, supported OS minimums, and app-by-app success rates remain unknown. Tauri, Rust, vector retrieval, and the database design in this spec are recommendations, not discoveries.</p>
-<p>The FAQ remains Mac-centric while newer installation material covers Windows. The website advertises free beta access, while settings documentation describes Free, Pro, and Founding-member states. Make entitlement and pricing copy configuration-driven; do not invent current prices or limits. <a href="https://goldfish.sh/faq">FAQ</a>, <a href="https://docs.goldfish.sh/reference/settings/">Settings</a></p>
-<p>The blog describes possible future anticipation and action-taking. Do not treat speculative calendar booking or autonomous outreach as verified shipped functionality. <a href="https://goldfish.sh/blog/the-prediction-machine">Product-direction essay</a></p>
+<p>The FAQ remains Mac-centric while newer installation material covers Windows. The website advertises free beta access, while settings documentation describes Free, Pro, and Founding-member states. Make entitlement and pricing copy configuration-driven; do not invent current prices or limits. <a href="https://rewind.sh/faq">FAQ</a>, <a href="https://docs.rewind.sh/reference/settings/">Settings</a></p>
+<p>The blog describes possible future anticipation and action-taking. Do not treat speculative calendar booking or autonomous outreach as verified shipped functionality. <a href="https://rewind.sh/blog/the-prediction-machine">Product-direction essay</a></p>
 <h3 id="explicit-scope-choices">Explicit scope choices</h3>
 <p>The first release is a single-user, single-device application. Cross-device sync, whole-mailbox ingestion, browser-history imports, screenshots/OCR, meeting recording, autonomous message sending, and arbitrary computer control are outside this baseline. Later additions require separate data-flow and product specifications. Seen-on-screen messages are observations, not an authoritative email or calendar integration.</p>
 <h2 id="3-product-requirements-and-journeys">3. Product requirements and journeys</h2>
 <h3 id="3-1-onboarding">3.1 Onboarding</h3>
-<p>DOCUMENTED: sign-in supports Google or email/password; macOS needs Accessibility, and microphone access is relevant to dictation. The tutorial teaches a rewrite in a real input field. <a href="https://docs.goldfish.sh/get-started/installation/">Installation</a>, <a href="https://docs.goldfish.sh/get-started/tutorial/">Tutorial</a></p>
+<p>DOCUMENTED: sign-in supports Google or email/password; macOS needs Accessibility, and microphone access is relevant to dictation. The tutorial teaches a rewrite in a real input field. <a href="https://docs.rewind.sh/get-started/installation/">Installation</a>, <a href="https://docs.rewind.sh/get-started/tutorial/">Tutorial</a></p>
 <p>Proposed sequence:</p>
 <ol>
 <li>Open a signed installer; launch the application.</li>
@@ -130,7 +130,7 @@
 </ol>
 <p>Store onboarding progress per step. Restarting should resume rather than duplicate enrollment. A user who declines microphone access can still use text features. A user who revokes Accessibility sees a clear degraded state with no repeated permission spam.</p>
 <h3 id="3-2-inline-writing">3.2 Inline writing</h3>
-<p>DOCUMENTED: field contents determine the operation; selected text scopes the edit; an empty input triggers context-sensitive drafting; <code>/g</code> invokes a direct answer. The documented busy indicator is a fish near the caret, and cancellation is available before replacement. <a href="https://docs.goldfish.sh/guides/the-goldfish-key/">Goldfish key</a></p>
+<p>DOCUMENTED: field contents determine the operation; selected text scopes the edit; an empty input triggers context-sensitive drafting; <code>/g</code> invokes a direct answer. The documented busy indicator is a fish near the caret, and cancellation is available before replacement. <a href="https://docs.rewind.sh/guides/the-rewind-key/">Rewind key</a></p>
 <p>Proposed decision order:</p>
 <table>
 <thead>
@@ -177,10 +177,10 @@
 <p>If the archive has no evidence, say so. Missing capture, private browsing, or an excluded app must never be represented as proof that an event did not occur.</p>
 <h3 id="3-5-voice">3.5 Voice</h3>
 <p>Implement push-to-talk and latched recording. A clear indicator shows when audio is being collected. Stop recording on cancellation, session lock, device loss, or the configured duration limit. Offer the recognized transcript for recovery when an editing action fails. Never silently restart the microphone after a crash.</p>
-<p>DOCUMENTED gestures include double-tap or a left-Control combination for hands-free use. The docs’ wording about “sending” text does not establish whether this means submitting to the recognizer or sending a message in the destination app. For this implementation, finishing dictation inserts text only; external submission remains a separate user action. <a href="https://docs.goldfish.sh/guides/voice-dictation/">Voice dictation</a></p>
+<p>DOCUMENTED gestures include double-tap or a left-Control combination for hands-free use. The docs’ wording about “sending” text does not establish whether this means submitting to the recognizer or sending a message in the destination app. For this implementation, finishing dictation inserts text only; external submission remains a separate user action. <a href="https://docs.rewind.sh/guides/voice-dictation/">Voice dictation</a></p>
 <h3 id="3-6-settings-and-memory-management">3.6 Settings and memory management</h3>
 <p>Use these product areas: Account; Capture and Privacy; Shortcuts; Voice; Appearance; Memory; Identity; Notifications; Connected AI Apps; Diagnostics; Updates. Show effective settings and their source when organization policy applies.</p>
-<p>DOCUMENTED settings include text scaling, edge placement, hover opening, identity editing, entity-type filters, proactive-message control, and integration configuration. The source’s navigation terminology varies between separate shortcut pages and a consolidated page; choose one consistent information architecture. <a href="https://docs.goldfish.sh/reference/settings/">Settings</a></p>
+<p>DOCUMENTED settings include text scaling, edge placement, hover opening, identity editing, entity-type filters, proactive-message control, and integration configuration. The source’s navigation terminology varies between separate shortcut pages and a consolidated page; choose one consistent information architecture. <a href="https://docs.rewind.sh/reference/settings/">Settings</a></p>
 <p>Add implementation-specific controls for retention period, disk budget, background inference, evidence inspection, and export. These are proposed additions, not verified parity requirements.</p>
 <h2 id="4-architecture-and-technology-decisions">4. Architecture and technology decisions</h2>
 <pre><code class="language-text">                  USER DEVICE — private memory boundary
@@ -209,7 +209,7 @@
                          ↓
                 result returned to device
 </code></pre>
-<p>The external MCP client is a separate trust boundary: once it retrieves memory, its own processing and retention rules apply. Local transport alone cannot make downstream AI processing local. <a href="https://docs.goldfish.sh/guides/ai-clients/">Goldfish MCP privacy explanation</a></p>
+<p>The external MCP client is a separate trust boundary: once it retrieves memory, its own processing and retention rules apply. Local transport alone cannot make downstream AI processing local. <a href="https://docs.rewind.sh/guides/ai-clients/">Rewind MCP privacy explanation</a></p>
 <h3 id="recommended-stack">Recommended stack</h3>
 <table>
 <thead>
@@ -277,7 +277,7 @@
 </tr>
 </tbody>
 </table>
-<p>Tauri supports a web frontend with native application functionality; it is a candidate implementation framework, not evidence of Goldfish’s own framework. <a href="https://v2.tauri.app/start/">Tauri documentation</a></p>
+<p>Tauri supports a web frontend with native application functionality; it is a candidate implementation framework, not evidence of Rewind’s own framework. <a href="https://v2.tauri.app/start/">Tauri documentation</a></p>
 <h3 id="process-and-privilege-separation">Process and privilege separation</h3>
 <p>The daemon is the sole database writer. The shell sends typed commands and receives events through authenticated IPC. Native capture runs in a restartable worker so an unresponsive accessibility provider does not block chat or corrupt storage. The MCP bridge calls read-oriented daemon methods rather than opening the database directly.</p>
 <p>The renderer never receives arbitrary filesystem, shell, or SQL access. It cannot choose arbitrary inference endpoints. Load bundled UI only, enforce a strict content security policy, and open external links in the system browser. Use a per-user background session process, not a privileged system service.</p>
@@ -388,7 +388,7 @@ infra/                 # deployments and release pipeline
 <p>Separate content from observations. Identical text can reappear after a long gap. Reusing a content record is fine; representing the interval between its first and last sighting as continuous work is not.</p>
 <p>Use exact sanitized hashes first. Near-duplicate grouping may cluster similar versions for retrieval but must not erase changed amounts, recipients, decisions, or negations. Preserve original sanitized versions. Track foreground activity as non-overlapping segments independent of snapshot deduplication.</p>
 <h2 id="6-privacy-deletion-and-security-requirements">6. Privacy, deletion, and security requirements</h2>
-<p>DOCUMENTED baseline: Goldfish describes local masking, excluded sensitive contexts, capture pause, and authenticated local connections. Its policy also states that some direct user submissions are sent as entered and that pattern masking is imperfect. <a href="https://docs.goldfish.sh/privacy/">Privacy guide</a></p>
+<p>DOCUMENTED baseline: Rewind describes local masking, excluded sensitive contexts, capture pause, and authenticated local connections. Its policy also states that some direct user submissions are sent as entered and that pattern masking is imperfect. <a href="https://docs.rewind.sh/privacy/">Privacy guide</a></p>
 <p>This implementation should provide a stronger explicit contract:</p>
 <ul>
 <li>Mask before every persistence or background egress boundary, including derived output and diagnostics.</li>
@@ -597,7 +597,7 @@ CREATE INDEX jobs_due ON jobs(state,run_after_ms);
 </table>
 <p>Before deleting a source, mark dependent derived items stale in the same transaction; then cascade source links. Rebuilders traverse dependency edges and must prevent cycles. Store user corrections separately so a summary refresh cannot erase them.</p>
 <h3 id="7-3-capacity-model">7.3 Capacity model</h3>
-<p>Illustrative workload, not a measured Goldfish figure: 8 active hours/day, 3-second sampling, 25% unique content, 6 KiB per unique snapshot gives 9,600 observations and about 2,400 distinct snapshots/day. Raw text is approximately 14 MiB/day, or 1.3 GiB over 90 days. FTS, versions, metadata, and embeddings can make the total several GiB.</p>
+<p>Illustrative workload, not a measured Rewind figure: 8 active hours/day, 3-second sampling, 25% unique content, 6 KiB per unique snapshot gives 9,600 observations and about 2,400 distinct snapshots/day. Raw text is approximately 14 MiB/day, or 1.3 GiB over 90 days. FTS, versions, metadata, and embeddings can make the total several GiB.</p>
 <p>Set a configurable retention horizon and disk cap. Estimate future size from measured rolling averages. When near the cap, stop optional embedding work, compact supported indexes, and apply the stated retention policy. Never silently drop recent source evidence while keeping answers that imply it is still available.</p>
 <h2 id="8-memory-construction-and-retrieval">8. Memory construction and retrieval</h2>
 <h3 id="8-1-memory-layers">8.1 Memory layers</h3>
@@ -747,7 +747,7 @@ CREATE INDEX jobs_due ON jobs(state,run_after_ms);
 <p>Clipboard fallback must snapshot available clipboard formats, paste only after focus validation, and restore the previous clipboard only if its change counter still matches the assistant’s write. Do not overwrite a clipboard the user updated meanwhile. Avoid fallback in terminals or command fields where pasted newlines might execute commands; use panel-only behavior there unless a dedicated safe adapter is proven.</p>
 <p>After insertion, verify the expected plain-text change. If verification is inconclusive, report that state; do not repeatedly paste or blindly roll back. Undo is offered only if the target still matches the inserted revision. Preserve rich-text formatting through range-specific providers where possible; whole-field replacement of a rich editor is not an acceptable generic fallback.</p>
 <h3 id="9-4-keyboard-recognition">9.4 Keyboard recognition</h3>
-<p>DOCUMENTED defaults are right Option on Mac, right Shift on Windows, right Command for Japanese Mac keyboards, and platform-specific fallback chords. The shortcut docs explicitly distinguish clean taps from ordinary modifier combinations. <a href="https://docs.goldfish.sh/reference/shortcuts/">Shortcuts</a></p>
+<p>DOCUMENTED defaults are right Option on Mac, right Shift on Windows, right Command for Japanese Mac keyboards, and platform-specific fallback chords. The shortcut docs explicitly distinguish clean taps from ordinary modifier combinations. <a href="https://docs.rewind.sh/reference/shortcuts/">Shortcuts</a></p>
 <p>Proposed recognition: track key-down/up, intervening non-modifier keys, hold duration, double-tap window, and composition state. Initial hold threshold: 350 ms; double-tap window: 250 ms. Delay tap dispatch enough to distinguish double-tap, or allow reversible prefetch without applying a first-tap result. Test layout switching, AltGr, capital typing, remote sessions, stuck keys, and key repeat. Global hooks must not become a key logger.</p>
 <h2 id="10-voice-pipeline">10. Voice pipeline</h2>
 <pre><code class="language-text">gesture → permission check → audio device → bounded in-memory buffer
@@ -761,17 +761,17 @@ CREATE INDEX jobs_due ON jobs(state,run_after_ms);
 <p>Implement four independent windows/surfaces: collapsed edge handle; expanded chat; caret-relative edit overlay; settings. The pet is optional and should not own critical status. Respect safe areas, display scaling, menu bars, taskbars, fullscreen applications, and screen changes. Clamp placement to the visible work area when a monitor disconnects.</p>
 <p>Use a keyboard-accessible alternative for every hover/drag operation. Provide reduced-motion mode, visible focus, text scaling, and a static busy state. Do not continually steal focus to display a nudge.</p>
 <h3 id="scheduler-semantics">Scheduler semantics</h3>
-<p>DOCUMENTED Goldfish behavior includes morning and evening messages with specific wake catch-up windows, plus user-scheduled reminders and recurring prompts. <a href="https://docs.goldfish.sh/guides/chat/">Chat guide</a></p>
+<p>DOCUMENTED Rewind behavior includes morning and evening messages with specific wake catch-up windows, plus user-scheduled reminders and recurring prompts. <a href="https://docs.rewind.sh/guides/chat/">Chat guide</a></p>
 <p>For parity, default morning brief to about 08:00 with a noon cutoff; evening wrap to about 16:00 with a midnight cutoff. Store timezone explicitly. On wake, evaluate whether today’s occurrence is still eligible. A device-only scheduler cannot deliver while the device is powered off.</p>
 <p>Use <code>(schedule_id, intended_local_occurrence)</code> as a unique delivery key. Commit the notification record transactionally before display. Across retries, generate or deliver once per occurrence. Define daylight-saving policy: for a nonexistent local time use the next valid time; for repeated local times use the first occurrence. Test timezone travel separately from DST.</p>
 <p>For interval checks, use monotonic elapsed time while awake and a stated catch-up policy after sleep. User-scheduled reminders and inferred nudges should be distinguishable in the UI and independently controllable.</p>
 <h3 id="nudges">Nudges</h3>
-<p>Require a specific evidence-backed reason, novelty, and freshness. Start with a maximum of three proactive nudges/day, a two-hour cooldown, quiet hours, and per-topic suppression after dismissal. These are proposed limits, not measured Goldfish defaults. Avoid sensitive content in lock-screen notifications. Persist an inbox item when live delivery is suppressed.</p>
+<p>Require a specific evidence-backed reason, novelty, and freshness. Start with a maximum of three proactive nudges/day, a two-hour cooldown, quiet hours, and per-topic suppression after dismissal. These are proposed limits, not measured Rewind defaults. Avoid sensitive content in lock-screen notifications. Persist an inbox item when live delivery is suppressed.</p>
 <p>Briefs should summarize confirmed activity and open items. Repeated workflow detection can suggest a shortcut or reusable prompt; baseline behavior does not execute the workflow automatically.</p>
 <h2 id="12-local-api-and-mcp">12. Local API and MCP</h2>
 <h3 id="12-1-compatibility-evidence">12.1 Compatibility evidence</h3>
 <p>LOCAL CONTRACT: the installed guide documents a daemon normally at <code>127.0.0.1:3333</code>, an effective-port file, a per-install token file, and a health response that identifies the service. It lists <code>/search</code>, <code>/snapshots</code>, <code>/working-memory</code>, <code>/recent-activity</code>, <code>/chronicle</code>, wiki routes, time routes, <code>/promises</code>, and <code>/attention</code>. These were read as static documentation only. Do not assume parameter or response compatibility without testing the actual version’s published schema.</p>
-<p>The public docs establish a local <code>goldfish-mcp</code> executable, stdio configuration, supported-client discovery, and removal/reconnect behavior. <a href="https://docs.goldfish.sh/guides/ai-clients/">MCP integration guide</a></p>
+<p>The public docs establish a local <code>rewind-mcp</code> executable, stdio configuration, supported-client discovery, and removal/reconnect behavior. <a href="https://docs.rewind.sh/guides/ai-clients/">MCP integration guide</a></p>
 <h3 id="12-2-proposed-versioned-api">12.2 Proposed versioned API</h3>
 <table>
 <thead>
@@ -904,7 +904,7 @@ get_attention_context(query?, limit?)
 <h2 id="13-cloud-services-inference-and-account-lifecycle">13. Cloud services, inference, and account lifecycle</h2>
 <h3 id="13-1-boundary">13.1 Boundary</h3>
 <p>The cloud stores account/device identity, entitlements, consent versions, usage totals, release metadata, and operational events. It does not store the personal memory corpus. Selected request text still crosses the network. Disable request-body logging in the gateway, reverse proxy, exception reporting, tracing, and provider integrations.</p>
-<p>Goldfish’s policy names account, billing, telemetry, and email providers as well as its inference route. Those vendors are not necessary to reproduce the product. The zero-retention statement is a vendor claim about its arrangements, not a property automatically inherited by every Azure deployment. Validate the chosen deployment’s actual contracts, features, and diagnostics before making the same promise. <a href="https://goldfish.sh/privacy">Privacy policy</a></p>
+<p>Rewind’s policy names account, billing, telemetry, and email providers as well as its inference route. Those vendors are not necessary to reproduce the product. The zero-retention statement is a vendor claim about its arrangements, not a property automatically inherited by every Azure deployment. Validate the chosen deployment’s actual contracts, features, and diagnostics before making the same promise. <a href="https://rewind.sh/privacy">Privacy policy</a></p>
 <h3 id="13-2-authentication">13.2 Authentication</h3>
 <p>Use browser-based OAuth/OIDC with PKCE and state validation. Store refresh credentials in the OS secret store, rotate them, and identify each installation separately. Validate redirect destinations and bind callbacks to the originating login attempt. Never place provider inference keys in the desktop binary.</p>
 <p>Separate local memory availability from cloud account state. Signing out should stop cloud requests and third-party integrations according to the user’s chosen policy; it should not silently erase local memory. Token expiry leaves local search usable. A switch to another account requires an explicit local-profile decision so one account never inherits another’s archive unnoticed.</p>
@@ -937,7 +937,7 @@ GET  /v1/releases/{channel}/{platform}
 </code></pre>
 <p>For an initial workload estimate, simulate 20 inline requests/day, 5 chat requests/day, session-based summarization, and a configurable speech allowance. Calculate with the provider’s contracted rates before launch. Background summarization is the main uncontrolled-volume risk: debounce, summarize deltas, cap daily spending, and prioritize explicit requests over maintenance.</p>
 <h2 id="14-distribution-updates-and-operations">14. Distribution, updates, and operations</h2>
-<p>DOCUMENTED reference behavior uses a universal macOS application and Windows x64 installer, a helper process, login startup, and periodic automatic updates. Public download endpoints redirect to release artifacts. The latest-manifest URL is documented, but its current contents could not be verified during this research. <a href="https://docs.goldfish.sh/get-started/managed-installations/">Managed installation documentation</a></p>
+<p>DOCUMENTED reference behavior uses a universal macOS application and Windows x64 installer, a helper process, login startup, and periodic automatic updates. Public download endpoints redirect to release artifacts. The latest-manifest URL is documented, but its current contents could not be verified during this research. <a href="https://docs.rewind.sh/get-started/managed-installations/">Managed installation documentation</a></p>
 <h3 id="proposed-release-pipeline">Proposed release pipeline</h3>
 <ol>
 <li>Build macOS arm64/x64 and Windows x64 on appropriate runners.</li>
@@ -950,16 +950,16 @@ GET  /v1/releases/{channel}/{platform}
 <li>Verify signature and hash before installing; reject mismatched or downgraded artifacts unless explicitly supported.</li>
 <li>Recheck permissions, helper health, database version, and MCP launch paths after upgrade.</li>
 </ol>
-<p>Do not copy Goldfish’s bundle identifiers or signing identity. Use your own stable app/helper identifiers so permission grants survive legitimate updates.</p>
+<p>Do not copy Rewind’s bundle identifiers or signing identity. Use your own stable app/helper identifiers so permission grants survive legitimate updates.</p>
 <p>Migrations must be transactional where possible and resumable where not. Back up using SQLite-supported mechanisms, with encryption and short retention, and expose that temporary copy in deletion policy. Old binaries must refuse schemas they cannot read. Rollback must not overwrite new user data with an old backup silently.</p>
 <h3 id="enterprise-configuration">Enterprise configuration</h3>
-<p>Support additive managed exclusions and auto-update control initially, matching the documented policy categories. Effective capture permission is the intersection of organizational allowance, user consent, and local rules; an organization cannot force capture of a user-excluded app. Show which restrictions are managed. <a href="https://docs.goldfish.sh/get-started/configure-with-mdm/">Goldfish MDM guide</a></p>
+<p>Support additive managed exclusions and auto-update control initially, matching the documented policy categories. Effective capture permission is the intersection of organizational allowance, user consent, and local rules; an organization cannot force capture of a user-excluded app. Show which restrictions are managed. <a href="https://docs.rewind.sh/get-started/configure-with-mdm/">Rewind MDM guide</a></p>
 <h3 id="diagnostics-and-resilience">Diagnostics and resilience</h3>
 <p>Collect event names, durations, error categories, app-adapter category, version, and resource counts. Do not collect titles, URLs, prompts, clipboard content, audio, or retrieved excerpts. Crash dumps require content-aware handling because process memory may contain private text.</p>
 <p>Expose local health states: running, paused, permission missing, indexing, offline, quota exhausted, storage full, and degraded adapter. Support user-reviewed diagnostic bundles with an inventory of included files. Test recovery from daemon crash, hung UI provider, network loss, corrupt index, revoked permission, and full disk.</p>
 <h2 id="15-public-website-specification">15. Public website specification</h2>
 <h3 id="15-1-inspected-reference">15.1 Inspected reference</h3>
-<p>OBSERVED at approximately 1265 × 712 viewport: white background; black text; orange-red italic emphasis; a soft orange fish illustration; left-aligned wordmark in the header; navigation to FAQ, docs, blog, and downloads; a large centered hero and paired platform CTAs. Below it are a privacy popover, activity counter, demonstration area, company-logo strip, rotating quotations, FAQ accordion, closing CTA, and multi-column footer. <a href="https://goldfish.sh/">Homepage</a></p>
+<p>OBSERVED at approximately 1265 × 712 viewport: white background; black text; orange-red italic emphasis; a soft orange fish illustration; left-aligned wordmark in the header; navigation to FAQ, docs, blog, and downloads; a large centered hero and paired platform CTAs. Below it are a privacy popover, activity counter, demonstration area, company-logo strip, rotating quotations, FAQ accordion, closing CTA, and multi-column footer. <a href="https://rewind.sh/">Homepage</a></p>
 <p>Computed styles from the rendered desktop page:</p>
 <table>
 <thead>
@@ -1233,6 +1233,6 @@ GET  /v1/releases/{channel}/{platform}
 <p>Unverified reference details to investigate if exact parity becomes necessary: installed app UI states; binary/framework metadata; full release manifest; actual MCP schemas; minimum OS versions; per-app adapters; updater rollback behavior; original performance; mobile marketing layout. This specification is sufficient to build an independent equivalent, but those unknowns prevent claiming a byte-for-byte or behaviorally exact clone.</p>
 <h2 id="19-research-provenance">19. Research provenance</h2>
 <p>Public research covered the rendered homepage, FAQ, blog, installation, onboarding, inline key, edit mode, voice, chat, privacy, settings, shortcuts, MCP, managed installation, and MDM documentation. Native APIs, SQLite, Tauri, and MCP transport choices were checked against their primary documentation, linked near the relevant decisions.</p>
-<p>A locally installed <code>goldfish/SKILL.md</code> integration guide supplied the static local-API and memory-layer contract labeled LOCAL CONTRACT. It was not used to search the user’s activity, open private memory, read credentials, or inspect their conversations. No desktop binary was decompiled, no account was created, and no software was installed for this research.</p>
-<p>The artifacts are an implementation plan, not a report of a built or tested Goldfish replacement. Website observations were made at one desktop viewport; mobile rules are proposed. Documentation claims about privacy and zero retention are attributed to their publisher. All sample data, performance gates, implementation details, and delivery estimates are explicitly design proposals.</p>
+<p>A locally installed <code>rewind/SKILL.md</code> integration guide supplied the static local-API and memory-layer contract labeled LOCAL CONTRACT. It was not used to search the user’s activity, open private memory, read credentials, or inspect their conversations. No desktop binary was decompiled, no account was created, and no software was installed for this research.</p>
+<p>The artifacts are an implementation plan, not a report of a built or tested Rewind replacement. Website observations were made at one desktop viewport; mobile rules are proposed. Documentation claims about privacy and zero retention are attributed to their publisher. All sample data, performance gates, implementation details, and delivery estimates are explicitly design proposals.</p>
 <footer>Prepared from public product documentation and a static local integration guide. All proposed designs and targets are distinguished from observed or documented behavior.</footer></main></body></html>

@@ -2,7 +2,7 @@
 
 Goal: build a corpus of text the user really wrote, labelled by where and how it was written, and only start a (paid) fine-tune for sentence autocomplete once the corpus is provably big and clean enough.
 
-This builds on spec section 8.4 ("Learning writing style") and test scenario 16.3 #6 ("visible but authored by someone else is not a style example") in `goldfish-end-to-end-spec.md`. Nothing here is implemented yet; `docs/implementation-status.md` lists style learning as not implemented.
+This builds on spec section 8.4 ("Learning writing style") and test scenario 16.3 #6 ("visible but authored by someone else is not a style example") in `rewind-end-to-end-spec.md`. Nothing here is implemented yet; `docs/implementation-status.md` lists style learning as not implemented.
 
 ## What exists today
 
@@ -51,7 +51,7 @@ Quality bar: sample 100 eligible items by hand every time the extractor changes.
 
 ### 3. Do not collect text we generated ourselves
 
-Interpretation: "we" is Goldfish. Assistant-written text must never be mistaken for the user's own writing, otherwise the model learns its own output and drifts. If you meant something else (for example "do not collect text I am currently drafting"), say so and I will adjust this section.
+Interpretation: "we" is Rewind. Assistant-written text must never be mistaken for the user's own writing, otherwise the model learns its own output and drifts. If you meant something else (for example "do not collect text I am currently drafting"), say so and I will adjust this section.
 
 - Log every insertion made through `edit.rs`: `request_id`, field, hash of inserted text, time.
 - Any later sample whose text matches an inserted draft (exact hash, or high n-gram overlap) is labelled `assistant_origin` and excluded from the SFT set.

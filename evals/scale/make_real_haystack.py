@@ -2,7 +2,7 @@
 """Build the real-snapshot haystack for `eval --extra-corpus`: symlinks every exported real fixture
 except those whose cleaned body contains an invented gold answer_text (they would contain the answer
 to a gold question and so are not distractors). Bodies come from
-`open-memory ingest-fixtures --dump-bodies` (the current cleaner). Prints/records what was excluded.
+`rewind ingest-fixtures --dump-bodies` (the current cleaner). Prints/records what was excluded.
 
   python3 evals/scale/make_real_haystack.py [--gold evals/gold/gold.jsonl] [--out evals/private/haystack]
 """

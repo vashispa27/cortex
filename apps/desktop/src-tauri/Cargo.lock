@@ -2179,21 +2179,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 
 [[package]]
-name = "open-memory-desktop"
-version = "0.1.0"
-dependencies = [
- "block2",
- "dirs 6.0.0",
- "libc",
- "objc2",
- "objc2-app-kit",
- "reqwest 0.12.28",
- "serde_json",
- "tauri",
- "tauri-build",
-]
-
-[[package]]
 name = "option-ext"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2711,6 +2696,21 @@ dependencies = [
  "wasm-bindgen-futures",
  "wasm-streams",
  "web-sys",
+]
+
+[[package]]
+name = "rewind"
+version = "0.1.0"
+dependencies = [
+ "block2",
+ "dirs 6.0.0",
+ "libc",
+ "objc2",
+ "objc2-app-kit",
+ "reqwest 0.12.28",
+ "serde_json",
+ "tauri",
+ "tauri-build",
 ]
 
 [[package]]

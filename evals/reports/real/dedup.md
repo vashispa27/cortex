@@ -1,8 +1,8 @@
 # Ingest-time deduplication: measured on the real corpus (aggregates only)
 
 Same 1,385 real snapshots (3,532 sightings) and 125 real questions (99 answerable) as `transfer.md`; release build of the
-tree that adds `crates/open-memory/src/dedup.rs`. Each row is one full eval run with the layers named switched on or off
-(`OPEN_MEMORY_NO_INGEST_DEDUP`, `OPEN_MEMORY_NO_NEAR_DUP_MERGE`, `OPEN_MEMORY_CHUNK_SHARING`). Differences of 2–3 questions are noise.
+tree that adds `crates/rewind/src/dedup.rs`. Each row is one full eval run with the layers named switched on or off
+(`REWIND_NO_INGEST_DEDUP`, `REWIND_NO_NEAR_DUP_MERGE`, `REWIND_CHUNK_SHARING`). Differences of 2–3 questions are noise.
 
 | configuration | snapshots | chunks | vector points | ingest | final hit@1 | final hit@8 | answer in chunk list but lost | query p50 |
 |---|---|---|---|---|---|---|---|---|

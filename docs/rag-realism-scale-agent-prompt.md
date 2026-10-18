@@ -1,22 +1,22 @@
 # Task: check that the retrieval eval numbers transfer to real use (real-data eval + scale test)
 
-You are working in `/Users/abhinavvashisht/workspace/goldfish-implementation` (Rust workspace, macOS-only crate `crates/open-memory`). An eval harness exists (`evals/`), with 24+ invented pages, a gold set, and a baseline. Another agent is fixing retrieval weaknesses at the same time (`docs/rag-fixes-agent-prompt.md`). Your job is different: find out whether the baseline numbers mean anything outside the small, clean, invented corpus.
+You are working in `/Users/abhinavvashisht/workspace/rewind` (Rust workspace, macOS-only crate `crates/rewind`). An eval harness exists (`evals/`), with 24+ invented pages, a gold set, and a baseline. Another agent is fixing retrieval weaknesses at the same time (`docs/rag-fixes-agent-prompt.md`). Your job is different: find out whether the baseline numbers mean anything outside the small, clean, invented corpus.
 
-Read first: `evals/README.md`, `evals/reports/baseline-analysis.md`, `evals/reports/baseline.md`, `docs/rag-fixes-agent-prompt.md` (so you know what the other agent owns), then `crates/open-memory/src/main.rs` (`open_runtime`, `index_pending`, `retrieve`, the eval and ingest code) and `evals/tools/`.
+Read first: `evals/README.md`, `evals/reports/baseline-analysis.md`, `evals/reports/baseline.md`, `docs/rag-fixes-agent-prompt.md` (so you know what the other agent owns), then `crates/rewind/src/main.rs` (`open_runtime`, `index_pending`, `retrieve`, the eval and ingest code) and `evals/tools/`.
 
 ## Permission to use the user's real data
 
-The user has explicitly allowed you to read and use their real captured data to speed this work up. They do not consider it sensitive and do not mind if it is changed. The real state directory is `~/Library/Application Support/Open Memory/local-memory` (SQLite `memory.sqlite3` with about 1,400 snapshots and 3,700 observations, plus `qdrant-edge/`). Backups from earlier cleaning runs (`memory.pre-clean-v1.sqlite3`, 61 snapshots; `memory.pre-clean-v3.sqlite3`, 57) are in the same folder.
+The user has explicitly allowed you to read and use their real captured data to speed this work up. They do not consider it sensitive and do not mind if it is changed. The real state directory is `~/Library/Application Support/Rewind/local-memory` (SQLite `memory.sqlite3` with about 1,400 snapshots and 3,700 observations, plus `qdrant-edge/`). Backups from earlier cleaning runs (`memory.pre-clean-v1.sqlite3`, 61 snapshots; `memory.pre-clean-v3.sqlite3`, 57) are in the same folder.
 
-- You may read it directly with `sqlite3` or from Rust. No need to make copies first. You may write to it if that is the fastest route, but prefer ingesting into a throwaway temp state dir (`OPEN_MEMORY_STATE_DIR`) for eval runs, because the harness needs a deterministic, disposable index.
-- Do not start live capture and do not request Accessibility permission (that needs the user). If a capture process is running (`pgrep -fl open-memory`), do not kill it; read the database anyway.
+- You may read it directly with `sqlite3` or from Rust. No need to make copies first. You may write to it if that is the fastest route, but prefer ingesting into a throwaway temp state dir (`REWIND_STATE_DIR`) for eval runs, because the harness needs a deterministic, disposable index.
+- Do not start live capture and do not request Accessibility permission (that needs the user). If a capture process is running (`pgrep -fl rewind`), do not kill it; read the database anyway.
 - Keep real-data-derived files (exports, private gold set, reports with real text) out of git: put them under `evals/private/` and make sure `.gitignore` excludes it. This is hygiene so nothing is pushed by accident, not a privacy worry.
 - No network calls and no LLM calls with this data in this task. The eval path needs neither.
 - All other rules still apply: no dependency added without asking the user; no changes to production retrieval, chunking or cleaning behavior.
 
 ## Coordination with the fixes agent
 
-- Work on your own git branch in a separate worktree (`git worktree add ../goldfish-scale -b evals-realism`). Do not work on the fixes agent's branch.
+- Work on your own git branch in a separate worktree (`git worktree add ../rewind-scale -b evals-realism`). Do not work on the fixes agent's branch.
 - The fixes agent owns, and you must not edit: `query_filter`, `time_bounds`, `retrieve`/`answer`/`snippet`/`llm_answer` logic, `cleaner.rs`, `evals/gold/gold.jsonl`, `evals/corpus/*`, `evals/pages/*`. You may read them.
 - You own: new files under `evals/scale/`, `evals/private/` tooling, `evals/tools/` additions, and new eval subcommand options that do not change existing behavior. If you need a small change in shared code (for example an eval flag), keep it minimal and additive, and say so in the commit message so the merge is easy.
 - Re-run against the latest fixes-agent commit before you report numbers, and state which commit you measured.
@@ -34,7 +34,7 @@ Question: do the invented-corpus results hold on what the user actually captured
    - Cover the types in the existing gold taxonomy, and add types the invented pages cannot show: terminal output, code, long documents, very short snapshots, repeated near-identical captures, mixed-language text, tables.
    - Split dev/test about 50/50, assigned by a stable hash of the id.
    - Do not look at retrieval results while writing questions.
-3. **Run it.** `open-memory eval --corpus evals/private/corpus --gold evals/private/gold.jsonl --out evals/private/reports/real-baseline.json` (and the usual ablations: mode, rerank_bonus, filters, derived, chunk_target). Use the latest fixes-agent code and also the `baseline` commit, so you can show how each fix transfers.
+3. **Run it.** `rewind eval --corpus evals/private/corpus --gold evals/private/gold.jsonl --out evals/private/reports/real-baseline.json` (and the usual ablations: mode, rerank_bonus, filters, derived, chunk_target). Use the latest fixes-agent code and also the `baseline` commit, so you can show how each fix transfers.
 4. **Compare with the invented corpus.** Produce `evals/reports/real/transfer.md` with aggregates only: for each question type and metric, the invented-corpus number next to the real-data number, with counts. Do not put snapshot text in this committed file. Say clearly which weaknesses from the baseline analysis are bigger or smaller on real data, which new failure modes appear (write them down with a few anonymized examples in the private folder, not in the committed report), and whether the fix order from `baseline-analysis.md` still holds.
 5. **Also provide the authoring helper**: a small CLI that shows a snapshot's cleaned body and lets the user add questions to `evals/private/gold.jsonl` with the answer-string check, so the user can grow the set later. Keep it simple.
 

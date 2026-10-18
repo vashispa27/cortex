@@ -1,4 +1,4 @@
-# Open Memory website
+# Rewind website
 
 Run `node apps/website/server.mjs` from the repository root and open `http://127.0.0.1:8790`. The site is dependency free and server renders `/`, `/faq`, `/docs`, `/blog`, `/blog/why-sources-matter`, `/privacy`, `/tos`, and `/dpa`. It includes a keyboard-operable synthetic demo, a privacy explainer, sitemap, and platform download routes.
 

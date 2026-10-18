@@ -8,7 +8,7 @@ import { test } from 'node:test';
 import { Client } from '@modelcontextprotocol/client';
 import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
 
-const daemonBinary = process.env.OPEN_MEMORY_DAEMON_BIN;
+const daemonBinary = process.env.REWIND_DAEMON_BIN;
 
 async function waitForPort(dir: string): Promise<number> {
   for (let attempt = 0; attempt < 100; attempt += 1) {
@@ -22,8 +22,8 @@ async function waitForPort(dir: string): Promise<number> {
 }
 
 test('synthetic source flows through daemon and consent-gated MCP', { skip: !daemonBinary }, async () => {
-  const dir = await mkdtemp(join(tmpdir(), 'open-memory-e2e-'));
-  const env = { ...process.env, OPEN_MEMORY_STATE_DIR: dir } as Record<string, string>;
+  const dir = await mkdtemp(join(tmpdir(), 'rewind-e2e-'));
+  const env = { ...process.env, REWIND_STATE_DIR: dir } as Record<string, string>;
   const seeded = spawnSync(daemonBinary!, ['--seed-synthetic'], { env, encoding: 'utf8', timeout: 15_000 });
   assert.equal(seeded.status, 0, seeded.stderr);
   let daemon: ChildProcess | undefined;

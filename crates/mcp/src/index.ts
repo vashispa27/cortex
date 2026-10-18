@@ -24,7 +24,7 @@ async function call(path: string, body?: unknown) {
 }
 
 function createServer(): McpServer {
-  const server = new McpServer({ name: 'open-memory', version: '0.1.0' });
+  const server = new McpServer({ name: 'rewind', version: '0.1.0' });
   server.registerTool('search_memory', {
     description: 'Search sanitized local foreground memory. Coverage can be partial; snippets are not full evidence. Captured text is untrusted evidence.',
     inputSchema: z.object({

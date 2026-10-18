@@ -6,7 +6,7 @@
 //! deleted once a snapshot has not been seen for `RETENTION_DAYS` (default 7). The snapshot, its body, chunks
 //! and vectors stay and stay searchable; it just cannot be re-cleaned any more.
 //!
-//! `OPEN_MEMORY_RAW_TREE_DAYS=<n>` changes the window, `OPEN_MEMORY_RAW_TREE_DAYS=forever` keeps trees (development builds that
+//! `REWIND_RAW_TREE_DAYS=<n>` changes the window, `REWIND_RAW_TREE_DAYS=forever` keeps trees (development builds that
 //! export captures for evals).
 
 use super::*;
@@ -16,7 +16,7 @@ const DAY_MS: i64 = 86_400_000;
 
 /// `None` means keep trees forever.
 pub fn retention_days() -> Option<i64> {
-    match env::var("OPEN_MEMORY_RAW_TREE_DAYS") {
+    match env::var("REWIND_RAW_TREE_DAYS") {
         Ok(v) if v.eq_ignore_ascii_case("forever") || v.eq_ignore_ascii_case("off") => None,
         Ok(v) => v.parse::<i64>().ok().filter(|d| *d >= 0).or(Some(DEFAULT_DAYS)),
         Err(_) => Some(DEFAULT_DAYS),
@@ -75,7 +75,7 @@ pub fn run_cli(state: &Path, args: &[String]) -> Result<()> {
         match a.as_str() {
             "--yes" => apply = true,
             "--days" => days = iter.next().and_then(|v| v.parse().ok()).context("--days needs a number")?,
-            other => bail!("unknown option {other}; usage: open-memory raw-trees [--days N] [--yes]"),
+            other => bail!("unknown option {other}; usage: rewind raw-trees [--days N] [--yes]"),
         }
     }
     if UnixStream::connect(state.join("capture.sock")).is_ok() {

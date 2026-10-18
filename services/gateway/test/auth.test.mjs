@@ -9,10 +9,10 @@ test('OIDC verifier checks signature, issuer, audience, expiry and maps subject'
   const oldFetch = globalThis.fetch;
   globalThis.fetch = async () => ({ ok: true, json: async () => ({ keys: [jwk] }) });
   try {
-    const authenticate = createAuthenticator({ issuer: 'https://issuer.example', audience: 'open-memory', jwksUrl: 'https://issuer.example/keys' });
+    const authenticate = createAuthenticator({ issuer: 'https://issuer.example', audience: 'rewind', jwksUrl: 'https://issuer.example/keys' });
     const make = (claims) => {
       const head = Buffer.from(JSON.stringify({ alg: 'RS256', kid: 'key-1' })).toString('base64url');
-      const body = Buffer.from(JSON.stringify({ iss: 'https://issuer.example', aud: 'open-memory', sub: 'auth0|123', exp: Math.floor(Date.now() / 1000) + 60, ...claims })).toString('base64url');
+      const body = Buffer.from(JSON.stringify({ iss: 'https://issuer.example', aud: 'rewind', sub: 'auth0|123', exp: Math.floor(Date.now() / 1000) + 60, ...claims })).toString('base64url');
       const signature = sign('RSA-SHA256', Buffer.from(`${head}.${body}`), privateKey).toString('base64url');
       return `Bearer ${head}.${body}.${signature}`;
     };

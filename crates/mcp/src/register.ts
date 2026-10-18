@@ -7,7 +7,7 @@ import { stateDirectory } from './local-api.js';
 
 type JsonObject = Record<string, unknown>;
 type Receipt = { configPath: string; entryHash: string; backupPath: string; removedByUser: boolean };
-const entryName = 'open-memory';
+const entryName = 'rewind';
 
 function hash(value: unknown): string {
   return createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -59,7 +59,7 @@ export async function configureClient(configPath: string, action: 'enable' | 'di
 
   if (action === 'enable') {
     if (servers[entryName] !== undefined) {
-      throw new Error('An open-memory entry already exists; inspect it before changing it');
+      throw new Error('An rewind entry already exists; inspect it before changing it');
     }
     const entry = bridgeEntry();
     const backupPath = join(stateDir, `mcp-backup-${hash(configPath).slice(0, 24)}-${Date.now()}.json`);

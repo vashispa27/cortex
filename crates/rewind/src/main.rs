@@ -45,7 +45,7 @@ const MODEL_ID: &str = "minishlab/potion-base-32M";
 const MODEL_REVISION: &str = "1e5a03f8eeb2c98b928fbbd846f22f816360919f";
 const MODEL_VERSION: &str = "minishlab/potion-base-32M@1e5a03f8eeb2c98b928fbbd846f22f816360919f:model2vec-rs-0.3.0:default-512";
 const MODEL_SHA256: &str = "99f6c33204c9231a7391871b7a3c91409b532c8f587a9ea44fc282303d8dec28";
-const HELPER: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/open-memory-ax-helper"));
+const HELPER: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/rewind-ax-helper"));
 
 #[derive(Debug, Deserialize)]
 struct AxReply {
@@ -158,16 +158,17 @@ unsafe fn libc_umask(mask: u32) {
     umask(mask);
 }
 fn usage() {
-    eprintln!("Usage: open-memory capture [--print] [--rebuild-index]\n       open-memory capture --clean-dry-run\n       open-memory capture --apply-cleaning\n       open-memory blocklist [purge [--yes]|list|check <app id>|add <app id> [label]|remove <app id>|enable <app id>|disable <app id>|reset]\n       open-memory ask \"natural-language question\"\n       OPEN_MEMORY_STATE_DIR=<tmp> open-memory ingest-fixtures --corpus evals/corpus\n       open-memory eval --corpus evals/corpus --gold evals/gold/gold.jsonl --out evals/reports/<name>.json\n       open-memory eval-answers --mock --corpus evals/corpus --gold evals/gold/gold.jsonl --out evals/answers/out/mock.json");
+    eprintln!("Usage: rewind capture [--print] [--rebuild-index]\n       rewind capture --clean-dry-run\n       rewind capture --apply-cleaning\n       rewind blocklist [purge [--yes]|list|check <app id>|add <app id> [label]|remove <app id>|enable <app id>|disable <app id>|reset]\n       rewind ask \"natural-language question\"\n       REWIND_STATE_DIR=<tmp> rewind ingest-fixtures --corpus evals/corpus\n       rewind eval --corpus evals/corpus --gold evals/gold/gold.jsonl --out evals/reports/<name>.json\n       rewind eval-answers --mock --corpus evals/corpus --gold evals/gold/gold.jsonl --out evals/answers/out/mock.json");
 }
 fn state_dir() -> Result<PathBuf> {
-    if let Some(path) = env::var_os("OPEN_MEMORY_STATE_DIR") {
+    if let Some(path) = env::var_os("REWIND_STATE_DIR") {
         return Ok(PathBuf::from(path));
     }
-    Ok(
-        PathBuf::from(env::var_os("HOME").context("HOME unavailable")?)
-            .join("Library/Application Support/Open Memory/local-memory"),
-    )
+    let home = PathBuf::from(env::var_os("HOME").context("HOME unavailable")?);
+    let current = home.join("Library/Application Support/Rewind/local-memory");
+    let legacy = home.join("Library/Application Support/Open Memory/local-memory");
+    if !current.exists() && legacy.exists() { let _ = fs::rename(&legacy, &current); }
+    Ok(current)
 }
 fn now_ms() -> i64 {
     SystemTime::now()
@@ -235,9 +236,9 @@ fn open_db(state: &Path) -> Result<Connection> {
 }
 
 fn install_helper(state: &Path) -> Result<PathBuf> {
-    let path = state.join("open-memory-ax-helper");
+    let path = state.join("rewind-ax-helper");
     if fs::read(&path).ok().as_deref() != Some(HELPER) {
-        let tmp = state.join("open-memory-ax-helper.tmp");
+        let tmp = state.join("rewind-ax-helper.tmp");
         fs::write(&tmp, HELPER)?;
         fs::set_permissions(&tmp, fs::Permissions::from_mode(0o700))?;
         fs::rename(tmp, &path)?;
@@ -256,15 +257,15 @@ fn run_helper(path: &Path, mode: &str) -> Result<AxReply> {
 fn download_model(state: &Path) -> Result<PathBuf> {
     // Offline evals point at an already-downloaded copy of the pinned model so a
     // throwaway state directory does not re-download it. The checksum is still enforced.
-    if let Some(dir) = env::var_os("OPEN_MEMORY_MODEL_DIR") {
+    if let Some(dir) = env::var_os("REWIND_MODEL_DIR") {
         let dir = PathBuf::from(dir);
         for file in ["config.json", "tokenizer.json", "model.safetensors"] {
             if !dir.join(file).is_file() {
-                bail!("OPEN_MEMORY_MODEL_DIR is missing {file}");
+                bail!("REWIND_MODEL_DIR is missing {file}");
             }
         }
         if file_hash(&dir.join("model.safetensors"))? != MODEL_SHA256 {
-            bail!("OPEN_MEMORY_MODEL_DIR model checksum mismatch");
+            bail!("REWIND_MODEL_DIR model checksum mismatch");
         }
         return Ok(dir);
     }
@@ -321,7 +322,7 @@ fn open_runtime_with(state: &Path, rebuild: bool, model: Option<StaticModel>, pr
     let db = open_db(state)?;
     let stale = stale_count(&db)?;
     if stale > 0 {
-        bail!("{stale} captures still use the old text format; run `open-memory capture --clean-dry-run` then `open-memory capture --apply-cleaning`");
+        bail!("{stale} captures still use the old text format; run `rewind capture --clean-dry-run` then `rewind capture --apply-cleaning`");
     }
     let old: Option<String> = db
         .query_row("SELECT value FROM index_meta WHERE key='model'", [], |r| {
@@ -329,7 +330,7 @@ fn open_runtime_with(state: &Path, rebuild: bool, model: Option<StaticModel>, pr
         })
         .optional()?;
     if old.as_deref().is_some_and(|v| v != prefix::index_version(prefix_mode)) && !rebuild {
-        bail!("embedding model or chunk context format changed; run `open-memory capture --rebuild-index` to reindex originals in SQLite");
+        bail!("embedding model or chunk context format changed; run `rewind capture --rebuild-index` to reindex originals in SQLite");
     }
     let shard_dir = state.join("qdrant-edge");
     if rebuild || (old.is_none() && shard_dir.join("edge_config.json").exists()) {
@@ -600,7 +601,7 @@ fn capture(state: &Path, print: bool, rebuild: bool) -> Result<()> {
     let mut last_status = String::new();
     let mut last_purge: Option<std::time::Instant> = None;
     let mut blocked_apps = blocklist::Watcher::new(state)?;
-    println!("Not saving windows of {} blocked app entries (open-memory blocklist list).", blocked_apps.list.apps.iter().filter(|e| e.enabled).count());
+    println!("Not saving windows of {} blocked app entries (rewind blocklist list).", blocked_apps.list.apps.iter().filter(|e| e.enabled).count());
     loop {
         match blocked_apps.refresh() {
             Ok(true) => println!("Blocklist reloaded: {} enabled entries.", blocked_apps.list.apps.iter().filter(|e| e.enabled).count()),
@@ -851,7 +852,7 @@ fn reprocess(state: &Path, apply: bool) -> Result<()> {
     println!("Cleaning preview: {} snapshots; {navigation_only} navigation-only; {unavailable} without AX nodes (original retained); {} with a deleted raw tree (kept as they are).", prepared.len(), kept_without_tree.len());
     println!("Removed-node reasons: {reason_counts:?}");
     if !apply {
-        println!("No snapshot text or Qdrant index changed. Run `open-memory capture --apply-cleaning` to apply.");
+        println!("No snapshot text or Qdrant index changed. Run `rewind capture --apply-cleaning` to apply.");
         return Ok(());
     }
 
@@ -1668,7 +1669,7 @@ fn answer(runtime: &mut Runtime, question: &str) -> Result<String> {
     }
     runtime.db.execute("INSERT INTO index_meta(key,value) VALUES('last_answer_snapshot',?1) ON CONFLICT(key) DO UPDATE SET value=excluded.value",[sources[0].id.to_string()])?;
     let mut output = String::new();
-    if env::var("OPEN_MEMORY_LLM_URL").is_ok() {
+    if env::var("REWIND_LLM_URL").is_ok() {
         match llm_answer(question, &hits, params.chunks_per_result) {
             Ok(response) => {
                 output.push_str(&response);

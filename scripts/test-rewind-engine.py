@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Offline adapter smoke check: uses a disposable archive, capture OFF, no LLM.
-Build first with `cargo build -p open-memory`. Uses OPEN_MEMORY_MODEL_DIR when
+Build first with `cargo build -p rewind`. Uses REWIND_MODEL_DIR when
 provided, otherwise the pinned model already cached by Rewind. No personal data
 is ingested, queried, deleted, or sent to a provider.
 """
@@ -11,9 +11,9 @@ state.mkdir(); old=sqlite3.connect(root/'memory.sqlite3')
 old.executescript('CREATE TABLE snapshots(id INTEGER PRIMARY KEY,app_id TEXT,title TEXT,url TEXT,body TEXT,first_seen_ms INTEGER,last_seen_ms INTEGER,window_session_id TEXT); CREATE TABLE observations(snapshot_id INTEGER,observed_ms INTEGER); CREATE TABLE settings(key TEXT,value_json TEXT);')
 old.execute('INSERT INTO snapshots VALUES(1,?,?,?,?,?,?,?)',('test.mail','Travel discussion','https://example.test/mail/123','Mira postponed our appointment. The meeting will happen on Friday at 10 AM.',1792300000000,1792300000000,'mail-window'))
 old.execute('INSERT INTO observations VALUES(1,1792300000000)');old.execute("INSERT INTO settings VALUES('capture_enabled','false')");old.commit();old.close()
-env=os.environ.copy();env['OPEN_MEMORY_STATE_DIR']=str(state);env['REWIND_SETTINGS_DIR']=str(root)
-env['OPEN_MEMORY_MODEL_DIR']=env.get('OPEN_MEMORY_MODEL_DIR') or str(Path.home()/'Library/Application Support/Open Memory/local-memory/models/1e5a03f8eeb2c98b928fbbd846f22f816360919f')
-log=open(root/'engine.log','w');proc=subprocess.Popen([str(Path(__file__).resolve().parents[1]/'target/debug/open-memory'),'desktop'],env=env,stdout=log,stderr=log)
+env=os.environ.copy();env['REWIND_STATE_DIR']=str(state);env['REWIND_SETTINGS_DIR']=str(root)
+env['REWIND_MODEL_DIR']=env.get('REWIND_MODEL_DIR') or str(Path.home()/'Library/Application Support/Rewind/local-memory/models/1e5a03f8eeb2c98b928fbbd846f22f816360919f')
+log=open(root/'engine.log','w');proc=subprocess.Popen([str(Path(__file__).resolve().parents[1]/'target/debug/rewind'),'desktop'],env=env,stdout=log,stderr=log)
 def req(method,path,body=None):
  c=socket.socket(socket.AF_UNIX);c.settimeout(60);c.connect(str(state/'capture.sock'));c.sendall(json.dumps({'method':method,'path':path,'body':body}).encode());c.shutdown(socket.SHUT_WR);data=b''
  while more:=c.recv(65536):data+=more

@@ -10,16 +10,16 @@ The private signing key is **not in this repository**. Supply it through a prote
 node infra/release.mjs sign \
   --dir /path/to/signed-installers \
   --version 1.2.3 --channel canary --minimum-version 1.0.0 \
-  --base-url https://downloads.example.com/open-memory/1.2.3 \
+  --base-url https://downloads.example.com/rewind/1.2.3 \
   --download-origin https://downloads.example.com \
-  --artifact macos-universal=open-memory-1.2.3.pkg \
+  --artifact macos-universal=rewind-1.2.3.pkg \
   --key-id release-2026 \
   --private-key-file /secure/path/release-private.pem \
-  --out /tmp/open-memory-release/manifest.json
+  --out /tmp/rewind-release/manifest.json
 
 node infra/release.mjs verify \
   --dir /path/to/signed-installers \
-  --manifest /tmp/open-memory-release/manifest.json \
+  --manifest /tmp/rewind-release/manifest.json \
   --channel canary \
   --key-id release-2026 \
   --public-key-file /secure/path/release-public.pem \
@@ -27,14 +27,14 @@ node infra/release.mjs verify \
 
 node infra/release.mjs export-config \
   --dir /path/to/signed-installers \
-  --manifest /tmp/open-memory-release/manifest.json \
+  --manifest /tmp/rewind-release/manifest.json \
   --channel canary \
   --download-origin https://downloads.example.com \
   --key-id release-2026 \
   --public-key-file /secure/path/release-public.pem \
-  --site-url https://open-memory.example.com \
-  --site-out /tmp/open-memory-release/site-config.json \
-  --control-out /tmp/open-memory-release/control-releases.json
+  --site-url https://rewind.example.com \
+  --site-out /tmp/rewind-release/site-config.json \
+  --control-out /tmp/rewind-release/control-releases.json
 ```
 
 The generated site config maps a verified universal macOS package to `downloads.macos`. The Windows download stays unavailable. `export-config` downloads each file from the declared HTTPS origin and checks its SHA-256 and size against the signed local artifact before it emits any URL. Set `GF_SITE_CONFIG_FILE` and `GF_RELEASES_FILE` to the reviewed outputs only after this succeeds. The control config maps `channel/platform` to the signed manifest and selected artifact. The CLI never overwrites output files.
@@ -44,7 +44,7 @@ The generated site config maps a verified universal macOS package to `downloads.
 - `.github/workflows/ci.yml` runs JavaScript, desktop, MCP, release-tool, and Rust workspace tests on pushes and pull requests. It has read-only repository permission and no release keys.
 - `.github/workflows/release-manifest.yml` is manual, limited to the repository's default branch and a protected `release` environment. It downloads a `signed-installers` artifact from a named prior run. macOS checks Gatekeeper acceptance, a stapled notarization ticket, and the configured Developer ID team. After that passes, it signs, verifies local and already-published remote bytes, and uploads metadata as a workflow artifact.
 
-Configure these protected environment values before running release preparation: `OPEN_MEMORY_MACOS_TEAM_ID`, `OPEN_MEMORY_RELEASE_KEY_ID`, `OPEN_MEMORY_RELEASE_VERIFY_KEY_PEM`, `OPEN_MEMORY_DOWNLOAD_ORIGIN`, and secret `OPEN_MEMORY_RELEASE_SIGNING_KEY_PEM`. The source artifact must contain the exact `.pkg` basename supplied at dispatch, and the same bytes must already be available under the allowlisted HTTPS origin. A missing value, file, signature, remote file, or cryptographic verification fails the workflow. Release output is a private workflow artifact, not a deployment.
+Configure these protected environment values before running release preparation: `REWIND_MACOS_TEAM_ID`, `REWIND_RELEASE_KEY_ID`, `REWIND_RELEASE_VERIFY_KEY_PEM`, `REWIND_DOWNLOAD_ORIGIN`, and secret `REWIND_RELEASE_SIGNING_KEY_PEM`. The source artifact must contain the exact `.pkg` basename supplied at dispatch, and the same bytes must already be available under the allowlisted HTTPS origin. A missing value, file, signature, remote file, or cryptographic verification fails the workflow. Release output is a private workflow artifact, not a deployment.
 
 The workflow does not code-sign, notarize, upload to a CDN, roll out updates, or update the live website. Those actions need certificates, hosting credentials, remote-byte verification, and a reviewed rollout process. The desktop updater must pin the public key, check the signature and downloaded file hash before install, enforce its own minimum version and channel policy, and defer restart during active edits or migrations.
 

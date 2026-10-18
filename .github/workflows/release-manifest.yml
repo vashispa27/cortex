@@ -57,7 +57,7 @@ jobs:
         shell: bash
         env:
           MACOS_FILENAME: ${{ inputs.macos_filename }}
-          MACOS_TEAM_ID: ${{ vars.OPEN_MEMORY_MACOS_TEAM_ID }}
+          MACOS_TEAM_ID: ${{ vars.REWIND_MACOS_TEAM_ID }}
         run: |
           set -euo pipefail
           [[ "$MACOS_FILENAME" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*\.pkg$ ]]
@@ -94,21 +94,21 @@ jobs:
           RELEASE_CHANNEL: ${{ inputs.channel }}
           RELEASE_BASE_URL: ${{ inputs.base_url }}
           RELEASE_SITE_URL: ${{ inputs.site_url }}
-          DOWNLOAD_ORIGIN: ${{ vars.OPEN_MEMORY_DOWNLOAD_ORIGIN }}
+          DOWNLOAD_ORIGIN: ${{ vars.REWIND_DOWNLOAD_ORIGIN }}
           MACOS_FILENAME: ${{ inputs.macos_filename }}
           MINIMUM_VERSION: ${{ inputs.minimum_version }}
-          RELEASE_KEY_ID: ${{ vars.OPEN_MEMORY_RELEASE_KEY_ID }}
-          OPEN_MEMORY_RELEASE_SIGNING_KEY_PEM: ${{ secrets.OPEN_MEMORY_RELEASE_SIGNING_KEY_PEM }}
-          OPEN_MEMORY_RELEASE_VERIFY_KEY_PEM: ${{ vars.OPEN_MEMORY_RELEASE_VERIFY_KEY_PEM }}
+          RELEASE_KEY_ID: ${{ vars.REWIND_RELEASE_KEY_ID }}
+          REWIND_RELEASE_SIGNING_KEY_PEM: ${{ secrets.REWIND_RELEASE_SIGNING_KEY_PEM }}
+          REWIND_RELEASE_VERIFY_KEY_PEM: ${{ vars.REWIND_RELEASE_VERIFY_KEY_PEM }}
         run: |
           set -euo pipefail
           test -n "$RELEASE_KEY_ID"
-          test -n "$OPEN_MEMORY_RELEASE_SIGNING_KEY_PEM"
-          test -n "$OPEN_MEMORY_RELEASE_VERIFY_KEY_PEM"
+          test -n "$REWIND_RELEASE_SIGNING_KEY_PEM"
+          test -n "$REWIND_RELEASE_VERIFY_KEY_PEM"
           test -n "$DOWNLOAD_ORIGIN"
-          node infra/release.mjs sign --dir signed-installers --version "$RELEASE_VERSION" --channel "$RELEASE_CHANNEL" --base-url "$RELEASE_BASE_URL" --download-origin "$DOWNLOAD_ORIGIN" --minimum-version "$MINIMUM_VERSION" --artifact "macos-universal=$MACOS_FILENAME" --key-id "$RELEASE_KEY_ID" --private-key-env OPEN_MEMORY_RELEASE_SIGNING_KEY_PEM --out release-output/release-manifest.json
-          node infra/release.mjs verify --dir signed-installers --manifest release-output/release-manifest.json --channel "$RELEASE_CHANNEL" --key-id "$RELEASE_KEY_ID" --public-key-env OPEN_MEMORY_RELEASE_VERIFY_KEY_PEM
-          node infra/release.mjs export-config --dir signed-installers --manifest release-output/release-manifest.json --channel "$RELEASE_CHANNEL" --download-origin "$DOWNLOAD_ORIGIN" --key-id "$RELEASE_KEY_ID" --public-key-env OPEN_MEMORY_RELEASE_VERIFY_KEY_PEM --site-url "$RELEASE_SITE_URL" --site-out release-output/site-config.json --control-out release-output/control-releases.json
+          node infra/release.mjs sign --dir signed-installers --version "$RELEASE_VERSION" --channel "$RELEASE_CHANNEL" --base-url "$RELEASE_BASE_URL" --download-origin "$DOWNLOAD_ORIGIN" --minimum-version "$MINIMUM_VERSION" --artifact "macos-universal=$MACOS_FILENAME" --key-id "$RELEASE_KEY_ID" --private-key-env REWIND_RELEASE_SIGNING_KEY_PEM --out release-output/release-manifest.json
+          node infra/release.mjs verify --dir signed-installers --manifest release-output/release-manifest.json --channel "$RELEASE_CHANNEL" --key-id "$RELEASE_KEY_ID" --public-key-env REWIND_RELEASE_VERIFY_KEY_PEM
+          node infra/release.mjs export-config --dir signed-installers --manifest release-output/release-manifest.json --channel "$RELEASE_CHANNEL" --download-origin "$DOWNLOAD_ORIGIN" --key-id "$RELEASE_KEY_ID" --public-key-env REWIND_RELEASE_VERIFY_KEY_PEM --site-url "$RELEASE_SITE_URL" --site-out release-output/site-config.json --control-out release-output/control-releases.json
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: verified-release-metadata

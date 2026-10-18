@@ -6,7 +6,7 @@ export default function FishMark({ className = "" }: { className?: string }) {
   const tail = `fish-tail-${id}`;
 
   return (
-    <svg className={`fish-mark ${className}`} viewBox="0 0 64 48" role="img" aria-label="Open Memory fish" focusable="false">
+    <svg className={`fish-mark ${className}`} viewBox="0 0 64 48" role="img" aria-label="Rewind fish" focusable="false">
       <defs>
         <linearGradient id={body} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#ffb06b" />

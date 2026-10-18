@@ -1,5 +1,5 @@
 {
-  "name": "@open-memory/gateway",
+  "name": "@rewind/gateway",
   "version": "0.1.0",
   "private": true,
   "type": "module",

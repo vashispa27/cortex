@@ -1,6 +1,6 @@
 use axum::{extract::{DefaultBodyLimit,Query,State}, http::{HeaderMap,StatusCode}, response::{IntoResponse,Response}, routing::{get,post}, Json,Router};
-use goldfish_contracts::{ApiError,Envelope,ErrorBody,ErrorCode,SearchRequest,SnapshotsRequest,Status,API_VERSION};
-use goldfish_memory::{MemoryError,MemoryStore,SettingsPatch};
+use rewind_contracts::{ApiError,Envelope,ErrorBody,ErrorCode,SearchRequest,SnapshotsRequest,Status,API_VERSION};
+use rewind_memory::{MemoryError,MemoryStore,SettingsPatch};
 use rand::RngCore;
 use serde::Deserialize;
 use serde_json::{json,Value};
@@ -46,7 +46,7 @@ async fn main() -> Result<(),Box<dyn std::error::Error>> {
     // Older builds captured Rewind's own window while it was frontmost. Those
     // rows are UI chrome, not memory, so remove them without touching user data.
     #[cfg(target_os = "macos")]
-    for app_id in ["app.open-memory.desktop", "app.rewind.desktop"] {
+    for app_id in ["app.rewind.desktop"] {
         if let Ok(count) = store.purge_app_snapshots(app_id, now_ms()) {
             if count > 0 { eprintln!("Removed {count} Rewind UI captures from local memory."); }
         }
@@ -57,7 +57,7 @@ async fn main() -> Result<(),Box<dyn std::error::Error>> {
         return Ok(());
     }
     #[cfg(target_os="macos")]
-    if env::var("OPEN_MEMORY_EXIT_ON_STDIN_EOF").as_deref() == Ok("1") {
+    if env::var("REWIND_EXIT_ON_STDIN_EOF").as_deref() == Ok("1") {
         std::thread::spawn(|| {
             use std::io::Read;
             let mut input = io::stdin();
@@ -88,28 +88,31 @@ async fn main() -> Result<(),Box<dyn std::error::Error>> {
         .route("/v1/privacy/delete",post(delete_memory))
         .layer(DefaultBodyLimit::max(64*1024))
         .with_state(state);
-    eprintln!("open-memory daemon listening on 127.0.0.1:{port}");
+    eprintln!("rewind daemon listening on 127.0.0.1:{port}");
     axum::serve(listener,app).await?;
     Ok(())
 }
 
 fn state_dir() -> io::Result<PathBuf> {
-    if let Some(path) = env::var_os("OPEN_MEMORY_STATE_DIR").or_else(|| env::var_os("GOLDFISH_STATE_DIR")) { return Ok(PathBuf::from(path)); }
+    if let Some(path) = env::var_os("REWIND_STATE_DIR") { return Ok(PathBuf::from(path)); }
     #[cfg(target_os="macos")]
     {
         let home = env::var_os("HOME").ok_or_else(|| io::Error::new(io::ErrorKind::NotFound,"HOME unavailable"))?;
-        return Ok(PathBuf::from(home).join("Library/Application Support/Open Memory"));
+        let current = PathBuf::from(&home).join("Library/Application Support/Rewind");
+        let legacy = PathBuf::from(&home).join("Library/Application Support/Open Memory");
+        if !current.exists() && legacy.exists() { let _ = fs::rename(&legacy, &current); }
+        return Ok(current);
     }
     #[cfg(target_os="windows")]
     {
         let base = env::var_os("LOCALAPPDATA").ok_or_else(|| io::Error::new(io::ErrorKind::NotFound,"LOCALAPPDATA unavailable"))?;
-        return Ok(PathBuf::from(base).join("OpenMemory"));
+        return Ok(PathBuf::from(base).join("Rewind"));
     }
     #[cfg(not(any(target_os="macos",target_os="windows")))]
     {
-        if let Some(path) = env::var_os("XDG_STATE_HOME") { return Ok(PathBuf::from(path).join("open-memory")); }
+        if let Some(path) = env::var_os("XDG_STATE_HOME") { return Ok(PathBuf::from(path).join("rewind")); }
         let home = env::var_os("HOME").ok_or_else(|| io::Error::new(io::ErrorKind::NotFound,"HOME unavailable"))?;
-        Ok(PathBuf::from(home).join(".local/state/open-memory"))
+        Ok(PathBuf::from(home).join(".local/state/rewind"))
     }
 }
 
@@ -208,7 +211,7 @@ fn store_error(err: MemoryError) -> Response {
     }
 }
 
-async fn health() -> Json<Value> { Json(json!({"service":"open-memory-daemon","api_version":API_VERSION})) }
+async fn health() -> Json<Value> { Json(json!({"service":"rewind-daemon","api_version":API_VERSION})) }
 
 async fn status(State(state): State<AppState>, headers: HeaderMap) -> Response {
     if let Err(err) = authorize(&headers,&state,false) { return err; }
@@ -313,7 +316,7 @@ async fn delete_memory(State(state): State<AppState>, headers: HeaderMap, Json(r
 }
 
 fn seed_synthetic(store: &MemoryStore) -> Result<(),Box<dyn std::error::Error>> {
-    use goldfish_capture::{BrowserContext,CapturePolicy,RawNode,RawWindow,SessionState};
+    use rewind_capture::{BrowserContext,CapturePolicy,RawNode,RawWindow,SessionState};
     let example = RawWindow { app_id: "example.mail".into(), window_session_id: "synthetic-window".into(), title: "Launch review".into(), browser: BrowserContext::NotBrowser, session: SessionState::Active, observed_ms: now_ms(), timezone: "UTC".into(), source_event: "synthetic_fixture".into(), focus_role: Some("text_field".into()), focus_name: None, focus_path: None, roots: vec![RawNode { role: "text".into(), name: None, value: Some("Synthetic example: launch review moved to Thursday. This is test data, not user activity.".into()), visible: true, protected: false, excluded: false, children: vec![] }] };
     let sanitized = CapturePolicy { consent: true, ..Default::default() }.sanitize(&example)
         .map_err(|reason| io::Error::new(io::ErrorKind::Other,format!("synthetic fixture skipped: {reason:?}")))?;

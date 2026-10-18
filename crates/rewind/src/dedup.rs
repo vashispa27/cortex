@@ -1,7 +1,7 @@
 //! Ingest-time deduplication, so a page that is captured again and again is stored, cleaned and
 //! embedded once.
 //!
-//! Layers, cheapest first (each is skipped when `OPEN_MEMORY_NO_INGEST_DEDUP` is set, which the evals
+//! Layers, cheapest first (each is skipped when `REWIND_NO_INGEST_DEDUP` is set, which the evals
 //! use to measure the effect):
 //!
 //! 1. exact: `snapshots.fingerprint`, a SHA-256 of app, URL and cleaned body (unchanged, in `record`).
@@ -29,21 +29,21 @@ const NEAR_DUP_CANDIDATES: i64 = 3;
 
 pub fn enabled() -> bool {
     static ON: OnceLock<bool> = OnceLock::new();
-    *ON.get_or_init(|| env::var_os("OPEN_MEMORY_NO_INGEST_DEDUP").is_none())
+    *ON.get_or_init(|| env::var_os("REWIND_NO_INGEST_DEDUP").is_none())
 }
 
-/// Layer 3 (near-identical page merge). `OPEN_MEMORY_NO_NEAR_DUP_MERGE` switches only this layer off.
+/// Layer 3 (near-identical page merge). `REWIND_NO_NEAR_DUP_MERGE` switches only this layer off.
 pub fn near_dup_enabled() -> bool {
     static ON: OnceLock<bool> = OnceLock::new();
-    *ON.get_or_init(|| enabled() && env::var_os("OPEN_MEMORY_NO_NEAR_DUP_MERGE").is_none())
+    *ON.get_or_init(|| enabled() && env::var_os("REWIND_NO_NEAR_DUP_MERGE").is_none())
 }
 
 /// Layer 4 (shared chunk points) is implemented but OFF by default: on the real corpus it cut vector points by
 /// 37% but cost 4 of 99 answerable questions at hit@8 and made queries about 2.5x slower (see
-/// evals/reports/real/dedup.md). Set `OPEN_MEMORY_CHUNK_SHARING=1` to turn it on.
+/// evals/reports/real/dedup.md). Set `REWIND_CHUNK_SHARING=1` to turn it on.
 pub fn chunk_sharing_enabled() -> bool {
     static ON: OnceLock<bool> = OnceLock::new();
-    *ON.get_or_init(|| enabled() && env::var_os("OPEN_MEMORY_CHUNK_SHARING").is_some())
+    *ON.get_or_init(|| enabled() && env::var_os("REWIND_CHUNK_SHARING").is_some())
 }
 
 /// Identity of what the cleaner sees: everything it reads (`role`, `name`, `value`, ancestor roles and

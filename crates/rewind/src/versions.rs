@@ -102,7 +102,7 @@ impl Features {
 /// `entries` must be sorted best first. Returns them merged and ordered, same type, still best first.
 pub fn apply(mut entries: Vec<Entry>, question: &str, params: &Params) -> Vec<Entry> {
     // Optional aggregate-only profiling: no question text or source metadata is logged.
-    let started = env::var_os("OPEN_MEMORY_PROFILE_VERSIONS").map(|_| std::time::Instant::now());
+    let started = env::var_os("REWIND_PROFILE_VERSIONS").map(|_| std::time::Instant::now());
     let input_count = entries.len();
     // 1. Merge near-identical results.
     if params.dedup_jaccard > 0.0 {

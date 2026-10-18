@@ -238,10 +238,10 @@ type TimelinePageProps = {
   hits: MemoryHit[];
   busy: boolean;
   error: string;
-  onOpenMemory: () => void;
+  onRewind: () => void;
 };
 
-export function TimelinePage({ sample, hits, busy, error, onOpenMemory }: TimelinePageProps) {
+export function TimelinePage({ sample, hits, busy, error, onRewind }: TimelinePageProps) {
   const groups = useMemo(() => groupHitsByDay(hits), [hits]);
   return <div className="page-content timeline-page">
     <div className="page-heading timeline-heading">
@@ -252,7 +252,7 @@ export function TimelinePage({ sample, hits, busy, error, onOpenMemory }: Timeli
     {sample && <div className="callout neutral timeline-note"><Sparkles size={16} /> These days are invented sample data. Your real timeline stays on this Mac.</div>}
     {error && <div className="callout warning">{error}</div>}
     {busy && !groups.length && <div className="loading-state">Loading recent memory…</div>}
-    {!busy && !groups.length && <div className="empty-state timeline-empty"><span className="empty-icon"><Clock3 size={24} /></span><h3>Nothing on the timeline yet</h3><p>Start capture, or open the sample workspace to see how a day of context is organized.</p><button type="button" className="button button-secondary" onClick={onOpenMemory}>Open memory</button></div>}
+    {!busy && !groups.length && <div className="empty-state timeline-empty"><span className="empty-icon"><Clock3 size={24} /></span><h3>Nothing on the timeline yet</h3><p>Start capture, or open the sample workspace to see how a day of context is organized.</p><button type="button" className="button button-secondary" onClick={onRewind}>Rewind</button></div>}
     {groups.length > 0 && <div className="timeline-rail">
       {groups.map((group) => <section className="timeline-group" key={group.key}>
         <header className="timeline-date">
@@ -270,6 +270,6 @@ export function TimelinePage({ sample, hits, busy, error, onOpenMemory }: Timeli
       </section>)}
     </div>}
     
-    <div className="timeline-tools"><button type="button" className="button button-secondary" onClick={onOpenMemory}><Search size={15} /> Search memory</button></div>
+    <div className="timeline-tools"><button type="button" className="button button-secondary" onClick={onRewind}><Search size={15} /> Search memory</button></div>
   </div>;
 }

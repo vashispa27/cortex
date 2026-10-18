@@ -1,6 +1,6 @@
 # Control service
 
-Private metadata service for Open Memory. It stores account IDs, devices, plan/consent metadata, a monthly request ledger, and billing event IDs in SQLite. It never accepts or stores captured text, retrieved evidence, prompts, audio, or provider responses.
+Private metadata service for Rewind. It stores account IDs, devices, plan/consent metadata, a monthly request ledger, and billing event IDs in SQLite. It never accepts or stores captured text, retrieved evidence, prompts, audio, or provider responses.
 
 Run with `GF_CONTROL_SECRET=<random-secret-at-least-16-chars> node server.mjs`. The default listener is `127.0.0.1:8788`; set `GF_CONTROL_DB` for its SQLite path. Every `/internal/*` request needs `Authorization: Bearer <GF_CONTROL_SECRET>`. Keep this listener private in deployment.
 

@@ -8,13 +8,13 @@ fn main() {
         let target_dir = root.join("target");
         let target = env::var("TARGET").unwrap();
         let profile = env::var("PROFILE").unwrap();
-        for path in ["crates/open-memory/src", "crates/open-memory/build.rs", "crates/open-memory/Cargo.toml", "crates/platform-mac/native/Capture.swift"] {
+        for path in ["crates/rewind/src", "crates/rewind/build.rs", "crates/rewind/Cargo.toml", "crates/platform-mac/native/Capture.swift"] {
             println!("cargo:rerun-if-changed={}",root.join(path).display());
         }
         let mut command = Command::new("cargo");
         command.arg("build").arg("--locked")
             .arg("--manifest-path").arg(root.join("Cargo.toml"))
-            .arg("-p").arg("open-memory")
+            .arg("-p").arg("rewind")
             .arg("--target-dir").arg(&target_dir);
         let cross = env::var("HOST").unwrap() != target;
         if cross { command.arg("--target").arg(&target); }
@@ -22,7 +22,7 @@ fn main() {
         let result = command.status().expect("cargo is required to bundle the macOS daemon");
         assert!(result.success(), "macOS daemon build failed");
         let artifacts = if cross { target_dir.join(&target) } else { target_dir.clone() };
-        fs::copy(artifacts.join(&profile).join("open-memory"),out.join("open-memory-daemon"))
+        fs::copy(artifacts.join(&profile).join("rewind"),out.join("rewind-daemon"))
             .expect("could not embed macOS daemon");
     }
     tauri_build::build()

@@ -9,12 +9,12 @@ export class LocalApiError extends Error {
 }
 
 export function stateDirectory(env: NodeJS.ProcessEnv = process.env): string {
-  if (env.OPEN_MEMORY_STATE_DIR) return env.OPEN_MEMORY_STATE_DIR;
-  if (env.GOLDFISH_STATE_DIR) return env.GOLDFISH_STATE_DIR;
+  if (env.REWIND_STATE_DIR) return env.REWIND_STATE_DIR;
+  if (env.REWIND_STATE_DIR) return env.REWIND_STATE_DIR;
   switch (platform()) {
-    case 'darwin': return join(homedir(), 'Library', 'Application Support', 'Open Memory');
-    case 'win32': return join(env.LOCALAPPDATA ?? join(homedir(), 'AppData', 'Local'), 'OpenMemory');
-    default: return join(env.XDG_STATE_HOME ?? join(homedir(), '.local', 'state'), 'open-memory');
+    case 'darwin': return join(homedir(), 'Library', 'Application Support', 'Rewind');
+    case 'win32': return join(env.LOCALAPPDATA ?? join(homedir(), 'AppData', 'Local'), 'Rewind');
+    default: return join(env.XDG_STATE_HOME ?? join(homedir(), '.local', 'state'), 'rewind');
   }
 }
 

@@ -1,17 +1,17 @@
-# Goldfish answer evaluation with Jev
+# Rewind answer evaluation with Jev
 
-This folder grades the existing Goldfish answer pipeline with TypeSafe Jev through OpenRouter. Gemini uses OpenRouter's **chat completions** endpoint; Jev uses its **Decisions API**. The script creates a fresh mock fixture run to check that every piece of evidence in the answer report exactly matches the current code's evidence for the frozen invented corpus. It does not start capture or access the live state directory.
+This folder grades the existing Rewind answer pipeline with TypeSafe Jev through OpenRouter. Gemini uses OpenRouter's **chat completions** endpoint; Jev uses its **Decisions API**. The script creates a fresh mock fixture run to check that every piece of evidence in the answer report exactly matches the current code's evidence for the frozen invented corpus. It does not start capture or access the live state directory.
 
 ## Set up
 
 From the repository root:
 
 ```sh
-cargo build -p open-memory
+cargo build -p rewind
 export OPENROUTER_API_KEY='your-openrouter-key'
 ```
 
-Alternatively, the script accepts the existing `OPEN_MEMORY_LLM_API_KEY` variable. Do not put keys in the output or source files.
+Alternatively, the script accepts the existing `REWIND_LLM_API_KEY` variable. Do not put keys in the output or source files.
 
 ## Grade your existing Gemini run
 
@@ -47,7 +47,7 @@ Jev makes separate choices about evidence sufficiency, answer quality and respon
 
 Retrieval abstentions and empty results never reach the answer model: gold-absent questions count as A and answerable questions as D, deterministically and without Jev. Provider failures, malformed Jev replies, and inconsistent judge results are **ungraded errors**, never D or correct abstentions. Counts and percentages use all graded questions as the denominator; error counts appear separately. `planned_questions` and `processed` make partial runs visible.
 
-The model's **raw answer** is graded even if Goldfish's citation validator rejects it and the user would see ranked evidence instead. `invalid_answer_fallbacks` and `grades_with_valid_citations_or_retrieval_refusal` are reported separately; do not interpret raw A as an answer delivered to the user when validation failed. Citation validity is still determined by the production validator, not by Jev.
+The model's **raw answer** is graded even if Rewind's citation validator rejects it and the user would see ranked evidence instead. `invalid_answer_fallbacks` and `grades_with_valid_citations_or_retrieval_refusal` are reported separately; do not interpret raw A as an answer delivered to the user when validation failed. Citation validity is still determined by the production validator, not by Jev.
 
 Detailed records include the exact judge request, probabilities/confidence returned by Jev, answer and judge costs when supplied, and timing. The default output directory is git-ignored; keep it private. No API key is recorded. `--answers` input also contains evidence and responses and should be treated as sensitive. By default the fresh reference is removed after the run. The script checks frozen fixture files before any live request, but cannot prove the raw response in a manually altered report is invented. Do not use reports containing real captures or real personal information.
 

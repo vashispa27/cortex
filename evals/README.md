@@ -1,4 +1,4 @@
-# open-memory retrieval evals
+# rewind retrieval evals
 
 An offline harness that runs a gold question set against an **invented** corpus through the real
 chunk → embed → index → retrieve code and reports metrics. It measures; it does not fix. No LLM is
@@ -21,12 +21,12 @@ For answer-quality grading with Gemini and Jev, see [llm_judge/README.md](llm_ju
 ## Run
 
 ```bash
-cargo build -p open-memory
-target/debug/open-memory eval --corpus evals/corpus --gold evals/gold/gold.jsonl \
+cargo build -p rewind
+target/debug/rewind eval --corpus evals/corpus --gold evals/gold/gold.jsonl \
   --out evals/reports/baseline.json                  # also writes baseline.md
 ```
 
-The model is taken from `OPEN_MEMORY_MODEL_DIR`, else the Hugging Face cache for the pinned
+The model is taken from `REWIND_MODEL_DIR`, else the Hugging Face cache for the pinned
 revision, else downloaded once into `target/eval-cache`. A run takes about 10 s.
 
 Options: `--split dev|test|all` (default all), `--param key=value` (repeatable, changes the base),
@@ -41,7 +41,7 @@ regex filters and the post-cut observation-time check.
 
 ```bash
 # the ablation set recorded with the baseline
-target/debug/open-memory eval --out evals/reports/ablations/ablation.json \
+target/debug/rewind eval --out evals/reports/ablations/ablation.json \
   --sweep mode=dense_only,bm25_only --sweep rerank_bonus=off --sweep filters=off \
   --sweep derived=off --sweep chunk_target=800,3200
 python3 evals/tools/compare.py evals/reports/ablations/ablation.json evals/reports/ablations/ablation.*-*.json \
@@ -66,7 +66,7 @@ Everything below is opt-in; the default `eval` run is unchanged.
   snapshots), the ingest curve, apparent vs allocated index bytes and a per-file `index_size` breakdown.
 * `--query-repeats N`: re-run each query N times; `query_latency_ms` covers all samples and
   `query_latency_best_of_repeats_ms` the per-query fastest run (robust against machine load).
-* `open-memory ingest-fixtures --corpus DIR --dump-bodies OUT` writes every fixture's cleaned body and an index.
+* `rewind ingest-fixtures --corpus DIR --dump-bodies OUT` writes every fixture's cleaned body and an index.
 * Real data (never committed): `evals/tools/export_real.py` exports the real database as fixtures into
   `evals/private/corpus`; `evals/tools/gold_author.py` browses cleaned bodies and appends gold questions with
   the answer-string check; gold goes in `evals/private/gold.jsonl` (types as above plus `terminal_output`,
@@ -74,8 +74,8 @@ Everything below is opt-in; the default `eval` run is unchanged.
   git-ignored. `evals/tools/transfer_table.py`, `transfer_types.py`, `ablation_table.py` and
   `dedup_potential.py` produce aggregate-only tables from the reports.
 * `evals/run_all.sh` builds and runs the invented and real evals, saves timestamped reports and prints the key numbers against the previous run.
-* Ingest-time dedup switches (env): `OPEN_MEMORY_NO_INGEST_DEDUP=1` (all off), `OPEN_MEMORY_NO_NEAR_DUP_MERGE=1`, `OPEN_MEMORY_CHUNK_SHARING=1` (on; off by default); results in `reports/real/dedup.md`.
-* Raw Accessibility trees are deleted 7 days after a snapshot was last seen (`raw-trees` command, automatic in `capture`); evals and `export_real.py` need them, so set `OPEN_MEMORY_RAW_TREE_DAYS=forever` while collecting data for evals.
+* Ingest-time dedup switches (env): `REWIND_NO_INGEST_DEDUP=1` (all off), `REWIND_NO_NEAR_DUP_MERGE=1`, `REWIND_CHUNK_SHARING=1` (on; off by default); results in `reports/real/dedup.md`.
+* Raw Accessibility trees are deleted 7 days after a snapshot was last seen (`raw-trees` command, automatic in `capture`); evals and `export_real.py` need them, so set `REWIND_RAW_TREE_DAYS=forever` while collecting data for evals.
 * Scale test: see `evals/scale/README.md` (generator, runner, summariser).
 
 ## Definitions
@@ -120,6 +120,6 @@ Everything below is opt-in; the default `eval` run is unchanged.
   reproduce `ask`, `ask` output is byte-identical (`ask_regression.sh`), and the only intentional
   difference is that exactly tied RRF scores are ordered by point id instead of arbitrarily.
 
-Aggregate-only version profiling: `OPEN_MEMORY_PROFILE_VERSIONS=1` logs candidate/merge counts and
+Aggregate-only version profiling: `REWIND_PROFILE_VERSIONS=1` logs candidate/merge counts and
 merge/order microseconds per retrieval pass to stderr; it never logs the question or source text.
 Features used for pairwise version merging are query-local; the public ingest merge rule is unchanged.

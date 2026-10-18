@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Opens every evals/pages/*.html in Safari, one at a time, long enough for one capture poll.
-# Run it in a second Terminal tab while `open-memory capture --print` runs in the first.
+# Run it in a second Terminal tab while `rewind capture --print` runs in the first.
 # Do not click into other windows while it runs: capture reads whatever is frontmost.
 set -euo pipefail
 root=$(cd "$(dirname "$0")/../.." && pwd)

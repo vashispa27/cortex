@@ -41,6 +41,6 @@ the base shard), chunk count 88 -> 87.
 ## Migration
 No schema change and no `cleaner::VERSION` bump: the stored `chunks` rows keep their meaning
 (`start_byte`/`end_byte` into the stored body, UTF-8 aligned). New snapshots are chunked with the new rules;
-existing snapshots keep their old chunks until the user runs `open-memory capture --apply-cleaning`, which
+existing snapshots keep their old chunks until the user runs `rewind capture --apply-cleaning`, which
 re-chunks every stored body and rebuilds the vector index (that is theirs to run on their own data). A
 live database can therefore hold both kinds of chunks; retrieval treats them identically.

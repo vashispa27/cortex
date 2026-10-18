@@ -4,7 +4,7 @@ export type NotchMode = "collapsed" | "compose" | "thinking" | "answer" | "histo
 
 export type MainPage = "today" | "timeline" | "ask" | "memory" | "settings";
 
-const activeSessionKey = "open-memory.rewind.active-session.v1";
+const activeSessionKey = "rewind.rewind.active-session.v1";
 
 export async function setNotchMode(mode: NotchMode, focus = true, reduceMotion = false): Promise<void> {
   if (!isTauri()) return;
@@ -66,7 +66,7 @@ export async function restorePreviousApp(): Promise<void> {
 export async function previewNotch(mode: NotchMode): Promise<void> {
   if (!isTauri()) {
     const url = `/index.html?window=notch&preview=1&mode=${mode}`;
-    const preview = window.open(url, "open-memory-notch-preview", "popup,width=700,height=520");
+    const preview = window.open(url, "rewind-notch-preview", "popup,width=700,height=520");
     if (preview && preview.location.href !== new URL(url, window.location.href).href) {
       try { preview.location.href = url; } catch { /* Cross-window navigation can be blocked. */ }
     }

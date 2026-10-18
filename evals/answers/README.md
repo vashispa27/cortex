@@ -3,18 +3,18 @@
 This evaluates retrieval, the production evidence builder and citation validator together. The default provider is a gold-aware scripted mock: it copies a gold fact only if that fact survives in the correct sent source, otherwise it refuses. Its results verify plumbing, **not model quality**. It is not a simulated independent model. See the [mock report](../reports/answers/mock-pipeline.md).
 
 ```sh
-cargo build -p open-memory
-target/debug/open-memory eval-answers --mock --corpus evals/corpus \
+cargo build -p rewind
+target/debug/rewind eval-answers --mock --corpus evals/corpus \
   --gold evals/gold/gold.jsonl --out evals/answers/out/mock.json
 ```
 
-Live evaluation requires an explicit `--live`, and is restricted to the verified frozen invented corpus and gold. Never supply private captures. The command does not start capture or open the live state directory. It creates a temporary index, injects the retrieval eval's clock, and uses `OPEN_MEMORY_MODEL_DIR` or the pinned model cache. The provider may be a remote service; the following command transmits invented evidence to it:
+Live evaluation requires an explicit `--live`, and is restricted to the verified frozen invented corpus and gold. Never supply private captures. The command does not start capture or open the live state directory. It creates a temporary index, injects the retrieval eval's clock, and uses `REWIND_MODEL_DIR` or the pinned model cache. The provider may be a remote service; the following command transmits invented evidence to it:
 
 ```sh
-export OPEN_MEMORY_LLM_URL='https://your-provider.example/v1/chat/completions'
-export OPEN_MEMORY_LLM_MODEL='your-model'
-export OPEN_MEMORY_LLM_API_KEY='your-key' # optional when the provider does not require one
-target/debug/open-memory eval-answers --live --corpus evals/corpus \
+export REWIND_LLM_URL='https://your-provider.example/v1/chat/completions'
+export REWIND_LLM_MODEL='your-model'
+export REWIND_LLM_API_KEY='your-key' # optional when the provider does not require one
+target/debug/rewind eval-answers --live --corpus evals/corpus \
   --gold evals/gold/gold.jsonl --out evals/answers/out/live.json
 ```
 

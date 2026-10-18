@@ -195,7 +195,7 @@ fn install_capture_bundle(root: &Path) -> Result<PathBuf> {
 fn is_self(app: &str) -> bool {
     matches!(
         app,
-        "app.open-memory.desktop" | "app.rewind.desktop" | "app.rewind.capture"
+        "app.rewind.desktop" | "app.rewind.capture"
     )
 }
 extern "C" {
@@ -489,7 +489,7 @@ pub fn serve(state: &Path) -> Result<()> {
         .map(PathBuf::from)
         .unwrap_or_else(|| state.parent().unwrap_or(state).to_path_buf());
     fs::create_dir_all(&root)?;
-    if env::var("OPEN_MEMORY_EXIT_ON_STDIN_EOF").as_deref() == Ok("1") {
+    if env::var("REWIND_EXIT_ON_STDIN_EOF").as_deref() == Ok("1") {
         thread::spawn(|| {
             let mut byte = [0u8; 1];
             loop {
@@ -502,7 +502,7 @@ pub fn serve(state: &Path) -> Result<()> {
     let socket = state.join("capture.sock");
     if UnixStream::connect(&socket).is_ok() {
         bail!(
-            "Open Memory already owns this archive; stop its capture process before opening Rewind"
+            "Rewind already owns this archive; stop its capture process before opening Rewind"
         );
     }
     if socket.exists() {
@@ -515,7 +515,7 @@ pub fn serve(state: &Path) -> Result<()> {
     let helper = install_capture_bundle(&root)?;
     let mut db = open_db(state)?;
     let count = import_legacy(&root, &mut db)?;
-    eprintln!("Imported {count} legacy desktop captures into the shared Open Memory archive");
+    eprintln!("Imported {count} legacy desktop captures into the shared Rewind archive");
     drop(db);
     let mut runtime = open_runtime(state, false)?;
     while runtime.index_pending()? > 0 {}

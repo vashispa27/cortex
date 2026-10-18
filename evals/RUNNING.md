@@ -1,7 +1,7 @@
 # Running the evals (one page)
 
 Everything below lives inside this repository. Nothing is read from or written to anywhere else, and the eval never
-touches your live memory (`~/Library/Application Support/Open Memory`).
+touches your live memory (`~/Library/Application Support/Rewind`).
 
 ## Commands
 
@@ -47,7 +47,7 @@ To keep a safe copy, archive `evals/private/` yourself and keep it with your own
 ## Isolation from your real vectors
 
 The eval builds a fresh SQLite file and a fresh Qdrant index per run inside `evals/.work/` (via `TMPDIR`), and deletes
-them afterwards. `ingest-fixtures` refuses to run unless `OPEN_MEMORY_STATE_DIR` is set explicitly. The embedding model
+them afterwards. `ingest-fixtures` refuses to run unless `REWIND_STATE_DIR` is set explicitly. The embedding model
 is read from the Hugging Face cache or `target/eval-cache`, never from your state directory.
 
 ## Other tools

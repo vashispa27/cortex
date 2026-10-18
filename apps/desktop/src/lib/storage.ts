@@ -48,7 +48,7 @@ export const defaultPreferences: Preferences = {
   openrouterModel: "",
 };
 
-const key = "open-memory.desktop.preferences.v1";
+const key = "rewind.desktop.preferences.v1";
 
 export function loadPreferences(): Preferences {
   try {
@@ -71,7 +71,7 @@ export type Reminder = {
   delivered: string[];
 };
 
-const reminderKey = "open-memory.desktop.reminders.v1";
+const reminderKey = "rewind.desktop.reminders.v1";
 
 export function loadReminders(): Reminder[] {
   try {

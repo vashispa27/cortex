@@ -1,9 +1,9 @@
 {
-  "name": "open-memory-mcp",
+  "name": "rewind-mcp",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "bin": { "open-memory-mcp": "./dist/index.js", "open-memory-mcp-register": "./dist/register.js" },
+  "bin": { "rewind-mcp": "./dist/index.js", "rewind-mcp-register": "./dist/register.js" },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && node --test dist/*.test.js"

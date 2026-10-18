@@ -1,16 +1,16 @@
-# Task: build a baseline evaluation harness for the open-memory RAG pipeline
+# Task: build a baseline evaluation harness for the rewind RAG pipeline
 
-You are working in `/Users/abhinavvashisht/workspace/goldfish-implementation` (Rust workspace, macOS-only crate `crates/open-memory`). Your job is to build an offline evaluation harness and produce a **baseline report** for the current chunking and retrieval. You are **not** fixing retrieval weaknesses in this task. Fixes come later, one at a time, measured against your baseline.
+You are working in `/Users/abhinavvashisht/workspace/rewind` (Rust workspace, macOS-only crate `crates/rewind`). Your job is to build an offline evaluation harness and produce a **baseline report** for the current chunking and retrieval. You are **not** fixing retrieval weaknesses in this task. Fixes come later, one at a time, measured against your baseline.
 
-Read first: `README.md`, `docs/implementation-status.md`, `docs/snapshot-text-cleaning-plan.md`, and spec section 8 and 16.4 in `goldfish-end-to-end-spec.md`.
+Read first: `README.md`, `docs/implementation-status.md`, `docs/snapshot-text-cleaning-plan.md`, and spec section 8 and 16.4 in `rewind-end-to-end-spec.md`.
 
 ## How the system works today
 
-- Capture: foreground Accessibility (AX) nodes go through `cleaner::clean` (`crates/open-memory/src/cleaner.rs`, cleaner v3). It keeps main content, drops navigation, toolbars, action controls and composer text, and joins fragments. Output is a cleaned `body`, a `quality` (`main_content`, `uncertain`, `navigation_only`), and per-node drop reasons.
+- Capture: foreground Accessibility (AX) nodes go through `cleaner::clean` (`crates/rewind/src/cleaner.rs`, cleaner v3). It keeps main content, drops navigation, toolbars, action controls and composer text, and joins fragments. Output is a cleaned `body`, a `quality` (`main_content`, `uncertain`, `navigation_only`), and per-node drop reasons.
 - Chunking: `cleaner::chunks` (cleaner.rs:221) splits on lines, then sentences, with a 1,600-byte target and no overlap. It starts a new chunk at speaker markers ("You said:", "ChatGPT said:", "... sent the following message:"). Chunks are stored in SQLite `chunks` with byte spans into the snapshot body.
-- Indexing: `Runtime::index_pending` (main.rs:355) embeds each chunk with Model2Vec `minishlab/potion-base-32M` (512-dim dense) plus BM25 sparse, into a Qdrant Edge shard (`crates/open-memory/src/main.rs`). "Derived" points (topic, entity, hour, day extractive summaries) are indexed into the same shard.
+- Indexing: `Runtime::index_pending` (main.rs:355) embeds each chunk with Model2Vec `minishlab/potion-base-32M` (512-dim dense) plus BM25 sparse, into a Qdrant Edge shard (`crates/rewind/src/main.rs`). "Derived" points (topic, entity, hour, day extractive summaries) are indexed into the same shard.
 - Retrieval: `answer()` (main.rs:917) applies regex-derived filters (`query_filter`, main.rs:831: app words, domain, "private", date via `time_bounds`), runs dense top-80 and BM25 top-80, fuses with RRF (k=60) to 40, collapses to one result per body (`evidence_key`), re-sorts with a keyword-count bonus, truncates to 8, then prints text and optionally calls an LLM (`llm_answer`).
-- There are currently no tests in `crates/open-memory` and no evals anywhere.
+- There are currently no tests in `crates/rewind` and no evals anywhere.
 
 ## Goal and non-goals
 
@@ -19,7 +19,7 @@ Goal: a repeatable command that runs a gold question set against a synthetic cor
 Non-goals (do not do these):
 - Do not change retrieval, chunking or cleaning behavior. The refactor in step 1 must be behavior-preserving.
 - Do not fix the weaknesses listed at the end. Only write the eval cases that expose them.
-- Do not enable live capture, request Accessibility permission, or read the user's real state directory (`~/Library/Application Support/Open Memory/local-memory`). Always use a temp dir through `OPEN_MEMORY_STATE_DIR`.
+- Do not enable live capture, request Accessibility permission, or read the user's real state directory (`~/Library/Application Support/Rewind/local-memory`). Always use a temp dir through `REWIND_STATE_DIR`.
 - Do not commit real personal data. All fixture text must be invented.
 - Do not add an LLM call to the eval path in this task (answer-quality judging is a later phase).
 
@@ -31,7 +31,7 @@ Non-goals (do not do these):
 - `Params` carries the current constants with their current values as defaults: prefetch depth (80), fused limit (40), RRF k (60), final truncate (8), plus switches for `use_filters`, `use_rerank_bonus`, `include_derived`, and `mode` (hybrid, dense_only, bm25_only). Defaults must reproduce today's output exactly.
 - `answer()` becomes a thin wrapper that calls `retrieve` and formats. Verify with a before/after comparison that `ask` output on a fixed fixture is byte-identical (capture the "before" output first).
 
-Keep the crate building as a binary. If a lib target is cleaner, add `src/lib.rs`, but keep `#![cfg(target_os = "macos")]` semantics and make sure `cargo build -p open-memory` and `cargo test --workspace` still work on macOS.
+Keep the crate building as a binary. If a lib target is cleaner, add `src/lib.rs`, but keep `#![cfg(target_os = "macos")]` semantics and make sure `cargo build -p rewind` and `cargo test --workspace` still work on macOS.
 
 ## Step 2: fixture ingest path
 
@@ -49,7 +49,7 @@ Realism matters: the cleaner depends on AX tree structure, so fixtures must have
 
 **You write the HTML pages; the user only runs the capture.** Author one self-contained `.html` file per corpus page in `evals/pages/` (no external assets, invented content only, planted facts with known exact strings). Style each like the real app so Safari/Chrome expose a realistic AX tree: for a ChatGPT-style page use a sidebar with a chat list, a header, `article` elements per turn with "You said:" / "ChatGPT said:" headings, Copy / Rate response / Share buttons, a footer disclaimer ("ChatGPT can make mistakes. Check important info.") and a prompt textarea; for multi-speaker chat use a conversation list, a message list with sender names and displayed times (e.g. "Lokesh 10:42 AM"), and a composer; for articles use nav, `main`, headings and a footer; likewise for email, terminal-like pages and notes. Use semantic HTML and ARIA roles/labels (`role="main"`, `aria-label="Conversation"`, `aria-label="Chat history"`, etc.) the way the real sites do, because `cleaner::region` keys on those labels. The repo's own manual check (README, "Manual macOS check") used an invented chat page opened in Safari; follow that precedent.
 
-Then write `evals/CAPTURE.md`: exact, short steps for the user to capture every page on their Mac (`OPEN_MEMORY_STATE_DIR="$(mktemp -d)" target/debug/open-memory capture --print`, open each page in Safari, wait for `new #N`, move on), plus a small script `evals/export_fixtures.*` that reads that temp SQLite database and writes `evals/corpus/<page-stem>.json` fixtures (app_id, title, url, source_type, `ax_nodes_json` roots) matched back to the HTML filename by URL. Do not run capture or request Accessibility permission yourself; the user does this step and confirms.
+Then write `evals/CAPTURE.md`: exact, short steps for the user to capture every page on their Mac (`REWIND_STATE_DIR="$(mktemp -d)" target/debug/rewind capture --print`, open each page in Safari, wait for `new #N`, move on), plus a small script `evals/export_fixtures.*` that reads that temp SQLite database and writes `evals/corpus/<page-stem>.json` fixtures (app_id, title, url, source_type, `ax_nodes_json` roots) matched back to the HTML filename by URL. Do not run capture or request Accessibility permission yourself; the user does this step and confirms.
 
 Until the user has captured, develop and test the harness against a few hand-authored AX fixtures built from the `cleaner.rs` region rules, mark them `provenance: hand_authored`, and replace or supplement them once real captures arrive (`provenance: real_capture_invented_content`). Keep a single `evals/pages/<stem>.facts.json` per page listing planted facts and `noise_strings` (UI text that must not leak into the cleaned body), which the gold set and cleaner checks reference.
 
@@ -85,7 +85,7 @@ Rules:
 
 ## Step 5: the `eval` subcommand
 
-Add `open-memory eval --corpus evals/corpus --gold evals/gold/gold.jsonl [--split dev|test|all] [--param key=value ...] --out evals/reports/<name>.json`. Load the embedding model once. Use a fresh temp state dir per run (delete afterwards). Make runs deterministic.
+Add `rewind eval --corpus evals/corpus --gold evals/gold/gold.jsonl [--split dev|test|all] [--param key=value ...] --out evals/reports/<name>.json`. Load the embedding model once. Use a fresh temp state dir per run (delete afterwards). Make runs deterministic.
 
 Compute, overall and per `type`:
 - **Chunk-level** (from the pre-collapse list): Recall@1/5/8/10/40, MRR, nDCG@10, hit = chunk text contains `answer_text`.
@@ -118,9 +118,9 @@ Run the eval with default params and commit the report as `evals/reports/baselin
 
 ## Acceptance criteria
 
-- `cargo build -p open-memory` and `cargo test --workspace` pass on macOS (ignored known-weakness tests are fine and must be listed).
+- `cargo build -p rewind` and `cargo test --workspace` pass on macOS (ignored known-weakness tests are fine and must be listed).
 - `ask` output on a fixed fixture is byte-identical before and after the refactor (show the diff check).
-- `open-memory eval ...` runs end to end from a clean checkout, in a temp state dir, and is deterministic across two runs (same report apart from timing fields).
+- `rewind eval ...` runs end to end from a clean checkout, in a temp state dir, and is deterministic across two runs (same report apart from timing fields).
 - Every `answer_text` in the gold set is verified against the cleaned bodies at ingest.
 - The baseline report and ablation numbers are committed, with a short summary of what the numbers say and where the pipeline is weakest by query type.
 - Nothing touches the user's real state directory or enables capture.

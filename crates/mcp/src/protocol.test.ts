@@ -8,14 +8,14 @@ import { Client } from '@modelcontextprotocol/client';
 import { StdioClientTransport } from '@modelcontextprotocol/client/stdio';
 
 test('stdio bridge negotiates MCP and fails closed with no daemon', async () => {
-  const stateDir = await mkdtemp(join(tmpdir(), 'open-memory-empty-state-'));
+  const stateDir = await mkdtemp(join(tmpdir(), 'rewind-empty-state-'));
   const serverFile = join(dirname(fileURLToPath(import.meta.url)), 'index.js');
   const client = new Client({ name: 'bridge-test', version: '1.0.0' });
   try {
     await client.connect(new StdioClientTransport({
       command: process.execPath,
       args: [serverFile],
-      env: { ...process.env, OPEN_MEMORY_STATE_DIR: stateDir } as Record<string, string>,
+      env: { ...process.env, REWIND_STATE_DIR: stateDir } as Record<string, string>,
     }));
     const listed = await client.listTools();
     assert.ok(listed.tools.some(tool => tool.name === 'search_memory'));

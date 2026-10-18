@@ -10,7 +10,7 @@ export type RewindSession = {
   messages: ChatMessage[];
 };
 
-const storageKey = "open-memory.rewind.sessions.v1";
+const storageKey = "rewind.rewind.sessions.v1";
 const maxSessions = 30;
 
 export function sessionTitle(text: string): string {

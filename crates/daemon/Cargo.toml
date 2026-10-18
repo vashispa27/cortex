@@ -1,12 +1,12 @@
 [package]
-name = "goldfish-daemon"
+name = "rewind-daemon"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-goldfish-contracts = { path = "../contracts" }
-goldfish-capture = { path = "../capture" }
-goldfish-memory = { path = "../memory" }
+rewind-contracts = { path = "../contracts" }
+rewind-capture = { path = "../capture" }
+rewind-memory = { path = "../memory" }
 axum = { version = "0.7", features = ["json"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
@@ -20,5 +20,5 @@ url = "2"
 libc = "0.2"
 
 [[bin]]
-name = "goldfish-daemon"
+name = "rewind-daemon"
 path = "src/main.rs"

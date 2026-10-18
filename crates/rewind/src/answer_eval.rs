@@ -82,9 +82,9 @@ pub fn run(args: &[String]) -> Result<()> {
         if !status.success() {
             bail!("frozen fixture verification failed");
         }
-        env::var("OPEN_MEMORY_LLM_URL").context("OPEN_MEMORY_LLM_URL is required for --live")?;
-        env::var("OPEN_MEMORY_LLM_MODEL")
-            .context("OPEN_MEMORY_LLM_MODEL is required for --live")?;
+        env::var("REWIND_LLM_URL").context("REWIND_LLM_URL is required for --live")?;
+        env::var("REWIND_LLM_MODEL")
+            .context("REWIND_LLM_MODEL is required for --live")?;
     }
     env::set_var("TZ", "UTC");
     let now = Utc
@@ -108,11 +108,11 @@ pub fn run(args: &[String]) -> Result<()> {
         }
         golds.push(g);
     }
-    if env::var_os("OPEN_MEMORY_MODEL_DIR").is_none() {
-        env::set_var("OPEN_MEMORY_MODEL_DIR", eval::resolve_model_dir()?);
+    if env::var_os("REWIND_MODEL_DIR").is_none() {
+        env::set_var("REWIND_MODEL_DIR", eval::resolve_model_dir()?);
     }
     let tmp = Temp(env::temp_dir().join(format!(
-        "open-memory-answer-eval-{}-{}",
+        "rewind-answer-eval-{}-{}",
         std::process::id(),
         SystemTime::now().duration_since(UNIX_EPOCH)?.as_nanos()
     )));
@@ -245,7 +245,7 @@ pub fn run(args: &[String]) -> Result<()> {
         });
         records.push(json!({"id":g.id,"type":g.qtype,"split":g.split,"retrieved_ids":ids,"retrieval_abstained":retrieval.abstained,
             "fact_state":fact_state,"sufficient_evidence":sufficient,"sensitive_placeholders":prepared.as_ref().map_or(0, |p| p.messages.iter().map(|m| { let text = m["content"].as_str().unwrap_or(""); ["[SECRET]", "[FINANCIAL_ID]", "[FINANCIAL_AMOUNT]", "[PAYMENT_CARD]"].iter().map(|label| text.matches(label).count()).sum::<usize>() }).sum::<usize>()),"prepared":prepared,"prompt_version":pipeline::PROMPT_VERSION,
-            "model":if live {env::var("OPEN_MEMORY_LLM_MODEL").unwrap_or_default()} else {"gold-aware-scripted-mock".into()},
+            "model":if live {env::var("REWIND_LLM_MODEL").unwrap_or_default()} else {"gold-aware-scripted-mock".into()},
             "raw_answer":answer,"citations":citations,"validation_error":validation,"provider_error":error,"usage":usage,"scores":scores,
             "latency_ms":{"retrieval":retrieval_ms,"preparation":prep_ms,"model":model_ms,"total":millis(total)}}));
     }

@@ -1,10 +1,10 @@
-use goldfish_capture::{BrowserContext, CapturePolicy, RawWindow};
-use goldfish_memory::MemoryStore;
+use rewind_capture::{BrowserContext, CapturePolicy, RawWindow};
+use rewind_memory::MemoryStore;
 use serde::Deserialize;
 use std::{fs, io::{self, Write}, os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt}, path::{Path, PathBuf}, process::Stdio, sync::Arc, time::Duration};
 use tokio::{process::Command, time::{interval, timeout, MissedTickBehavior}};
 
-const HELPER: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/open-memory-ax-helper"));
+const HELPER: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/rewind-ax-helper"));
 const MAX_HELPER_OUTPUT: usize = 512 * 1024;
 
 #[derive(Deserialize)]
@@ -109,7 +109,6 @@ pub async fn capture_loop(path: PathBuf, store: Arc<MemoryStore>) {
         }
         let Ok(epoch) = store.memory_epoch() else { previous = None; continue; };
         let mut excluded_args: Vec<String> = vec![
-            "--exclude-app=app.open-memory.desktop".into(),
             "--exclude-app=app.rewind.desktop".into(),
             "--exclude-app=app.rewind.capture".into(),
             "--exclude-app=com.apple.securityagent".into(),

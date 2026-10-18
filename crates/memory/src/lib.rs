@@ -1,5 +1,5 @@
-use goldfish_capture::SanitizedSnapshot;
-use goldfish_contracts::{Coverage, CoverageState, RecentResponse, SearchRequest, SearchResponse, SearchResult, Snapshot, SnapshotsResponse};
+use rewind_capture::SanitizedSnapshot;
+use rewind_contracts::{Coverage, CoverageState, RecentResponse, SearchRequest, SearchResponse, SearchResult, Snapshot, SnapshotsResponse};
 use chrono::{NaiveDate, TimeZone, Utc};
 use chrono_tz::Tz;
 use rusqlite::{params, Connection, OptionalExtension};
@@ -389,7 +389,7 @@ fn safe_fts_terms(query: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use goldfish_capture::{BrowserContext,CapturePolicy,RawNode,RawWindow,SessionState};
+    use rewind_capture::{BrowserContext,CapturePolicy,RawNode,RawWindow,SessionState};
 
     fn capture(text: &str, ms: i64) -> SanitizedSnapshot {
         CapturePolicy { consent: true, ..Default::default() }.sanitize(&RawWindow {
@@ -434,11 +434,11 @@ mod tests {
         let db = MemoryStore::in_memory().unwrap();
         let real = db.ingest(&capture("Instagram Saurabh Thakur",1_000)).unwrap();
         let mut self_capture = capture("Rewind home LOCAL PREVIEW",2_000);
-        self_capture.app_id = "app.open-memory.desktop".into();
+        self_capture.app_id = "app.rewind.desktop".into();
         self_capture.window_session_id = "rewind-window".into();
         let self_id = db.ingest(&self_capture).unwrap();
         assert_eq!(db.snapshot_count().unwrap(),2);
-        assert_eq!(db.purge_app_snapshots("app.open-memory.desktop",3_000).unwrap(),1);
+        assert_eq!(db.purge_app_snapshots("app.rewind.desktop",3_000).unwrap(),1);
         assert_eq!(db.snapshots(&[self_id]).unwrap().snapshots.len(),0);
         assert_eq!(db.snapshots(&[real]).unwrap().snapshots.len(),1);
         assert_eq!(db.memory_epoch().unwrap(),0);

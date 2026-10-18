@@ -27,10 +27,10 @@ test('no unconfigured download redirect or fabricated price', async (t) => {
 });
 
 test('configured HTTPS artifact redirects and pricing is displayed', async (t) => {
-  const base = await site(t, { siteUrl: 'https://example.invalid', pricing: 'Private beta is free.', downloads: { macos: 'https://example.invalid/open-memory.pkg' } });
+  const base = await site(t, { siteUrl: 'https://example.invalid', pricing: 'Private beta is free.', downloads: { macos: 'https://example.invalid/rewind.pkg' } });
   const home = await (await fetch(base)).text();
   assert.match(home, /Private beta is free/);
   const download = await fetch(base + '/download/macos', { redirect: 'manual' });
   assert.equal(download.status, 302);
-  assert.equal(download.headers.get('location'), 'https://example.invalid/open-memory.pkg');
+  assert.equal(download.headers.get('location'), 'https://example.invalid/rewind.pkg');
 });

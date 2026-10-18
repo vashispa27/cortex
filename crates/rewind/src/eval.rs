@@ -1,4 +1,4 @@
-//! Offline retrieval evaluation: `open-memory eval --corpus DIR --gold FILE --out FILE`.
+//! Offline retrieval evaluation: `rewind eval --corpus DIR --gold FILE --out FILE`.
 //!
 //! Loads invented AX fixtures into a throwaway state directory through the real
 //! record -> chunk -> embed -> index path, runs the gold questions through `retrieve`, and writes
@@ -1018,7 +1018,7 @@ fn probes(db: &Connection, now_ms: i64, params: &Params) -> Result<Value> {
 
 // ------------------------------------------------------------------------------- driver
 
-/// Where the pinned embedding model comes from when `OPEN_MEMORY_MODEL_DIR` is not set: an
+/// Where the pinned embedding model comes from when `REWIND_MODEL_DIR` is not set: an
 /// existing Hugging Face hub cache entry for the pinned revision, else a download (checksum
 /// verified) into `<repo>/target/eval-cache`, which later runs reuse. Never the user's state dir.
 pub(crate) fn resolve_model_dir() -> Result<PathBuf> {
@@ -1096,7 +1096,7 @@ pub fn run(args: &[String]) -> Result<()> {
         }
     }
     for (group, target) in targets.iter().enumerate() {
-        let state = env::temp_dir().join(format!("open-memory-eval-{}-{}", std::process::id(), group));
+        let state = env::temp_dir().join(format!("rewind-eval-{}-{}", std::process::id(), group));
         if state.exists() {
             fs::remove_dir_all(&state)?;
         }
@@ -1133,8 +1133,8 @@ fn run_group(
     facts: &BTreeMap<String, Facts>,
     now_ms: i64,
 ) -> Result<StaticModel> {
-    if model.is_none() && env::var_os("OPEN_MEMORY_MODEL_DIR").is_none() {
-        env::set_var("OPEN_MEMORY_MODEL_DIR", resolve_model_dir()?);
+    if model.is_none() && env::var_os("REWIND_MODEL_DIR").is_none() {
+        env::set_var("REWIND_MODEL_DIR", resolve_model_dir()?);
     }
     let mut runtime = open_runtime_with(state, false, model, index_prefix)?;
     let ingest_started = std::time::Instant::now();

@@ -3,7 +3,7 @@
 Question: do quality, latency and index size hold up when the index is 100x to 1000x larger?
 
 Everything here is additive: no production retrieval, chunking, cleaning or storage behaviour is touched.
-The only change in shared code is `open-memory eval --extra-corpus DIR` (ingest a second directory, score
+The only change in shared code is `rewind eval --extra-corpus DIR` (ingest a second directory, score
 only the gold questions) and `--query-repeats N` (more latency samples), see `evals/README.md`.
 
 ## Inputs
@@ -42,8 +42,8 @@ What the generator emits (see the docstring in `gen_distractors.py`):
 ## Run
 
 ```bash
-cargo build --release -p open-memory
-evals/scale/run_scale.sh target/release/open-memory evals/private/reports/scale \
+cargo build --release -p rewind
+evals/scale/run_scale.sh target/release/rewind evals/private/reports/scale \
     inv-base inv-hard inv-real inv-1k inv-10k inv-10k-hard real-base real-1k real-10k real-mut
 python3 evals/scale/summarize.py evals/private/reports/scale          # aggregate table
 ```

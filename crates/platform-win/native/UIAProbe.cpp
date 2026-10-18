@@ -7,7 +7,7 @@
 // Run only with --live. Reads the currently focused UIA control's role and value
 // after checking IsPassword. It never calls SetValue or sends keys.
 int synthetic() {
-    HWND root = CreateWindowExW(0, L"STATIC", L"Open Memory Synthetic UIA Fixture", WS_OVERLAPPEDWINDOW,
+    HWND root = CreateWindowExW(0, L"STATIC", L"Rewind Synthetic UIA Fixture", WS_OVERLAPPEDWINDOW,
                                 CW_USEDEFAULT, CW_USEDEFAULT, 450, 160, nullptr, nullptr, GetModuleHandleW(nullptr), nullptr);
     if (!root) return 10;
     HWND edit = CreateWindowExW(WS_EX_CLIENTEDGE, L"EDIT", L"Synthetic hello", WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL,

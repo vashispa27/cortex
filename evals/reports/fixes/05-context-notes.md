@@ -37,6 +37,6 @@ be re-measured on real data or a larger gold set; enabling it would be a one-lin
 
 ## Decision for the user
 * The sender-label rule changes the stored text of newly captured Slack-like windows. Existing snapshots keep
-  the old text until `open-memory capture --apply-cleaning` is run. A `cleaner::VERSION` bump (3 -> 4) would
+  the old text until `rewind capture --apply-cleaning` is run. A `cleaner::VERSION` bump (3 -> 4) would
   make `open_runtime` demand that run on first start; I did not bump it because that forces a migration on
   the user's own database. Bump it if you want existing data re-cleaned.

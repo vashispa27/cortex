@@ -19,7 +19,7 @@ const server = createServer((request, response) => {
 });
 
 before(async () => {
-  dir = await mkdtemp(join(tmpdir(), 'open-memory-mcp-test-'));
+  dir = await mkdtemp(join(tmpdir(), 'rewind-mcp-test-'));
   await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve));
   const address = server.address();
   if (!address || typeof address === 'string') throw new Error('Unexpected test address');

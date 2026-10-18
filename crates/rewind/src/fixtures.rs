@@ -75,8 +75,8 @@ pub fn load_corpus(dir: &Path) -> Result<Vec<Loaded>> {
 
 /// Refuses to run against the default state directory: fixtures are throwaway data.
 pub fn require_isolated_state() -> Result<PathBuf> {
-    let dir = env::var_os("OPEN_MEMORY_STATE_DIR")
-        .context("set OPEN_MEMORY_STATE_DIR to a temporary directory; fixtures never use the default state directory")?;
+    let dir = env::var_os("REWIND_STATE_DIR")
+        .context("set REWIND_STATE_DIR to a temporary directory; fixtures never use the default state directory")?;
     Ok(PathBuf::from(dir))
 }
 
@@ -217,7 +217,7 @@ pub fn ingest_merged(
     Ok(out)
 }
 
-/// `open-memory ingest-fixtures --corpus DIR`: fills `$OPEN_MEMORY_STATE_DIR` and exits.
+/// `rewind ingest-fixtures --corpus DIR`: fills `$REWIND_STATE_DIR` and exits.
 pub fn run_cli(args: &[String]) -> Result<()> {
     let mut corpus = PathBuf::from("evals/corpus");
     let mut dump: Option<PathBuf> = None;

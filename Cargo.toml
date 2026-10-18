@@ -6,7 +6,7 @@ members = [
   "crates/daemon",
   "crates/platform-mac",
   "crates/platform-win",
-  "crates/open-memory",
+  "crates/rewind",
 ]
 resolver = "2"
 exclude = ["apps/desktop/src-tauri"]

@@ -1608,75 +1608,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e629b9b98ef3dd8afe6ca2bd0f89306cec16d43d907889945bc5d6687f2f13c7"
 
 [[package]]
-name = "goldfish-capture"
-version = "0.1.0"
-dependencies = [
- "goldfish-contracts",
- "hex",
- "once_cell",
- "regex",
- "serde",
- "serde_json",
- "sha2 0.10.9",
- "url",
-]
-
-[[package]]
-name = "goldfish-contracts"
-version = "0.1.0"
-dependencies = [
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "goldfish-daemon"
-version = "0.1.0"
-dependencies = [
- "axum 0.7.9",
- "goldfish-capture",
- "goldfish-contracts",
- "goldfish-memory",
- "hex",
- "libc",
- "rand 0.8.8",
- "serde",
- "serde_json",
- "subtle",
- "tokio",
- "url",
-]
-
-[[package]]
-name = "goldfish-memory"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "chrono-tz",
- "goldfish-capture",
- "goldfish-contracts",
- "rusqlite",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror 2.0.21",
-]
-
-[[package]]
-name = "goldfish-platform-mac"
-version = "0.1.0"
-dependencies = [
- "goldfish-contracts",
-]
-
-[[package]]
-name = "goldfish-platform-win"
-version = "0.1.0"
-dependencies = [
- "goldfish-contracts",
-]
-
-[[package]]
 name = "h2"
 version = "0.4.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2814,25 +2745,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "open-memory"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "hex",
- "libc",
- "model2vec-rs",
- "qdrant-edge",
- "regex",
- "reqwest",
- "rusqlite",
- "serde",
- "serde_json",
- "sha2 0.10.9",
- "url",
-]
-
-[[package]]
 name = "option-ext"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3634,6 +3546,94 @@ dependencies = [
  "wasm-bindgen-futures",
  "web-sys",
  "webpki-roots 1.0.9",
+]
+
+[[package]]
+name = "rewind"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "hex",
+ "libc",
+ "model2vec-rs",
+ "qdrant-edge",
+ "regex",
+ "reqwest",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "url",
+]
+
+[[package]]
+name = "rewind-capture"
+version = "0.1.0"
+dependencies = [
+ "hex",
+ "once_cell",
+ "regex",
+ "rewind-contracts",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "url",
+]
+
+[[package]]
+name = "rewind-contracts"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "rewind-daemon"
+version = "0.1.0"
+dependencies = [
+ "axum 0.7.9",
+ "hex",
+ "libc",
+ "rand 0.8.8",
+ "rewind-capture",
+ "rewind-contracts",
+ "rewind-memory",
+ "serde",
+ "serde_json",
+ "subtle",
+ "tokio",
+ "url",
+]
+
+[[package]]
+name = "rewind-memory"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "chrono-tz",
+ "rewind-capture",
+ "rewind-contracts",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror 2.0.21",
+]
+
+[[package]]
+name = "rewind-platform-mac"
+version = "0.1.0"
+dependencies = [
+ "rewind-contracts",
+]
+
+[[package]]
+name = "rewind-platform-win"
+version = "0.1.0"
+dependencies = [
+ "rewind-contracts",
 ]
 
 [[package]]

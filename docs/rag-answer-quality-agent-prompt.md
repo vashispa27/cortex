@@ -1,22 +1,22 @@
-# Task: build answer-quality evals for the open-memory LLM answer step
+# Task: build answer-quality evals for the rewind LLM answer step
 
-You are working in `/Users/abhinavvashisht/workspace/goldfish-implementation` (Rust workspace, macOS-only crate `crates/open-memory`). Retrieval already has an eval harness (`evals/`). Nothing measures the generation step: `ask` with `OPEN_MEMORY_LLM_URL` set sends redacted retrieved evidence to an OpenAI-compatible chat endpoint (`llm_answer` in `crates/open-memory/src/main.rs`) and prints the model's answer above the ranked evidence. Your job is to measure that step: is the answer faithful to the evidence, are citations valid, does it abstain when it should, and are numbers and times right.
+You are working in `/Users/abhinavvashisht/workspace/rewind` (Rust workspace, macOS-only crate `crates/rewind`). Retrieval already has an eval harness (`evals/`). Nothing measures the generation step: `ask` with `REWIND_LLM_URL` set sends redacted retrieved evidence to an OpenAI-compatible chat endpoint (`llm_answer` in `crates/rewind/src/main.rs`) and prints the model's answer above the ranked evidence. Your job is to measure that step: is the answer faithful to the evidence, are citations valid, does it abstain when it should, and are numbers and times right.
 
-Read first: `evals/README.md`, `evals/reports/baseline-analysis.md`, `README.md` (the LLM section and redaction notes), spec sections 8.5 and 16.4 in `goldfish-end-to-end-spec.md`, then `llm_answer`, `redact_cloud`, `snippet`, `retrieve`, and the eval code.
+Read first: `evals/README.md`, `evals/reports/baseline-analysis.md`, `README.md` (the LLM section and redaction notes), spec sections 8.5 and 16.4 in `rewind-end-to-end-spec.md`, then `llm_answer`, `redact_cloud`, `snippet`, `retrieve`, and the eval code.
 
 ## Coordination with the fixes agent (important)
 
 Another agent is fixing retrieval at the same time (`docs/rag-fixes-agent-prompt.md`) and will change `retrieve`, `snippet`, and the evidence passed to `llm_answer` (Fix 2 passes several chunks per snapshot), plus abstention behavior (Fix 3).
 
-- Work on your own git branch in a separate worktree (`git worktree add ../goldfish-answer-eval -b evals-answer-quality`).
-- Put your code in new files (for example `crates/open-memory/src/answer_eval.rs` and `evals/answers/`). For `llm_answer`, make only a small additive refactor: split it into (a) building the prompt from `(question, sources)` and (b) sending it and parsing the reply, so the eval can call (a) and a provider function with an injected endpoint. Do not change prompts, evidence selection or redaction behavior in this task. Keep the refactor minimal so it merges cleanly after the fixes land; say so in the commit message.
+- Work on your own git branch in a separate worktree (`git worktree add ../rewind-answer-eval -b evals-answer-quality`).
+- Put your code in new files (for example `crates/rewind/src/answer_eval.rs` and `evals/answers/`). For `llm_answer`, make only a small additive refactor: split it into (a) building the prompt from `(question, sources)` and (b) sending it and parsing the reply, so the eval can call (a) and a provider function with an injected endpoint. Do not change prompts, evidence selection or redaction behavior in this task. Keep the refactor minimal so it merges cleanly after the fixes land; say so in the commit message.
 - The system prompt currently reads "Answer only from the supplied evidence. Cite snapshot IDs in square brackets..." Measure it as is. Prompt improvements are a later task, driven by your results.
 - Report which fixes-agent commit you measured against.
 
 ## Safety and data rules (hard)
 
-- Only the **invented** corpus and gold set may be sent to a model. Never use the user's real state directory (`~/Library/Application Support/Open Memory/local-memory`) or any private captured data. Do not enable capture or request Accessibility permission.
-- LLM endpoints, models and keys come only from environment variables: `OPEN_MEMORY_LLM_URL`, `OPEN_MEMORY_LLM_MODEL`, `OPEN_MEMORY_LLM_API_KEY` for the answer model, and a separate trio with the prefix `OPEN_MEMORY_JUDGE_` for the judge. Never hardcode or print keys. The existing rule allows only HTTPS or localhost HTTP endpoints; keep it.
+- Only the **invented** corpus and gold set may be sent to a model. Never use the user's real state directory (`~/Library/Application Support/Rewind/local-memory`) or any private captured data. Do not enable capture or request Accessibility permission.
+- LLM endpoints, models and keys come only from environment variables: `REWIND_LLM_URL`, `REWIND_LLM_MODEL`, `REWIND_LLM_API_KEY` for the answer model, and a separate trio with the prefix `REWIND_JUDGE_` for the judge. Never hardcode or print keys. The existing rule allows only HTTPS or localhost HTTP endpoints; keep it.
 - All tests must run without network access using a mock provider (a local HTTP server or an injected function that returns scripted replies). Live-model runs are opt-in and require the user to set the variables.
 - The user decides which model generates and which judges. If the variables are unset, build and test everything with the mock and stop at "ready to run live"; say what the user needs to set.
 
@@ -49,7 +49,7 @@ Reuse `evals/gold/gold.jsonl` (do not edit it; the fixes agent owns it) and add 
 
 ## Harness
 
-Add `open-memory eval-answers --corpus ... --gold ... [--extra-gold ...] --out evals/reports/answers/<name>.json` (or a Python driver that calls a thin Rust JSON mode; choose the simpler one that keeps the model loading once). It must:
+Add `rewind eval-answers --corpus ... --gold ... [--extra-gold ...] --out evals/reports/answers/<name>.json` (or a Python driver that calls a thin Rust JSON mode; choose the simpler one that keeps the model loading once). It must:
 - reuse the existing deterministic ingest and fixed clock,
 - cache model replies keyed by (model, prompt hash) in a gitignored directory so reruns are cheap and reproducible, and record the cache hit rate,
 - record per question: retrieved IDs, the exact prompt sent (after redaction), the raw reply, all automatic scores, the judge verdicts and cost/latency,

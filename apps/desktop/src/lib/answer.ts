@@ -8,7 +8,7 @@ export async function answerFromMemory(question: string, history: ChatMessage[])
   if (!model) throw new Error("Add your OpenRouter model in Settings → AI model.");
   if (!await invoke<boolean>("openrouter_has_key")) throw new Error("Add your OpenRouter API key in Settings → AI model.");
   // One natural-language query goes to the same Model2Vec + Qdrant hybrid
-  // retrieval and evidence preparation used by Open Memory. No UI-side token
+  // retrieval and evidence preparation used by Rewind. No UI-side token
   // search, application-specific ranking, or unrelated recent-screen fallback.
   const prior = history.slice(-12).map((m) => ({ role: m.role, content: m.body.slice(0, 4000) }));
   const query = prior.length ? await invoke<string>("openrouter_search_query", { model, question, history: prior }) : question;

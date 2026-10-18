@@ -1,13 +1,13 @@
 [package]
-name = "goldfish-memory"
+name = "rewind-memory"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 chrono = "0.4"
 chrono-tz = "0.10"
-goldfish-contracts = { path = "../contracts" }
-goldfish-capture = { path = "../capture" }
+rewind-contracts = { path = "../contracts" }
+rewind-capture = { path = "../capture" }
 rusqlite = { version = "0.32", features = ["bundled"] }
 serde_json = "1"
 serde = { version = "1", features = ["derive"] }

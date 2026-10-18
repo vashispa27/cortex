@@ -1,11 +1,11 @@
-# Task: four retrieval improvements measured on real captures (open-memory)
+# Task: four retrieval improvements measured on real captures (rewind)
 
-You are working in `/Users/abhinavvashisht/workspace/goldfish-implementation` (Rust workspace, macOS-only crate `crates/open-memory`), on `main`. Do each of the four changes below as its own commit and prove it with the eval on **both** corpora. Another agent has been working on capture-side dedup and storage (`dedup.rs`, `rawtrees.rs`); do not touch those, and re-read `git log` before you start so you build on their latest commit.
+You are working in `/Users/abhinavvashisht/workspace/rewind` (Rust workspace, macOS-only crate `crates/rewind`), on `main`. Do each of the four changes below as its own commit and prove it with the eval on **both** corpora. Another agent has been working on capture-side dedup and storage (`dedup.rs`, `rawtrees.rs`); do not touch those, and re-read `git log` before you start so you build on their latest commit.
 
 ## Read first
 1. `evals/README.md`, `evals/reports/real/transfer.md` (what the real corpus showed and why), `evals/scale/README.md`.
-2. `crates/open-memory/src/main.rs`: `retrieve_with` (fusion, collapse, rerank bonus, version step, final cut), `Params`, `answer`.
-3. `crates/open-memory/src/versions.rs` (Fix 7: pairwise merge and version ordering) and `abstain.rs` for context.
+2. `crates/rewind/src/main.rs`: `retrieve_with` (fusion, collapse, rerank bonus, version step, final cut), `Params`, `answer`.
+3. `crates/rewind/src/versions.rs` (Fix 7: pairwise merge and version ordering) and `abstain.rs` for context.
 
 ## How to measure (one command)
 ```bash
@@ -16,7 +16,7 @@ Reports go to `evals/reports/runs/` (invented, ignored by git) and `evals/privat
 python3 evals/tools/compare.py OLD.json NEW.json
 python3 evals/tools/ablation_table.py BASE.json VARIANT.json ...    # compact table from one run with --sweep
 ```
-`target/release/open-memory eval --help`-style options live in `evals/README.md`: `--param key=value`, `--sweep key=v1,v2`, `--query-repeats N` (use 5 for latency; read `query_latency_best_of_repeats_ms`, which ignores machine load).
+`target/release/rewind eval --help`-style options live in `evals/README.md`: `--param key=value`, `--sweep key=v1,v2`, `--query-repeats N` (use 5 for latency; read `query_latency_best_of_repeats_ms`, which ignores machine load).
 
 Two corpora, both must be reported for every change:
 * **invented**: `evals/corpus` + `evals/gold/gold.jsonl` (124 questions, clean, small).
@@ -37,7 +37,7 @@ Current numbers at `53dfca6` (main before the blocklist and the dedup work; re-m
 * **Don't tune to the test split.** Constants chosen on `dev`, reported on `test` (`by_split` in each report).
 * **Don't edit existing gold questions** to make numbers look better. If a real question is wrong, fix it in a separate commit and say why.
 * A change that lowers any per-type final hit@8 by more than noise on either corpus needs an explanation, or a revert. With 99 real questions, 3 to 4 questions is noise; use the paired bootstrap, not eyeballing.
-* No new dependency without asking the user. No network or LLM calls in the eval path. Do not start live capture or touch `~/Library/Application Support/Open Memory` (evals use throwaway state dirs).
+* No new dependency without asking the user. No network or LLM calls in the eval path. Do not start live capture or touch `~/Library/Application Support/Rewind` (evals use throwaway state dirs).
 * Keep `ask` working; list visible output changes in the commit message. Run `cargo test --workspace` before every commit.
 * Match the surrounding code style. No unrelated refactors.
 

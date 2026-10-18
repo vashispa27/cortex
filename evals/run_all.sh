@@ -10,7 +10,7 @@
 #
 # Inputs are frozen: before each run `evals/freeze.py verify` must pass (see evals/RUNNING.md).
 # Isolation: eval indexes are built in throwaway directories under evals/.work (set via TMPDIR), never in
-# ~/Library/Application Support/Open Memory, and are deleted afterwards.
+# ~/Library/Application Support/Rewind, and are deleted afterwards.
 # Outputs: reports in evals/reports/runs (invented, bench) and evals/private/reports/runs (real);
 # one tracked row per run in evals/history/runs.csv  (view: python3 evals/history.py).
 set -eu
@@ -42,8 +42,8 @@ fi
 [ $RUN_REAL = 1 ] && python3 evals/freeze.py verify real
 
 # 2. build
-[ $BUILD = 1 ] && cargo build --release -p open-memory
-BIN=$ROOT/target/release/open-memory
+[ $BUILD = 1 ] && cargo build --release -p rewind
+BIN=$ROOT/target/release/rewind
 if [ ! -x "$BIN" ]; then echo "no release binary; run without --no-build"; exit 2; fi
 if [ -n "$(find crates -name '*.rs' -newer "$BIN" 2>/dev/null | head -1)" ]; then
   echo "WARNING: sources are newer than $BIN; the numbers are for the old binary (rerun without --no-build)"
@@ -53,8 +53,8 @@ fi
 # 3. isolation: scratch state lives in the repo, never in the live state directory
 export TMPDIR=$ROOT/evals/.work
 rm -rf "$TMPDIR"; mkdir -p "$TMPDIR"
-trap 'rm -rf "$ROOT/evals/.work"/open-memory-eval-* 2>/dev/null || true' EXIT
-unset OPEN_MEMORY_STATE_DIR
+trap 'rm -rf "$ROOT/evals/.work"/rewind-eval-* 2>/dev/null || true' EXIT
+unset REWIND_STATE_DIR
 
 STAMP=$(date +%Y%m%d-%H%M%S)
 SHA=$(git rev-parse --short HEAD)

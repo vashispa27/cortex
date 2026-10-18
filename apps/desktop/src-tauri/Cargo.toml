@@ -1,12 +1,12 @@
 [package]
-name = "open-memory-desktop"
+name = "rewind"
 version = "0.1.0"
 description = "Local-first desktop memory shell"
-authors = ["Open Memory contributors"]
+authors = ["Rewind contributors"]
 edition = "2021"
 
 [lib]
-name = "open_memory_desktop_lib"
+name = "rewind_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

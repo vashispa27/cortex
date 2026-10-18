@@ -87,7 +87,7 @@ class JudgeTests(unittest.TestCase):
     def test_full_script_with_scripted_provider(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            binary = root / 'target/debug/open-memory'
+            binary = root / 'target/debug/rewind'
             binary.parent.mkdir(parents=True)
             binary.touch()
             rec = sample()

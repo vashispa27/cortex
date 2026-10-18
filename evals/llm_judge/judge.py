@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Grade invented Goldfish evals with Jev via OpenRouter. No network without --live."""
+"""Grade invented Rewind evals with Jev via OpenRouter. No network without --live."""
 from __future__ import annotations
 
 import argparse
@@ -218,16 +218,16 @@ def main(argv=None):
     answer_path = (OUT / 'generated-answers.json') if args.generate else args.answers
     if args.out.resolve() == answer_path.resolve():
         ap.error('--out must differ from the answer report path')
-    key = os.environ.get('OPENROUTER_API_KEY') or os.environ.get('OPEN_MEMORY_LLM_API_KEY')
+    key = os.environ.get('OPENROUTER_API_KEY') or os.environ.get('REWIND_LLM_API_KEY')
     if not key:
-        ap.error('set OPENROUTER_API_KEY (or OPEN_MEMORY_LLM_API_KEY)')
+        ap.error('set OPENROUTER_API_KEY (or REWIND_LLM_API_KEY)')
     verify_frozen()
     OUT.mkdir(parents=True, exist_ok=True)
     # Fresh fixture reference establishes the provenance of every message supplied to Jev.
     reference = OUT / f'.fixture-reference-{os.getpid()}.json'
-    binary = ROOT / 'target/debug/open-memory'
+    binary = ROOT / 'target/debug/rewind'
     if not binary.is_file():
-        raise RuntimeError('build first: cargo build -p open-memory')
+        raise RuntimeError('build first: cargo build -p rewind')
     try:
         subprocess.run([str(binary), 'eval-answers', '--mock', '--corpus', str(CORPUS), '--gold', str(GOLD), '--out', str(reference)], cwd=ROOT, check=True)
         ref = read_json(reference)
@@ -236,7 +236,7 @@ def main(argv=None):
             if answers.exists() and not args.overwrite:
                 raise RuntimeError(f'{answers} exists; use --overwrite or --answers')
             env = os.environ.copy()
-            env.update({'OPEN_MEMORY_LLM_URL': CHAT_URL, 'OPEN_MEMORY_LLM_MODEL': args.answer_model, 'OPEN_MEMORY_LLM_API_KEY': key})
+            env.update({'REWIND_LLM_URL': CHAT_URL, 'REWIND_LLM_MODEL': args.answer_model, 'REWIND_LLM_API_KEY': key})
             subprocess.run([str(binary), 'eval-answers', '--live', '--corpus', str(CORPUS), '--gold', str(GOLD), '--out', str(answers)], cwd=ROOT, env=env, check=True)
         else:
             answers = args.answers.resolve()

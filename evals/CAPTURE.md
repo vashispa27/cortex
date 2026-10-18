@@ -14,7 +14,7 @@ minutes. Nothing here uses your normal state directory.
 ## 1. Build and prepare
 
 ```bash
-cargo build -p open-memory
+cargo build -p rewind
 ```
 
 Open a **new Safari window with a single tab** and hide the Favorites bar (View → Hide Favorites
@@ -26,14 +26,14 @@ The export script redacts browser-chrome text, but a clean window is the real sa
 Terminal tab 1:
 
 ```bash
-export OPEN_MEMORY_STATE_DIR="$(mktemp -d)"
-export OPEN_MEMORY_MODEL_DIR="$(ls -d ~/.cache/huggingface/hub/models--minishlab--potion-base-32M/snapshots/* | head -1)"  # optional; skips a 130 MB download
-echo "$OPEN_MEMORY_STATE_DIR"        # keep this path for step 4
-target/debug/open-memory capture --print
+export REWIND_STATE_DIR="$(mktemp -d)"
+export REWIND_MODEL_DIR="$(ls -d ~/.cache/huggingface/hub/models--minishlab--potion-base-32M/snapshots/* | head -1)"  # optional; skips a 130 MB download
+echo "$REWIND_STATE_DIR"        # keep this path for step 4
+target/debug/rewind capture --print
 ```
 
 The first run asks for Accessibility access for the helper at
-`$OPEN_MEMORY_STATE_DIR/open-memory-ax-helper`. Grant it in System Settings → Privacy & Security →
+`$REWIND_STATE_DIR/rewind-ax-helper`. Grant it in System Settings → Privacy & Security →
 Accessibility and leave the command running. Wait for `Model2Vec and Qdrant Edge ready`.
 
 ## 3. Show each page once
@@ -58,8 +58,8 @@ answer is missing, which is how a clipped page shows up.
 ## 4. Export fixtures
 
 ```bash
-python3 evals/export_fixtures.py "$OPEN_MEMORY_STATE_DIR" --list    # which pages were captured
-python3 evals/export_fixtures.py "$OPEN_MEMORY_STATE_DIR"           # writes evals/corpus/<stem>.json
+python3 evals/export_fixtures.py "$REWIND_STATE_DIR" --list    # which pages were captured
+python3 evals/export_fixtures.py "$REWIND_STATE_DIR"           # writes evals/corpus/<stem>.json
 git diff --stat evals/corpus                                        # review before committing
 ```
 
@@ -71,8 +71,8 @@ browser-chrome text it does not recognise as a generic label.
 ## 5. Check and clean up
 
 ```bash
-cargo run -p open-memory -- eval --out evals/reports/check.json
-rm -rf "$OPEN_MEMORY_STATE_DIR"
+cargo run -p rewind -- eval --out evals/reports/check.json
+rm -rf "$REWIND_STATE_DIR"
 ```
 
 `eval` fails loudly if a real capture changed the cleaned text so that a gold `answer_text` no longer
