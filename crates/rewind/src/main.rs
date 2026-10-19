@@ -6,6 +6,7 @@ mod answer_eval;
 mod appscope;
 mod blocklist;
 mod cleaner;
+mod categorization;
 mod cloud_redaction;
 mod dedup;
 mod desktop;
@@ -226,7 +227,7 @@ fn open_db(state: &Path) -> Result<Connection> {
             .collect::<rusqlite::Result<Vec<_>>>()?;
         found
     };
-    for (column, definition) in [("dup_of", "INTEGER"), ("text_hash", "TEXT")] {
+    for (column, definition) in [("dup_of", "INTEGER"), ("text_hash", "TEXT"), ("category", "TEXT NOT NULL DEFAULT 'unknown'"), ("author", "TEXT"), ("displayed_time", "TEXT"), ("object_start", "INTEGER"), ("object_end", "INTEGER"), ("label_model", "TEXT")] {
         if !chunk_columns.iter().any(|existing| existing == column) {
             db.execute(&format!("ALTER TABLE chunks ADD COLUMN {column} {definition}"), [])?;
         }
@@ -454,7 +455,7 @@ impl Runtime {
     }
     fn index_pending(&mut self) -> Result<usize> {
         let chunks = {
-            let mut stmt = self.db.prepare("SELECT c.id,c.snapshot_id,s.app_id,s.title,s.url,s.domain,s.source_type,c.body,c.start_byte,c.end_byte,s.first_seen_ms,s.last_seen_ms,s.body FROM chunks c JOIN snapshots s ON s.id=c.snapshot_id WHERE c.indexed=0 AND s.searchable=1 ORDER BY c.id LIMIT 100")?;
+            let mut stmt = self.db.prepare("SELECT c.id,c.snapshot_id,s.app_id,s.title,s.url,s.domain,s.source_type,c.body,c.start_byte,c.end_byte,s.first_seen_ms,s.last_seen_ms,s.body,c.category FROM chunks c JOIN snapshots s ON s.id=c.snapshot_id WHERE c.indexed=0 AND s.searchable=1 ORDER BY c.id LIMIT 100")?;
             let rows = stmt.query_map([], |r| {
                 Ok((
                     r.get::<_, i64>(0)?,
@@ -470,6 +471,7 @@ impl Runtime {
                     r.get::<_, i64>(10)?,
                     r.get::<_, i64>(11)?,
                     r.get::<_, String>(12)?,
+                    r.get::<_, String>(13)?,
                 ))
             })?;
             rows.collect::<rusqlite::Result<Vec<_>>>()?
@@ -495,12 +497,12 @@ impl Runtime {
         let mut batch: std::collections::HashMap<String, i64> = std::collections::HashMap::new();
         let mut keys: Vec<(i64, String)> = Vec::new();
         let mut shared: Vec<(i64, i64, String)> = Vec::new();
-        for (chunk_id, snapshot_id, app, title, url, domain, source_type, body, start, end, first, last, snapshot_body) in &chunks {
+        for (chunk_id, snapshot_id, app, title, url, domain, source_type, body, start, end, first, last, snapshot_body, category) in &chunks {
             let key = dedup::chunk_key(self.prefix, app, domain.as_deref(), title, body);
-            if share {
+            if share && category == "unknown" {
                 let canonical = match batch.get(&key) {
                     Some(c) => Some(*c),
-                    None => self.db.query_row("SELECT id FROM chunks WHERE text_hash=?1 AND indexed=1 AND dup_of IS NULL LIMIT 1", [&key], |r| r.get::<_, i64>(0)).optional()?,
+                    None => self.db.query_row("SELECT id FROM chunks WHERE text_hash=?1 AND indexed=1 AND dup_of IS NULL AND category='unknown' LIMIT 1", [&key], |r| r.get::<_, i64>(0)).optional()?,
                 };
                 if let Some(canonical) = canonical {
                     shared.push((*chunk_id, canonical, key));
@@ -510,7 +512,7 @@ impl Runtime {
             }
             keys.push((*chunk_id, key));
             let text = prefix::embed_text(self.prefix, &prefix::ChunkContext { title, app_id: app, domain: domain.as_deref(), first_seen_ms: *first, snapshot_body, start_byte: *start as usize }, body);
-            self.upsert_point((1_u64 << 61) + *chunk_id as u64, &text, json!({"snapshot_id":snapshot_id,"snapshot_ids":[snapshot_id],"chunk_id":chunk_id,"start_byte":start,"end_byte":end,"point_type":"chunk","app":app,"domain":domain,"url":url,"capture_time":first,"last_seen":last,"source_type":source_type,"model":version}))?;
+            self.upsert_point((1_u64 << 61) + *chunk_id as u64, &text, json!({"snapshot_id":snapshot_id,"snapshot_ids":[snapshot_id],"chunk_id":chunk_id,"start_byte":start,"end_byte":end,"point_type":"chunk","category":category,"app":app,"domain":domain,"url":url,"capture_time":first,"last_seen":last,"source_type":source_type,"model":version}))?;
         }
         // A shared point must be findable through every snapshot that shares it, and its time window must
         // cover all of them (the exact per-snapshot observation check runs after the query).
@@ -555,7 +557,7 @@ impl Runtime {
             for (id, canonical, key) in &shared {
                 tx.execute("UPDATE chunks SET indexed=1,dup_of=?2,text_hash=?3 WHERE id=?1", params![id, canonical, key])?;
             }
-            for (_, snapshot_id, _, _, _, _, _, _, _, _, _, _, _) in &chunks {
+            for (_, snapshot_id, _, _, _, _, _, _, _, _, _, _, _, _) in &chunks {
                 tx.execute("UPDATE snapshots SET indexed=1,embedding_model=?2 WHERE id=?1", params![snapshot_id, version])?;
             }
             for (id, _, body) in derived {
@@ -776,6 +778,12 @@ fn record_with_target(
             return Ok((id, false, source));
         }
     }
+    // Do not hold a SQLite write transaction while waiting on the local model.
+    let new_chunks = if existing.is_none() {
+        categorization::chunks(body, chunking, &window.app_id, url.as_deref())?
+    } else {
+        Vec::new()
+    };
     let transaction = db.transaction()?;
     transaction.execute("INSERT INTO snapshots(fingerprint,evidence_fingerprint,app_id,title,url,domain,source_type,body,first_seen_ms,last_seen_ms,focus_role,focus_name,limitations,ax_nodes_json,cleaner_version,cleaner_quality,cleaner_coverage,cleaning_trace_json,searchable) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?9,?10,?11,?12,?13,?14,?15,?16,?17,?18) ON CONFLICT(fingerprint) DO UPDATE SET last_seen_ms=excluded.last_seen_ms,duration_ms=MAX(0,excluded.last_seen_ms-snapshots.first_seen_ms),sightings=snapshots.sightings+1,limitations=excluded.limitations,source_type=excluded.source_type",
         params![fingerprint,evidence_fingerprint,window.app_id,window.title,url,domain,source_type,body,window.observed_ms,window.focus_role,window.focus_name,limitations,ax_nodes_json,cleaner::VERSION,cleaned.quality,cleaned.coverage,cleaning_trace_json,i64::from(!body.is_empty())])?;
@@ -787,8 +795,8 @@ fn record_with_target(
     transaction.execute("INSERT OR IGNORE INTO raw_versions(snapshot_id,ax_hash,ax_nodes_json,observed_ms) VALUES(?1,?2,?3,?4)",params![id,digest(&ax_nodes_json),ax_nodes_json,window.observed_ms])?;
     transaction.execute("INSERT OR IGNORE INTO tree_keys(tree_key,snapshot_id) VALUES(?1,?2)", params![tree_key,id])?;
     if existing.is_none() {
-        for (start, end, text) in cleaner::chunks_cfg(body, chunking) {
-            transaction.execute("INSERT INTO chunks(snapshot_id,start_byte,end_byte,body) VALUES(?1,?2,?3,?4)", params![id,start as i64,end as i64,text])?;
+        for chunk in new_chunks {
+            transaction.execute("INSERT INTO chunks(snapshot_id,start_byte,end_byte,body,category,author,displayed_time,object_start,object_end,label_model) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)", params![id,chunk.start as i64,chunk.end as i64,chunk.text,chunk.category,chunk.author,chunk.displayed_time,chunk.object_start as i64,chunk.object_end as i64,chunk.model])?;
         }
     }
     transaction.execute("INSERT INTO observations(snapshot_id,observed_ms,window_session_id,focus_role,focus_name,limitations) VALUES(?1,?2,?3,?4,?5,?6)",params![id,window.observed_ms,window.window_session_id,window.focus_role,window.focus_name,limitations])?;
@@ -1171,6 +1179,9 @@ enum RerankBonus {
 /// Retrieval knobs shared by `ask` and the offline eval.
 #[derive(Clone, Debug, Serialize)]
 struct Params {
+    /// Ask the local model to select relevant categories for this query.
+    category_route: bool,
+    category_filter: Vec<String>,
     /// Per-retriever candidate depth (dense and BM25 prefetch).
     prefetch: usize,
     /// Fused candidates returned by Qdrant before collapsing.
@@ -1226,6 +1237,8 @@ struct Params {
 impl Default for Params {
     fn default() -> Self {
         Params {
+            category_route: env::var("REWIND_CATEGORY_ROUTE").ok().as_deref() == Some("1"),
+            category_filter: Vec::new(),
             prefetch: 80,
             fused_limit: 40,
             rrf_k: 60,
@@ -1333,7 +1346,19 @@ struct Retrieval {
 }
 
 fn retrieve(runtime: &mut Runtime, question: &str, params: &Params) -> Result<Retrieval> {
-    let mut r = retrieve_scoped(runtime, question, params)?;
+    let mut routed = params.clone();
+    if params.category_route {
+        match categorization::route(question) {
+            Ok(categories) => routed.category_filter = categories,
+            Err(error) if categorization::strict() => return Err(error),
+            Err(error) => eprintln!("Category routing failed; searching all categories: {error}"),
+        }
+    }
+    let mut r = retrieve_scoped(runtime, question, &routed)?;
+    if !routed.category_filter.is_empty() && r.hits.is_empty() {
+        routed.category_filter.clear();
+        r = retrieve_scoped(runtime, question, &routed)?;
+    }
     r.support = abstain::support(&r.hits, question);
     r.dense_sim = abstain::dense_sim(runtime, &r.hits, question)?;
     r.chunk_sim = abstain::chunk_sim(runtime, &r.ranked, question)?;
@@ -1342,6 +1367,12 @@ fn retrieve(runtime: &mut Runtime, question: &str, params: &Params) -> Result<Re
     r.ident = abstain::identifier_support(&r.hits, question);
     r.score_norm = abstain::score_norm(r.hits.first().map_or(0.0, |h| h.source.score as f64), params);
     r.abstained = abstain::decide(&r, params);
+    if r.abstained && !routed.category_filter.is_empty() {
+        let mut broad = params.clone();
+        broad.category_route = false;
+        broad.category_filter.clear();
+        return retrieve(runtime, question, &broad);
+    }
     Ok(r)
 }
 
@@ -1390,6 +1421,16 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
     } else {
         Vec::new()
     };
+    if !params.category_filter.is_empty() {
+        let mut categories = params.category_filter.clone();
+        categories.push("unknown".into());
+        // Legacy points have no category payload; derived points are not classified.
+        clauses.push(json!({"should":[
+            {"key":"category","match":{"any":categories}},
+            {"is_empty":{"key":"category"}},
+            {"key":"point_type","match":{"value":"derived"}}
+        ]}));
+    }
     let time = if !params.use_filters { None } else if params.window.is_some() { params.window } else { time_bounds(question, params.now_ms)? };
     let reported_clauses = clauses.clone();
     if !params.include_derived {
@@ -1434,14 +1475,19 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
     if params.mode == Mode::Bm25DenseRerank {
         // Candidate generation is lexical; dense similarity can only reorder these candidates.
         // The outer one-list RRF keeps scores on the same scale as the other single-list modes.
-        builder = builder.add_prefetch(
-            PrefetchBuilder::new(params.prefetch)
-                .add_prefetch(PrefetchBuilder::new(params.prefetch).query(sparse.unwrap()).build())
-                .query(dense.unwrap()).build(),
-        );
+        let mut inner = PrefetchBuilder::new(params.prefetch).query(sparse.unwrap());
+        let mut outer = PrefetchBuilder::new(params.prefetch).query(dense.unwrap());
+        if !params.category_filter.is_empty() {
+            if let Some(f) = &filter { inner = inner.filter(f.clone()); outer = outer.filter(f.clone()); }
+        }
+        builder = builder.add_prefetch(outer.add_prefetch(inner.build()).build());
     } else {
         for query in dense.into_iter().chain(sparse) {
-            builder = builder.add_prefetch(PrefetchBuilder::new(params.prefetch).query(query).build());
+            let mut prefetch = PrefetchBuilder::new(params.prefetch).query(query);
+            if !params.category_filter.is_empty() {
+                if let Some(f) = &filter { prefetch = prefetch.filter(f.clone()); }
+            }
+            builder = builder.add_prefetch(prefetch.build());
         }
     }
     let mut builder = builder

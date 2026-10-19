@@ -55,6 +55,12 @@ CREATE TABLE IF NOT EXISTS chunks (
  end_byte INTEGER NOT NULL,
  body TEXT NOT NULL,
  indexed INTEGER NOT NULL DEFAULT 0,
+ category TEXT NOT NULL DEFAULT 'unknown',
+ author TEXT,
+ displayed_time TEXT,
+ object_start INTEGER,
+ object_end INTEGER,
+ label_model TEXT,
  UNIQUE(snapshot_id,start_byte,end_byte)
 );
 CREATE INDEX IF NOT EXISTS chunks_snapshot ON chunks(snapshot_id,start_byte);
