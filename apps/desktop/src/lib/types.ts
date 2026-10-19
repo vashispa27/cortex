@@ -17,5 +17,16 @@ export type SettingsPage =
   | "diagnostics"
   | "updates";
 
-export type AnswerSource = "memory" | "general" | "mixed" | "none";
-export type ChatMessage = { role: "user" | "assistant"; body: string; hits?: MemoryHit[]; source?: AnswerSource };
+export type AnswerSource = "memory" | "general" | "mixed" | "none" | "selection";
+export type ChatMessage = {
+  role: "user" | "assistant";
+  body: string;
+  hits?: MemoryHit[];
+  source?: AnswerSource;
+  /** A selection the user asked Rewind to summarize. `body` holds the text the model saw. */
+  kind?: "summarize";
+  /** Where the selection came from, for example "Safari · nytimes.com". */
+  origin?: string;
+  /** A visible note about the excerpt, for example that it was cut. */
+  note?: string;
+};

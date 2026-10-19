@@ -3560,6 +3560,8 @@ dependencies = [
  "qdrant-edge",
  "regex",
  "reqwest",
+ "rewind-capture",
+ "rewind-contracts",
  "rusqlite",
  "serde",
  "serde_json",

@@ -18,7 +18,7 @@ export function AnswerContent({ text }: { text: string }) {
   }}>{cleanAnswer(text)}</ReactMarkdown></div>;
 }
 
-const SOURCE_LABELS: Partial<Record<AnswerSource, string>> = { general: "General knowledge", mixed: "Your activity + general knowledge" };
+const SOURCE_LABELS: Partial<Record<AnswerSource, string>> = { general: "General knowledge", mixed: "Your activity + general knowledge", selection: "Summary of selection" };
 
 /** Marks answers that did not come purely from the user's captured activity. */
 export function AnswerSourceLabel({ source }: { source?: AnswerSource }) {

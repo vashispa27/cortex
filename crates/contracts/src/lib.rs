@@ -172,3 +172,45 @@ pub struct EditDraft {
     pub replacement: String,
     pub memory_epoch: i64,
 }
+
+/// What the Accessibility helper saw in the focused app at the moment of an explicit double-tap.
+/// Everything here is untrusted text read from the screen.
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+pub struct FocusContext {
+    /// `ok` or `skipped`. A skipped context carries no field values.
+    pub status: String,
+    #[serde(default)]
+    pub reason: Option<String>,
+    #[serde(default)]
+    pub app_id: String,
+    #[serde(default)]
+    pub app_name: String,
+    #[serde(default)]
+    pub window_title: String,
+    #[serde(default)]
+    pub url: Option<String>,
+    /// `app`, `browser` or `browser_private`.
+    #[serde(default)]
+    pub source_type: String,
+    #[serde(default)]
+    pub role: String,
+    #[serde(default)]
+    pub editable: bool,
+    #[serde(default)]
+    pub multiline: bool,
+    /// Last 2,000 characters before the caret.
+    #[serde(default)]
+    pub text_before_caret: String,
+    /// First 500 characters after the caret.
+    #[serde(default)]
+    pub text_after_caret: String,
+    #[serde(default)]
+    pub selected_text: String,
+    /// Visible text above the field, oldest first.
+    #[serde(default)]
+    pub conversation_tail: String,
+    #[serde(default)]
+    pub recipient_hint: Option<String>,
+    #[serde(default)]
+    pub target: Option<TargetRevision>,
+}

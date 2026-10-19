@@ -8,7 +8,7 @@ import {
   ShieldCheck, Sparkles, Square, Trash2, UserRound, Volume2, WandSparkles, X,
 } from "lucide-react";
 import {
-  deleteAllMemory, desktopRuntime, getServiceSettings, getStatus, pauseCapture, patchSettings, recentMemory, requestCapturePermission,
+  deleteAllMemory, desktopRuntime, getServiceSettings, getStatus, pauseCapture, patchSettings, recentMemory, requestCapturePermission, resetEvalData,
   searchMemory, type MemoryHit, type SearchData, type ServiceStatus,
 } from "./lib/api";
 import { demoSearch } from "./lib/demo";
@@ -17,7 +17,8 @@ import {
   saveReminders, type Preferences, type Reminder, type RewindTrigger,
 } from "./lib/storage";
 import { canApplyDraft, classifyWriting, draftSample, type WritingOperation } from "./lib/writing";
-import { configureRewindTrigger, openMain, previewNotch, quitApp, setNotchVisible } from "./lib/notch";
+import { aiTarget, testConnection, validLocalEndpoint } from "./lib/provider";
+import { configureAssist, configureRewindTrigger, configureTestMode, openMain, previewNotch, quitApp, setNotchVisible } from "./lib/notch";
 import { saveSessions, triggerName } from "./lib/rewind";
 import type { Page, SettingsPage } from "./lib/types";
 import { HomeDashboard, TimelinePage } from "./Dashboard";
@@ -300,8 +301,13 @@ export default function App() {
   const [deleteError, setDeleteError] = useState("");
   const [voiceText, setVoiceText] = useState("");
   const [settingsNotice, setSettingsNotice] = useState("");
+  const [testMode, setTestMode] = useState(false);
+  const [evalDir, setEvalDir] = useState("");
+  const [confirmEvalReset, setConfirmEvalReset] = useState(false);
   const [openrouterKey, setOpenrouterKey] = useState("");
   const [hasOpenrouterKey, setHasOpenrouterKey] = useState(false);
+  const [localTesting, setLocalTesting] = useState(false);
+  const [localTestResult, setLocalTestResult] = useState("");
   const [modelDraft, setModelDraft] = useState(() => loadPreferences().openrouterModel);
   const [wikiQuery, setWikiQuery] = useState("");
   const sample = preferences.sampleMode;
@@ -315,6 +321,7 @@ export default function App() {
         const settings = await getServiceSettings();
         nextStatus.capturePaused = settings.capture_paused;
         nextStatus.captureRequested = settings.capture_enabled;
+        setTestMode(settings.test_mode); setEvalDir(settings.eval_dir);
         setPreferencesState((current) => {
           const next = { ...current, mcpConsent: settings.mcp_enabled, captureConsent: current.captureConsent || settings.capture_enabled };
           savePreferences(next);
@@ -330,6 +337,12 @@ export default function App() {
   useEffect(() => { if (desktopRuntime()) void invoke<boolean>("openrouter_has_key").then(setHasOpenrouterKey).catch(() => setHasOpenrouterKey(false)); }, [settingsPage]);
   useEffect(() => { document.documentElement.style.fontSize = `${preferences.textScale}%`; document.documentElement.dataset.reduceMotion = String(preferences.reduceMotion); }, [preferences.textScale, preferences.reduceMotion]);
   useEffect(() => { void configureRewindTrigger(preferences.rewindTrigger, preferences.rewindHotkey); }, [preferences.rewindTrigger, preferences.rewindHotkey]);
+  useEffect(() => {
+    void configureAssist({
+      autocomplete: preferences.autocompleteOnTap, summarize: preferences.summarizeOnTap, rewrite: preferences.rewriteOnTap,
+      privateWindows: preferences.assistInPrivateWindows, showOverFullScreen: preferences.showOverFullScreen,
+    });
+  }, [preferences.autocompleteOnTap, preferences.summarizeOnTap, preferences.rewriteOnTap, preferences.assistInPrivateWindows, preferences.showOverFullScreen]);
   useEffect(() => {
     if (!desktopRuntime()) return;
     let disposed = false;
@@ -368,6 +381,15 @@ export default function App() {
   useEffect(() => { if ((page === "memory" || page === "today" || page === "timeline") && !memoryData) void runSearch("", true); }, [page, sample]);
   const updateSetting = (changes: Partial<Preferences>) => {
     setPreferences({ ...preferences, ...changes }); setSettingsNotice("");
+  };
+  const runLocalTest = async () => {
+    const target = aiTarget(loadPreferences());
+    if (!validLocalEndpoint(target.endpoint ?? "")) { setLocalTestResult("Enter an http address on this Mac, such as http://127.0.0.1:8080/v1."); return; }
+    if (!target.model) { setLocalTestResult("Enter the model name first."); return; }
+    setLocalTesting(true); setLocalTestResult("");
+    try { await testConnection(target); setLocalTestResult("Connected. The local model answered."); }
+    catch (error) { setLocalTestResult(error instanceof Error ? error.message : String(error)); }
+    finally { setLocalTesting(false); }
   };
   const saveModel = async () => {
     const model = modelDraft.trim();
@@ -429,6 +451,23 @@ export default function App() {
       return true;
     } catch (error) { setSettingsNotice(`Capture did not stop: ${error instanceof Error ? error.message : String(error)}`); return false; }
   };
+  const changeTestMode = async (enabled: boolean) => {
+    try {
+      const settings = await patchSettings({ test_mode: enabled });
+      setTestMode(settings.test_mode); setEvalDir(settings.eval_dir || evalDir);
+      void configureTestMode(settings.test_mode);
+      setSettingsNotice(enabled ? "Test mode is on. Questions are answered from the eval archive; use the notch play button to record into it." : "Test mode is off. Questions are answered from your real memory again.");
+      await refreshStatus();
+    } catch (error) { setSettingsNotice(`Test mode did not change: ${error instanceof Error ? error.message : String(error)}`); }
+  };
+  const eraseEvalData = async () => {
+    try {
+      await resetEvalData();
+      setConfirmEvalReset(false);
+      setSettingsNotice("Eval archive erased. Your real memory was not touched.");
+      await refreshStatus();
+    } catch (error) { setSettingsNotice(`Eval archive was not erased: ${error instanceof Error ? error.message : String(error)}`); }
+  };
   const performDelete = async () => {
     if (deletePhrase !== "DELETE ALL LOCAL MEMORY" || !status) return;
     setDeleteBusy(true); setDeleteError("");
@@ -479,10 +518,37 @@ export default function App() {
       {page === "reminders" && <RemindersPage reminders={reminders} setReminders={setReminders} notices={notices} />}
       {page === "settings" && <div className="settings-layout"><div className="settings-nav"><span className="eyebrow">Preferences</span><h1>Settings</h1>{settingsNav.map((item) => <button key={item.id} className={settingsPage === item.id ? "active" : ""} onClick={() => { setSettingsPage(item.id); setSettingsNotice(""); }}>{item.label}<ChevronRight size={15} /></button>)}</div><div className="settings-content"><span className="eyebrow">{settingsNav.find((item) => item.id === settingsPage)?.label}</span><h2>{settingsNav.find((item) => item.id === settingsPage)?.label}</h2>{settingsNotice && <div role="status" className="callout neutral">{settingsNotice}</div>}
         {settingsPage === "account" && <div className="settings-stack"><div className="surface-card"><h3>Workspace</h3><p>This independent build runs locally and has no account sign-in yet.</p><div className="connection-card"><span className={`status-light ${status ? "good" : ""}`} /><div><strong>{status ? "Local service connected" : "Local service offline"}</strong><small>{desktopRuntime() ? "Desktop app" : "Browser preview"}</small></div><Button kind="secondary" onClick={() => void refreshStatus()}>Retry</Button></div>{statusError && <small className="muted-text">{statusError}</small>}</div><div className="surface-card"><h3>Sample workspace</h3><Toggle checked={sample} onChange={(value) => updateSetting({ sampleMode: value })} label="Use invented sample data" description="Clearly marked examples for exploring the interface." /><Button kind="quiet" onClick={() => updateSetting({ onboardingComplete: false, captureSetupComplete: false })}>Replay onboarding</Button></div></div>}
-        {settingsPage === "ai" && <div className="settings-stack"><div className="surface-card"><h3>OpenRouter</h3><p>Choose the model that answers your questions. Your API key is stored in a private local file on this Mac, without Keychain. It is not encrypted.</p><label className="field-label" htmlFor="openrouter-model">Model ID</label><input id="openrouter-model" value={modelDraft} onChange={(event) => setModelDraft(event.target.value)} placeholder="provider/model-name" autoComplete="off" /><label className="field-label" htmlFor="openrouter-key">OpenRouter API key</label><input id="openrouter-key" type="password" value={openrouterKey} onChange={(event) => setOpenrouterKey(event.target.value)} placeholder={hasOpenrouterKey ? "Key saved — enter a new key to replace it" : "Paste your OpenRouter API key"} autoComplete="off" /><p className="fine-print">{hasOpenrouterKey ? "A key is saved." : "No key saved yet."}</p><div className="manage-actions"><Button disabled={!desktopRuntime()} onClick={() => void saveModel()}>Save model settings</Button>{hasOpenrouterKey && <Button kind="secondary" onClick={() => void invoke("openrouter_delete_key").then(() => { setHasOpenrouterKey(false); setSettingsNotice("Local OpenRouter key removed."); }).catch(() => setSettingsNotice("Could not remove the local key."))}>Remove key</Button>}</div></div><div className="callout neutral"><ShieldCheck size={18} /> When you ask a question, Rewind sends your question, recent conversation, and excerpts from matching and recent captured sources to OpenRouter and your selected model provider. Review their privacy and data policies before using it.</div></div>}
+        {settingsPage === "ai" && <div className="settings-stack">
+          <div className="surface-card"><h3>Model provider</h3>
+            <p>Choose where questions, rewrites and summaries are answered.</p>
+            <label className="field-label" htmlFor="ai-provider">Provider</label>
+            <select id="ai-provider" value={preferences.aiProvider} onChange={(event) => { updateSetting({ aiProvider: event.target.value as Preferences["aiProvider"] }); setLocalTestResult(""); }}>
+              <option value="openrouter">OpenRouter (cloud)</option>
+              <option value="local">Local model on this Mac</option>
+            </select>
+          </div>
+          {preferences.aiProvider === "local" ? <>
+            <div className="surface-card"><h3>Local model</h3>
+              <p>Any server on this Mac that speaks the OpenAI chat API: <code>mlx_lm.server</code>, Ollama or LM Studio. Nothing leaves your computer.</p>
+              <label className="field-label" htmlFor="local-endpoint">Server address</label>
+              <input id="local-endpoint" value={preferences.localEndpoint} onChange={(event) => { updateSetting({ localEndpoint: event.target.value }); setLocalTestResult(""); }} placeholder="http://127.0.0.1:8080/v1" autoComplete="off" />
+              <p className="fine-print">mlx_lm.server: http://127.0.0.1:8080/v1 · Ollama: http://localhost:11434/v1 · LM Studio: http://localhost:1234/v1. Only addresses on this Mac are accepted.</p>
+              <label className="field-label" htmlFor="local-model">Model name</label>
+              <input id="local-model" value={preferences.localModel} onChange={(event) => { updateSetting({ localModel: event.target.value.trim() }); setLocalTestResult(""); }} placeholder="mlx-community/Qwen3.5-2B-4bit" autoComplete="off" />
+              <p className="fine-print">Use the name the server lists: the --model value for mlx_lm.server, or the tag from <code>ollama list</code>, such as qwen3:4b.</p>
+              <div className="manage-actions"><Button disabled={!desktopRuntime() || localTesting} onClick={() => void runLocalTest()}>{localTesting ? "Testing…" : "Test connection"}</Button></div>
+              {localTestResult && <p className="fine-print" role="status">{localTestResult}</p>}
+            </div>
+            <div className="callout neutral"><ShieldCheck size={18} /> With a local model, questions, captured excerpts and selected text stay on this Mac. Small models can be slower to follow instructions, so answers may be rougher than a cloud model's. Memory search and tool use still run locally.</div>
+          </> : <>
+            <div className="surface-card"><h3>OpenRouter</h3><p>Choose the model that answers your questions. Your API key is stored in a private local file on this Mac, without Keychain. It is not encrypted.</p><label className="field-label" htmlFor="openrouter-model">Model ID</label><input id="openrouter-model" value={modelDraft} onChange={(event) => setModelDraft(event.target.value)} placeholder="provider/model-name" autoComplete="off" /><label className="field-label" htmlFor="openrouter-fast-model">Autocomplete model (optional)</label><input id="openrouter-fast-model" value={preferences.fastModel} onChange={(event) => updateSetting({ fastModel: event.target.value.trim() })} placeholder="A faster model for double-tap autocomplete" autoComplete="off" /><label className="field-label" htmlFor="openrouter-key">OpenRouter API key</label><input id="openrouter-key" type="password" value={openrouterKey} onChange={(event) => setOpenrouterKey(event.target.value)} placeholder={hasOpenrouterKey ? "Key saved — enter a new key to replace it" : "Paste your OpenRouter API key"} autoComplete="off" /><p className="fine-print">{hasOpenrouterKey ? "A key is saved." : "No key saved yet."}</p><div className="manage-actions"><Button disabled={!desktopRuntime()} onClick={() => void saveModel()}>Save model settings</Button>{hasOpenrouterKey && <Button kind="secondary" onClick={() => void invoke("openrouter_delete_key").then(() => { setHasOpenrouterKey(false); setSettingsNotice("Local OpenRouter key removed."); }).catch(() => setSettingsNotice("Could not remove the local key."))}>Remove key</Button>}</div></div>
+            <div className="callout neutral"><ShieldCheck size={18} /> When you ask a question, Rewind sends your question, recent conversation, and excerpts from matching and recent captured sources to OpenRouter and your selected model provider. Review their privacy and data policies before using it.</div>
+          </>}
+        </div>}
         {settingsPage === "capture" && <div className="settings-stack">
           <div className="callout neutral"><ShieldCheck size={18} /> macOS capture starts only after your choice and Accessibility permission. Normal browser windows can be read; private/incognito windows, credential apps, and protected fields are skipped.</div>
           <div className="surface-card"><h3>Capture</h3><Toggle checked={Boolean(status?.captureRequested)} disabled={!status} onChange={(value) => { if (value) void startCapture(); else void stopCapture(); }} label="Capture memory" description={status?.permission !== "granted" && status?.captureRequested ? "Accessibility permission needed." : "Read foreground app text and store it locally."} /><div className="status-details"><span>Service</span><strong>{status ? "Connected" : "Offline"}</strong><span>Accessibility permission</span><strong>{status?.permission || "Unknown"}</strong></div>{status?.captureRequested && <Button kind="secondary" disabled={status.permission !== "granted"} onClick={() => void togglePause()}>{status.capturePaused ? <Play size={16} /> : <Pause size={16} />}{status.capturePaused ? "Resume" : "Pause"}</Button>}</div>
+          <div className="surface-card"><h3>Test mode</h3><Toggle checked={testMode} disabled={!status} onChange={(value) => void changeTestMode(value)} label="Evaluate against a separate archive" description="Every question you ask is answered from the eval archive instead of your real memory, and a play/pause button appears in the notch to record the current screen into it. Nothing recorded here touches your real memory." />{testMode && <div className="status-details"><span>Eval archive</span><strong>{status?.indexedCount ?? 0} captures</strong><span>Location</span><strong>{evalDir || "Unknown"}</strong><span>Logs</span><strong>captures.jsonl (cleaned text and chunks), queries.jsonl</strong></div>}{testMode && (confirmEvalReset ? <div style={{ display: "flex", gap: 8, marginTop: 12 }}><Button kind="secondary" onClick={() => void eraseEvalData()}>Erase eval archive</Button><Button kind="quiet" onClick={() => setConfirmEvalReset(false)}>Cancel</Button></div> : <Button kind="secondary" onClick={() => setConfirmEvalReset(true)}>Reset eval archive…</Button>)}</div>
           <div className="surface-card"><h3>Exclusions</h3><label className="field-label" htmlFor="excluded-apps">Excluded apps</label><textarea id="excluded-apps" value={preferences.excludedApps} onChange={(event) => updateSetting({ excludedApps: event.target.value })} placeholder="One bundle ID per line, e.g. com.example.app" /><label className="field-label" htmlFor="excluded-domains">Excluded domains</label><textarea id="excluded-domains" value={preferences.excludedDomains} onChange={(event) => updateSetting({ excludedDomains: event.target.value })} placeholder="One domain per line" /><p className="fine-print">Private/incognito windows are skipped because their state cannot be verified reliably. Add domains here to exclude specific browser sites.</p><Button kind="secondary" disabled={!status} onClick={() => void saveCaptureExclusions()}>Save exclusions</Button></div>
           <div className="surface-card"><h3>AI answers</h3><p>Configure OpenRouter under AI model. Captured text is sent only when you ask a question.</p><Button kind="secondary" onClick={() => setSettingsPage("ai")}>Open AI model settings</Button></div>
         </div>}
@@ -500,8 +566,28 @@ export default function App() {
               <option value="leftShift">Left Shift (⇧)</option>
               <option value="rightControl">Right Control (⌃)</option>
               <option value="leftControl">Left Control (⌃)</option>
+              <option value="rightCommand">Right Command (⌘)</option>
+              <option value="leftCommand">Left Command (⌘)</option>
             </select>
-            <p className="fine-print">Double-tap the selected key. The notch shows × 1 on the first tap, then × 2 opens a fresh single-entry rewind. macOS may ask for Input Monitoring or Accessibility permission. Current trigger: {triggerName(preferences.rewindTrigger)}.</p>
+            {(preferences.rewindTrigger === "rightCommand" || preferences.rewindTrigger === "leftCommand") && <p className="fine-print">Double-tapping Command can also be the macOS Dictation shortcut. Check System Settings → Keyboard → Dictation → Shortcut so the two do not collide. Shortcuts such as ⌘C never count as taps.</p>}
+            {preferences.rewindTrigger === "fn" && <p className="fine-print">Globe / Fn may be set to show emoji, change the input source or start dictation (System Settings → Keyboard → “Press 🌐 key to”). A double-tap runs that action as well.</p>}
+            <p className="fine-print">Double-tap the selected key. The notch shows × 1 on the first tap, then × 2 opens a fresh single-entry rewind, or completes, rewrites or summarizes when you are typing or have text selected. macOS may ask for Input Monitoring or Accessibility permission. Current trigger: {triggerName(preferences.rewindTrigger)}.</p>
+          </div>
+          <div className="surface-card"><h3>Double-tap actions</h3>
+            <p>What a double-tap does depends on where you are. Rewind reads the focused field only at the moment you tap, never while you type.</p>
+            <Toggle checked={preferences.autocompleteOnTap} onChange={(value) => updateSetting({ autocompleteOnTap: value })} label="Autocomplete" description="Double-tap while typing and Rewind finishes your sentence in place, using who you are replying to. It never presses Return." />
+            <label className="field-label" htmlFor="autocomplete-length">Autocomplete length</label>
+            <select id="autocomplete-length" value={preferences.autocompleteLength} disabled={!preferences.autocompleteOnTap} onChange={(event) => updateSetting({ autocompleteLength: event.target.value as Preferences["autocompleteLength"] })}>
+              <option value="phrase">A few words</option>
+              <option value="sentence">To the end of the sentence</option>
+              <option value="reply">A short reply</option>
+            </select>
+            <Toggle checked={preferences.summarizeOnTap} onChange={(value) => updateSetting({ summarizeOnTap: value })} label="Summarize a selection" description="Select text on a page or document, double-tap, and the summary opens in the notch chat." />
+            <Toggle checked={preferences.rewriteOnTap} onChange={(value) => updateSetting({ rewriteOnTap: value })} label="Rewrite a selection in a text field" description="Shows a preview first. Rewind never replaces your text without a click. When off, selections in text fields are summarized." />
+            <Toggle checked={preferences.showOverFullScreen} onChange={(value) => updateSetting({ showOverFullScreen: value })} label="Show the notch over full-screen apps" description="Keeps Rewind on the notch when another app is full screen." />
+            <Toggle checked={preferences.allowPasteInsert} onChange={(value) => updateSetting({ allowPasteInsert: value })} label="Allow paste as a last resort" description="If typing into a field fails, paste instead. Your clipboard is restored right after." />
+            <Toggle checked={preferences.assistInPrivateWindows} onChange={(value) => updateSetting({ assistInPrivateWindows: value })} label="Allow in private browser windows" description="Off by default. Text from private windows is sent to your AI provider only if this is on." />
+            <p className="fine-print">Secure fields, password managers and apps you excluded are never read. Everything is redacted before it is sent to your AI provider, and text is never logged. Needs Accessibility access for Rewind Capture.</p>
           </div>
           <div className="surface-card"><h3>Try it</h3><p>Preview the single-entry rewind or the history drop without leaving this window.</p>
             <div className="manage-actions"><Button kind="secondary" onClick={() => void previewNotch("compose")}><RewindMark className="button-rewind" /> Single rewind</Button><Button kind="secondary" onClick={() => void previewNotch("history")}><MessageCircle size={15} /> Chat history</Button></div>

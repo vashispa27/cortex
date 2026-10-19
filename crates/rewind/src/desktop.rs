@@ -12,6 +12,9 @@ struct Settings {
     mcp_enabled: bool,
     excluded_apps: Vec<String>,
     excluded_domains: Vec<String>,
+    /// Routes every search to the separate eval archive and lets the notch record into it.
+    #[serde(default)]
+    test_mode: bool,
 }
 impl Default for Settings {
     fn default() -> Self {
@@ -22,6 +25,7 @@ impl Default for Settings {
             mcp_enabled: false,
             excluded_apps: vec![],
             excluded_domains: vec![],
+            test_mode: false,
         }
     }
 }
@@ -55,6 +59,88 @@ fn load_settings(root: &Path) -> Result<Settings> {
     }
     write_settings(root, &settings)?;
     Ok(settings)
+}
+
+/// Test mode's own archive: a separate SQLite file and Qdrant index next to (never inside) the real
+/// memory, so evals only ever see what the user deliberately recorded into it. Recording is a
+/// play/pause switch that is off whenever the engine starts.
+struct EvalLab {
+    dir: PathBuf,
+    runtime: Option<Runtime>,
+    capturing: bool,
+}
+impl EvalLab {
+    fn new(root: &Path) -> Self {
+        let dir = env::var_os("REWIND_EVAL_DIR").map(PathBuf::from).unwrap_or_else(|| root.join("eval-memory"));
+        Self { dir, runtime: None, capturing: false }
+    }
+    /// Opens the eval archive on first use. It borrows the embedding model of the real runtime, so it is
+    /// not downloaded or loaded twice.
+    fn runtime(&mut self, main: &Runtime) -> Result<&mut Runtime> {
+        if self.runtime.is_none() {
+            fs::create_dir_all(&self.dir)?;
+            fs::set_permissions(&self.dir, fs::Permissions::from_mode(0o700))?;
+            self.runtime = Some(open_runtime_with(&self.dir, false, Some(main.model.clone()), prefix::Prefix::DEFAULT)?);
+        }
+        self.runtime.as_mut().context("eval archive unavailable")
+    }
+    /// Deletes everything recorded for evals: the database, the vector index and both logs. Only files
+    /// this module creates are removed, so a mistyped `REWIND_EVAL_DIR` cannot take anything else with it.
+    fn reset(&mut self) -> Result<()> {
+        self.capturing = false;
+        self.runtime = None;
+        for name in ["memory.sqlite3", "memory.sqlite3-wal", "memory.sqlite3-shm", CAPTURE_LOG, QUERY_LOG] {
+            let path = self.dir.join(name);
+            if path.is_file() {
+                fs::remove_file(path)?;
+            }
+        }
+        let index = self.dir.join("qdrant-edge");
+        if index.is_dir() {
+            fs::remove_dir_all(index)?;
+        }
+        Ok(())
+    }
+}
+const CAPTURE_LOG: &str = "captures.jsonl";
+const QUERY_LOG: &str = "queries.jsonl";
+
+fn append_jsonl(dir: &Path, name: &str, value: &Value) -> Result<()> {
+    use std::io::Write;
+    use std::os::unix::fs::OpenOptionsExt;
+    let mut file = fs::OpenOptions::new().create(true).append(true).mode(0o600).open(dir.join(name))?;
+    writeln!(file, "{value}")?;
+    Ok(())
+}
+/// Writes what the cleaner produced for a newly recorded page and the chunks that were cut from it:
+/// exactly the text that goes on to be embedded.
+fn log_eval_capture(dir: &Path, rt: &Runtime, id: i64) -> Result<()> {
+    let source = load_source(&rt.db, id, 0.0)?.context("recorded source missing")?;
+    let mut stmt = rt.db.prepare("SELECT body FROM chunks WHERE snapshot_id=?1 ORDER BY start_byte")?;
+    let chunks = stmt.query_map([id], |r| r.get::<_, String>(0))?.collect::<rusqlite::Result<Vec<_>>>()?;
+    append_jsonl(dir, CAPTURE_LOG, &json!({
+        "captured_at": time_string(now_ms()), "snapshot_id": id, "app_id": source.app_id, "title": source.title,
+        "url": source.url, "source_type": source.source_type, "cleaner_quality": source.cleaner_quality,
+        "cleaned_body": source.body, "chunks": chunks,
+    }))
+}
+fn log_eval_query(dir: &Path, route: &str, query: &str, hits: &[Hit], abstained: bool) -> Result<()> {
+    let results: Vec<Value> = hits.iter().map(|h| json!({"snapshot_id":h.source.id,"app_id":h.source.app_id,"title":h.source.title,"url":h.source.url,"score":h.source.score})).collect();
+    append_jsonl(dir, QUERY_LOG, &json!({"asked_at":time_string(now_ms()),"route":route,"query":query,"abstained":abstained,"results":results}))
+}
+/// Routes that read the archive: in test mode these answer from the eval archive instead.
+fn reads_archive(method: &str, path: &str) -> bool {
+    matches!(
+        (method, path),
+        ("GET", "/v1/status")
+            | ("POST", "/v1/memory/search" | "/v1/memory/retrieve" | "/v1/memory/snapshots" | "/v1/assistant/prepare" | "/v1/assistant/search")
+    ) || (method == "GET" && path.starts_with("/v1/memory/recent?"))
+}
+fn settings_json(settings: &Settings, lab: &EvalLab) -> Result<Value> {
+    let mut value = serde_json::to_value(settings)?;
+    value["eval_capture_active"] = json!(settings.test_mode && lab.capturing);
+    value["eval_dir"] = json!(lab.dir);
+    Ok(value)
 }
 
 /// Copy the former desktop's already-sanitized captures into the canonical
@@ -219,6 +305,11 @@ extern "C" {
 /// grant to "Rewind Capture" would never apply. Disclaiming makes the helper's
 /// stable bundle identity the one that is checked and prompted for.
 fn run_helper(path: &Path, mode: &str) -> Result<AxReply> {
+    let bytes = run_helper_raw(path, &[mode.to_owned()], None, 15)?;
+    serde_json::from_slice(&bytes).context("invalid Accessibility response")
+}
+/// Spawns the helper with `args`, optionally feeding `input` on stdin, and returns its stdout.
+pub(crate) fn run_helper_raw(path: &Path, args: &[String], input: Option<&[u8]>, timeout_secs: u64) -> Result<Vec<u8>> {
     use std::ffi::CString;
     use std::os::fd::FromRawFd;
     use std::os::unix::ffi::OsStrExt;
@@ -227,20 +318,37 @@ fn run_helper(path: &Path, mode: &str) -> Result<AxReply> {
         if libc::pipe(fds.as_mut_ptr()) != 0 {
             bail!("Accessibility helper failed");
         }
-        libc::fcntl(fds[0], libc::F_SETFD, libc::FD_CLOEXEC);
-        libc::fcntl(fds[1], libc::F_SETFD, libc::FD_CLOEXEC);
+        let mut stdin_fds = [-1 as libc::c_int; 2];
+        if input.is_some() && libc::pipe(stdin_fds.as_mut_ptr()) != 0 {
+            libc::close(fds[0]);
+            libc::close(fds[1]);
+            bail!("Accessibility helper failed");
+        }
+        for fd in [fds[0], fds[1], stdin_fds[0], stdin_fds[1]] {
+            if fd >= 0 {
+                libc::fcntl(fd, libc::F_SETFD, libc::FD_CLOEXEC);
+            }
+        }
         let mut actions: libc::posix_spawn_file_actions_t = std::mem::zeroed();
         let mut attr: libc::posix_spawnattr_t = std::mem::zeroed();
         libc::posix_spawn_file_actions_init(&mut actions);
         libc::posix_spawnattr_init(&mut attr);
         let null = CString::new("/dev/null")?;
-        libc::posix_spawn_file_actions_addopen(&mut actions, 0, null.as_ptr(), libc::O_RDONLY, 0);
+        if input.is_some() {
+            libc::posix_spawn_file_actions_adddup2(&mut actions, stdin_fds[0], 0);
+        } else {
+            libc::posix_spawn_file_actions_addopen(&mut actions, 0, null.as_ptr(), libc::O_RDONLY, 0);
+        }
         libc::posix_spawn_file_actions_addopen(&mut actions, 2, null.as_ptr(), libc::O_WRONLY, 0);
         libc::posix_spawn_file_actions_adddup2(&mut actions, fds[1], 1);
         responsibility_spawnattrs_setdisclaim(&mut attr, 1);
         let program = CString::new(path.as_os_str().as_bytes())?;
-        let mode = CString::new(mode)?;
-        let argv = [program.as_ptr(), mode.as_ptr(), std::ptr::null()];
+        let mut owned: Vec<CString> = vec![program.clone()];
+        for arg in args {
+            owned.push(CString::new(arg.as_str())?);
+        }
+        let mut argv: Vec<*const libc::c_char> = owned.iter().map(|arg| arg.as_ptr()).collect();
+        argv.push(std::ptr::null());
         let vars: Vec<CString> = env::vars_os()
             .filter_map(|(k, v)| {
                 let mut entry = k.as_bytes().to_vec();
@@ -264,8 +372,21 @@ fn run_helper(path: &Path, mode: &str) -> Result<AxReply> {
         libc::posix_spawnattr_destroy(&mut attr);
         libc::close(fds[1]);
         let mut reader = fs::File::from_raw_fd(fds[0]);
+        if input.is_some() {
+            libc::close(stdin_fds[0]);
+        }
         if spawned != 0 {
+            if input.is_some() {
+                libc::close(stdin_fds[1]);
+            }
             bail!("Accessibility helper could not start");
+        }
+        if let Some(input) = input {
+            let mut writer = fs::File::from_raw_fd(stdin_fds[1]);
+            let payload = input.to_vec();
+            thread::spawn(move || {
+                let _ = writer.write_all(&payload);
+            });
         }
         let (tx, rx) = std::sync::mpsc::channel();
         thread::spawn(move || {
@@ -273,7 +394,7 @@ fn run_helper(path: &Path, mode: &str) -> Result<AxReply> {
             let _ = (&mut reader).take(512 * 1024 + 1).read_to_end(&mut bytes);
             let _ = tx.send(bytes);
         });
-        let bytes = rx.recv_timeout(Duration::from_secs(15));
+        let bytes = rx.recv_timeout(Duration::from_secs(timeout_secs));
         if bytes.is_err() {
             libc::kill(pid, libc::SIGKILL);
         }
@@ -283,7 +404,7 @@ fn run_helper(path: &Path, mode: &str) -> Result<AxReply> {
         if !libc::WIFEXITED(status) || libc::WEXITSTATUS(status) != 0 || bytes.len() > 512 * 1024 {
             bail!("Accessibility helper failed");
         }
-        serde_json::from_slice(&bytes).context("invalid Accessibility response")
+        Ok(bytes)
     }
 }
 fn permission(helper: &Path) -> String {
@@ -325,6 +446,7 @@ fn recent(db: &Connection, limit: usize, since: i64) -> Result<Value> {
 }
 fn route(
     rt: &mut Runtime,
+    lab: &mut EvalLab,
     root: &Path,
     settings: &mut Settings,
     helper: &Path,
@@ -333,6 +455,36 @@ fn route(
     let method = request["method"].as_str().context("method missing")?;
     let path = request["path"].as_str().context("path missing")?;
     let body = &request["body"];
+    match (method, path) {
+        ("POST", "/v1/eval/capture") => {
+            // The play/pause switch. Only available in test mode, and only with Accessibility permission.
+            if !settings.test_mode {
+                bail!("Turn on test mode in Settings first");
+            }
+            let active = body["active"].as_bool().context("active must be true or false")?;
+            if active {
+                if permission(helper) != "granted" {
+                    bail!("Accessibility permission is not granted to Rewind Capture");
+                }
+                lab.runtime(rt)?;
+            }
+            lab.capturing = active;
+            return settings_json(settings, lab);
+        }
+        ("POST", "/v1/eval/reset") => {
+            if body["confirmation"] != "RESET EVAL DATA" {
+                bail!("Reset confirmation did not match");
+            }
+            lab.reset()?;
+            return Ok(json!({"reset":true,"eval_dir":lab.dir}));
+        }
+        _ => {}
+    }
+    // In test mode every question is answered from the eval archive; the real memory is not read.
+    let eval_dir = lab.dir.clone();
+    let test_mode = settings.test_mode;
+    let reads_eval = test_mode && reads_archive(method, path);
+    let rt = if reads_eval { lab.runtime(rt)? } else { rt };
     match (method, path) {
         ("GET", "/v1/health") => Ok(json!({"ready":true,"retrieval_engine":"qdrant_edge_hybrid"})),
         ("GET", "/v1/status") => {
@@ -357,10 +509,10 @@ fn route(
                 .optional()?
                 .unwrap_or(0);
             Ok(
-                json!({"capture_enabled":settings.capture_enabled && access=="granted","capture_paused":settings.capture_paused,"permission_state":access,"snapshot_count":count,"indexed_chunks":indexed,"memory_epoch":epoch,"retrieval_engine":"qdrant_edge_hybrid","embedding_model":MODEL_VERSION,"version":"0.1.0","ready":true}),
+                json!({"test_mode":test_mode,"eval_dir":eval_dir,"capture_enabled":settings.capture_enabled && access=="granted","capture_paused":settings.capture_paused,"permission_state":access,"snapshot_count":count,"indexed_chunks":indexed,"memory_epoch":epoch,"retrieval_engine":"qdrant_edge_hybrid","embedding_model":MODEL_VERSION,"version":"0.1.0","ready":true}),
             )
         }
-        ("GET", "/v1/settings") => Ok(serde_json::to_value(&*settings)?),
+        ("GET", "/v1/settings") => settings_json(settings, lab),
         ("PATCH", "/v1/settings") => {
             if body["expected_version"].as_u64() != Some(settings.version) {
                 bail!("Settings changed; refresh and try again");
@@ -377,6 +529,9 @@ fn route(
             if body["mcp_enabled"] == true {
                 bail!("MCP access is not available through the Rewind adapter");
             }
+            if let Some(value) = body.get("test_mode") {
+                next.test_mode = value.as_bool().context("invalid test mode setting")?;
+            }
             for (key, target) in [
                 ("excluded_apps", &mut next.excluded_apps),
                 ("excluded_domains", &mut next.excluded_domains),
@@ -390,8 +545,11 @@ fn route(
             }
             next.version += 1;
             write_settings(root, &next)?;
+            if !next.test_mode {
+                lab.capturing = false;
+            }
             *settings = next;
-            Ok(serde_json::to_value(&*settings)?)
+            settings_json(settings, lab)
         }
         ("POST", "/v1/capture/request-permission") => {
             Ok(json!({"permission_state":run_helper(helper,"--request-permission")?.permission}))
@@ -408,6 +566,9 @@ fn route(
                 .unwrap_or(answer_pipeline::SOURCE_LIMIT as u64)
                 .clamp(1, 50) as usize;
             let result = retrieve(rt, query, &params)?;
+            if test_mode {
+                let _ = log_eval_query(&eval_dir, path, query, &result.hits, result.abstained);
+            }
             // The assistant route shows the user's own wording to the model; retrieval ran on `query`.
             let question = body["question"]
                 .as_str()
@@ -464,6 +625,9 @@ fn route(
                 params.app_ids = Some(ids.iter().map(|id| id.to_string()).collect());
             }
             let result = retrieve(rt, query, &params)?;
+            if test_mode {
+                let _ = log_eval_query(&eval_dir, path, query, &result.hits, result.abstained);
+            }
             let timezone = answer_pipeline::system_timezone();
             let prepared = answer_pipeline::prepare(&answer_pipeline::Request {
                 timezone: &timezone,
@@ -483,6 +647,73 @@ fn route(
             // Tool output from outside the engine is redacted the same way as evidence before it leaves the Mac.
             let text = body["text"].as_str().context("text missing")?;
             Ok(json!({"text":redact_cloud(text)?}))
+        }
+        ("POST", "/v1/assist/focus") => {
+            // Reads the focused field on an explicit double-tap and says what the tap means.
+            let started = std::time::Instant::now();
+            let flags: assist::RouteFlags = serde_json::from_value(body.clone()).unwrap_or_default();
+            let mut args = vec!["--focus".to_owned()];
+            if body["copy_fallback"] == true {
+                args.push("--copy-fallback".into());
+            }
+            args.extend(settings.excluded_apps.iter().map(|app| format!("--exclude-app={app}")));
+            let reply = run_helper_raw(helper, &args, None, 4).and_then(|bytes| serde_json::from_slice::<Value>(&bytes).context("invalid Accessibility response"));
+            let mut context: rewind_contracts::FocusContext = match reply.and_then(|value| serde_json::from_value(value).context("invalid focus context")) {
+                Ok(context) => context,
+                Err(_) => serde_json::from_value(json!({"status":"skipped","reason":"focus_unavailable"}))?,
+            };
+            let domain = context.url.as_deref().and_then(|s| url::Url::parse(s).ok()).and_then(|u| u.host_str().map(str::to_owned));
+            let excluded_domain = domain.is_some_and(|d| settings.excluded_domains.iter().any(|s| d == *s || d.ends_with(&format!(".{s}"))));
+            if context.status == "ok" && (excluded_domain || settings.excluded_apps.iter().any(|a| a.eq_ignore_ascii_case(&context.app_id))) {
+                context = serde_json::from_value(json!({"status":"skipped","reason":"excluded_app"}))?;
+            }
+            let (intent, hint) = assist::classify(&context, &flags);
+            eprintln!("assist focus: intent={intent:?} status={} reason={} ms={}", context.status, context.reason.as_deref().unwrap_or("-"), started.elapsed().as_millis());
+            Ok(json!({"intent":intent,"hint":hint,"context":context}))
+        }
+        ("POST", "/v1/assist/prepare") => {
+            let context: rewind_contracts::FocusContext = serde_json::from_value(body["context"].clone()).context("Invalid focus context")?;
+            let timezone = answer_pipeline::system_timezone();
+            let now = answer_pipeline::time_anchor(Local::now().fixed_offset(), &timezone);
+            let prepared = assist::prepare(
+                body["kind"].as_str().unwrap_or(""), &context, body["length"].as_str().unwrap_or("sentence"),
+                body["tone"].as_str().unwrap_or(""), body["me"].as_str().unwrap_or(""), &now, body["private_windows"] == true,
+            )?;
+            Ok(json!({"messages":prepared.messages,"max_tokens":prepared.max_tokens,"temperature":prepared.temperature,"truncated":prepared.truncated,"prompt_version":assist::PROMPT_VERSION}))
+        }
+        ("POST", "/v1/assist/finish") => {
+            let raw = body["raw"].as_str().context("raw missing")?;
+            let text = if body["kind"] == "autocomplete" {
+                let app_id = body["app_id"].as_str().unwrap_or("");
+                let keep_newlines = body["multiline"] == true && !assist::types_into(app_id);
+                assist::sanitize_completion(raw, body["text_before_caret"].as_str().unwrap_or(""), keep_newlines)
+            } else {
+                assist::sanitize_rewrite(raw, body["original"].as_str().unwrap_or(""))
+            };
+            Ok(json!({"text":text,"empty":text.trim().is_empty()}))
+        }
+        ("POST", "/v1/assist/apply" | "/v1/assist/undo" | "/v1/assist/check") => {
+            let exclude: Vec<String> = settings.excluded_apps.clone();
+            let mut editor = assist::HelperEditor::new(helper, exclude, body["allow_paste"] == true);
+            let started = std::time::Instant::now();
+            let result = match path {
+                "/v1/assist/apply" => {
+                    let target: rewind_contracts::TargetRevision = serde_json::from_value(body["target"].clone()).context("Invalid target")?;
+                    let text = body["text"].as_str().filter(|t| t.chars().count() <= 24_000).context("Invalid text")?;
+                    let request_id = body["request_id"].as_str().unwrap_or("assist");
+                    assist::apply(&mut editor, &target, text, request_id, 0)
+                }
+                "/v1/assist/undo" => {
+                    let token: rewind_capture::edit::UndoToken = serde_json::from_value(body["token"].clone()).context("Invalid undo token")?;
+                    assist::undo(&mut editor, &token)
+                }
+                _ => {
+                    let target: rewind_contracts::TargetRevision = serde_json::from_value(body["target"].clone()).context("Invalid target")?;
+                    json!({"current":assist::still_current(&mut editor, &target)})
+                }
+            };
+            eprintln!("assist {}: outcome={} ms={}", &path[11..], result["outcome"].as_str().unwrap_or("-"), started.elapsed().as_millis());
+            Ok(result)
         }
         ("POST", "/v1/memory/snapshots") => {
             let ids: Vec<i64> = serde_json::from_value(body["ids"].clone())?;
@@ -515,6 +746,9 @@ fn route(
             )
         }
         ("POST", "/v1/privacy/delete") => {
+            if settings.test_mode {
+                bail!("Turn off test mode before deleting your memory; this would not touch the eval archive");
+            }
             if body["scope"] != "all" || body["confirmation"] != "DELETE ALL LOCAL MEMORY" {
                 bail!("Deletion confirmation did not match");
             }
@@ -607,6 +841,7 @@ pub fn serve(state: &Path) -> Result<()> {
     drop(db);
     let mut runtime = open_runtime(state, false)?;
     while runtime.index_pending()? > 0 {}
+    let mut lab = EvalLab::new(&root);
     let mut blocked = blocklist::Watcher::new(state)?;
     let mut last_capture = std::time::Instant::now() - Duration::from_secs(3);
     loop {
@@ -637,13 +872,15 @@ pub fn serve(state: &Path) -> Result<()> {
                 let result = if is_json {
                     route(
                         &mut runtime,
+                        &mut lab,
                         &root,
                         &mut settings,
                         &helper,
                         &request.unwrap(),
                     )
                 } else {
-                    answer(&mut runtime, text.trim()).map(|v| json!({"text":v}))
+                    let active = if settings.test_mode { lab.runtime(&runtime) } else { Ok(&mut runtime) };
+                    active.and_then(|rt| answer(rt, text.trim())).map(|v| json!({"text":v}))
                 };
                 let rebuild = result
                     .as_ref()
@@ -665,22 +902,41 @@ pub fn serve(state: &Path) -> Result<()> {
         if last_capture.elapsed() >= Duration::from_secs(3) {
             last_capture = std::time::Instant::now();
             let _ = blocked.refresh();
-            if settings.capture_enabled
-                && !settings.capture_paused
-                && permission(&helper) == "granted"
-            {
-                match capture_one(&mut runtime, &helper, &settings, &blocked.list) {
-                    Ok(Some(id)) => {
-                        if let Err(e) = summarize(state, id) {
-                            eprintln!("Summary failed: {e:#}");
+            let real_capture = settings.capture_enabled && !settings.capture_paused;
+            let eval_capture = settings.test_mode && lab.capturing;
+            if (real_capture || eval_capture) && permission(&helper) == "granted" {
+                if real_capture {
+                    match capture_one(&mut runtime, &helper, &settings, &blocked.list) {
+                        Ok(Some(id)) => {
+                            if let Err(e) = summarize(state, id) {
+                                eprintln!("Summary failed: {e:#}");
+                            }
                         }
+                        Ok(None) => {}
+                        Err(e) => eprintln!("Capture skipped: {e:#}"),
                     }
-                    Ok(None) => {}
-                    Err(e) => eprintln!("Capture skipped: {e:#}"),
+                }
+                // The play/pause switch records into the eval archive only, whatever the real capture does.
+                if eval_capture {
+                    let dir = lab.dir.clone();
+                    match lab.runtime(&runtime).and_then(|eval| capture_one(eval, &helper, &settings, &blocked.list).map(|id| (eval, id))) {
+                        Ok((eval, Some(id))) => {
+                            if let Err(e) = log_eval_capture(&dir, eval, id).and_then(|_| summarize(&dir, id)) {
+                                eprintln!("Eval record failed: {e:#}");
+                            }
+                        }
+                        Ok((_, None)) => {}
+                        Err(e) => eprintln!("Eval capture skipped: {e:#}"),
+                    }
                 }
             }
             if let Err(e) = runtime.index_pending() {
                 eprintln!("Indexing failed: {e:#}");
+            }
+            if let Some(eval) = lab.runtime.as_mut() {
+                if let Err(e) = eval.index_pending() {
+                    eprintln!("Eval indexing failed: {e:#}");
+                }
             }
         }
         thread::sleep(Duration::from_millis(30));
@@ -743,14 +999,49 @@ fn capture_one(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::sync::atomic::Ordering as AtomicOrdering;
     fn temp_root() -> PathBuf {
+        static NEXT: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
         let root = env::temp_dir().join(format!(
-            "rewind-import-test-{}-{}",
+            "rewind-import-test-{}-{}-{}",
             std::process::id(),
-            now_ms()
+            now_ms(),
+            NEXT.fetch_add(1, AtomicOrdering::SeqCst)
         ));
         fs::create_dir_all(&root).unwrap();
         root
+    }
+    #[test]
+    fn test_mode_reads_the_eval_archive_and_never_deletes() {
+        for (method, path) in [("GET", "/v1/status"), ("POST", "/v1/memory/retrieve"), ("POST", "/v1/assistant/search"), ("GET", "/v1/memory/recent?limit=5")] {
+            assert!(reads_archive(method, path), "{path}");
+        }
+        for (method, path) in [("GET", "/v1/settings"), ("POST", "/v1/privacy/delete"), ("POST", "/v1/eval/reset"), ("POST", "/v1/assist/prepare")] {
+            assert!(!reads_archive(method, path), "{path}");
+        }
+        assert!(!Settings::default().test_mode);
+        // Settings written before test mode existed still load.
+        let old: Settings = serde_json::from_str(r#"{"version":3,"capture_enabled":true,"capture_paused":false,"mcp_enabled":false,"excluded_apps":[],"excluded_domains":[]}"#).unwrap();
+        assert!(old.capture_enabled && !old.test_mode);
+    }
+    #[test]
+    fn eval_reset_removes_only_its_own_files() {
+        let root = temp_root();
+        let dir = root.join("eval-memory");
+        fs::create_dir_all(dir.join("qdrant-edge")).unwrap();
+        for name in ["memory.sqlite3", CAPTURE_LOG, QUERY_LOG, "keep.txt"] {
+            fs::write(dir.join(name), "x").unwrap();
+        }
+        fs::write(dir.join("qdrant-edge/edge_config.json"), "{}").unwrap();
+        let mut lab = EvalLab { dir: dir.clone(), runtime: None, capturing: true };
+        append_jsonl(&dir, CAPTURE_LOG, &json!({"cleaned_body":"hello"})).unwrap();
+        lab.reset().unwrap();
+        assert!(!lab.capturing);
+        for name in ["memory.sqlite3", CAPTURE_LOG, QUERY_LOG, "qdrant-edge"] {
+            assert!(!dir.join(name).exists(), "{name}");
+        }
+        assert!(dir.join("keep.txt").exists());
+        fs::remove_dir_all(root).unwrap();
     }
     #[test]
     fn tool_dates_are_local_and_inclusive_of_the_end_day() {

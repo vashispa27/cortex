@@ -1,6 +1,6 @@
 import { invoke, isTauri } from "@tauri-apps/api/core";
 
-export type NotchMode = "collapsed" | "compose" | "thinking" | "answer" | "history";
+export type NotchMode = "collapsed" | "compose" | "thinking" | "answer" | "history" | "assist" | "assist-done" | "assist-result";
 
 export type MainPage = "today" | "timeline" | "ask" | "memory" | "settings";
 
@@ -42,6 +42,53 @@ export async function configureRewindTrigger(trigger: string, enabled: boolean):
     await invoke("set_rewind_trigger", { trigger, enabled });
   } catch {
     // The trigger is optional; the mouse controls still work.
+  }
+}
+
+export type AssistConfig = {
+  autocomplete: boolean;
+  summarize: boolean;
+  rewrite: boolean;
+  privateWindows: boolean;
+  showOverFullScreen: boolean;
+};
+
+/** Tells the shell which double-tap actions are on and whether the notch may show over full-screen apps. */
+export async function configureAssist(config: AssistConfig): Promise<void> {
+  if (!isTauri()) return;
+  try {
+    await invoke("set_assist_config", config);
+  } catch {
+    // Without it, a double-tap just opens the compose box.
+  }
+}
+
+/** Test mode adds a record button to the collapsed notch; the shell widens the notch to fit it. */
+export async function configureTestMode(enabled: boolean): Promise<void> {
+  if (!isTauri()) return;
+  try {
+    await invoke("set_test_mode", { enabled });
+  } catch {
+    // Without it the button is merely cramped.
+  }
+}
+
+export async function setAssistActive(active: boolean): Promise<void> {
+  if (!isTauri()) return;
+  try {
+    await invoke("assist_set_active", { active });
+  } catch {
+    // Cancel-on-typing is best effort.
+  }
+}
+
+/** Lets a text field in the notch take typing without activating Rewind. */
+export async function focusNotch(): Promise<void> {
+  if (!isTauri()) return;
+  try {
+    await invoke("notch_focus");
+  } catch {
+    // The field still works through the normal focus path.
   }
 }
 

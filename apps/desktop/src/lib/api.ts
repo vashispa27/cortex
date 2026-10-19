@@ -21,7 +21,14 @@ export type ServiceStatus = {
   version: string | null;
   raw: Record<string, unknown>;
 };
-export type ServiceSettings = { version: number; capture_paused: boolean; capture_enabled: boolean; mcp_enabled: boolean; excluded_apps: string[]; excluded_domains: string[] };
+export type ServiceSettings = {
+  version: number; capture_paused: boolean; capture_enabled: boolean; mcp_enabled: boolean; excluded_apps: string[]; excluded_domains: string[];
+  /** Test mode: searches run against the separate eval archive and the notch can record into it. */
+  test_mode: boolean;
+  /** True while the notch play button is recording into the eval archive. Resets when the engine restarts. */
+  eval_capture_active: boolean;
+  eval_dir: string;
+};
 
 type Envelope<T> = { request_id?: string; data: T };
 
@@ -64,6 +71,9 @@ async function request<T>(method: "GET" | "POST" | "PATCH", path: string, body?:
     throw new LocalApiError(message, message.includes("not running") ? "OFFLINE" : "REQUEST_FAILED");
   }
 }
+
+/** Calls any allow-listed local engine route; used by the double-tap assist flow. */
+export const localRequest = request;
 
 export function desktopRuntime(): boolean {
   return isTauri();
@@ -176,13 +186,19 @@ export async function getServiceSettings(): Promise<ServiceSettings> {
     mcp_enabled: Boolean(raw.mcp_enabled),
     excluded_apps: Array.isArray(raw.excluded_apps) ? raw.excluded_apps.filter((item): item is string => typeof item === "string") : [],
     excluded_domains: Array.isArray(raw.excluded_domains) ? raw.excluded_domains.filter((item): item is string => typeof item === "string") : [],
+    test_mode: Boolean(raw.test_mode),
+    eval_capture_active: Boolean(raw.eval_capture_active),
+    eval_dir: text(raw.eval_dir),
   };
 }
 
-export async function patchSettings(changes: Partial<Pick<ServiceSettings, "capture_paused" | "capture_enabled" | "mcp_enabled" | "excluded_apps" | "excluded_domains">>): Promise<ServiceSettings> {
+export async function patchSettings(changes: Partial<Pick<ServiceSettings, "capture_paused" | "capture_enabled" | "mcp_enabled" | "excluded_apps" | "excluded_domains" | "test_mode">>): Promise<ServiceSettings> {
   const current = await getServiceSettings();
   const raw = object(await request<unknown>("PATCH", "/v1/settings", { expected_version: current.version, ...changes }));
   return {
+    test_mode: Boolean(raw.test_mode ?? changes.test_mode ?? current.test_mode),
+    eval_capture_active: Boolean(raw.eval_capture_active),
+    eval_dir: text(raw.eval_dir) || current.eval_dir,
     version: number(raw.version) ?? current.version + 1,
     capture_paused: Boolean(raw.capture_paused ?? changes.capture_paused ?? current.capture_paused),
     capture_enabled: Boolean(raw.capture_enabled ?? changes.capture_enabled ?? current.capture_enabled),
@@ -214,4 +230,18 @@ export async function deleteAllMemory(): Promise<DeletionReceipt> {
     memory_epoch: number(raw.memory_epoch) ?? 0,
     capture_paused: Boolean(raw.capture_paused),
   };
+}
+
+/** The notch play/pause button: start or stop recording what is on screen into the eval archive. */
+export async function setEvalCapture(active: boolean): Promise<ServiceSettings> {
+  const raw = object(await request<unknown>("POST", "/v1/eval/capture", { active }));
+  return {
+    ...(await getServiceSettings()),
+    eval_capture_active: Boolean(raw.eval_capture_active),
+  };
+}
+
+/** Erases the eval archive (database, vector index and logs). The real memory is untouched. */
+export async function resetEvalData(): Promise<void> {
+  await request<unknown>("POST", "/v1/eval/reset", { confirmation: "RESET EVAL DATA" });
 }

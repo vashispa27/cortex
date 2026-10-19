@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { answerFromMemory, needsRewrite, parseSource } from "./answer";
+import { acceptableRewrite, answerFromMemory, fallbackQuery, needsRewrite, parseSource } from "./answer";
 import { prepareAssistantRequest } from "./api";
 import { invoke } from "@tauri-apps/api/core";
 vi.mock("@tauri-apps/api/core", () => ({ invoke: vi.fn() }));
 vi.mock("./api", () => ({ prepareAssistantRequest: vi.fn() }));
-vi.mock("./storage", () => ({ loadPreferences: () => ({ openrouterModel: "example/model" }) }));
+const prefs = vi.hoisted(() => ({ current: { openrouterModel: "example/model" } as Record<string, unknown> }));
+vi.mock("./storage", () => ({ loadPreferences: () => prefs.current }));
 const hit = { snapshot_id: 42, observed_ms: 0, app_id: "example.app", title: "Plan", excerpt: "excerpt", evidence_available: true, truncated: false };
 const retrieval = { engine: "qdrant_edge_hybrid" as const, dense: true, bm25: true, fusion: "rrf", candidates: 4 };
 const messages = [{ role: "system" as const, content: "prompt" }, { role: "user" as const, content: "Question: q" }];
@@ -20,16 +21,16 @@ describe("assistant answers", () => {
     vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared());
     const answer = await answerFromMemory("What did I ask about the launch in Example?", []);
     expect(prepareAssistantRequest).toHaveBeenCalledExactlyOnceWith("What did I ask about the launch in Example?", "What did I ask about the launch in Example?", []);
-    expect(invoke).toHaveBeenCalledWith("openrouter_chat", { model: "example/model", messages });
+    expect(invoke).toHaveBeenCalledWith("openrouter_chat", { model: "example/model", messages, endpoint: null });
     expect(answer).toMatchObject({ body: "The launch is Monday. [42]", source: "memory", hits: [hit] });
   });
 
-  it("resolves follow-ups before retrieval, but answers the user's own wording", async () => {
+  it("resolves follow-ups before retrieval, and shows the model both the user's words and the resolution", async () => {
     script("SOURCE: memory\nFriday. [42]", "When did Mira reply in Example?");
     vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared());
     const history = [{ role: "user" as const, body: "What did Mira say in Example?" }];
     await answerFromMemory("What date?", history);
-    expect(prepareAssistantRequest).toHaveBeenCalledExactlyOnceWith("When did Mira reply in Example?", "What date?", [{ role: "user", content: "What did Mira say in Example?" }]);
+    expect(prepareAssistantRequest).toHaveBeenCalledExactlyOnceWith("When did Mira reply in Example?", "What date?\n(Meaning: When did Mira reply in Example?)", [{ role: "user", content: "What did Mira say in Example?" }]);
   });
 
   it.each([
@@ -106,5 +107,82 @@ describe("follow-up rewrite", () => {
   it("runs for short or pronoun follow-ups", () => {
     expect(needsRewrite("What date?", history)).toBe(true);
     expect(needsRewrite("Can you open the link they shared in that thread for me please", history)).toBe(true);
+  });
+});
+
+describe("local model", () => {
+  beforeEach(() => { vi.resetAllMocks(); });
+  it("sends the same request to the local server, with no API key check", async () => {
+    prefs.current = { aiProvider: "local", localModel: "mlx-community/Qwen3.5-2B-4bit", localEndpoint: "http://127.0.0.1:8080/v1" };
+    script("SOURCE: general\nHello.");
+    vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared({ results: [], sources: [], abstained: true }));
+    await answerFromMemory("hi there", []);
+    expect(invoke).toHaveBeenCalledWith("openrouter_chat", expect.objectContaining({ model: "mlx-community/Qwen3.5-2B-4bit", endpoint: "http://127.0.0.1:8080/v1" }));
+    expect(invoke).not.toHaveBeenCalledWith("openrouter_has_key");
+    prefs.current = { openrouterModel: "example/model" };
+  });
+});
+
+describe("a reply that is only a source tag", () => {
+  beforeEach(() => { vi.resetAllMocks(); prefs.current = { openrouterModel: "example/model" }; vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared({ results: [], sources: [], abstained: true })); });
+
+  it("is retried once with a reminder instead of being shown", async () => {
+    const replies = ["SOURCE: none", "SOURCE: none\n\nI could not find Brandon Smith in what was captured."];
+    vi.mocked(invoke).mockImplementation(async (command, args) => {
+      if (command === "openrouter_has_key") return true;
+      const sent = (args as { messages: { content: string }[] }).messages;
+      if (replies.length === 2) expect(sent.at(-1)?.content).not.toMatch(/Reminder/);
+      else expect(sent.at(-1)?.content).toMatch(/Reminder: after the SOURCE line/);
+      return { content: replies.shift() };
+    });
+    const answer = await answerFromMemory("do u have brandon smith on X", []);
+    expect(answer.body).toBe("I could not find Brandon Smith in what was captured.");
+    expect(answer.source).toBe("none");
+  });
+
+  it("is an error when the model still gives no answer, and never reaches the history", async () => {
+    vi.mocked(invoke).mockImplementation(async (command) => command === "openrouter_has_key" ? true : { content: "SOURCE: none" });
+    await expect(answerFromMemory("do u know shivani", [])).rejects.toThrow(/only a source tag/);
+  });
+});
+
+describe("follow-up rewrites from small models", () => {
+  it("rejects a rewrite that answers the question or refuses instead", () => {
+    expect(acceptableRewrite("Do you have the X handle of Roop Reddy?", "do u have X handle of him?")).toBe(true);
+    expect(acceptableRewrite("No, I do not have access to your X (Twitter) handle or any other personal account information.", "do u have X handle of him?")).toBe(false);
+    expect(acceptableRewrite("", "him?")).toBe(false);
+    expect(acceptableRewrite("x".repeat(400), "him?")).toBe(false);
+  });
+
+  it("falls back to the last question plus the follow-up, so the person is not lost", () => {
+    const history = [{ role: "user" as const, content: "what did Roop reddy reply?" }, { role: "assistant" as const, content: "I could not find a reply." }];
+    expect(fallbackQuery("do u have X handle of him?", history)).toBe("what did Roop reddy reply? do u have X handle of him?");
+    expect(fallbackQuery("hello", [])).toBe("hello");
+  });
+
+  it("uses the fallback query for retrieval when the model's rewrite is unusable", async () => {
+    prefs.current = { openrouterModel: "example/model" };
+    vi.resetAllMocks();
+    script("SOURCE: general\nOk.", "No, I do not have access to your X handle.");
+    vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared());
+    await answerFromMemory("do u have X handle of him?", [{ role: "user", body: "what did Roop reddy reply?" }, { role: "assistant", body: "No reply found." }]);
+    expect(prepareAssistantRequest).toHaveBeenCalledWith("what did Roop reddy reply? do u have X handle of him?", "do u have X handle of him?", expect.anything());
+  });
+});
+
+describe("pronouns in a longer chat", () => {
+  it("rewrites from the last exchange only, so him means the person just discussed", async () => {
+    prefs.current = { openrouterModel: "example/model" };
+    vi.resetAllMocks();
+    script("SOURCE: none\nNot captured.", "Do you have Roop Reddy's X handle?");
+    vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared());
+    const chat = [
+      { role: "user" as const, body: "do u have the X handle of Connor Loi?" }, { role: "assistant" as const, body: "Not captured." },
+      { role: "user" as const, body: "what did Roop reddy reply?" }, { role: "assistant" as const, body: "No reply found." },
+    ];
+    await answerFromMemory("do u have X handle of him?", chat);
+    const rewrite = vi.mocked(invoke).mock.calls.find(([name]) => name === "openrouter_search_query")![1] as { history: { content: string }[] };
+    expect(rewrite.history.map((turn) => turn.content)).toEqual(["what did Roop reddy reply?", "No reply found."]);
+    expect(prepareAssistantRequest).toHaveBeenCalledWith("Do you have Roop Reddy's X handle?", "do u have X handle of him?\n(Meaning: Do you have Roop Reddy's X handle?)", expect.anything());
   });
 });

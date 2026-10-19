@@ -1,6 +1,6 @@
 # Spec: notch over full-screen apps, double-tap autocomplete, double-tap summarize
 
-Status: draft, not implemented. Date: 2026-10-19.
+Status: phases 0–3 implemented on 2026-10-19; not yet verified by hand in real apps (see "Implementation notes" at the end). Phase 4 (memory context, preview mode, chunked summaries, evals) is not started.
 
 This spec covers three changes to the Rewind desktop shell (`apps/desktop`):
 
@@ -380,3 +380,18 @@ New `NotchMode` values in `lib/notch.ts`, with sizes in `notch_size`:
 3. **Multiple displays.** Should the notch follow the active screen, or always stay on the built-in display?
 4. **Accessibility identity.** Writes from the helper keep one approved identity. Confirm that synthesized `CGEvent` posting from the helper does not need a separate Input Monitoring grant on macOS 26.
 5. **Summary storage.** Should summaries (not the selected text) be saved into the memory archive so they are searchable later?
+
+## 12. Implementation notes (2026-10-19)
+
+Built: `NSPanel` notch (non-activating, one screen, screen-change re-placement, `showOverFullScreen`); ⌘ triggers and a tested tap state machine (`src-tauri/src/tap.rs`); `FocusContext` (`crates/contracts`); helper modes `--focus`, `--read-target`, `--replace-selection` (`Capture.swift`); engine routes `/v1/assist/{focus,prepare,finish,apply,undo,check}` and router, prompts, sanitizer and `HelperEditor` in `crates/rewind/src/assist.rs`; `undo_token` / `undo_guarded` in `crates/capture/src/edit.rs`; shell commands `set_assist_config`, `assist_set_active`, `notch_focus`, `openrouter_complete`; the `rewind-intent` and `rewind-cancel` events; the `assist`, `assist-done` and `assist-result` notch modes; Settings.
+
+Differences from the spec:
+
+- The focus read runs through the daemon, but the shell calls `/v1/assist/focus` itself (it is not in the page's route allow-list), with a 1.2 s cap before it falls back to compose.
+- The assist prompts have their own version, `assist-v1`. `answer-v4` is unchanged because the answer prompt did not change.
+- The app chip shows the app's initial, not its icon.
+- Esc is not used to cancel; typing in any app, or another double-tap, cancels an in-flight request.
+- Stage timings are logged by the engine for the focus read and the write. The model stage is not logged yet.
+- Not built (phase 4): `autocompleteUsesMemory`, `autocompleteMode = preview`, chunked summaries, evals.
+
+Unverified (needs a manual pass, per §10): notch visible and clickable over full-screen apps and no Space switch; `_setPreventsActivation:` taking effect on the converted panel; clicking panel buttons without the target app losing its selection; compose typing in a non-activating panel and focus returning to the previous app after a submit; AX versus typing insertion in Slack, Messages, Mail, Gmail, Notes and Notion; the ⌘C selection fallback; open question 4 (Input Monitoring for synthesized events).

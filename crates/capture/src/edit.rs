@@ -1,4 +1,5 @@
 use rewind_contracts::{EditDraft,ErrorCode,Selection,TargetRevision};
+use serde::{Deserialize,Serialize};
 use sha2::{Digest,Sha256};
 
 #[derive(Clone, Debug)]
@@ -69,6 +70,64 @@ pub fn apply_guarded<E: NativeEditor>(editor: &mut E, draft: &EditDraft, active_
     }
 }
 
+/// Everything needed to remove exactly one insertion, as long as nothing else changed since.
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+pub struct UndoToken {
+    /// The field as it stood right after the write, with the caret at the end of the inserted text.
+    pub target: TargetRevision,
+    /// Hash of the field text before the write; the undo must reproduce it.
+    pub before_text_hash: String,
+    /// UTF-16 offset of the inserted text.
+    pub start: usize,
+    /// UTF-16 length of the inserted text.
+    pub inserted_len: usize,
+    /// Text the write replaced (empty for a plain insertion).
+    pub restore: String,
+}
+
+/// Builds the undo record after a verified write. `None` when the caret is not where an insertion
+/// would leave it, in which case the user falls back to the app's own undo.
+pub fn undo_token(before: &EditableState, after: &EditableState, selection: &Selection, replacement: &str) -> Option<UndoToken> {
+    let inserted_len: usize = replacement.chars().map(char::len_utf16).sum();
+    let end = selection.start + inserted_len;
+    if inserted_len == 0 || after.revision.selection != (Selection { start: end, end }) { return None; }
+    Some(UndoToken {
+        target: after.revision.clone(),
+        before_text_hash: hash(&before.text),
+        start: selection.start,
+        inserted_len,
+        restore: slice_utf16(&before.text, selection)?.to_owned(),
+    })
+}
+
+/// Removes the inserted span if and only if the field is exactly as the write left it.
+pub fn undo_guarded<E: NativeEditor>(editor: &mut E, token: &UndoToken) -> EditOutcome {
+    let current = match editor.read_target(&token.target) {
+        Ok(Some(x)) => x,
+        Ok(None) => return panel(ErrorCode::TargetStale,"Target disappeared"),
+        Err(_) => return panel(ErrorCode::TargetUnsupported,"Target could not be read"),
+    };
+    if current.secure || !current.writable || !current.plain_text || !current.exact_range_write {
+        return panel(ErrorCode::TargetUnsupported,"Exact plain-text range write unavailable");
+    }
+    let mut expected = token.target.clone();
+    expected.captured_at_ms = current.revision.captured_at_ms;
+    if !same_revision(&current.revision,&expected) || hash(&current.text) != token.target.field_text_hash {
+        return panel(ErrorCode::TargetStale,"Target changed since the insertion");
+    }
+    let span = Selection { start: token.start, end: token.start + token.inserted_len };
+    if slice_utf16(&current.text,&span).is_none() { return panel(ErrorCode::TargetStale,"Inserted text is no longer there"); }
+    let Some(restored) = replace_utf16(&current.text,&span,&token.restore) else { return panel(ErrorCode::TargetStale,"Inserted text is no longer there") };
+    if hash(&restored) != token.before_text_hash { return panel(ErrorCode::TargetStale,"Target changed since the insertion"); }
+    if editor.replace_selection(&token.target,&span,&token.restore).is_err() {
+        return EditOutcome::Recovery { reason: "Provider write failed; field state must be checked before retry".into() };
+    }
+    match editor.read_target(&token.target) {
+        Ok(Some(after)) if after.text == restored => EditOutcome::Applied,
+        _ => EditOutcome::Recovery { reason: "Undo could not be verified; use the app's own undo".into() },
+    }
+}
+
 fn panel(code: ErrorCode, reason: &str) -> EditOutcome {
     EditOutcome::ResultInPanel { code, reason: reason.into() }
 }
@@ -82,6 +141,8 @@ fn same_revision(a: &TargetRevision, b: &TargetRevision) -> bool {
     a.field_text_hash == b.field_text_hash && a.selection == b.selection &&
     a.selected_text_hash == b.selected_text_hash
 }
+
+pub fn same_target(a: &TargetRevision, b: &TargetRevision) -> bool { same_revision(a,b) }
 
 pub fn hash(value: &str) -> String { hex::encode(Sha256::digest(value.as_bytes())) }
 
@@ -153,6 +214,52 @@ mod tests {
         let (mut editor,draft) = fixture();
         assert!(matches!(apply_guarded(&mut editor,&draft,"r1",0,true),EditOutcome::ResultInPanel{code:ErrorCode::Cancelled,..}));
         assert_eq!(editor.writes,0);
+    }
+    fn caret_fixture(text: &str, caret: usize) -> (MockEditor,EditDraft) {
+        let (mut editor,mut draft) = fixture();
+        editor.state.text = text.into();
+        let revision = TargetRevision { field_text_hash: hash(text), selection: Selection{start:caret,end:caret}, selected_text_hash: hash(""), ..draft.target.clone() };
+        editor.state.revision = revision.clone();
+        draft.target = revision;
+        draft.replacement = " by Thursday.".into();
+        draft.operation = EditOperation::DraftResponse;
+        (editor,draft)
+    }
+    impl MockEditor {
+        fn place_caret(&mut self, caret: usize) {
+            self.state.revision.selection = Selection{start:caret,end:caret};
+        }
+    }
+    #[test]
+    fn undo_removes_the_insertion_only_when_the_field_is_unchanged() {
+        let (mut editor,draft) = caret_fixture("I can send the deck",19);
+        let before = editor.state.clone();
+        assert_eq!(apply_guarded(&mut editor,&draft,"r1",0,false),EditOutcome::Applied);
+        assert_eq!(editor.state.text,"I can send the deck by Thursday.");
+        editor.place_caret(19 + " by Thursday.".len());
+        let after = editor.state.clone();
+        let token = undo_token(&before,&after,&Selection{start:19,end:19},&draft.replacement).expect("caret is at the end of the insertion");
+        assert_eq!(token.inserted_len,13);
+        assert_eq!(undo_guarded(&mut editor,&token),EditOutcome::Applied);
+        assert_eq!(editor.state.text,"I can send the deck");
+    }
+    #[test]
+    fn undo_is_refused_after_further_typing_or_a_moved_caret() {
+        let (mut editor,draft) = caret_fixture("I can send the deck",19);
+        let before = editor.state.clone();
+        apply_guarded(&mut editor,&draft,"r1",0,false);
+        editor.place_caret(32);
+        let token = undo_token(&before,&editor.state.clone(),&Selection{start:19,end:19},&draft.replacement).unwrap();
+        let writes = editor.writes;
+        editor.state.text.push('x');
+        editor.state.revision.field_text_hash = hash(&editor.state.text);
+        assert!(matches!(undo_guarded(&mut editor,&token),EditOutcome::ResultInPanel{code:ErrorCode::TargetStale,..}));
+        assert_eq!(editor.writes,writes);
+        let (mut editor,draft) = caret_fixture("I can send the deck",19);
+        let before = editor.state.clone();
+        apply_guarded(&mut editor,&draft,"r1",0,false);
+        editor.place_caret(5);
+        assert!(undo_token(&before,&editor.state.clone(),&Selection{start:19,end:19},&draft.replacement).is_none());
     }
     #[test]
     fn verification_failure_does_not_retry() {

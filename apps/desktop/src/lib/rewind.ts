@@ -59,6 +59,14 @@ export function newSession(question: string, now = Date.now()): RewindSession {
   };
 }
 
+/** A new chat that opens with a selection to summarize. The excerpt stays in the session so follow-ups see it. */
+export function newSummarySession(excerpt: string, origin: string, note?: string, now = Date.now()): RewindSession {
+  const words = excerpt.replace(/\s+/g, " ").trim().split(" ").slice(0, 6).join(" ");
+  const session = newSession(words, now);
+  const message: ChatMessage = { role: "user", body: excerpt, kind: "summarize", origin, ...(note ? { note } : {}) };
+  return { ...session, title: sessionTitle(`Summary: ${words}`), messages: [message] };
+}
+
 export function appendMessage(session: RewindSession, message: ChatMessage, now = Date.now()): RewindSession {
   return { ...session, updatedAt: now, messages: [...session.messages, message] };
 }
@@ -96,6 +104,8 @@ export function triggerSymbol(trigger: RewindTrigger): string {
     case "rightShift": return "⇧";
     case "leftControl":
     case "rightControl": return "⌃";
+    case "leftCommand":
+    case "rightCommand": return "⌘";
     default: return "⌥";
   }
 }
@@ -109,6 +119,8 @@ export function triggerName(trigger: RewindTrigger): string {
     case "rightShift": return "Right Shift";
     case "leftControl": return "Left Control";
     case "rightControl": return "Right Control";
+    case "leftCommand": return "Left Command";
+    case "rightCommand": return "Right Command";
     default: return "Right Option";
   }
 }

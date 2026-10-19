@@ -81,10 +81,9 @@ The browser-only preview is `npm run dev` from `apps/desktop`; select **Explore 
 
 ## Retrieval evals
 
-`evals/` holds an offline harness for the rewind chunking and retrieval: invented pages and AX
-fixtures, a 122-question gold set, `rewind eval`, and a committed baseline with ablations. See
-[evals/README.md](evals/README.md); `evals/CAPTURE.md` explains how to replace the hand-authored AX trees
-with real captures. It uses temp state directories only and never enables capture.
+The earlier invented-corpus evals were removed. New evals are built from pages you record on purpose:
+turn on test mode in Settings and use the notch play button. Everything goes to a separate eval archive,
+never your real memory. See [evals/TEST_MODE.md](evals/TEST_MODE.md). The `rewind eval` command is still in the engine.
 
 ## Answer pipeline evaluation
 
