@@ -84,7 +84,7 @@ export function applyFailureMessage(result: ApplyResult, kind: "autocomplete" | 
 /** Builds the redacted request in the local engine, runs the model once, and returns the reply. */
 async function ask(kind: "autocomplete" | "rewrite" | "summarize", context: FocusContext, tone?: RewriteTone): Promise<{ raw: string; truncated: boolean }> {
   const preferences = loadPreferences();
-  const target = aiTarget(preferences, kind === "autocomplete" ? "fast" : "main");
+  const target = aiTarget(preferences, kind === "autocomplete" ? "autocomplete" : "writing");
   await ensureReady(target);
   const prepared = await localRequest<Prepared>("POST", "/v1/assist/prepare", {
     kind, context, tone: tone ?? "", length: preferences.autocompleteLength, me: preferences.identity, private_windows: preferences.assistInPrivateWindows,

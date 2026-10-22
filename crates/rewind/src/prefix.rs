@@ -1,11 +1,5 @@
-//! The text that is embedded and BM25-indexed for a chunk: a short deterministic context prefix plus
-//! the chunk body. Nothing is sent anywhere and no model writes it. The stored chunk body, its
-//! spans, the snippets and the evidence shown to the user stay the raw chunk text.
-//!
-//! Why: a chunk such as `Protein 137 g | Fat 35 g | Carbs 185 g` says nothing about macros, a bare
-//! reply says nothing about who sent it, and a note says nothing about which app it came from. The
-//! page title, app, domain, capture date and (for a chunk cut mid-message) the speaker are all known
-//! at index time.
+//! Text used only by the embedding and BM25 index. Stored evidence remains raw.
+//! Prefix::Contextual uses separately validated, opt-in model context.
 
 use super::*;
 use std::sync::OnceLock;
@@ -19,6 +13,8 @@ pub enum Prefix {
     Title,
     /// `title | app | domain | date` line, plus the speaker for chunks cut mid-message.
     Context,
+    /// Validated model context stored separately from evidence.
+    Contextual,
 }
 
 impl Prefix {
@@ -30,16 +26,19 @@ impl Prefix {
             Prefix::None => None,
             Prefix::Title => Some("prefix-title-v1"),
             Prefix::Context => Some("prefix-context-v1"),
+            Prefix::Contextual => Some("prefix-contextual-v1"),
         }
     }
 }
 
 /// Model version plus the prefix format: stored in `index_meta` and every point payload.
 pub fn index_version(prefix: Prefix) -> String {
-    match prefix.tag() {
+    let base = match prefix.tag() {
         None => MODEL_VERSION.to_owned(),
         Some(tag) => format!("{MODEL_VERSION}:{tag}"),
-    }
+    };
+    // Item chunks (segment.rs) are a different chunking: an index that mixes the two must be rebuilt.
+    if segment::active() { format!("{base}:{}", segment::TAG) } else { base }
 }
 
 pub fn app_label(app_id: &str) -> String {
@@ -77,6 +76,7 @@ fn speaker_before(body: &str, start: usize, chunk: &str) -> Option<String> {
 }
 
 pub struct ChunkContext<'a> {
+    pub context: Option<&'a str>,
     pub title: &'a str,
     pub app_id: &'a str,
     pub domain: Option<&'a str>,
@@ -87,6 +87,9 @@ pub struct ChunkContext<'a> {
 
 /// `prefix + chunk body` for the embedder and BM25.
 pub fn embed_text(prefix: Prefix, ctx: &ChunkContext, chunk: &str) -> String {
+    if prefix == Prefix::Contextual {
+        return ctx.context.filter(|s| !s.is_empty()).map_or_else(|| chunk.to_owned(), |c| format!("{c}\n{chunk}"));
+    }
     if prefix == Prefix::None {
         return chunk.to_owned();
     }
@@ -114,8 +117,17 @@ mod tests {
     use super::*;
 
     fn ctx<'a>(body: &'a str, start: usize) -> ChunkContext<'a> {
-        ChunkContext { title: "Daily macros plan - ChatGPT", app_id: "com.google.Chrome", domain: Some("chatgpt.com"),
+        ChunkContext { context: None, title: "Daily macros plan - ChatGPT", app_id: "com.google.Chrome", domain: Some("chatgpt.com"),
             first_seen_ms: 1_792_144_200_000, snapshot_body: body, start_byte: start }
+    }
+
+    #[test]
+    fn contextual_preserves_raw_fallback() {
+        let mut c = ctx("", 0);
+        assert_eq!(embed_text(Prefix::Contextual, &c, "raw"), "raw");
+        c.context = Some("A post by Alice.");
+        assert_eq!(embed_text(Prefix::Contextual, &c, "raw"), "A post by Alice.\nraw");
+        assert!(index_version(Prefix::Contextual).ends_with(":prefix-contextual-v1"));
     }
 
     #[test]

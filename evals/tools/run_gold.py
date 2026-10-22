@@ -26,7 +26,8 @@ a = ap.parse_args()
 if not os.path.exists(a.bin):
     sys.exit(f"{a.bin} missing: run `cargo build --release -p rewind`")
 
-work = tempfile.mkdtemp(prefix="rewind-evalcopy-")
+os.makedirs(os.path.join(ROOT, "evals/private"), exist_ok=True)
+work = tempfile.mkdtemp(prefix="rewind-evalcopy-", dir=os.path.join(ROOT, "evals/private"))
 state = os.path.join(work, "state")
 shutil.copytree(a.archive, state)
 
@@ -37,9 +38,12 @@ def ask(q):
     env = dict(os.environ, REWIND_STATE_DIR=state)
     env.pop("REWIND_LLM_URL", None)  # retrieval only
     try:
-        out = subprocess.run([a.bin, "ask", q], env=env, capture_output=True, text=True, timeout=60).stdout
+        result = subprocess.run([a.bin, "ask", q], env=env, capture_output=True, text=True, timeout=60)
+        if result.returncode:
+            raise RuntimeError(f"retrieval process failed (exit {result.returncode}); refusing to score an invalid run")
+        out = result.stdout
     except subprocess.TimeoutExpired:
-        return [], True
+        raise RuntimeError("retrieval timed out; refusing to score an invalid run") from None
     ranked, cur = [], None
     for line in out.splitlines():
         m = ITEM.match(line)
@@ -64,9 +68,15 @@ def run(r):
             "variant": bool(r.get("variant_of")), "has_support": bool(sup), "rank": rank,
             "abstained": abst, "returned": [sorted(g)[0] for g in ranked]}
 
-with ThreadPoolExecutor(a.jobs) as ex:
-    res = list(ex.map(run, todo))
-shutil.rmtree(work, ignore_errors=True)
+try:
+    res = []
+    with ThreadPoolExecutor(a.jobs) as ex:
+        for index, result in enumerate(ex.map(run, todo), 1):
+            res.append(result)
+            if index % 25 == 0:
+                print(f"Retrieval: {index}/{len(todo)} questions", file=sys.stderr, flush=True)
+finally:
+    shutil.rmtree(work, ignore_errors=True)
 json.dump(res, open(a.out, "w"), indent=1)
 
 def summarize(items):

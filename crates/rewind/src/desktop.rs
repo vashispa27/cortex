@@ -3,6 +3,9 @@
 use super::*;
 
 const MAX_REQUEST: u64 = 65_537;
+/// How many of the best results are widened with neighbouring chunks, and to how many chunks.
+const WIDENED_TOP_HITS: usize = 3;
+const WIDENED_MAX_CHUNKS: usize = 6;
 
 #[derive(Clone, Serialize, Deserialize)]
 struct Settings {
@@ -15,6 +18,36 @@ struct Settings {
     /// Routes every search to the separate eval archive and lets the notch record into it.
     #[serde(default)]
     test_mode: bool,
+    /// Nothing may be sent to a cloud model, whatever else is chosen.
+    #[serde(default)]
+    local_only: bool,
+    /// Contextual retrieval: a model writes a short context for each new chunk before it is indexed.
+    #[serde(default)]
+    context_enabled: bool,
+    /// "local" (a server on this Mac) or "cloud" (OpenRouter), as the app resolved it for this layer.
+    #[serde(default = "local_provider")]
+    context_provider: String,
+    #[serde(default)]
+    context_cloud_model: String,
+    #[serde(default)]
+    context_local_model: String,
+    /// Base address of the local model server, such as `http://127.0.0.1:8080/v1`.
+    #[serde(default)]
+    local_endpoint: String,
+}
+fn local_provider() -> String {
+    "local".into()
+}
+/// Tells the context generator which model and provider Settings chose. Local-only wins over a cloud choice.
+fn apply_context(settings: &Settings) -> Result<()> {
+    let cloud = settings.context_provider == "cloud" && !settings.local_only;
+    let model = if cloud { &settings.context_cloud_model } else { &settings.context_local_model };
+    contextual::configure(settings.context_enabled, cloud, model, &settings.local_endpoint)
+}
+/// True when the main archive's index was built without context, so enabling context needs a re-index.
+fn index_lacks_context(db: &Connection) -> bool {
+    let old: Option<String> = db.query_row("SELECT value FROM index_meta WHERE key='model'", [], |r| r.get(0)).optional().ok().flatten();
+    old.is_some_and(|v| v != prefix::index_version(prefix::Prefix::Contextual))
 }
 impl Default for Settings {
     fn default() -> Self {
@@ -26,6 +59,12 @@ impl Default for Settings {
             excluded_apps: vec![],
             excluded_domains: vec![],
             test_mode: false,
+            local_only: false,
+            context_enabled: false,
+            context_provider: local_provider(),
+            context_cloud_model: String::new(),
+            context_local_model: String::new(),
+            local_endpoint: String::new(),
         }
     }
 }
@@ -80,7 +119,11 @@ impl EvalLab {
         if self.runtime.is_none() {
             fs::create_dir_all(&self.dir)?;
             fs::set_permissions(&self.dir, fs::Permissions::from_mode(0o700))?;
-            self.runtime = Some(open_runtime_with(&self.dir, false, Some(main.model.clone()), prefix::Prefix::DEFAULT)?);
+            // The eval archive never generates context, whatever Settings chose for the real memory.
+            contextual::suppress(true);
+            let opened = open_runtime_with(&self.dir, false, Some(main.model.clone()), prefix::Prefix::DEFAULT);
+            contextual::suppress(false);
+            self.runtime = Some(opened?);
         }
         self.runtime.as_mut().context("eval archive unavailable")
     }
@@ -427,6 +470,42 @@ fn parse_when(value: &str, end: bool) -> Option<i64> {
         .find_map(|f| chrono::NaiveDateTime::parse_from_str(value, f).ok())
         .and_then(local)
 }
+/// The best results are most likely the page the answer is on, but retrieval only returns the chunks that matched
+/// the question best, and in a chat thread those are often the repeated sidebar rather than the message that holds
+/// the fact. So the top results also get the chunks next to the ones that matched, up to `max_chunks`, in page order.
+fn widen_top_hits(db: &Connection, hits: &mut [Hit], top: usize, max_chunks: usize) -> Result<()> {
+    for hit in hits.iter_mut().take(top) {
+        // Item chunks (segment.rs) are not neighbours in a page; they carry their own header.
+        if hit.chunks.iter().any(|c| c.header.is_some()) {
+            continue;
+        }
+        let mut stmt = db.prepare("SELECT id,body FROM chunks WHERE snapshot_id=?1 AND body!='' ORDER BY start_byte,id")?;
+        let all = stmt
+            .query_map([hit.source.id], |r| Ok((r.get::<_, i64>(0)?, r.get::<_, String>(1)?)))?
+            .collect::<rusqlite::Result<Vec<_>>>()?;
+        let mut keep: Vec<usize> = hit.chunks.iter().filter_map(|c| all.iter().position(|(id, _)| *id == c.chunk_id)).collect();
+        if keep.is_empty() || all.len() <= keep.len() {
+            continue;
+        }
+        // Next chunk before previous (a message usually follows its header), nearest first.
+        'grow: for distance in 1..all.len() {
+            for index in keep.clone() {
+                for candidate in [index.checked_add(distance).filter(|i| *i < all.len()), index.checked_sub(distance)].into_iter().flatten() {
+                    if keep.len() >= max_chunks {
+                        break 'grow;
+                    }
+                    if !keep.contains(&candidate) {
+                        keep.push(candidate);
+                    }
+                }
+            }
+        }
+        keep.sort_unstable();
+        let score = |id: i64| hit.chunks.iter().find(|c| c.chunk_id == id).map_or(0.0, |c| c.score);
+        hit.chunks = keep.into_iter().map(|i| EvidenceChunk { chunk_id: all[i].0, text: all[i].1.clone(), score: score(all[i].0), header: None }).collect();
+    }
+    Ok(())
+}
 fn hit_json(hit: &Hit, question: &str, chunks: usize) -> Value {
     let s = &hit.source;
     json!({"snapshot_id":s.id,"observed_ms":s.last_seen_ms,"app_id":s.app_id,"title":s.title,"url":s.url,"excerpt":evidence_snippet(hit,question,chunks),"evidence_available":true,"truncated":false,"score":s.score})
@@ -532,6 +611,33 @@ fn route(
             if let Some(value) = body.get("test_mode") {
                 next.test_mode = value.as_bool().context("invalid test mode setting")?;
             }
+            for (key, target) in [("local_only", &mut next.local_only), ("context_enabled", &mut next.context_enabled)] {
+                if let Some(value) = body.get(key) {
+                    *target = value.as_bool().with_context(|| format!("invalid {key} setting"))?;
+                }
+            }
+            if let Some(value) = body.get("context_provider") {
+                next.context_provider = match value.as_str() {
+                    Some(p @ ("local" | "cloud")) => p.to_owned(),
+                    _ => bail!("context_provider must be local or cloud"),
+                };
+            }
+            for (key, target) in [
+                ("context_cloud_model", &mut next.context_cloud_model),
+                ("context_local_model", &mut next.context_local_model),
+                ("local_endpoint", &mut next.local_endpoint),
+            ] {
+                if let Some(value) = body.get(key) {
+                    let text = value.as_str().with_context(|| format!("invalid {key} setting"))?.trim();
+                    if text.len() > 160 || (key.ends_with("_model") && text.chars().any(char::is_whitespace)) {
+                        bail!("invalid {key} setting");
+                    }
+                    *target = text.to_owned();
+                }
+            }
+            // Validate before saving: a bad model name or address must not be persisted.
+            apply_context(&next)?;
+            let reindex = next.context_enabled && !settings.context_enabled && index_lacks_context(&rt.db);
             for (key, target) in [
                 ("excluded_apps", &mut next.excluded_apps),
                 ("excluded_domains", &mut next.excluded_domains),
@@ -549,7 +655,10 @@ fn route(
                 lab.capturing = false;
             }
             *settings = next;
-            settings_json(settings, lab)
+            let mut response = settings_json(settings, lab)?;
+            // Enabling context on an index built without it: the engine re-embeds from the archive (nothing is deleted).
+            response["reindex"] = json!(reindex);
+            Ok(response)
         }
         ("POST", "/v1/capture/request-permission") => {
             Ok(json!({"permission_state":run_helper(helper,"--request-permission")?.permission}))
@@ -565,9 +674,12 @@ fn route(
                 .as_u64()
                 .unwrap_or(answer_pipeline::SOURCE_LIMIT as u64)
                 .clamp(1, 50) as usize;
-            let result = retrieve(rt, query, &params)?;
+            let mut result = retrieve(rt, query, &params)?;
             if test_mode {
                 let _ = log_eval_query(&eval_dir, path, query, &result.hits, result.abstained);
+            }
+            if assistant {
+                widen_top_hits(&rt.db, &mut result.hits, WIDENED_TOP_HITS, WIDENED_MAX_CHUNKS)?;
             }
             // The assistant route shows the user's own wording to the model; retrieval ran on `query`.
             let question = body["question"]
@@ -838,8 +950,14 @@ pub fn serve(state: &Path) -> Result<()> {
     let mut db = open_db(state)?;
     let count = import_legacy(&root, &mut db)?;
     eprintln!("Imported {count} legacy desktop captures into the shared Rewind archive");
+    // Settings choose the context model before the index opens; turning context on for an index built without it
+    // re-embeds from the archive.
+    if let Err(e) = apply_context(&settings) {
+        eprintln!("Context settings ignored: {e:#}");
+    }
+    let reindex = settings.context_enabled && index_lacks_context(&db);
     drop(db);
-    let mut runtime = open_runtime(state, false)?;
+    let mut runtime = open_runtime(state, reindex)?;
     while runtime.index_pending()? > 0 {}
     let mut lab = EvalLab::new(&root);
     let mut blocked = blocklist::Watcher::new(state)?;
@@ -884,7 +1002,7 @@ pub fn serve(state: &Path) -> Result<()> {
                 };
                 let rebuild = result
                     .as_ref()
-                    .is_ok_and(|v| v["rebuild_empty_index"] == true);
+                    .is_ok_and(|v| v["rebuild_empty_index"] == true || v["reindex"] == true);
                 let response = match result {
                     Ok(data) if is_json => json!({"ok":true,"data":data}),
                     Ok(data) => json!({"ok":true,"text":data["text"]}),
@@ -919,7 +1037,12 @@ pub fn serve(state: &Path) -> Result<()> {
                 // The play/pause switch records into the eval archive only, whatever the real capture does.
                 if eval_capture {
                     let dir = lab.dir.clone();
-                    match lab.runtime(&runtime).and_then(|eval| capture_one(eval, &helper, &settings, &blocked.list).map(|id| (eval, id))) {
+                    match lab.runtime(&runtime).and_then(|eval| {
+                        contextual::suppress(true);
+                        let captured = capture_one(eval, &helper, &settings, &blocked.list);
+                        contextual::suppress(false);
+                        captured.map(|id| (eval, id))
+                    }) {
                         Ok((eval, Some(id))) => {
                             if let Err(e) = log_eval_capture(&dir, eval, id).and_then(|_| summarize(&dir, id)) {
                                 eprintln!("Eval record failed: {e:#}");

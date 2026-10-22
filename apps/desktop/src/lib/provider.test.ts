@@ -1,17 +1,42 @@
 import { describe, expect, it } from "vitest";
-import { aiTarget, validLocalEndpoint } from "./provider";
-import { defaultPreferences } from "./storage";
+import { aiTarget, layerIsLocal, validLocalEndpoint } from "./provider";
+import { defaultLayers, defaultPreferences } from "./storage";
+
+const prefs = (changes: Partial<typeof defaultPreferences> = {}) => ({ ...defaultPreferences, layers: defaultLayers(), openrouterModel: "a/main", localModel: "qwen-main", ...changes });
 
 describe("ai provider", () => {
-  it("uses OpenRouter and its optional fast model by default", () => {
-    const prefs = { ...defaultPreferences, openrouterModel: "a/main", fastModel: "a/fast" };
-    expect(aiTarget(prefs)).toEqual({ model: "a/main", endpoint: null, local: false });
-    expect(aiTarget(prefs, "fast").model).toBe("a/fast");
+  it("follows the global provider and its default model when a step has no choice of its own", () => {
+    expect(aiTarget(prefs())).toEqual({ model: "a/main", endpoint: null, local: false });
+    expect(aiTarget(prefs({ aiProvider: "local" }), "followup")).toEqual({ model: "qwen-main", endpoint: "http://127.0.0.1:8080/v1", local: true });
   });
 
-  it("sends everything to the local server when chosen, ignoring the OpenRouter models", () => {
-    const prefs = { ...defaultPreferences, aiProvider: "local" as const, localModel: " mlx-community/Qwen3.5-2B-4bit ", fastModel: "a/fast", openrouterModel: "a/main" };
-    expect(aiTarget(prefs, "fast")).toEqual({ model: "mlx-community/Qwen3.5-2B-4bit", endpoint: "http://127.0.0.1:8080/v1", local: true });
+  it("lets each step run somewhere else, with its own model for that provider", () => {
+    const p = prefs();
+    p.layers.answer = { provider: "cloud", cloudModel: "a/big", localModel: "qwen-big" };
+    p.layers.autocomplete = { provider: "local", cloudModel: "a/fast", localModel: "qwen-small" };
+    p.layers.writing = { provider: "default", cloudModel: "", localModel: "" };
+    expect(aiTarget(p, "answer")).toEqual({ model: "a/big", endpoint: null, local: false });
+    expect(aiTarget(p, "autocomplete")).toEqual({ model: "qwen-small", endpoint: "http://127.0.0.1:8080/v1", local: true });
+    // Untouched steps still use the defaults.
+    expect(aiTarget(p, "writing")).toEqual({ model: "a/main", endpoint: null, local: false });
+    expect(aiTarget(p, "followup").local).toBe(false);
+  });
+
+  it("falls back to the default local model when the step names none", () => {
+    const p = prefs();
+    p.layers.followup = { provider: "local", cloudModel: "a/x", localModel: "" };
+    expect(aiTarget(p, "followup").model).toBe("qwen-main");
+  });
+
+  it("local only forces every step onto the local server, whatever it chose", () => {
+    const p = prefs({ localOnly: true, aiProvider: "openrouter" });
+    p.layers.answer = { provider: "cloud", cloudModel: "a/big", localModel: "" };
+    for (const layer of ["answer", "followup", "autocomplete", "writing", "context"] as const) {
+      expect(layerIsLocal(p, layer)).toBe(true);
+      expect(aiTarget(p, layer).local).toBe(true);
+      expect(aiTarget(p, layer).endpoint).toBe("http://127.0.0.1:8080/v1");
+    }
+    expect(aiTarget(p, "answer").model).toBe("qwen-main");
   });
 
   it("accepts only http addresses on this Mac", () => {

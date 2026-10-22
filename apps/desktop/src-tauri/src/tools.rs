@@ -123,8 +123,10 @@ pub(crate) async fn run(
     let tools = specs(calendar);
     let started = Instant::now();
     let (mut rounds, mut tools_ok, mut hits) = (0, true, Vec::<Value>::new());
+    // Set after one "answer now" nudge, which is sent without tools and is only tried once.
+    let mut nudged = false;
     loop {
-        let allow = tools_ok && rounds < limits.max_rounds && started.elapsed() < limits.deadline;
+        let allow = tools_ok && !nudged && rounds < limits.max_rounds && started.elapsed() < limits.deadline;
         let message = match chat.chat(model, &messages, allow.then_some(tools.as_slice()), max_tokens).await {
             Ok(message) => message,
             // The model or route may not support tools at all: answer from the evidence already given.
@@ -139,7 +141,17 @@ pub(crate) async fn run(
         };
         let calls = message["tool_calls"].as_array().filter(|c| allow && !c.is_empty());
         let Some(calls) = calls else {
-            let content = message["content"].as_str().map(str::trim).filter(|c| !c.is_empty()).ok_or("The model returned an empty answer.")?;
+            let Some(content) = message["content"].as_str().map(str::trim).filter(|c| !c.is_empty()) else {
+                // Some models keep asking for tools after the round limit, which leaves no text. Ask once, without
+                // tools, for the answer from the evidence already gathered, instead of failing the question.
+                if nudged {
+                    let asked_for_tools = message["tool_calls"].as_array().is_some_and(|c| !c.is_empty());
+                    return Err(format!("The model returned an empty answer{} after being asked to answer.", if asked_for_tools { " (it asked for more tools)" } else { "" }));
+                }
+                nudged = true;
+                messages.push(json!({"role":"user","content":"No more searches are available. Answer the question now from the evidence above, in sentences, in the format the system message asks for, including the SOURCE line."}));
+                continue;
+            };
             return Ok(Outcome { content: content.to_owned(), hits, tool_rounds: rounds });
         };
         rounds += 1;
@@ -251,10 +263,31 @@ mod tests {
         assert_eq!((out.content.as_str(), out.tool_rounds), ("done", 3));
         let offered: Vec<bool> = chat.seen.borrow().iter().map(|s| s.1).collect();
         assert_eq!(offered, [true, true, true, false]);
-        // A model that keeps asking for tools anyway gets no further execution.
-        let (chat, eng) = (Scripted::new((0..4).map(|_| call("search_memory", r#"{"query":"a"}"#)).collect()), engine("x"));
+        // A model that keeps asking for tools anyway gets no further execution, and one nudge to answer.
+        let (chat, eng) = (Scripted::new((0..5).map(|_| call("search_memory", r#"{"query":"a"}"#)).collect()), engine("x"));
         assert!(go(&chat, &eng, &NoCalendar, &Limits::default()).is_err());
         assert_eq!(eng.calls.borrow().len(), 3);
+    }
+
+    #[test]
+    fn a_model_that_asks_for_tools_past_the_limit_is_nudged_once_and_can_still_answer() {
+        let replies = (0..4).map(|_| call("search_memory", r#"{"query":"a"}"#)).chain([answer("SOURCE: memory\nIt was Priya.")]).collect();
+        let (chat, eng) = (Scripted::new(replies), engine("x"));
+        let out = go(&chat, &eng, &NoCalendar, &Limits::default()).ok().unwrap();
+        assert_eq!(out.content, "SOURCE: memory\nIt was Priya.");
+        assert_eq!(eng.calls.borrow().len(), 3);
+        let seen = chat.seen.borrow();
+        assert!(!seen[3].1 && !seen[4].1, "neither the empty round nor the nudge may offer tools");
+        assert!(seen[4].0.last().unwrap()["content"].as_str().unwrap().contains("Answer the question now"));
+    }
+
+    #[test]
+    fn an_empty_reply_without_tools_is_nudged_once() {
+        let (chat, eng) = (Scripted::new(vec![answer("  "), answer("SOURCE: none\nNot found.")]), engine(""));
+        let out = go(&chat, &eng, &NoCalendar, &Limits::default()).ok().unwrap();
+        assert_eq!(out.content, "SOURCE: none\nNot found.");
+        let (chat, eng) = (Scripted::new(vec![answer(""), answer("")]), engine(""));
+        assert!(go(&chat, &eng, &NoCalendar, &Limits::default()).is_err());
     }
 
     #[test]

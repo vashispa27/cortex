@@ -55,12 +55,7 @@ CREATE TABLE IF NOT EXISTS chunks (
  end_byte INTEGER NOT NULL,
  body TEXT NOT NULL,
  indexed INTEGER NOT NULL DEFAULT 0,
- category TEXT NOT NULL DEFAULT 'unknown',
- author TEXT,
- displayed_time TEXT,
- object_start INTEGER,
- object_end INTEGER,
- label_model TEXT,
+ context TEXT,
  UNIQUE(snapshot_id,start_byte,end_byte)
 );
 CREATE INDEX IF NOT EXISTS chunks_snapshot ON chunks(snapshot_id,start_byte);
@@ -85,3 +80,30 @@ CREATE TABLE IF NOT EXISTS tree_keys (
  snapshot_id INTEGER NOT NULL REFERENCES snapshots(id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS tree_keys_snapshot ON tree_keys(snapshot_id);
+CREATE TABLE IF NOT EXISTS items (
+ id INTEGER PRIMARY KEY,
+ item_key TEXT NOT NULL UNIQUE,
+ site TEXT NOT NULL,
+ kind TEXT NOT NULL,
+ container TEXT NOT NULL,
+ author TEXT,
+ handle TEXT,
+ displayed_time TEXT,
+ body TEXT NOT NULL,
+ first_seen_ms INTEGER NOT NULL,
+ last_seen_ms INTEGER NOT NULL,
+ sightings INTEGER NOT NULL DEFAULT 1
+);
+CREATE TABLE IF NOT EXISTS item_sightings (
+ item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+ snapshot_id INTEGER NOT NULL REFERENCES snapshots(id) ON DELETE CASCADE,
+ PRIMARY KEY(item_id,snapshot_id)
+);
+CREATE INDEX IF NOT EXISTS item_sightings_snapshot ON item_sightings(snapshot_id);
+CREATE TABLE IF NOT EXISTS chunk_items (
+ chunk_id INTEGER NOT NULL REFERENCES chunks(id) ON DELETE CASCADE,
+ item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+ ord INTEGER NOT NULL,
+ PRIMARY KEY(chunk_id,item_id)
+);
+CREATE INDEX IF NOT EXISTS chunk_items_item ON chunk_items(item_id);

@@ -2,6 +2,27 @@ export type RewindTrigger = "rightOption" | "leftOption" | "fn" | "rightShift" |
 
 export type AiProvider = "openrouter" | "local";
 
+/** The model-backed steps, each of which can run in the cloud or on this Mac on its own. */
+export type LayerId = "answer" | "followup" | "autocomplete" | "writing" | "context";
+/** `default` follows the global provider. */
+export type LayerProvider = "default" | "cloud" | "local";
+export type LayerChoice = {
+  provider: LayerProvider;
+  /** OpenRouter model for this step; empty uses the default OpenRouter model. */
+  cloudModel: string;
+  /** Local-server model for this step; empty uses the default local model. */
+  localModel: string;
+};
+export const LAYER_IDS: readonly LayerId[] = ["answer", "followup", "autocomplete", "writing", "context"];
+export const defaultLayers = (): Record<LayerId, LayerChoice> => ({
+  answer: { provider: "default", cloudModel: "", localModel: "" },
+  followup: { provider: "default", cloudModel: "", localModel: "" },
+  autocomplete: { provider: "default", cloudModel: "", localModel: "" },
+  writing: { provider: "default", cloudModel: "", localModel: "" },
+  // Context is generated for every new capture, so it starts on this Mac and off.
+  context: { provider: "local", cloudModel: "", localModel: "" },
+});
+
 export type AutocompleteLength = "phrase" | "sentence" | "reply";
 
 export type Preferences = {
@@ -25,6 +46,12 @@ export type Preferences = {
   rewriteOnTap: boolean;
   /** Optional model used only for autocomplete; empty means the main model. */
   fastModel: string;
+  /** Per-step provider and model; see `LayerId`. */
+  layers: Record<LayerId, LayerChoice>;
+  /** Nothing is sent to a cloud model, whatever the steps say. */
+  localOnly: boolean;
+  /** Contextual retrieval: a model adds a short context to each new capture before it is indexed. */
+  contextEnabled: boolean;
   proactive: boolean;
   backgroundInference: boolean;
   mcpConsent: boolean;
@@ -61,6 +88,9 @@ export const defaultPreferences: Preferences = {
   summarizeOnTap: true,
   rewriteOnTap: true,
   fastModel: "",
+  layers: defaultLayers(),
+  localOnly: false,
+  contextEnabled: false,
   proactive: false,
   backgroundInference: false,
   mcpConsent: false,
@@ -81,9 +111,13 @@ const key = "rewind.desktop.preferences.v1";
 export function loadPreferences(): Preferences {
   try {
     const saved = JSON.parse(localStorage.getItem(key) || "{}");
-    return { ...defaultPreferences, ...saved };
+    const layers = defaultLayers();
+    for (const id of LAYER_IDS) layers[id] = { ...layers[id], ...(saved.layers?.[id] ?? {}) };
+    // The old single "autocomplete model" box is now the autocomplete step's OpenRouter model.
+    if (!saved.layers && typeof saved.fastModel === "string" && saved.fastModel.trim()) layers.autocomplete.cloudModel = saved.fastModel.trim();
+    return { ...defaultPreferences, ...saved, layers, fastModel: "" };
   } catch {
-    return { ...defaultPreferences };
+    return { ...defaultPreferences, layers: defaultLayers() };
   }
 }
 

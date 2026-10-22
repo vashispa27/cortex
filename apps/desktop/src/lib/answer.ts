@@ -7,6 +7,10 @@ import type { AnswerSource, ChatMessage } from "./types";
 export type Answer = {
   body: string;
   hits: MemoryHit[];
+  /** Everything retrieval returned and the model could see, whatever it tagged the answer. `hits` is empty for a `none` or `general` answer. */
+  retrieved: MemoryHit[];
+  /** The query that was searched: the question itself, or its rewrite for a follow-up. */
+  searchQuery: string;
   source: AnswerSource;
   /** Milliseconds spent rewriting the follow-up, preparing (retrieval) and waiting for the model. */
   timings: { rewrite: number; prepare: number; model: number };
@@ -53,7 +57,8 @@ export function fallbackQuery(question: string, history: HistoryTurn[]): string 
 }
 
 export async function answerFromMemory(question: string, history: ChatMessage[]): Promise<Answer> {
-  const target = aiTarget(loadPreferences());
+  const preferences = loadPreferences();
+  const target = aiTarget(preferences, "answer");
   await ensureReady(target);
   const { model, endpoint } = target;
   // A summarized selection keeps more of its text, so follow-ups such as "shorter" still see it.
@@ -67,7 +72,11 @@ export async function answerFromMemory(question: string, history: ChatMessage[])
   if (needsRewrite(question, prior)) {
     // "Him", "that" and "there" almost always point at the last exchange. Showing the rewriter the
     // whole chat lets it grab an earlier person instead (it picked the first-mentioned one in testing).
-    const rewritten = await invoke<string>("openrouter_search_query", { model, question, history: prior.slice(-2), endpoint }).catch(() => "");
+    // Rewriting a follow-up is its own step: it may run somewhere other than the answer.
+    const rewriteTarget = aiTarget(preferences, "followup");
+    const rewritten = await ensureReady(rewriteTarget)
+      .then(() => invoke<string>("openrouter_search_query", { model: rewriteTarget.model, question, history: prior.slice(-2), endpoint: rewriteTarget.endpoint }))
+      .catch(() => "");
     if (acceptableRewrite(rewritten, question)) { query = rewritten.trim(); meaning = query; }
     else query = fallbackQuery(question, prior);
   }
@@ -100,6 +109,8 @@ export async function answerFromMemory(question: string, history: ChatMessage[])
   return {
     body,
     source,
+    retrieved: found.filter((hit, i) => found.findIndex((other) => other.snapshot_id === hit.snapshot_id) === i),
+    searchQuery: query,
     hits: source === "memory" || source === "mixed" ? found.filter((hit, i) => found.findIndex((other) => other.snapshot_id === hit.snapshot_id) === i) : [],
     timings: { rewrite, prepare, model: model_ },
   };

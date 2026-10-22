@@ -262,3 +262,35 @@ html[data-reduce-motion="true"] *, html[data-reduce-motion="true"] *::before, ht
 @media (max-width: 530px) { .top-status { display: none; } .moment-grid, .entity-grid { grid-template-columns: 1fr; } .today-side { flex-direction: column; } .settings-layout { display: block; overflow: auto; } .settings-nav { border-right: 0; border-bottom: 1px solid #e9e4da; padding: 20px; } .settings-nav h1 { margin-bottom: 9px; } .settings-nav button { width: auto; display: inline-flex; margin: 2px; border: 1px solid #e5e2d8; } .settings-nav button svg { display: none; } .settings-content { overflow: visible; } .onboarding-card { padding: 22px; } .onboarding-body { padding: 28px 0 10px; } .privacy-tiles { grid-template-columns: 1fr; } .inline-form { flex-direction: column; } }
 
 .answer-source { display: inline-block; margin-bottom: .35em; padding: .1em .55em; border-radius: 999px; font-size: 11px; letter-spacing: .02em; opacity: .75; border: 1px solid currentColor; }
+
+/* Settings → AI model: one row per model-backed step. */
+.layer-row { border-top: 1px solid #eee9df; padding: 16px 0 6px; }
+.layer-row:first-of-type { border-top: 0; }
+.layer-row[data-off="true"] .layer-controls { opacity: .55; }
+.layer-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.layer-head strong { font-size: .85rem; color: #354239; }
+.layer-row > small { display: block; color: #8b958c; margin-top: 4px; max-width: 560px; }
+.layer-controls { display: grid; grid-template-columns: minmax(170px, 1fr) minmax(220px, 2fr); gap: 14px; margin-top: 4px; }
+.layer-switch { position: relative; display: inline-flex; cursor: pointer; }
+.layer-leaves { list-style: none; margin: 8px 0 0; padding: 0; }
+.layer-leaves li { padding: 8px 0; border-top: 1px solid #eee9df; font-size: .82rem; color: #354239; }
+.layer-leaves li:first-child { border-top: 0; }
+.layer-leaves small { display: block; color: #8b958c; margin-top: 3px; }
+.layer-good { display: flex; align-items: center; gap: 8px; color: #2f6b4a; }
+@media (max-width: 700px) { .layer-controls { grid-template-columns: 1fr; } }
+
+/* Settings → AI model: one row per model-backed step. */
+.layer-row { border-top: 1px solid #eee9df; padding: 16px 0 6px; }
+.layer-row:first-of-type { border-top: 0; }
+.layer-row[data-off="true"] .layer-controls { opacity: .55; }
+.layer-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.layer-head strong { font-size: .85rem; color: #354239; }
+.layer-row > small { display: block; color: #8b958c; margin-top: 4px; max-width: 560px; }
+.layer-controls { display: grid; grid-template-columns: minmax(170px, 1fr) minmax(220px, 2fr); gap: 14px; margin-top: 4px; }
+.layer-switch { position: relative; display: inline-flex; cursor: pointer; }
+.layer-leaves { list-style: none; margin: 8px 0 0; padding: 0; }
+.layer-leaves li { padding: 8px 0; border-top: 1px solid #eee9df; font-size: .82rem; color: #354239; }
+.layer-leaves li:first-child { border-top: 0; }
+.layer-leaves small { display: block; color: #8b958c; margin-top: 3px; }
+.layer-good { display: flex; align-items: center; gap: 8px; color: #2f6b4a; }
+@media (max-width: 700px) { .layer-controls { grid-template-columns: 1fr; } }

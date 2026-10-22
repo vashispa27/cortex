@@ -1,15 +1,23 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { Preferences } from "./storage";
+import type { LayerId, Preferences } from "./storage";
 
 /** Which model a request goes to. `endpoint` is null for OpenRouter and the server's base URL for a local model. */
 export type AiTarget = { model: string; endpoint: string | null; local: boolean };
 
-export function aiTarget(preferences: Preferences, purpose: "main" | "fast" = "main"): AiTarget {
-  if (preferences.aiProvider === "local") {
-    return { model: preferences.localModel.trim(), endpoint: preferences.localEndpoint.trim() || null, local: true };
+/** Where one step runs: its own choice, else the global provider; "local only" overrides everything. */
+export function layerIsLocal(preferences: Preferences, layer: LayerId): boolean {
+  if (preferences.localOnly) return true;
+  const choice = preferences.layers[layer].provider;
+  return (choice === "default" ? preferences.aiProvider : choice === "local" ? "local" : "openrouter") === "local";
+}
+
+/** The model a step uses: its own model for the provider it runs on, else that provider's default model. */
+export function aiTarget(preferences: Preferences, layer: LayerId = "answer"): AiTarget {
+  const choice = preferences.layers[layer];
+  if (layerIsLocal(preferences, layer)) {
+    return { model: choice.localModel.trim() || preferences.localModel.trim(), endpoint: preferences.localEndpoint.trim() || null, local: true };
   }
-  const fast = purpose === "fast" ? preferences.fastModel.trim() : "";
-  return { model: fast || preferences.openrouterModel.trim(), endpoint: null, local: false };
+  return { model: choice.cloudModel.trim() || preferences.openrouterModel.trim(), endpoint: null, local: false };
 }
 
 /** Mirrors the shell's rule: a local model must be an http address on this Mac. */

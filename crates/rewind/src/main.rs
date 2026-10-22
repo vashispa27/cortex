@@ -7,14 +7,16 @@ mod appscope;
 mod assist;
 mod blocklist;
 mod cleaner;
-mod categorization;
+mod contextual;
 mod cloud_redaction;
 mod dedup;
 mod desktop;
 mod eval;
 mod fixtures;
+mod items;
 mod prefix;
 mod rawtrees;
+mod segment;
 mod timewin;
 mod versions;
 
@@ -114,6 +116,9 @@ fn main() -> Result<()> {
         Some("eval") => return eval::run(&args[1..]),
         Some("eval-answers") => return answer_eval::run(&args[1..]),
         Some("ingest-fixtures") => return fixtures::run_cli(&args[1..]),
+        Some("prepare-context-eval") => return contextual::prepare(&args[1..]),
+        Some("segment-archive") => return items::rebuild_archive(&args[1..]),
+        Some("segment-report") => return items::report(&args[1..]),
         _ => {}
     }
     let state = state_dir()?;
@@ -228,7 +233,18 @@ fn open_db(state: &Path) -> Result<Connection> {
             .collect::<rusqlite::Result<Vec<_>>>()?;
         found
     };
-    for (column, definition) in [("dup_of", "INTEGER"), ("text_hash", "TEXT"), ("category", "TEXT NOT NULL DEFAULT 'unknown'"), ("author", "TEXT"), ("displayed_time", "TEXT"), ("object_start", "INTEGER"), ("object_end", "INTEGER"), ("label_model", "TEXT")] {
+    for (column, definition) in [
+        ("dup_of", "INTEGER"),
+        ("text_hash", "TEXT"),
+        ("context", "TEXT"),
+        // Item chunks (segment.rs); empty for page chunks.
+        ("kind", "TEXT"),
+        ("author", "TEXT"),
+        ("displayed_time", "TEXT"),
+        ("container", "TEXT"),
+        ("header", "TEXT"),
+        ("payload_dirty", "INTEGER NOT NULL DEFAULT 0"),
+    ] {
         if !chunk_columns.iter().any(|existing| existing == column) {
             db.execute(&format!("ALTER TABLE chunks ADD COLUMN {column} {definition}"), [])?;
         }
@@ -322,6 +338,10 @@ fn open_runtime(state: &Path, rebuild: bool) -> Result<Runtime> {
 /// `model` lets offline evals reuse one loaded embedding model across state directories.
 fn open_runtime_with(state: &Path, rebuild: bool, model: Option<StaticModel>, prefix_mode: prefix::Prefix) -> Result<Runtime> {
     let db = open_db(state)?;
+    // An index that holds items stays an item index, with or without REWIND_SEGMENTS.
+    if items::has_items(&db)? {
+        segment::activate();
+    }
     let stale = stale_count(&db)?;
     if stale > 0 {
         bail!("{stale} captures still use the old text format; run `rewind capture --clean-dry-run` then `rewind capture --apply-cleaning`");
@@ -331,6 +351,11 @@ fn open_runtime_with(state: &Path, rebuild: bool, model: Option<StaticModel>, pr
             r.get(0)
         })
         .optional()?;
+    let prefix_mode = if prefix_mode == prefix::Prefix::None {
+        if contextual::enabled() || (!rebuild && old.as_deref() == Some(prefix::index_version(prefix::Prefix::Contextual).as_str())) {
+            prefix::Prefix::Contextual
+        } else { prefix_mode }
+    } else { prefix_mode };
     if old.as_deref().is_some_and(|v| v != prefix::index_version(prefix_mode)) && !rebuild {
         bail!("embedding model or chunk context format changed; run `rewind capture --rebuild-index` to reindex originals in SQLite");
     }
@@ -454,9 +479,32 @@ impl Runtime {
         }
         Ok(())
     }
+    /// Item chunks whose items were seen again in new snapshots: their points now cover those snapshots.
+    fn refresh_item_payloads(&self) -> Result<()> {
+        let dirty = {
+            let mut stmt = self.db.prepare("SELECT id,indexed FROM chunks WHERE payload_dirty=1")?;
+            let found = stmt.query_map([], |r| Ok((r.get::<_, i64>(0)?, r.get::<_, i64>(1)?)))?.collect::<rusqlite::Result<Vec<_>>>()?;
+            found
+        };
+        for (id, indexed) in dirty {
+            if indexed == 1 {
+                let (first, last, ids) = items::payload_snapshots(&self.db, id)?;
+                let payload: Payload = serde_json::from_value(json!({"capture_time":first,"last_seen":last,"snapshot_ids":ids}))?;
+                self.shard.update(UpdateOperation::PayloadOperation(PayloadOps::SetPayload(SetPayloadOp {
+                    payload,
+                    points: Some(vec![PointId::NumId((1_u64 << 61) + id as u64)]),
+                    filter: None,
+                    key: None,
+                })))?;
+            }
+            self.db.execute("UPDATE chunks SET payload_dirty=0 WHERE id=?1", [id])?;
+        }
+        Ok(())
+    }
     fn index_pending(&mut self) -> Result<usize> {
+        self.refresh_item_payloads()?;
         let chunks = {
-            let mut stmt = self.db.prepare("SELECT c.id,c.snapshot_id,s.app_id,s.title,s.url,s.domain,s.source_type,c.body,c.start_byte,c.end_byte,s.first_seen_ms,s.last_seen_ms,s.body,c.category FROM chunks c JOIN snapshots s ON s.id=c.snapshot_id WHERE c.indexed=0 AND s.searchable=1 ORDER BY c.id LIMIT 100")?;
+            let mut stmt = self.db.prepare("SELECT c.id,c.snapshot_id,s.app_id,s.title,s.url,s.domain,s.source_type,c.body,c.start_byte,c.end_byte,s.first_seen_ms,s.last_seen_ms,s.body,c.context FROM chunks c JOIN snapshots s ON s.id=c.snapshot_id WHERE c.indexed=0 AND s.searchable=1 ORDER BY c.id LIMIT 100")?;
             let rows = stmt.query_map([], |r| {
                 Ok((
                     r.get::<_, i64>(0)?,
@@ -472,7 +520,7 @@ impl Runtime {
                     r.get::<_, i64>(10)?,
                     r.get::<_, i64>(11)?,
                     r.get::<_, String>(12)?,
-                    r.get::<_, String>(13)?,
+                    r.get::<_, Option<String>>(13)?,
                 ))
             })?;
             rows.collect::<rusqlite::Result<Vec<_>>>()?
@@ -494,16 +542,24 @@ impl Runtime {
         // Chunks whose text is already indexed (same app and domain, same embedded context) get no point of
         // their own; they point at the one that exists. The context prefix puts the capture date in the
         // embedded text, so that mode never shares.
-        let share = dedup::chunk_sharing_enabled() && self.prefix != prefix::Prefix::Context;
+        let share = dedup::chunk_sharing_enabled() && !matches!(self.prefix, prefix::Prefix::Context | prefix::Prefix::Contextual);
         let mut batch: std::collections::HashMap<String, i64> = std::collections::HashMap::new();
         let mut keys: Vec<(i64, String)> = Vec::new();
         let mut shared: Vec<(i64, i64, String)> = Vec::new();
-        for (chunk_id, snapshot_id, app, title, url, domain, source_type, body, start, end, first, last, snapshot_body, category) in &chunks {
+        for (chunk_id, snapshot_id, app, title, url, domain, source_type, body, start, end, first, last, snapshot_body, context) in &chunks {
+            // An item chunk is embedded with its header; it never shares a point and never uses a model context.
+            if let Some(meta) = items::chunk_meta(&self.db, *chunk_id)? {
+                let (seen_first, seen_last, ids) = items::payload_snapshots(&self.db, *chunk_id)?;
+                keys.push((*chunk_id, format!("item:{chunk_id}")));
+                let text = format!("{}\n{body}", meta.header);
+                self.upsert_point((1_u64 << 61) + *chunk_id as u64, &text, json!({"snapshot_id":snapshot_id,"snapshot_ids":ids,"chunk_id":chunk_id,"start_byte":start,"end_byte":end,"point_type":"chunk","app":app,"domain":domain,"url":url,"capture_time":seen_first.min(*first),"last_seen":seen_last.max(*last),"source_type":source_type,"model":version,"kind":meta.kind,"author":meta.author,"displayed_time":meta.time,"container":meta.container}))?;
+                continue;
+            }
             let key = dedup::chunk_key(self.prefix, app, domain.as_deref(), title, body);
-            if share && category == "unknown" {
+            if share {
                 let canonical = match batch.get(&key) {
                     Some(c) => Some(*c),
-                    None => self.db.query_row("SELECT id FROM chunks WHERE text_hash=?1 AND indexed=1 AND dup_of IS NULL AND category='unknown' LIMIT 1", [&key], |r| r.get::<_, i64>(0)).optional()?,
+                    None => self.db.query_row("SELECT id FROM chunks WHERE text_hash=?1 AND indexed=1 AND dup_of IS NULL LIMIT 1", [&key], |r| r.get::<_, i64>(0)).optional()?,
                 };
                 if let Some(canonical) = canonical {
                     shared.push((*chunk_id, canonical, key));
@@ -512,8 +568,8 @@ impl Runtime {
                 batch.insert(key.clone(), *chunk_id);
             }
             keys.push((*chunk_id, key));
-            let text = prefix::embed_text(self.prefix, &prefix::ChunkContext { title, app_id: app, domain: domain.as_deref(), first_seen_ms: *first, snapshot_body, start_byte: *start as usize }, body);
-            self.upsert_point((1_u64 << 61) + *chunk_id as u64, &text, json!({"snapshot_id":snapshot_id,"snapshot_ids":[snapshot_id],"chunk_id":chunk_id,"start_byte":start,"end_byte":end,"point_type":"chunk","category":category,"app":app,"domain":domain,"url":url,"capture_time":first,"last_seen":last,"source_type":source_type,"model":version}))?;
+            let text = prefix::embed_text(self.prefix, &prefix::ChunkContext { title, app_id: app, domain: domain.as_deref(), first_seen_ms: *first, snapshot_body, start_byte: *start as usize, context: context.as_deref() }, body);
+            self.upsert_point((1_u64 << 61) + *chunk_id as u64, &text, json!({"snapshot_id":snapshot_id,"snapshot_ids":[snapshot_id],"chunk_id":chunk_id,"start_byte":start,"end_byte":end,"point_type":"chunk","app":app,"domain":domain,"url":url,"capture_time":first,"last_seen":last,"source_type":source_type,"model":version}))?;
         }
         // A shared point must be findable through every snapshot that shares it, and its time window must
         // cover all of them (the exact per-snapshot observation check runs after the query).
@@ -756,6 +812,8 @@ fn record_with_target(
     }
     let cleaned = cleaner::clean(&window.roots, &window.app_id, url.as_deref(), &window.title);
     let body = &cleaned.body;
+    // Pages on a supported site are stored as items (segment.rs); anything else keeps the page path below.
+    let segmented = if segment::active() { segment::segment(&window.roots, url.as_deref()) } else { None };
     let domain = url
         .as_deref()
         .and_then(|u| url::Url::parse(u).ok())
@@ -773,18 +831,19 @@ fn record_with_target(
         .optional()?;
     // A near-identical copy of the page's latest snapshot (same numbers, names and negations) is one more
     // sighting of it, not a new snapshot.
-    if dedup::near_dup_enabled() && existing.is_none() {
+    if dedup::near_dup_enabled() && existing.is_none() && segmented.is_none() {
         if let Some(id) = dedup::find_near_duplicate(db, window, url.as_deref(), body)? {
             let source = dedup::touch(db, id, window, &source_type, &limitations, &tree_key)?;
             return Ok((id, false, source));
         }
     }
-    // Do not hold a SQLite write transaction while waiting on the local model.
-    let new_chunks = if existing.is_none() {
-        categorization::chunks(body, chunking, &window.app_id, url.as_deref())?
+    // Do not hold a SQLite write transaction while waiting on the context model.
+    let new_chunks = if existing.is_none() && segmented.is_none() {
+        cleaner::chunks_cfg(body, chunking)
     } else {
         Vec::new()
     };
+    let contexts = contextual::generate(body, &window.app_id, &window.title, url.as_deref(), &new_chunks.iter().map(|c| c.2.as_str()).collect::<Vec<_>>())?;
     let transaction = db.transaction()?;
     transaction.execute("INSERT INTO snapshots(fingerprint,evidence_fingerprint,app_id,title,url,domain,source_type,body,first_seen_ms,last_seen_ms,focus_role,focus_name,limitations,ax_nodes_json,cleaner_version,cleaner_quality,cleaner_coverage,cleaning_trace_json,searchable) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?9,?10,?11,?12,?13,?14,?15,?16,?17,?18) ON CONFLICT(fingerprint) DO UPDATE SET last_seen_ms=excluded.last_seen_ms,duration_ms=MAX(0,excluded.last_seen_ms-snapshots.first_seen_ms),sightings=snapshots.sightings+1,limitations=excluded.limitations,source_type=excluded.source_type",
         params![fingerprint,evidence_fingerprint,window.app_id,window.title,url,domain,source_type,body,window.observed_ms,window.focus_role,window.focus_name,limitations,ax_nodes_json,cleaner::VERSION,cleaned.quality,cleaned.coverage,cleaning_trace_json,i64::from(!body.is_empty())])?;
@@ -796,9 +855,12 @@ fn record_with_target(
     transaction.execute("INSERT OR IGNORE INTO raw_versions(snapshot_id,ax_hash,ax_nodes_json,observed_ms) VALUES(?1,?2,?3,?4)",params![id,digest(&ax_nodes_json),ax_nodes_json,window.observed_ms])?;
     transaction.execute("INSERT OR IGNORE INTO tree_keys(tree_key,snapshot_id) VALUES(?1,?2)", params![tree_key,id])?;
     if existing.is_none() {
-        for chunk in new_chunks {
-            transaction.execute("INSERT INTO chunks(snapshot_id,start_byte,end_byte,body,category,author,displayed_time,object_start,object_end,label_model) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10)", params![id,chunk.start as i64,chunk.end as i64,chunk.text,chunk.category,chunk.author,chunk.displayed_time,chunk.object_start as i64,chunk.object_end as i64,chunk.model])?;
+        for ((start, end, text), context) in new_chunks.into_iter().zip(contexts) {
+            transaction.execute("INSERT INTO chunks(snapshot_id,start_byte,end_byte,body,context) VALUES(?1,?2,?3,?4,?5)", params![id,start as i64,end as i64,text,context])?;
         }
+    }
+    if let (Some(seg), true) = (&segmented, existing.is_none()) {
+        items::ingest(&transaction, id, window.observed_ms, &window.app_id, seg)?;
     }
     transaction.execute("INSERT INTO observations(snapshot_id,observed_ms,window_session_id,focus_role,focus_name,limitations) VALUES(?1,?2,?3,?4,?5,?6)",params![id,window.observed_ms,window.window_session_id,window.focus_role,window.focus_name,limitations])?;
     transaction.commit()?;
@@ -817,6 +879,9 @@ fn reprocess(state: &Path, apply: bool) -> Result<()> {
         bail!("stop the capture process before reprocessing stored snapshots");
     }
     let mut db = open_db(state)?;
+    if items::has_items(&db)? {
+        bail!("this memory stores items (REWIND_SEGMENTS); re-cleaning would delete their chunks");
+    }
     let records = {
         let mut stmt = db.prepare("SELECT id,app_id,title,url,domain,source_type,body,ax_nodes_json FROM snapshots ORDER BY id")?;
         let found = stmt.query_map([], |r| Ok((r.get::<_,i64>(0)?,r.get::<_,String>(1)?,r.get::<_,String>(2)?,r.get::<_,Option<String>>(3)?,r.get::<_,Option<String>>(4)?,r.get::<_,String>(5)?,r.get::<_,String>(6)?,r.get::<_,String>(7)?)))?
@@ -1180,9 +1245,6 @@ enum RerankBonus {
 /// Retrieval knobs shared by `ask` and the offline eval.
 #[derive(Clone, Debug, Serialize)]
 struct Params {
-    /// Ask the local model to select relevant categories for this query.
-    category_route: bool,
-    category_filter: Vec<String>,
     /// Per-retriever candidate depth (dense and BM25 prefetch).
     prefetch: usize,
     /// Fused candidates returned by Qdrant before collapsing.
@@ -1238,8 +1300,6 @@ struct Params {
 impl Default for Params {
     fn default() -> Self {
         Params {
-            category_route: env::var("REWIND_CATEGORY_ROUTE").ok().as_deref() == Some("1"),
-            category_filter: Vec::new(),
             prefetch: 80,
             fused_limit: 40,
             rrf_k: 60,
@@ -1310,6 +1370,18 @@ struct EvidenceChunk {
     chunk_id: i64,
     text: String,
     score: f32,
+    /// The deterministic header of an item chunk (segment.rs): verified author, handle and displayed time.
+    header: Option<String>,
+}
+
+impl EvidenceChunk {
+    /// The chunk as the reader sees it: the header as a labelled line above the text.
+    fn shown(&self) -> String {
+        match &self.header {
+            Some(header) => format!("Context: {header}\n{}", self.text),
+            None => self.text.clone(),
+        }
+    }
 }
 
 struct Hit {
@@ -1347,19 +1419,7 @@ struct Retrieval {
 }
 
 fn retrieve(runtime: &mut Runtime, question: &str, params: &Params) -> Result<Retrieval> {
-    let mut routed = params.clone();
-    if params.category_route {
-        match categorization::route(question) {
-            Ok(categories) => routed.category_filter = categories,
-            Err(error) if categorization::strict() => return Err(error),
-            Err(error) => eprintln!("Category routing failed; searching all categories: {error}"),
-        }
-    }
-    let mut r = retrieve_scoped(runtime, question, &routed)?;
-    if !routed.category_filter.is_empty() && r.hits.is_empty() {
-        routed.category_filter.clear();
-        r = retrieve_scoped(runtime, question, &routed)?;
-    }
+    let mut r = retrieve_scoped(runtime, question, params)?;
     r.support = abstain::support(&r.hits, question);
     r.dense_sim = abstain::dense_sim(runtime, &r.hits, question)?;
     r.chunk_sim = abstain::chunk_sim(runtime, &r.ranked, question)?;
@@ -1368,12 +1428,6 @@ fn retrieve(runtime: &mut Runtime, question: &str, params: &Params) -> Result<Re
     r.ident = abstain::identifier_support(&r.hits, question);
     r.score_norm = abstain::score_norm(r.hits.first().map_or(0.0, |h| h.source.score as f64), params);
     r.abstained = abstain::decide(&r, params);
-    if r.abstained && !routed.category_filter.is_empty() {
-        let mut broad = params.clone();
-        broad.category_route = false;
-        broad.category_filter.clear();
-        return retrieve(runtime, question, &broad);
-    }
     Ok(r)
 }
 
@@ -1422,16 +1476,6 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
     } else {
         Vec::new()
     };
-    if !params.category_filter.is_empty() {
-        let mut categories = params.category_filter.clone();
-        categories.push("unknown".into());
-        // Legacy points have no category payload; derived points are not classified.
-        clauses.push(json!({"should":[
-            {"key":"category","match":{"any":categories}},
-            {"is_empty":{"key":"category"}},
-            {"key":"point_type","match":{"value":"derived"}}
-        ]}));
-    }
     let time = if !params.use_filters { None } else if params.window.is_some() { params.window } else { time_bounds(question, params.now_ms)? };
     let reported_clauses = clauses.clone();
     if !params.include_derived {
@@ -1476,18 +1520,12 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
     if params.mode == Mode::Bm25DenseRerank {
         // Candidate generation is lexical; dense similarity can only reorder these candidates.
         // The outer one-list RRF keeps scores on the same scale as the other single-list modes.
-        let mut inner = PrefetchBuilder::new(params.prefetch).query(sparse.unwrap());
-        let mut outer = PrefetchBuilder::new(params.prefetch).query(dense.unwrap());
-        if !params.category_filter.is_empty() {
-            if let Some(f) = &filter { inner = inner.filter(f.clone()); outer = outer.filter(f.clone()); }
-        }
+        let inner = PrefetchBuilder::new(params.prefetch).query(sparse.unwrap());
+        let outer = PrefetchBuilder::new(params.prefetch).query(dense.unwrap());
         builder = builder.add_prefetch(outer.add_prefetch(inner.build()).build());
     } else {
         for query in dense.into_iter().chain(sparse) {
-            let mut prefetch = PrefetchBuilder::new(params.prefetch).query(query);
-            if !params.category_filter.is_empty() {
-                if let Some(f) = &filter { prefetch = prefetch.filter(f.clone()); }
-            }
+            let prefetch = PrefetchBuilder::new(params.prefetch).query(query);
             builder = builder.add_prefetch(prefetch.build());
         }
     }
@@ -1516,6 +1554,8 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
     let mut collapsed: Vec<(Source, Option<i64>, Vec<EvidenceChunk>)> = Vec::new();
     let mut ranked = Vec::with_capacity(points.len());
     let mut observation_dropped = 0_usize;
+    // Snapshots an item chunk was also seen in, by the snapshot that speaks for it.
+    let mut item_versions = std::collections::HashMap::<i64, Vec<i64>>::new();
     for (rank, point) in points.into_iter().enumerate() {
         let PointId::NumId(point_id) = point.id else {
             continue;
@@ -1524,6 +1564,8 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
         let mut derived_kind = None;
         let mut chunk_id = None;
         let mut point_text = String::new();
+        let mut item_header: Option<String> = None;
+        let mut all_snapshots: Option<Vec<i64>> = None;
         let hits: Vec<(i64, Option<String>, Option<i64>)> = if point_id >= (1_u64 << 62) {
             let id = (point_id - (1_u64 << 62)) as i64;
             derived_id = Some(id);
@@ -1547,6 +1589,42 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
         } else if point_id >= (1_u64 << 61) {
             let id = (point_id - (1_u64 << 61)) as i64;
             chunk_id = Some(id);
+            if let Some(meta) = items::chunk_meta(&runtime.db, id)? {
+                // An item chunk (segment.rs) stands for every snapshot that held its items. One of them
+                // speaks for it; the others are listed as its other captured versions.
+                let body: String = runtime.db.query_row("SELECT body FROM chunks WHERE id=?1", [id], |r| r.get(0))?;
+                point_text = format!("{}\n{body}", meta.header);
+                item_header = Some(meta.header);
+                let mut snapshots = items::chunk_snapshots(&runtime.db, id)?;
+                all_snapshots = Some(snapshots.clone());
+                if let Some((start, end)) = time {
+                    let before = snapshots.len();
+                    let mut kept = Vec::with_capacity(before);
+                    for snapshot in snapshots {
+                        let observed: bool = runtime.db.query_row("SELECT EXISTS(SELECT 1 FROM observations WHERE snapshot_id=?1 AND observed_ms>=?2 AND observed_ms<?3)", params![snapshot, start, end], |r| r.get(0))?;
+                        if observed { kept.push(snapshot); }
+                    }
+                    observation_dropped += before - kept.len();
+                    snapshots = kept;
+                }
+                // Prefer a snapshot that is already a result, so the chunks of one page stay together.
+                let mut pick = 0;
+                for (position, snapshot) in snapshots.iter().enumerate() {
+                    if let Some(source) = load_source(&runtime.db, *snapshot, 0.0)? {
+                        if index_by_evidence.contains_key(&evidence_key(&source.app_id, source.domain.as_deref(), &source.source_type, &source.body)) {
+                            pick = position;
+                            break;
+                        }
+                    }
+                }
+                if snapshots.is_empty() {
+                    Vec::new()
+                } else {
+                    let speaker = snapshots.remove(pick);
+                    item_versions.entry(speaker).or_default().extend(snapshots);
+                    vec![(speaker, Some(body), Some(id))]
+                }
+            } else {
             // The point's own chunk first, then the chunks that share it (dedup.rs): same text, other snapshots.
             let rows: Vec<(i64, String, i64)> = {
                 let mut stmt = runtime.db.prepare("SELECT snapshot_id,body,id FROM chunks WHERE id=?1 UNION ALL SELECT snapshot_id,body,id FROM chunks WHERE dup_of=?1")?;
@@ -1557,10 +1635,11 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
                 point_text = first.1.clone();
             }
             rows.into_iter().map(|(snapshot_id, body, chunk)| (snapshot_id, Some(body), Some(chunk))).collect()
+            }
         } else {
             vec![(point_id as i64, None, None)]
         };
-        let snapshot_ids: Vec<i64> = hits.iter().map(|(id, _, _)| *id).collect();
+        let snapshot_ids: Vec<i64> = all_snapshots.unwrap_or_else(|| hits.iter().map(|(id, _, _)| *id).collect());
         let mut passed_any = false;
         for (id, hit_text, hit_chunk) in hits {
             if let Some((start, end)) = time {
@@ -1579,7 +1658,7 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
                     &source.source_type,
                     &source.body,
                 );
-                let evidence_chunk = hit_chunk.zip(source.hit_text.clone()).map(|(chunk_id, text)| EvidenceChunk { chunk_id, text, score: point.score });
+                let evidence_chunk = hit_chunk.zip(source.hit_text.clone()).map(|(chunk_id, text)| EvidenceChunk { chunk_id, text, score: point.score, header: item_header.clone() });
                 match index_by_evidence.entry(evidence) {
                     std::collections::hash_map::Entry::Vacant(entry) => {
                         entry.insert(collapsed.len());
@@ -1657,7 +1736,15 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
         observation_dropped,
         hits: keyed
             .into_iter()
-            .map(|(_, (source, best_chunk_id, mut chunks, versions))| {
+            .map(|(_, (source, best_chunk_id, mut chunks, mut versions))| {
+                // Snapshots an item chunk was also seen in count as this result's other versions.
+                for id in std::iter::once(source.id).chain(versions.clone()) {
+                    for other in item_versions.get(&id).into_iter().flatten() {
+                        if *other != source.id && !versions.contains(other) {
+                            versions.push(*other);
+                        }
+                    }
+                }
                 // The best chunk always stays; the rest are the highest-scoring others. Shown in
                 // document order so adjacent chunks read as the page does.
                 chunks.sort_by(|a, b| {
@@ -1676,7 +1763,7 @@ fn retrieve_with(runtime: &mut Runtime, question: &str, params: &Params, drop_ap
 /// than one allowed, falling back to the whole page when the chunks hold none of the query terms.
 fn evidence_snippet(hit: &Hit, question: &str, chunks_per_result: usize) -> String {
     if chunks_per_result > 1 && !hit.chunks.is_empty() {
-        let scope = hit.chunks.iter().map(|c| c.text.as_str()).collect::<Vec<_>>().join("\n");
+        let scope = hit.chunks.iter().map(EvidenceChunk::shown).collect::<Vec<_>>().join("\n");
         let lower = scope.to_lowercase();
         if content_terms(question).iter().any(|t| lower.contains(t.as_str())) {
             return snippet(&scope, question);
@@ -1685,16 +1772,46 @@ fn evidence_snippet(hit: &Hit, question: &str, chunks_per_result: usize) -> Stri
     snippet(&hit.source.body, question)
 }
 
-/// Total characters of retrieved-chunk evidence sent to the LLM per source.
-const EVIDENCE_CHAR_CAP: usize = 2_500;
+/// Total characters of retrieved-chunk evidence sent to the LLM per source: room for the three chunks a result
+/// carries (a chunk is about 1,500 characters), so a page's last chunk is not simply cut off.
+const EVIDENCE_CHAR_CAP: usize = 4_500;
+/// A source that was widened with neighbouring chunks (see `desktop::widen_top_hits`) may send up to this much.
+const WIDENED_EVIDENCE_CHAR_CAP: usize = 7_500;
+/// More chunks than a normal result carries means the result was widened.
+const NORMAL_CHUNKS: usize = 3;
+const CHUNK_SEPARATOR: &str = "\n…\n";
 
-/// The retrieved chunks of one result as one block (the first 2,500 characters of the page when a
-/// derived point, not a chunk, matched).
+/// The retrieved chunks of one result as one block (the first characters of the page when a derived point,
+/// not a chunk, matched). When they do not all fit, the budget goes to the best-matching chunk first and only
+/// the last chunk that does not fit is cut; the kept chunks are shown in page order. Cutting from the end of the
+/// page instead would drop the open chat of a messaging page, which comes after its sidebar.
 fn evidence_text(hit: &Hit) -> String {
     if hit.chunks.is_empty() {
         return hit.source.body.chars().take(EVIDENCE_CHAR_CAP).collect();
     }
-    hit.chunks.iter().map(|c| c.text.as_str()).collect::<Vec<_>>().join("\n…\n").chars().take(EVIDENCE_CHAR_CAP).collect()
+    let cap = if hit.chunks.len() > NORMAL_CHUNKS { WIDENED_EVIDENCE_CHAR_CAP } else { EVIDENCE_CHAR_CAP };
+    let mut order: Vec<usize> = (0..hit.chunks.len()).collect();
+    order.sort_by(|&a, &b| {
+        let (x, y) = (&hit.chunks[a], &hit.chunks[b]);
+        (Some(y.chunk_id) == hit.best_chunk_id)
+            .cmp(&(Some(x.chunk_id) == hit.best_chunk_id))
+            .then_with(|| y.score.total_cmp(&x.score))
+            .then(a.cmp(&b))
+    });
+    let separator = CHUNK_SEPARATOR.chars().count();
+    let mut budget = cap;
+    let mut kept: Vec<(usize, String)> = Vec::new();
+    for index in order {
+        let cost = if kept.is_empty() { 0 } else { separator };
+        if budget <= cost {
+            break;
+        }
+        let text: String = hit.chunks[index].shown().chars().take(budget - cost).collect();
+        budget -= cost + text.chars().count();
+        kept.push((index, text));
+    }
+    kept.sort_by_key(|(index, _)| *index);
+    kept.iter().map(|(_, text)| text.as_str()).collect::<Vec<_>>().join(CHUNK_SEPARATOR)
 }
 
 fn answer(runtime: &mut Runtime, question: &str) -> Result<String> {
@@ -1960,7 +2077,7 @@ mod tests {
         Hit {
             source,
             best_chunk_id: Some(1),
-            chunks: chunks.iter().enumerate().map(|(i, c)| EvidenceChunk { chunk_id: i as i64 + 1, text: (*c).into(), score: 0.0 }).collect(),
+            chunks: chunks.iter().enumerate().map(|(i, c)| EvidenceChunk { chunk_id: i as i64 + 1, text: (*c).into(), score: 0.0, header: None }).collect(),
             versions: vec![],
         }
     }
@@ -1977,6 +2094,22 @@ mod tests {
         // chunks_per_result = 1 keeps the original whole-page snippet.
         assert!(evidence_snippet(&hit, "my macros table", 1).contains("macros intro"));
         assert!(evidence_text(&hit).contains("Protein 137 g"));
+    }
+
+    #[test]
+    fn the_matching_chunk_survives_the_cap_even_when_page_furniture_comes_first() {
+        // A messaging page: two sidebar chunks, then the open chat. The chat is the best match.
+        let (sidebar_a, sidebar_b, chat) = ("A".repeat(1_600), "B".repeat(1_600), format!("{}9932346540", "C".repeat(1_590)));
+        let mut hit = hit_with("page", &[sidebar_a.as_str(), sidebar_b.as_str(), chat.as_str()]);
+        hit.best_chunk_id = Some(3);
+        let text = evidence_text(&hit);
+        assert_eq!(text.chars().count(), EVIDENCE_CHAR_CAP, "{}", text.len());
+        assert!(text.contains(&chat), "the best chunk is kept whole");
+        assert!(text.starts_with('A') && text.trim_end().ends_with("9932346540"), "chunks stay in page order");
+        // With room for all three, nothing is cut.
+        let small: Vec<String> = ["a", "b", "c"].iter().map(|x| x.repeat(1_400)).collect();
+        let hit = hit_with("page", &small.iter().map(String::as_str).collect::<Vec<_>>());
+        assert_eq!(evidence_text(&hit).chars().count(), 4_200 + 2 * CHUNK_SEPARATOR.chars().count());
     }
 
     #[test]

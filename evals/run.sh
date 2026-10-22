@@ -25,7 +25,7 @@ else
 fi
 export EVAL_GOLD="${EVAL_GOLD:-$(cd "$(dirname "$0")" && pwd)/private/gold-v1.jsonl}"   # the 309-question set
 # run name says where and with what model it ran, e.g. local-Qwen3.5-4B-MLX-4bit_1019-2300
-export EVAL_RUN="${KIND}_$(date +%m%d-%H%M)"
+export EVAL_RUN="${EVAL_RUN:-${KIND}_$(date +%m%d-%H%M)}"
 cd "$(dirname "$0")/../apps/desktop"
 npm run eval:answers
 npm run eval:judge

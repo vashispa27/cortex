@@ -14,6 +14,10 @@ export type AnswerRecord = {
   answer: string | null;
   source: string | null;
   hit_ids: number[];
+  /** Snapshots retrieval returned, even when the model tagged the answer `none` (then `hit_ids` is empty). */
+  retrieved_ids: number[];
+  /** The query searched: the question itself, or the model's rewrite of a follow-up. */
+  search_query: string | null;
   timings_ms: { rewrite: number; prepare: number; model: number } | null;
   error: string | null;
   model: string;
@@ -36,9 +40,9 @@ it("answers the gold questions", async () => {
     let record: AnswerRecord;
     try {
       const a = await answerFromMemory(q.query, history);
-      record = { id: q.id, query: q.query, answer: a.body, source: a.source, hit_ids: a.hits.map((h) => h.snapshot_id), timings_ms: a.timings, error: null, model };
+      record = { id: q.id, query: q.query, answer: a.body, source: a.source, hit_ids: a.hits.map((h) => h.snapshot_id), retrieved_ids: a.retrieved.map((h) => h.snapshot_id), search_query: a.searchQuery, timings_ms: a.timings, error: null, model };
     } catch (error) {
-      record = { id: q.id, query: q.query, answer: null, source: null, hit_ids: [], timings_ms: null, error: error instanceof Error ? error.message : String(error), model };
+      record = { id: q.id, query: q.query, answer: null, source: null, hit_ids: [], retrieved_ids: [], search_query: null, timings_ms: null, error: error instanceof Error ? error.message : String(error), model };
     }
     appendFileSync(OUT, JSON.stringify(record) + "\n");
     console.log(`[${i + 1}/${todo.length}] ${q.id} ${record.error ? "ERROR " + record.error : record.source}`);

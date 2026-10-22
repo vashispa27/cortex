@@ -4,7 +4,11 @@ import { prepareAssistantRequest } from "./api";
 import { invoke } from "@tauri-apps/api/core";
 vi.mock("@tauri-apps/api/core", () => ({ invoke: vi.fn() }));
 vi.mock("./api", () => ({ prepareAssistantRequest: vi.fn() }));
-const prefs = vi.hoisted(() => ({ current: { openrouterModel: "example/model" } as Record<string, unknown> }));
+const prefs = vi.hoisted(() => {
+  const step = { provider: "default", cloudModel: "", localModel: "" };
+  const base = { openrouterModel: "example/model", aiProvider: "openrouter", localOnly: false, layers: { answer: { ...step }, followup: { ...step }, autocomplete: { ...step }, writing: { ...step }, context: { ...step } } } as Record<string, any>;
+  return { base, current: base };
+});
 vi.mock("./storage", () => ({ loadPreferences: () => prefs.current }));
 const hit = { snapshot_id: 42, observed_ms: 0, app_id: "example.app", title: "Plan", excerpt: "excerpt", evidence_available: true, truncated: false };
 const retrieval = { engine: "qdrant_edge_hybrid" as const, dense: true, bm25: true, fusion: "rrf", candidates: 4 };
@@ -113,18 +117,18 @@ describe("follow-up rewrite", () => {
 describe("local model", () => {
   beforeEach(() => { vi.resetAllMocks(); });
   it("sends the same request to the local server, with no API key check", async () => {
-    prefs.current = { aiProvider: "local", localModel: "mlx-community/Qwen3.5-2B-4bit", localEndpoint: "http://127.0.0.1:8080/v1" };
+    prefs.current = { ...prefs.base, aiProvider: "local", localModel: "mlx-community/Qwen3.5-2B-4bit", localEndpoint: "http://127.0.0.1:8080/v1" };
     script("SOURCE: general\nHello.");
     vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared({ results: [], sources: [], abstained: true }));
     await answerFromMemory("hi there", []);
     expect(invoke).toHaveBeenCalledWith("openrouter_chat", expect.objectContaining({ model: "mlx-community/Qwen3.5-2B-4bit", endpoint: "http://127.0.0.1:8080/v1" }));
     expect(invoke).not.toHaveBeenCalledWith("openrouter_has_key");
-    prefs.current = { openrouterModel: "example/model" };
+    prefs.current = { ...prefs.base, openrouterModel: "example/model" };
   });
 });
 
 describe("a reply that is only a source tag", () => {
-  beforeEach(() => { vi.resetAllMocks(); prefs.current = { openrouterModel: "example/model" }; vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared({ results: [], sources: [], abstained: true })); });
+  beforeEach(() => { vi.resetAllMocks(); prefs.current = { ...prefs.base, openrouterModel: "example/model" }; vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared({ results: [], sources: [], abstained: true })); });
 
   it("is retried once with a reminder instead of being shown", async () => {
     const replies = ["SOURCE: none", "SOURCE: none\n\nI could not find Brandon Smith in what was captured."];
@@ -161,7 +165,7 @@ describe("follow-up rewrites from small models", () => {
   });
 
   it("uses the fallback query for retrieval when the model's rewrite is unusable", async () => {
-    prefs.current = { openrouterModel: "example/model" };
+    prefs.current = { ...prefs.base, openrouterModel: "example/model" };
     vi.resetAllMocks();
     script("SOURCE: general\nOk.", "No, I do not have access to your X handle.");
     vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared());
@@ -172,7 +176,7 @@ describe("follow-up rewrites from small models", () => {
 
 describe("pronouns in a longer chat", () => {
   it("rewrites from the last exchange only, so him means the person just discussed", async () => {
-    prefs.current = { openrouterModel: "example/model" };
+    prefs.current = { ...prefs.base, openrouterModel: "example/model" };
     vi.resetAllMocks();
     script("SOURCE: none\nNot captured.", "Do you have Roop Reddy's X handle?");
     vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared());
@@ -184,5 +188,27 @@ describe("pronouns in a longer chat", () => {
     const rewrite = vi.mocked(invoke).mock.calls.find(([name]) => name === "openrouter_search_query")![1] as { history: { content: string }[] };
     expect(rewrite.history.map((turn) => turn.content)).toEqual(["what did Roop reddy reply?", "No reply found."]);
     expect(prepareAssistantRequest).toHaveBeenCalledWith("Do you have Roop Reddy's X handle?", "do u have X handle of him?\n(Meaning: Do you have Roop Reddy's X handle?)", expect.anything());
+  });
+});
+
+describe("per-step providers", () => {
+  beforeEach(() => { vi.resetAllMocks(); });
+  it("answers in the cloud while rewriting the follow-up on this Mac", async () => {
+    prefs.current = { ...prefs.base, localEndpoint: "http://127.0.0.1:8080/v1", localModel: "qwen-main", layers: { ...prefs.base.layers, followup: { provider: "local", cloudModel: "", localModel: "qwen-small" } } };
+    script("SOURCE: memory\nFriday. [42]", "When did Mira reply in Example?");
+    vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared());
+    await answerFromMemory("What date?", [{ role: "user" as const, body: "What did Mira say in Example?" }]);
+    expect(invoke).toHaveBeenCalledWith("openrouter_search_query", expect.objectContaining({ model: "qwen-small", endpoint: "http://127.0.0.1:8080/v1" }));
+    expect(invoke).toHaveBeenCalledWith("openrouter_chat", expect.objectContaining({ model: "example/model", endpoint: null }));
+    prefs.current = prefs.base;
+  });
+  it("local only keeps both steps on this Mac even if a step asks for the cloud", async () => {
+    prefs.current = { ...prefs.base, localOnly: true, localEndpoint: "http://127.0.0.1:8080/v1", localModel: "qwen-main", layers: { ...prefs.base.layers, answer: { provider: "cloud", cloudModel: "a/big", localModel: "" } } };
+    script("SOURCE: memory\nFriday. [42]", "When did Mira reply in Example?");
+    vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared());
+    await answerFromMemory("What date?", [{ role: "user" as const, body: "What did Mira say in Example?" }]);
+    for (const call of vi.mocked(invoke).mock.calls) if (call[0] === "openrouter_chat" || call[0] === "openrouter_search_query") expect(call[1]).toMatchObject({ endpoint: "http://127.0.0.1:8080/v1", model: "qwen-main" });
+    expect(invoke).not.toHaveBeenCalledWith("openrouter_has_key");
+    prefs.current = prefs.base;
   });
 });

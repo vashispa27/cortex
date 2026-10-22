@@ -1022,7 +1022,10 @@ pub fn run() {
                 let executable = install_bundled_daemon()?;
                 let root=state_dir().map_err(io::Error::other)?;
                 let log=fs::OpenOptions::new().create(true).append(true).mode(0o600).open(root.join("rewind-engine.log"))?;
-                let child = Command::new(executable)
+                let mut engine = Command::new(executable);
+                // Structure-aware chunking (LinkedIn and X) is opt-in: `touch "<state>/segments-on"` to try it.
+                if root.join("segments-on").exists() { engine.env("REWIND_SEGMENTS", "1"); }
+                let child = engine
                     .arg("desktop")
                     .env("REWIND_STATE_DIR", root.join("local-memory"))
                     .env("REWIND_SETTINGS_DIR", &root)

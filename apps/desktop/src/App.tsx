@@ -17,7 +17,9 @@ import {
   saveReminders, type Preferences, type Reminder, type RewindTrigger,
 } from "./lib/storage";
 import { canApplyDraft, classifyWriting, draftSample, type WritingOperation } from "./lib/writing";
-import { aiTarget, testConnection, validLocalEndpoint } from "./lib/provider";
+import { testConnection, validLocalEndpoint } from "./lib/provider";
+import { engineChanges, engineSettingsFor } from "./lib/layers";
+import LayerSettings from "./components/LayerSettings";
 import { configureAssist, configureRewindTrigger, configureTestMode, openMain, previewNotch, quitApp, setNotchVisible } from "./lib/notch";
 import { saveSessions, triggerName } from "./lib/rewind";
 import type { Page, SettingsPage } from "./lib/types";
@@ -382,8 +384,25 @@ export default function App() {
   const updateSetting = (changes: Partial<Preferences>) => {
     setPreferences({ ...preferences, ...changes }); setSettingsNotice("");
   };
+  // Contextual indexing runs inside the engine, so it gets its slice of these choices pushed to it.
+  useEffect(() => {
+    if (!desktopRuntime() || !status || preferences.sampleMode) return;
+    const desired = engineSettingsFor(preferences);
+    const timer = window.setTimeout(async () => {
+      try {
+        const changes = engineChanges(desired, await getServiceSettings());
+        // A half-typed address is not sent; the engine refuses anything but this Mac.
+        if (changes.local_endpoint !== undefined && changes.local_endpoint !== "" && !validLocalEndpoint(changes.local_endpoint)) delete changes.local_endpoint;
+        if (!Object.keys(changes).length) return;
+        const next = await patchSettings(changes);
+        if (next.reindex) setSettingsNotice("Contextual indexing is on. Rewind is re-indexing your memory once; search may be slow for a minute.");
+      } catch (error) { setSettingsNotice(`Could not apply the contextual indexing settings: ${error instanceof Error ? error.message : String(error)}`); }
+    }, 500);
+    return () => window.clearTimeout(timer);
+  }, [status !== null, preferences.sampleMode, preferences.localOnly, preferences.contextEnabled, preferences.layers.context, preferences.aiProvider, preferences.localEndpoint, preferences.localModel]);
   const runLocalTest = async () => {
-    const target = aiTarget(loadPreferences());
+    // The connection test is about the local server itself, whichever steps use it.
+    const target = { model: preferences.localModel.trim(), endpoint: preferences.localEndpoint.trim() || null, local: true };
     if (!validLocalEndpoint(target.endpoint ?? "")) { setLocalTestResult("Enter an http address on this Mac, such as http://127.0.0.1:8080/v1."); return; }
     if (!target.model) { setLocalTestResult("Enter the model name first."); return; }
     setLocalTesting(true); setLocalTestResult("");
@@ -519,31 +538,29 @@ export default function App() {
       {page === "settings" && <div className="settings-layout"><div className="settings-nav"><span className="eyebrow">Preferences</span><h1>Settings</h1>{settingsNav.map((item) => <button key={item.id} className={settingsPage === item.id ? "active" : ""} onClick={() => { setSettingsPage(item.id); setSettingsNotice(""); }}>{item.label}<ChevronRight size={15} /></button>)}</div><div className="settings-content"><span className="eyebrow">{settingsNav.find((item) => item.id === settingsPage)?.label}</span><h2>{settingsNav.find((item) => item.id === settingsPage)?.label}</h2>{settingsNotice && <div role="status" className="callout neutral">{settingsNotice}</div>}
         {settingsPage === "account" && <div className="settings-stack"><div className="surface-card"><h3>Workspace</h3><p>This independent build runs locally and has no account sign-in yet.</p><div className="connection-card"><span className={`status-light ${status ? "good" : ""}`} /><div><strong>{status ? "Local service connected" : "Local service offline"}</strong><small>{desktopRuntime() ? "Desktop app" : "Browser preview"}</small></div><Button kind="secondary" onClick={() => void refreshStatus()}>Retry</Button></div>{statusError && <small className="muted-text">{statusError}</small>}</div><div className="surface-card"><h3>Sample workspace</h3><Toggle checked={sample} onChange={(value) => updateSetting({ sampleMode: value })} label="Use invented sample data" description="Clearly marked examples for exploring the interface." /><Button kind="quiet" onClick={() => updateSetting({ onboardingComplete: false, captureSetupComplete: false })}>Replay onboarding</Button></div></div>}
         {settingsPage === "ai" && <div className="settings-stack">
-          <div className="surface-card"><h3>Model provider</h3>
-            <p>Choose where questions, rewrites and summaries are answered.</p>
-            <label className="field-label" htmlFor="ai-provider">Provider</label>
+          <div className="surface-card"><h3>Privacy</h3>
+            <Toggle checked={preferences.localOnly} onChange={(value) => { updateSetting({ localOnly: value }); setLocalTestResult(""); }} label="Local only: never use the cloud" description="Every step below runs on the local model on this Mac, whatever it is set to, and nothing you capture or ask is sent to OpenRouter. Answers may be rougher than a cloud model's." />
+            <label className="field-label" htmlFor="ai-provider">Default provider</label>
             <select id="ai-provider" value={preferences.aiProvider} onChange={(event) => { updateSetting({ aiProvider: event.target.value as Preferences["aiProvider"] }); setLocalTestResult(""); }}>
               <option value="openrouter">OpenRouter (cloud)</option>
               <option value="local">Local model on this Mac</option>
             </select>
+            <p className="fine-print">Steps set to "Default" below follow this.</p>
           </div>
-          {preferences.aiProvider === "local" ? <>
-            <div className="surface-card"><h3>Local model</h3>
-              <p>Any server on this Mac that speaks the OpenAI chat API: <code>mlx_lm.server</code>, Ollama or LM Studio. Nothing leaves your computer.</p>
+          <LayerSettings preferences={preferences} hasKey={hasOpenrouterKey} onChange={updateSetting} />
+          <div className="surface-card"><h3>Local model</h3>
+              <p>Any server on this Mac that speaks the OpenAI chat API: <code>mlx_lm.server</code>, Ollama or LM Studio. Used by every step that runs on this Mac.</p>
               <label className="field-label" htmlFor="local-endpoint">Server address</label>
               <input id="local-endpoint" value={preferences.localEndpoint} onChange={(event) => { updateSetting({ localEndpoint: event.target.value }); setLocalTestResult(""); }} placeholder="http://127.0.0.1:8080/v1" autoComplete="off" />
               <p className="fine-print">mlx_lm.server: http://127.0.0.1:8080/v1 · Ollama: http://localhost:11434/v1 · LM Studio: http://localhost:1234/v1. Only addresses on this Mac are accepted.</p>
-              <label className="field-label" htmlFor="local-model">Model name</label>
+              <label className="field-label" htmlFor="local-model">Default model name</label>
               <input id="local-model" value={preferences.localModel} onChange={(event) => { updateSetting({ localModel: event.target.value.trim() }); setLocalTestResult(""); }} placeholder="mlx-community/Qwen3.5-2B-4bit" autoComplete="off" />
               <p className="fine-print">Use the name the server lists: the --model value for mlx_lm.server, or the tag from <code>ollama list</code>, such as qwen3:4b.</p>
               <div className="manage-actions"><Button disabled={!desktopRuntime() || localTesting} onClick={() => void runLocalTest()}>{localTesting ? "Testing…" : "Test connection"}</Button></div>
               {localTestResult && <p className="fine-print" role="status">{localTestResult}</p>}
             </div>
-            <div className="callout neutral"><ShieldCheck size={18} /> With a local model, questions, captured excerpts and selected text stay on this Mac. Small models can be slower to follow instructions, so answers may be rougher than a cloud model's. Memory search and tool use still run locally.</div>
-          </> : <>
-            <div className="surface-card"><h3>OpenRouter</h3><p>Choose the model that answers your questions. Your API key is stored in a private local file on this Mac, without Keychain. It is not encrypted.</p><label className="field-label" htmlFor="openrouter-model">Model ID</label><input id="openrouter-model" value={modelDraft} onChange={(event) => setModelDraft(event.target.value)} placeholder="provider/model-name" autoComplete="off" /><label className="field-label" htmlFor="openrouter-fast-model">Autocomplete model (optional)</label><input id="openrouter-fast-model" value={preferences.fastModel} onChange={(event) => updateSetting({ fastModel: event.target.value.trim() })} placeholder="A faster model for double-tap autocomplete" autoComplete="off" /><label className="field-label" htmlFor="openrouter-key">OpenRouter API key</label><input id="openrouter-key" type="password" value={openrouterKey} onChange={(event) => setOpenrouterKey(event.target.value)} placeholder={hasOpenrouterKey ? "Key saved — enter a new key to replace it" : "Paste your OpenRouter API key"} autoComplete="off" /><p className="fine-print">{hasOpenrouterKey ? "A key is saved." : "No key saved yet."}</p><div className="manage-actions"><Button disabled={!desktopRuntime()} onClick={() => void saveModel()}>Save model settings</Button>{hasOpenrouterKey && <Button kind="secondary" onClick={() => void invoke("openrouter_delete_key").then(() => { setHasOpenrouterKey(false); setSettingsNotice("Local OpenRouter key removed."); }).catch(() => setSettingsNotice("Could not remove the local key."))}>Remove key</Button>}</div></div>
-            <div className="callout neutral"><ShieldCheck size={18} /> When you ask a question, Rewind sends your question, recent conversation, and excerpts from matching and recent captured sources to OpenRouter and your selected model provider. Review their privacy and data policies before using it.</div>
-          </>}
+          <div className="surface-card"><h3>OpenRouter</h3><p>The default OpenRouter model, used by every step that runs in the cloud and has no model of its own. Your API key is stored in a private local file on this Mac, without Keychain. It is not encrypted.</p><label className="field-label" htmlFor="openrouter-model">Model ID</label><input id="openrouter-model" value={modelDraft} onChange={(event) => setModelDraft(event.target.value)} placeholder="provider/model-name" autoComplete="off" /><label className="field-label" htmlFor="openrouter-key">OpenRouter API key</label><input id="openrouter-key" type="password" value={openrouterKey} onChange={(event) => setOpenrouterKey(event.target.value)} placeholder={hasOpenrouterKey ? "Key saved — enter a new key to replace it" : "Paste your OpenRouter API key"} autoComplete="off" /><p className="fine-print">{hasOpenrouterKey ? "A key is saved." : "No key saved yet."}</p><div className="manage-actions"><Button disabled={!desktopRuntime()} onClick={() => void saveModel()}>Save model settings</Button>{hasOpenrouterKey && <Button kind="secondary" onClick={() => void invoke("openrouter_delete_key").then(() => { setHasOpenrouterKey(false); setSettingsNotice("Local OpenRouter key removed."); }).catch(() => setSettingsNotice("Could not remove the local key."))}>Remove key</Button>}</div></div>
+          <div className="callout neutral"><ShieldCheck size={18} /> A step set to the cloud sends the text listed under "What leaves this Mac" to OpenRouter and the model provider you chose. Review their privacy and data policies before using it. Steps on this Mac, including memory search and tool use, never leave it.</div>
         </div>}
         {settingsPage === "capture" && <div className="settings-stack">
           <div className="callout neutral"><ShieldCheck size={18} /> macOS capture starts only after your choice and Accessibility permission. Normal browser windows can be read; private/incognito windows, credential apps, and protected fields are skipped.</div>

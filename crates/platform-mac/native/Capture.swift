@@ -210,6 +210,9 @@ private func collectText(from window: AXUIElement, visibleBounds: CGRect) -> ([[
     var outputBudgetReached = false
     var nodes: [[String: Any]] = []
     var url: String?
+    // Chrome shows the address without its scheme ("linkedin.com/feed/"), so this is only used when no web area
+    // reports the real address.
+    var addressBarURL: String?
     var protectedCount = 0
     var missingBounds = 0
     while let item = stack.popLast(), timeLeft(), visited < maximumNodes,
@@ -246,6 +249,8 @@ private func collectText(from window: AXUIElement, visibleBounds: CGRect) -> ([[
             if let candidate, let parsed = URL(string: candidate),
                ["https", "http", "file"].contains(parsed.scheme?.lowercased() ?? "") {
                 url = candidate
+            } else if isAddress, addressBarURL == nil, let candidate, let schemeless = schemelessAddress(candidate) {
+                addressBarURL = schemeless
             }
         }
 
@@ -315,7 +320,17 @@ private func collectText(from window: AXUIElement, visibleBounds: CGRect) -> ([[
     if nodes.count >= maximumEmittedNodes { limitations.append("output_node_limit") }
     if outputBudgetReached { limitations.append("output_byte_limit") }
     if textBytes >= maximumTextBytes { limitations.append("text_limit") }
-    return (nodes, url, limitations)
+    return (nodes, url ?? addressBarURL, limitations)
+}
+
+/// A browser address field's text without a scheme, such as `linkedin.com/feed/`, as an https address.
+/// Anything with a space, or that is not a host with an optional port and path, is not an address.
+private func schemelessAddress(_ text: String) -> String? {
+    let value = text.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !value.isEmpty, value.count <= 2_048, !value.contains("://"),
+          value.range(of: #"^[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+(:[0-9]{1,5})?([/?#]\S*)?$"#, options: .regularExpression) != nil
+    else { return nil }
+    return "https://" + value
 }
 
 private func idleMilliseconds() -> Int? {
@@ -343,6 +358,9 @@ private func readFrontmost() -> Never {
     guard let screenBounds = screenUnion() else { skip("no_display") }
 
     let application = AXUIElementCreateApplication(app.processIdentifier)
+    // Chrome and Electron apps only expose page content to assistive software that asks for it. Without this a
+    // browser shows its toolbar and nothing else, so no address and no text were captured.
+    enableRichAccessibility(application, appID: appID)
     guard let window = axElement(application, kAXFocusedWindowAttribute as String)
         ?? axElement(application, kAXMainWindowAttribute as String) else {
         skip("no_focused_window")

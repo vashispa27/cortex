@@ -28,6 +28,17 @@ export type ServiceSettings = {
   /** True while the notch play button is recording into the eval archive. Resets when the engine restarts. */
   eval_capture_active: boolean;
   eval_dir: string;
+  /** Nothing may be sent to a cloud model; the engine enforces this for contextual retrieval. */
+  local_only: boolean;
+  /** Contextual retrieval: a model writes a short context for each new chunk before it is indexed. */
+  context_enabled: boolean;
+  context_provider: "local" | "cloud";
+  context_cloud_model: string;
+  context_local_model: string;
+  /** Base address of the local model server, shared with the answer steps. */
+  local_endpoint: string;
+  /** Set on a settings change that makes the engine re-embed the archive (turning context on). */
+  reindex?: boolean;
 };
 
 type Envelope<T> = { request_id?: string; data: T };
@@ -189,16 +200,31 @@ export async function getServiceSettings(): Promise<ServiceSettings> {
     test_mode: Boolean(raw.test_mode),
     eval_capture_active: Boolean(raw.eval_capture_active),
     eval_dir: text(raw.eval_dir),
+    local_only: Boolean(raw.local_only),
+    context_enabled: Boolean(raw.context_enabled),
+    context_provider: raw.context_provider === "cloud" ? "cloud" : "local",
+    context_cloud_model: text(raw.context_cloud_model),
+    context_local_model: text(raw.context_local_model),
+    local_endpoint: text(raw.local_endpoint),
   };
 }
 
-export async function patchSettings(changes: Partial<Pick<ServiceSettings, "capture_paused" | "capture_enabled" | "mcp_enabled" | "excluded_apps" | "excluded_domains" | "test_mode">>): Promise<ServiceSettings> {
+type SettingsChanges = Partial<Pick<ServiceSettings, "capture_paused" | "capture_enabled" | "mcp_enabled" | "excluded_apps" | "excluded_domains" | "test_mode" | "local_only" | "context_enabled" | "context_provider" | "context_cloud_model" | "context_local_model" | "local_endpoint">>;
+
+export async function patchSettings(changes: SettingsChanges): Promise<ServiceSettings> {
   const current = await getServiceSettings();
   const raw = object(await request<unknown>("PATCH", "/v1/settings", { expected_version: current.version, ...changes }));
   return {
     test_mode: Boolean(raw.test_mode ?? changes.test_mode ?? current.test_mode),
     eval_capture_active: Boolean(raw.eval_capture_active),
     eval_dir: text(raw.eval_dir) || current.eval_dir,
+    local_only: Boolean(raw.local_only ?? changes.local_only ?? current.local_only),
+    context_enabled: Boolean(raw.context_enabled ?? changes.context_enabled ?? current.context_enabled),
+    context_provider: (raw.context_provider ?? changes.context_provider ?? current.context_provider) === "cloud" ? "cloud" : "local",
+    context_cloud_model: text(raw.context_cloud_model ?? changes.context_cloud_model ?? current.context_cloud_model),
+    context_local_model: text(raw.context_local_model ?? changes.context_local_model ?? current.context_local_model),
+    local_endpoint: text(raw.local_endpoint ?? changes.local_endpoint ?? current.local_endpoint),
+    reindex: raw.reindex === true,
     version: number(raw.version) ?? current.version + 1,
     capture_paused: Boolean(raw.capture_paused ?? changes.capture_paused ?? current.capture_paused),
     capture_enabled: Boolean(raw.capture_enabled ?? changes.capture_enabled ?? current.capture_enabled),

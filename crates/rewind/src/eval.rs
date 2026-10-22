@@ -177,7 +177,6 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, index_pref
             params.rerank_weight = weight;
         },
         "filters" => params.use_filters = flag(value)?,
-        "category_route" => params.category_route = flag(value)?,
         "derived" => params.include_derived = flag(value)?,
         "rrf_k" => params.rrf_k = value.parse()?,
         "bm25_weight" => {
@@ -204,7 +203,8 @@ fn apply_param(params: &mut Params, chunking: &mut cleaner::ChunkCfg, index_pref
                 "none" => prefix::Prefix::None,
                 "title" => prefix::Prefix::Title,
                 "context" => prefix::Prefix::Context,
-                _ => bail!("prefix must be none, title or context"),
+                "contextual" => prefix::Prefix::Contextual,
+                _ => bail!("prefix must be none, title, context or contextual"),
             }
         }
         "chunk_mode" => {
@@ -1238,11 +1238,6 @@ fn run_group(
                 m
             });
         let dirty = git(&["status", "--porcelain", "--", "crates", "evals/corpus", "evals/gold", "evals/pages"]).map_or(false, |s| !s.is_empty());
-        let category_counts: BTreeMap<String, i64> = {
-            let mut stmt = runtime.db.prepare("SELECT category, count(*) FROM chunks GROUP BY category")?;
-            let rows = stmt.query_map([], |r| Ok((r.get(0)?, r.get(1)?)))?;
-            rows.collect::<rusqlite::Result<_>>()?
-        };
         let report = json!({
             "meta": {
                 "variant": variant.name,
@@ -1250,9 +1245,6 @@ fn run_group(
                 "git_dirty_in_inputs": dirty,
                 "model_version": prefix::index_version(index_prefix), "prefix": index_prefix, "cleaner_version": cleaner::VERSION,
                 "params": variant.params, "chunking": chunking,
-                "category_segmentation_enabled": env::var("REWIND_CATEGORY_ENABLED").ok().as_deref() == Some("1"),
-                "category_model": env::var("REWIND_CATEGORY_MODEL").ok(),
-                "category_counts": category_counts,
                 "split": args.split, "timezone": "UTC", "injected_now_ms": now_ms,
                 "corpus_fixtures": corpus.iter().map(|l| l.id.as_str()).collect::<BTreeSet<_>>().len(),"corpus_sightings": corpus.len(), "corpus_provenance": provenance,
                 "gold_total": golds.len(), "gold_evaluated": results.len(),
