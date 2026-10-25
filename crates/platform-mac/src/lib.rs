@@ -15,5 +15,5 @@ pub fn accessibility_permission() -> PermissionState {
     { PermissionState::UnsupportedPlatform }
 }
 
-pub const NATIVE_PROBE: &str = "swiftc crates/platform-mac/native/AXProbe.swift -o /tmp/rewind-independent-ax-probe && /tmp/rewind-independent-ax-probe --permission";
+pub const NATIVE_PROBE: &str = "swiftc crates/platform-mac/native/AXProbe.swift -o /tmp/cortex-independent-ax-probe && /tmp/cortex-independent-ax-probe --permission";
 

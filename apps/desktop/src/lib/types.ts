@@ -1,6 +1,6 @@
 import type { MemoryHit } from "./api";
 
-export type Page = "today" | "timeline" | "ask" | "memory" | "wiki" | "write" | "reminders" | "settings";
+export type Page = "today" | "timeline" | "ask" | "memory" | "wiki" | "write" | "reminders" | "settings" | "tasks";
 
 export type SettingsPage =
   | "account"
@@ -23,7 +23,7 @@ export type ChatMessage = {
   body: string;
   hits?: MemoryHit[];
   source?: AnswerSource;
-  /** A selection the user asked Rewind to summarize. `body` holds the text the model saw. */
+  /** A selection the user asked Cortex to summarize. `body` holds the text the model saw. */
   kind?: "summarize";
   /** Where the selection came from, for example "Safari · nytimes.com". */
   origin?: string;

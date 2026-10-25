@@ -6,16 +6,16 @@ import { demoSearch } from "../lib/demo";
 import { takeActiveSession } from "../lib/notch";
 import {
   appendMessage, commitSession, composeAnswer, loadSessions, newSession, sessionsStorageKey, sessionTime,
-  type RewindSession,
-} from "../lib/rewind";
+  type CortexSession,
+} from "../lib/cortex";
 import type { ChatMessage } from "../lib/types";
 import "./ask-chat.css";
 
 type Props = { sample: boolean; active: boolean; onSessionCount: (count: number) => void };
 
-/** Dashboard Ask Rewind: the same persisted sessions the notch shows. */
+/** Dashboard Ask Cortex: the same persisted sessions the notch shows. */
 export default function AskChat({ sample, active, onSessionCount }: Props) {
-  const [sessions, setSessions] = useState<RewindSession[]>(loadSessions);
+  const [sessions, setSessions] = useState<CortexSession[]>(loadSessions);
   const [activeId, setActiveId] = useState<string | null>(() => loadSessions()[0]?.id ?? null);
   const [input, setInput] = useState("");
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -44,8 +44,8 @@ export default function AskChat({ sample, active, onSessionCount }: Props) {
     };
     if (active) adopt();
     // Already on this page when the notch expands a chat.
-    window.addEventListener("rewind:handoff", adopt);
-    return () => window.removeEventListener("rewind:handoff", adopt);
+    window.addEventListener("cortex:handoff", adopt);
+    return () => window.removeEventListener("cortex:handoff", adopt);
   }, [active]);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function AskChat({ sample, active, onSessionCount }: Props) {
     if (element) element.scrollTop = element.scrollHeight;
   }, [session?.messages.length, busyId, activeId]);
 
-  const commit = (next: RewindSession) => setSessions(commitSession(next));
+  const commit = (next: CortexSession) => setSessions(commitSession(next));
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -71,7 +71,7 @@ export default function AskChat({ sample, active, onSessionCount }: Props) {
         : await answerFromMemory(question, session?.messages ?? []);
       commit(appendMessage(next, { role: "assistant", body: answer.body, hits: answer.hits, source: answer.source }));
     } catch (error) {
-      commit(appendMessage(next, { role: "assistant", body: `Rewind could not answer: ${error instanceof Error ? error.message : String(error)}` }));
+      commit(appendMessage(next, { role: "assistant", body: `Cortex could not answer: ${error instanceof Error ? error.message : String(error)}` }));
     } finally {
       busyRef.current = false;
       setBusyId(null);
@@ -84,19 +84,19 @@ export default function AskChat({ sample, active, onSessionCount }: Props) {
   </div>;
 
   return <div className="chat-page ask-chat">
-    <aside className="ask-sessions" aria-label="Rewind sessions">
-      <div className="ask-sessions-head"><span className="eyebrow">Rewinds</span>
-        <button type="button" className="ask-new" aria-label="New rewind" title="New rewind" disabled={busyId !== null} onClick={() => { setActiveId(null); setInput(""); }}><Plus size={15} /></button>
+    <aside className="ask-sessions" aria-label="Cortex sessions">
+      <div className="ask-sessions-head"><span className="eyebrow">Chats</span>
+        <button type="button" className="ask-new" aria-label="New chat" title="New chat" disabled={busyId !== null} onClick={() => { setActiveId(null); setInput(""); }}><Plus size={15} /></button>
       </div>
       <div className="ask-session-scroll">
         {sessions.length ? sessions.map((item) => <button type="button" key={item.id} className={`ask-session ${item.id === activeId ? "active" : ""}`} onClick={() => setActiveId(item.id)}>
           <strong>{item.title}</strong>
           <small>{sessionTime(item.updatedAt)} · {item.messages.length} {item.messages.length === 1 ? "message" : "messages"}</small>
-        </button>) : <p className="ask-empty-list">No rewinds yet.</p>}
+        </button>) : <p className="ask-empty-list">No chats yet.</p>}
       </div>
     </aside>
     <section className="ask-thread">
-      <div className="chat-heading"><span className="eyebrow">Ask Rewind</span><h1>{session ? session.title : "What’s on your mind?"}</h1>{!session && <p>Ask about what you have seen in your apps.</p>}</div>
+      <div className="chat-heading"><span className="eyebrow">Ask Cortex</span><h1>{session ? session.title : "What’s on your mind?"}</h1>{!session && <p>Ask about what you have seen in your apps.</p>}</div>
       <div className="chat-scroll" ref={scrollRef}>
         {session ? <div className="messages">
           {session.messages.map(message)}
@@ -105,7 +105,7 @@ export default function AskChat({ sample, active, onSessionCount }: Props) {
           <div className="suggestions">{["What did Maya say about the review?", "Find the accessibility checklist", "What was in the project notes?"].map((prompt) => <button key={prompt} onClick={() => setInput(prompt)}>{prompt} <ArrowRight size={14} /></button>)}</div></div>}
       </div>
       <form className="chat-composer" onSubmit={submit}>
-        <div className="composer-box"><input aria-label="Ask Rewind" value={input} onChange={(event) => setInput(event.target.value)} placeholder={session ? "Ask a follow-up…" : "Ask about something you saw…"} /><button disabled={!input.trim() || busyId !== null} type="submit" aria-label="Send question"><ArrowRight size={19} /></button></div>
+        <div className="composer-box"><input aria-label="Ask Cortex" value={input} onChange={(event) => setInput(event.target.value)} placeholder={session ? "Ask a follow-up…" : "Ask about something you saw…"} /><button disabled={!input.trim() || busyId !== null} type="submit" aria-label="Send question"><ArrowRight size={19} /></button></div>
         <small>{sample ? "Answers use the sample workspace." : "Search results may be incomplete when capture was off or excluded."}</small>
       </form>
     </section>

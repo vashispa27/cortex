@@ -4,7 +4,7 @@ export type NotchMode = "collapsed" | "compose" | "thinking" | "answer" | "histo
 
 export type MainPage = "today" | "timeline" | "ask" | "memory" | "settings";
 
-const activeSessionKey = "rewind.rewind.active-session.v1";
+const activeSessionKey = "cortex.cortex.active-session.v1";
 
 export async function setNotchMode(mode: NotchMode, focus = true, reduceMotion = false): Promise<void> {
   if (!isTauri()) return;
@@ -36,10 +36,10 @@ export async function openMain(page: MainPage): Promise<void> {
   }
 }
 
-export async function configureRewindTrigger(trigger: string, enabled: boolean): Promise<void> {
+export async function configureCortexTrigger(trigger: string, enabled: boolean): Promise<void> {
   if (!isTauri()) return;
   try {
-    await invoke("set_rewind_trigger", { trigger, enabled });
+    await invoke("set_cortex_trigger", { trigger, enabled });
   } catch {
     // The trigger is optional; the mouse controls still work.
   }
@@ -82,7 +82,7 @@ export async function setAssistActive(active: boolean): Promise<void> {
   }
 }
 
-/** Lets a text field in the notch take typing without activating Rewind. */
+/** Lets a text field in the notch take typing without activating Cortex. */
 export async function focusNotch(): Promise<void> {
   if (!isTauri()) return;
   try {
@@ -95,7 +95,7 @@ export async function focusNotch(): Promise<void> {
 export async function quitApp(): Promise<void> {
   if (!isTauri()) return;
   try {
-    await invoke("quit_rewind");
+    await invoke("quit_cortex");
   } catch {
     // Ignore shutdown errors.
   }
@@ -113,7 +113,7 @@ export async function restorePreviousApp(): Promise<void> {
 export async function previewNotch(mode: NotchMode): Promise<void> {
   if (!isTauri()) {
     const url = `/index.html?window=notch&preview=1&mode=${mode}`;
-    const preview = window.open(url, "rewind-notch-preview", "popup,width=700,height=520");
+    const preview = window.open(url, "cortex-notch-preview", "popup,width=700,height=520");
     if (preview && preview.location.href !== new URL(url, window.location.href).href) {
       try { preview.location.href = url; } catch { /* Cross-window navigation can be blocked. */ }
     }

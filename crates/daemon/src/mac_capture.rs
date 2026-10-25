@@ -1,10 +1,10 @@
-use rewind_capture::{BrowserContext, CapturePolicy, RawWindow};
-use rewind_memory::MemoryStore;
+use cortex_capture::{BrowserContext, CapturePolicy, RawWindow};
+use cortex_memory::MemoryStore;
 use serde::Deserialize;
 use std::{fs, io::{self, Write}, os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt}, path::{Path, PathBuf}, process::Stdio, sync::Arc, time::Duration};
 use tokio::{process::Command, time::{interval, timeout, MissedTickBehavior}};
 
-const HELPER: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/rewind-ax-helper"));
+const HELPER: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/cortex-ax-helper"));
 const MAX_HELPER_OUTPUT: usize = 512 * 1024;
 
 #[derive(Deserialize)]
@@ -36,8 +36,8 @@ fn browser_context(source_type: Option<&str>, url: Option<&str>) -> BrowserConte
 pub fn install_helper(state_dir: &Path) -> io::Result<PathBuf> {
     // TCC identifies the process that actually performs the Accessibility read.
     // A named app bundle makes that process discoverable in System Settings.
-    let bundle = state_dir.join("Rewind Capture.app");
-    let path = bundle.join("Contents/MacOS/Rewind Capture");
+    let bundle = state_dir.join("Cortex Capture.app");
+    let path = bundle.join("Contents/MacOS/Cortex Capture");
     let source = bundle.join("Contents/Resources/helper-source");
     if let Ok(meta) = fs::symlink_metadata(&path) {
         if meta.is_file() && meta.uid() == unsafe { libc::geteuid() }
@@ -46,11 +46,11 @@ pub fn install_helper(state_dir: &Path) -> io::Result<PathBuf> {
             return Ok(path);
         }
     }
-    let temp = state_dir.join("Rewind Capture.tmp.app");
+    let temp = state_dir.join("Cortex Capture.tmp.app");
     if temp.exists() { fs::remove_dir_all(&temp)?; }
     fs::create_dir_all(temp.join("Contents/MacOS"))?;
     fs::create_dir_all(temp.join("Contents/Resources"))?;
-    let executable = temp.join("Contents/MacOS/Rewind Capture");
+    let executable = temp.join("Contents/MacOS/Cortex Capture");
     let mut file = fs::OpenOptions::new().write(true).create_new(true).mode(0o700).open(&executable)?;
     file.write_all(HELPER)?;
     file.sync_all()?;
@@ -59,16 +59,16 @@ pub fn install_helper(state_dir: &Path) -> io::Result<PathBuf> {
     fs::write(temp.join("Contents/Info.plist"), br#"<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-<key>CFBundleIdentifier</key><string>app.rewind.capture</string>
-<key>CFBundleName</key><string>Rewind Capture</string>
-<key>CFBundleDisplayName</key><string>Rewind Capture</string>
-<key>CFBundleExecutable</key><string>Rewind Capture</string>
+<key>CFBundleIdentifier</key><string>app.cortex.capture</string>
+<key>CFBundleName</key><string>Cortex Capture</string>
+<key>CFBundleDisplayName</key><string>Cortex Capture</string>
+<key>CFBundleExecutable</key><string>Cortex Capture</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>CFBundleVersion</key><string>1</string>
 <key>LSUIElement</key><true/>
 </dict></plist>"#)?;
     let signed = std::process::Command::new("/usr/bin/codesign").args(["--force", "--sign", "-"]).arg(&temp).output()?;
-    if !signed.status.success() { return Err(io::Error::other("Could not sign the Rewind Capture helper")); }
+    if !signed.status.success() { return Err(io::Error::other("Could not sign the Cortex Capture helper")); }
     if bundle.exists() { fs::remove_dir_all(&bundle)?; }
     fs::rename(&temp, &bundle)?;
     Ok(path)
@@ -109,8 +109,8 @@ pub async fn capture_loop(path: PathBuf, store: Arc<MemoryStore>) {
         }
         let Ok(epoch) = store.memory_epoch() else { previous = None; continue; };
         let mut excluded_args: Vec<String> = vec![
-            "--exclude-app=app.rewind.desktop".into(),
-            "--exclude-app=app.rewind.capture".into(),
+            "--exclude-app=app.cortex.desktop".into(),
+            "--exclude-app=app.cortex.capture".into(),
             "--exclude-app=com.apple.securityagent".into(),
         ];
         excluded_args.extend(settings.excluded_apps.iter().map(|app| format!("--exclude-app={app}")));

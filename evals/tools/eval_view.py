@@ -13,7 +13,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("id", nargs="?", type=int)
 ap.add_argument("--chunks", action="store_true")
 ap.add_argument("--dump", metavar="OUT")
-ap.add_argument("--dir", default=os.environ.get("REWIND_EVAL_DIR") or os.path.expanduser("~/Library/Application Support/Rewind/eval-memory"))
+ap.add_argument("--dir", default=os.environ.get("CORTEX_EVAL_DIR") or os.path.expanduser("~/Library/Application Support/Cortex/eval-memory"))
 a = ap.parse_args()
 rows = [json.loads(l) for l in open(os.path.join(a.dir, "captures.jsonl"))]
 if a.dump:

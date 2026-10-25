@@ -1,12 +1,12 @@
 [package]
-name = "rewind-daemon"
+name = "cortex-daemon"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rewind-contracts = { path = "../contracts" }
-rewind-capture = { path = "../capture" }
-rewind-memory = { path = "../memory" }
+cortex-contracts = { path = "../contracts" }
+cortex-capture = { path = "../capture" }
+cortex-memory = { path = "../memory" }
 axum = { version = "0.7", features = ["json"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
@@ -20,5 +20,5 @@ url = "2"
 libc = "0.2"
 
 [[bin]]
-name = "rewind-daemon"
+name = "cortex-daemon"
 path = "src/main.rs"

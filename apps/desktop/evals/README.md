@@ -12,7 +12,7 @@ How it works: `answers.eval.ts` runs the page's own `answerFromMemory` in Node. 
 
 ```bash
 # once, or after Rust changes
-(cd ../.. && cargo build --release -p rewind)
+(cd ../.. && cargo build --release -p cortex)
 (cd src-tauri && cargo build --release --example eval_bridge)
 
 # 1. answer every question (resumable; same EVAL_RUN continues where it stopped)

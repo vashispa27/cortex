@@ -1,6 +1,6 @@
 # Agent prompt: structure-aware chunking v1 (LinkedIn and X)
 
-You are building v1 of structure-aware ("category-aware") chunking for Rewind, a Mac app that reads the
+You are building v1 of structure-aware ("category-aware") chunking for Cortex, a Mac app that reads the
 frontmost window through the macOS Accessibility (AX) tree, cleans the text, chunks it, embeds it into a local
 Qdrant Edge index and answers questions from it. Read this whole prompt before writing code.
 
@@ -106,9 +106,9 @@ Run it on every LinkedIn and X snapshot in the eval archive and record the label
 
 ## 4. Data and safety rules
 
-* Work only on the **eval archive** `~/Library/Application Support/Rewind/eval-memory/` (35 X and LinkedIn pages
+* Work only on the **eval archive** `~/Library/Application Support/Cortex/eval-memory/` (35 X and LinkedIn pages
   recorded on 2026-10-19, raw trees included) and copies you make of it. **Never open
-  `~/Library/Application Support/Rewind/local-memory/`**, the user's real memory.
+  `~/Library/Application Support/Cortex/local-memory/`**, the user's real memory.
 * The pages contain real people's messages. Keep any dump, fixture or report built from them under `evals/private/`
   (gitignored). Unit-test fixtures that are committed must be **synthetic** trees that mimic the observed structure
   with invented names and text.
@@ -121,19 +121,19 @@ Run it on every LinkedIn and X snapshot in the eval archive and record the label
 
 ## 5. Where it plugs in
 
-* `crates/rewind/src/main.rs`: `record_with_target` (capture → clean → chunk → store), `index_pending` (embedding),
+* `crates/cortex/src/main.rs`: `record_with_target` (capture → clean → chunk → store), `index_pending` (embedding),
   `retrieve_with` (search, collapse to snapshots), `evidence_text` / `evidence_snippet` (what the model sees).
-* `crates/rewind/src/cleaner.rs`: today's cleaning and chunking; reuse its noise and protected-node handling.
-* `crates/rewind/src/dedup.rs`: snapshot-level dedup layers; item identity is a new, finer layer.
-* `crates/rewind/src/prefix.rs`: embedded text prefix and `index_version`. Add a variant/tag such as
+* `crates/cortex/src/cleaner.rs`: today's cleaning and chunking; reuse its noise and protected-node handling.
+* `crates/cortex/src/dedup.rs`: snapshot-level dedup layers; item identity is a new, finer layer.
+* `crates/cortex/src/prefix.rs`: embedded text prefix and `index_version`. Add a variant/tag such as
   `segments-v1` so a mixed index demands a rebuild.
-* `crates/rewind/src/schema.sql` plus the migration code in `open_db`: new tables/columns must migrate existing
+* `crates/cortex/src/schema.sql` plus the migration code in `open_db`: new tables/columns must migrate existing
   databases without data loss.
-* `crates/rewind/src/answer_pipeline.rs`: how evidence and headers are shown to the model (`PROMPT_VERSION`).
-* Put the segmenter in a new module, for example `crates/rewind/src/segment.rs`, with per-site rules in one place
+* `crates/cortex/src/answer_pipeline.rs`: how evidence and headers are shown to the model (`PROMPT_VERSION`).
+* Put the segmenter in a new module, for example `crates/cortex/src/segment.rs`, with per-site rules in one place
   (a small table keyed by site and container label), plus generic noise rules (navigation, banner, footer,
   toolbar, advertisement, sponsored/promoted, toast, status lines).
-* Gate it behind `REWIND_SEGMENTS=1` (off by default). Settings UI is a later step.
+* Gate it behind `CORTEX_SEGMENTS=1` (off by default). Settings UI is a later step.
 
 ## 6. Tests
 
@@ -143,14 +143,14 @@ Run it on every LinkedIn and X snapshot in the eval archive and record the label
 * Item dedup: two captures of the same thread at different scroll positions store each message once; a feed
   scrolled by two posts adds exactly the new posts; an unchanged chat plus a changed feed adds no message items.
 * Fallback: an unsupported page (and a supported page with no recognised regions) yields exactly today's chunks.
-* With the flag off, `cargo test -p rewind` and every existing eval produce identical results.
+* With the flag off, `cargo test -p cortex` and every existing eval produce identical results.
 
 ## 7. Evaluate on the eval archive
 
 1. **Segmentation report** (no model): for every LinkedIn and X snapshot in the eval archive, print items per
    kind, the share of text classified `noise` and `other`, and any page that fell back. Read a sample of items by
    hand. Save it as `evals/private/segments-report.md`.
-2. **Segmented archive copy:** build `~/Library/Application Support/Rewind/eval-memory-segments` by re-ingesting the
+2. **Segmented archive copy:** build `~/Library/Application Support/Cortex/eval-memory-segments` by re-ingesting the
    stored raw trees of the eval archive through the new path in observation order (look at
    `evals/tools/prepare_context_archive.py` for how a derived archive is built safely from `eval-memory` without
    modifying it). Report snapshots, items, chunks and vector points before and after (this measures the scroll dedup).
@@ -159,7 +159,7 @@ Run it on every LinkedIn and X snapshot in the eval archive and record the label
    for the families `attribution`, `chat_lookup`, `scheduling`, `contact_details`, `aggregation`, `cross_chunk`.
    Gold support is by snapshot id: a retrieved item counts for every snapshot it was seen in.
 4. **Answer eval (costs money, the user runs it):** document the exact command, for example
-   `EVAL_ARCHIVE="$HOME/Library/Application Support/Rewind/eval-memory-segments" EVAL_CLOUD_MODEL=anthropic/claude-haiku-5.5 evals/run.sh`,
+   `EVAL_ARCHIVE="$HOME/Library/Application Support/Cortex/eval-memory-segments" EVAL_CLOUD_MODEL=anthropic/claude-haiku-5.5 evals/run.sh`,
    and how to compare it with the baseline run `evals/private/answers/cloud-anthropic-claude-haiku-5.5_1021-1513.*`.
 
 Targets for v1: no regression in overall hit@8; better attribution and chat_lookup; at least 30% fewer chunks on
@@ -169,7 +169,7 @@ questions.
 ## 8. Deliverables
 
 * `segment.rs` (or equivalent), schema migration, item storage and dedup, item chunking with headers, retrieval and
-  evidence changes, all behind `REWIND_SEGMENTS=1`.
+  evidence changes, all behind `CORTEX_SEGMENTS=1`.
 * `evals/tools/ax_regions.py` and `docs/structure-aware-chunking.md` (observed labels, rules, what is out of scope).
 * Synthetic unit tests; all existing tests passing.
 * `evals/private/segments-report.md` with the segmentation report, the chunk-count comparison and the retrieval

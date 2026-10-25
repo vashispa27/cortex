@@ -1,5 +1,5 @@
 #!/bin/bash
-# One command: ask Rewind every gold question using the local model, then judge the answers with Jev.
+# One command: ask Cortex every gold question using the local model, then judge the answers with Jev.
 #   evals/run.sh          # all questions
 #   evals/run.sh dev      # dev split only (or: test)
 #   evals/run.sh 5        # first 5 questions (smoke test)
@@ -13,7 +13,7 @@ case "${1:-}" in
   *) export EVAL_LIMIT="$1" ;;
 esac
 if [ -n "${EVAL_CLOUD_MODEL:-}" ]; then
-  # Cloud: Rewind answers through OpenRouter with your saved key, e.g. EVAL_CLOUD_MODEL=anthropic/claude-haiku-5.5
+  # Cloud: Cortex answers through OpenRouter with your saved key, e.g. EVAL_CLOUD_MODEL=anthropic/claude-haiku-5.5
   export EVAL_PROVIDER=openrouter EVAL_MODEL="$EVAL_CLOUD_MODEL"
   KIND="cloud-$(echo "$EVAL_CLOUD_MODEL" | tr '/' '-')"
 else

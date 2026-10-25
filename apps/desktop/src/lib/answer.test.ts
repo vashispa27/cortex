@@ -51,7 +51,7 @@ describe("assistant answers", () => {
   });
 
   it("passes weak hits through, and lets the model (not the UI) say it found nothing", async () => {
-    script("SOURCE: none\nI couldn't find that in what Rewind captured. Can you add a detail?");
+    script("SOURCE: none\nI couldn't find that in what Cortex captured. Can you add a detail?");
     vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared({ abstained: true }));
     const answer = await answerFromMemory("Unknown person", []);
     expect(invoke).toHaveBeenCalledWith("openrouter_chat", expect.anything());

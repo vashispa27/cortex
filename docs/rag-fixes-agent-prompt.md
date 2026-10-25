@@ -1,8 +1,8 @@
-# Task: fix the measured RAG weaknesses in rewind, one at a time, with eval proof
+# Task: fix the measured RAG weaknesses in cortex, one at a time, with eval proof
 
-You are working in `/Users/abhinavvashisht/workspace/rewind` (Rust workspace, macOS-only crate `crates/rewind`). An eval harness and a baseline already exist. Your job is to fix the retrieval and chunking weaknesses the baseline found, **one fix per commit**, and prove each fix with the eval.
+You are working in `/Users/abhinavvashisht/workspace/rewind` (Rust workspace, macOS-only crate `crates/cortex`). An eval harness and a baseline already exist. Your job is to fix the retrieval and chunking weaknesses the baseline found, **one fix per commit**, and prove each fix with the eval.
 
-Read first, in this order: `evals/README.md`, `evals/reports/baseline-analysis.md`, `evals/reports/baseline.md`, `evals/reports/ablations.md`, then the code: `crates/rewind/src/main.rs` (`retrieve`, `answer`, `query_filter`, `time_bounds`, `index_pending`, `summarize`, `put_derived`, `snippet`), `crates/rewind/src/cleaner.rs` (`clean`, `chunks`), and the eval code and gold set under `evals/`.
+Read first, in this order: `evals/README.md`, `evals/reports/baseline-analysis.md`, `evals/reports/baseline.md`, `evals/reports/ablations.md`, then the code: `crates/cortex/src/main.rs` (`retrieve`, `answer`, `query_filter`, `time_bounds`, `index_pending`, `summarize`, `put_derived`, `snippet`), `crates/cortex/src/cleaner.rs` (`clean`, `chunks`), and the eval code and gold set under `evals/`.
 
 ## Ground rules
 
@@ -12,7 +12,7 @@ Read first, in this order: `evals/README.md`, `evals/reports/baseline-analysis.m
 - **Gold-set discipline.** For each fix, first add or confirm the gold questions that expose the problem, see them fail, then fix. Do not edit or delete existing gold questions to make numbers look better. If a question is wrong, fix it in a separate commit with an explanation. Grow the set (see Fix 0) before judging anything marginal.
 - **No regressions without a reason.** If a fix lowers any per-type final hit@8 or overall metrics by more than noise, stop and explain, then either adjust or revert it. Within-noise changes (61 questions: 2–3 queries) must be called noise, not wins.
 - **Un-ignore known-weakness tests.** The crate has `#[ignore = "known weakness: ..."]` tests for the boundary fact and the filter traps. When a fix makes one pass, remove the `ignore` in the same commit.
-- **Safety.** Do not enable live capture, request Accessibility permission, or touch the user's real state directory (`~/Library/Application Support/Rewind/local-memory`). Use the eval's temp dirs. No real personal data in the repo. No network or LLM calls in the eval path. Ask before adding any dependency.
+- **Safety.** Do not enable live capture, request Accessibility permission, or touch the user's real state directory (`~/Library/Application Support/Cortex/local-memory`). Use the eval's temp dirs. No real personal data in the repo. No network or LLM calls in the eval path. Ask before adding any dependency.
 - **Keep `ask` working.** `evals/tools/ask_regression.sh` compares `ask` output between binaries. Fixes change output on purpose, so use it to review the diff, not to demand byte equality, and describe each visible change in the commit message.
 - Match the surrounding code style. No unrelated refactors.
 

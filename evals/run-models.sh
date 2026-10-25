@@ -4,7 +4,7 @@
 #   evals/run-models.sh           # all questions for every model
 #   evals/run-models.sh 20        # first 20 questions each (smoke test)
 cd "$(dirname "$0")/.."
-export EVAL_ARCHIVE="${EVAL_ARCHIVE:-$HOME/Library/Application Support/Rewind/eval-memory-context-haiku}"
+export EVAL_ARCHIVE="${EVAL_ARCHIVE:-$HOME/Library/Application Support/Cortex/eval-memory-context-haiku}"
 MODELS=(
   anthropic/claude-haiku-5.5            # closed, cheap Anthropic
   openai/gpt-4.1-nano                   # closed, cheap OpenAI

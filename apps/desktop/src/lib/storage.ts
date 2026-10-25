@@ -1,4 +1,4 @@
-export type RewindTrigger = "rightOption" | "leftOption" | "fn" | "rightShift" | "leftShift" | "rightControl" | "leftControl" | "rightCommand" | "leftCommand";
+export type CortexTrigger = "rightOption" | "leftOption" | "fn" | "rightShift" | "leftShift" | "rightControl" | "leftControl" | "rightCommand" | "leftCommand";
 
 export type AiProvider = "openrouter" | "local";
 
@@ -35,8 +35,8 @@ export type Preferences = {
   hoverOpen: boolean;
   hideDrop: boolean;
   fishByText: boolean;
-  rewindHotkey: boolean;
-  rewindTrigger: RewindTrigger;
+  cortexHotkey: boolean;
+  cortexTrigger: CortexTrigger;
   showOverFullScreen: boolean;
   autocompleteOnTap: boolean;
   autocompleteLength: AutocompleteLength;
@@ -78,8 +78,8 @@ export const defaultPreferences: Preferences = {
   hoverOpen: false,
   hideDrop: false,
   fishByText: true,
-  rewindHotkey: true,
-  rewindTrigger: "rightOption",
+  cortexHotkey: true,
+  cortexTrigger: "rightOption",
   showOverFullScreen: true,
   autocompleteOnTap: true,
   autocompleteLength: "sentence",
@@ -106,7 +106,7 @@ export const defaultPreferences: Preferences = {
   localModel: "",
 };
 
-const key = "rewind.desktop.preferences.v1";
+const key = "cortex.desktop.preferences.v1";
 
 export function loadPreferences(): Preferences {
   try {
@@ -133,7 +133,7 @@ export type Reminder = {
   delivered: string[];
 };
 
-const reminderKey = "rewind.desktop.reminders.v1";
+const reminderKey = "cortex.desktop.reminders.v1";
 
 export function loadReminders(): Reminder[] {
   try {

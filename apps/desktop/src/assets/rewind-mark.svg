@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Rewind mark">
-  <rect width="128" height="128" rx="31" fill="#ed9a5b"/>
-  <circle cx="64" cy="64" r="42" fill="none" stroke="#273832" stroke-width="8" opacity=".96"/>
-  <path d="M34 82c16-35 43-54 61-48M32 66c25 27 48 35 68 29" fill="none" stroke="#273832" stroke-linecap="round" stroke-width="8"/>
-  <circle cx="64" cy="64" r="10" fill="#fff7e9"/>
-</svg>

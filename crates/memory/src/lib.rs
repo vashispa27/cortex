@@ -1,11 +1,12 @@
-use rewind_capture::SanitizedSnapshot;
-use rewind_contracts::{Coverage, CoverageState, RecentResponse, SearchRequest, SearchResponse, SearchResult, Snapshot, SnapshotsResponse};
+use cortex_capture::SanitizedSnapshot;
+use cortex_contracts::{Coverage, CoverageState, RecentResponse, SearchRequest, SearchResponse, SearchResult, Snapshot, SnapshotsResponse};
 use chrono::{NaiveDate, TimeZone, Utc};
 use chrono_tz::Tz;
 use rusqlite::{params, Connection, OptionalExtension};
 use std::path::Path;
 use std::sync::Mutex;
 use thiserror::Error;
+pub mod workspace;
 
 const MAX_RESULTS: usize = 50;
 const MAX_SNAPSHOT_IDS: usize = 25;
@@ -272,7 +273,7 @@ impl MemoryStore {
         Ok(count)
     }
 
-    /// Removes captures made by Rewind itself. These are UI chrome, never user memory.
+    /// Removes captures made by Cortex itself. These are UI chrome, never user memory.
     /// Unlike a user-initiated delete this does not pause capture or advance the epoch.
     pub fn purge_app_snapshots(&self, app_id: &str, occurred_ms: i64) -> Result<usize, MemoryError> {
         if app_id.is_empty() { return Err(MemoryError::InvalidRequest("invalid app id")); }
@@ -389,7 +390,7 @@ fn safe_fts_terms(query: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rewind_capture::{BrowserContext,CapturePolicy,RawNode,RawWindow,SessionState};
+    use cortex_capture::{BrowserContext,CapturePolicy,RawNode,RawWindow,SessionState};
 
     fn capture(text: &str, ms: i64) -> SanitizedSnapshot {
         CapturePolicy { consent: true, ..Default::default() }.sanitize(&RawWindow {
@@ -430,15 +431,15 @@ mod tests {
         assert!(!latest.results[0].excerpt.contains("abcdefghijklmnopqrstu"));
     }
     #[test]
-    fn self_capture_purge_removes_only_the_rewind_ui() {
+    fn self_capture_purge_removes_only_the_cortex_ui() {
         let db = MemoryStore::in_memory().unwrap();
         let real = db.ingest(&capture("Instagram Saurabh Thakur",1_000)).unwrap();
-        let mut self_capture = capture("Rewind home LOCAL PREVIEW",2_000);
-        self_capture.app_id = "app.rewind.desktop".into();
-        self_capture.window_session_id = "rewind-window".into();
+        let mut self_capture = capture("Cortex home LOCAL PREVIEW",2_000);
+        self_capture.app_id = "app.cortex.desktop".into();
+        self_capture.window_session_id = "cortex-window".into();
         let self_id = db.ingest(&self_capture).unwrap();
         assert_eq!(db.snapshot_count().unwrap(),2);
-        assert_eq!(db.purge_app_snapshots("app.rewind.desktop",3_000).unwrap(),1);
+        assert_eq!(db.purge_app_snapshots("app.cortex.desktop",3_000).unwrap(),1);
         assert_eq!(db.snapshots(&[self_id]).unwrap().snapshots.len(),0);
         assert_eq!(db.snapshots(&[real]).unwrap().snapshots.len(),1);
         assert_eq!(db.memory_epoch().unwrap(),0);

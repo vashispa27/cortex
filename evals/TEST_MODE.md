@@ -4,19 +4,19 @@ Test mode keeps everything evals use in a **separate archive** from your real me
 exactly which pages are in it.
 
 ```
-~/Library/Application Support/Rewind/
+~/Library/Application Support/Cortex/
   local-memory/   real memory (SQLite + Qdrant). Never read or written in test mode.
   eval-memory/    eval archive: memory.sqlite3, qdrant-edge/, captures.jsonl, queries.jsonl
 ```
 
-Override the location with `REWIND_EVAL_DIR`.
+Override the location with `CORTEX_EVAL_DIR`.
 
 ## Use
 
 1. Settings → Capture & privacy → **Test mode** on.
 2. A play button appears in the collapsed notch (right side, next to chats). Click it to start
    recording the frontmost window into the eval archive; click again to pause. It always starts paused
-   when the engine restarts, and it needs Accessibility permission for Rewind Capture.
+   when the engine restarts, and it needs Accessibility permission for Cortex Capture.
 3. While test mode is on, every question (notch, Ask page, Memory search, the `search_memory` tool) is
    answered from the eval archive. The notch footer says "Test mode · eval archive".
 4. Settings → Test mode → **Reset eval archive** erases the eval archive and both logs. Your real
@@ -41,5 +41,5 @@ The eval archive keeps the raw Accessibility trees like the real one does, so th
 build fixtures from it:
 
 ```bash
-python3 evals/tools/export_real.py --db "$HOME/Library/Application Support/Rewind/eval-memory/memory.sqlite3" --out evals/private/corpus
+python3 evals/tools/export_real.py --db "$HOME/Library/Application Support/Cortex/eval-memory/memory.sqlite3" --out evals/private/corpus
 ```

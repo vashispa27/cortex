@@ -5,6 +5,12 @@ use tauri::{Emitter, Manager};
 use std::{io::Write, os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt}, process::{Child, Command, Stdio}, sync::{Arc, Mutex}};
 
 mod tap;
+mod mcp_setup;
+
+#[tauri::command]
+fn mcp_connection_info() -> Result<Value, String> {
+    mcp_setup::connection_info(&state_dir()?)
+}
 
 const MAX_RESPONSE_BYTES: usize = 1_048_576;
 const NOTCH_FALLBACK_WIDTH: f64 = 179.0;
@@ -86,7 +92,7 @@ fn place_notch(app: &tauri::AppHandle, window: &tauri::WebviewWindow, width: f64
 }
 
 /// Makes the notch the key window so it can take typing. The notch is a non-activating panel, so this
-/// never activates Rewind or pulls the user out of a full-screen Space.
+/// never activates Cortex or pulls the user out of a full-screen Space.
 fn focus_notch(window: &tauri::WebviewWindow) {
     #[cfg(target_os = "macos")]
     {
@@ -226,7 +232,7 @@ fn notch_set_mode(app: tauri::AppHandle, mode: String, focus: bool, reduce_motio
     }
 }
 
-/// Lets the follow-up field take typing without activating Rewind.
+/// Lets the follow-up field take typing without activating Cortex.
 #[tauri::command]
 fn notch_focus(app: tauri::AppHandle) -> Result<(), String> {
     let window = app.get_webview_window("notch").ok_or_else(|| "Notch window is unavailable".to_string())?;
@@ -262,9 +268,9 @@ fn notch_preview(app: tauri::AppHandle, mode: String) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn set_rewind_trigger(trigger: String, enabled: bool) {
+fn set_cortex_trigger(trigger: String, enabled: bool) {
     #[cfg(target_os = "macos")]
-    rewind_hotkey::configure(&trigger, enabled);
+    cortex_hotkey::configure(&trigger, enabled);
     #[cfg(not(target_os = "macos"))]
     let _ = (trigger, enabled);
 }
@@ -304,7 +310,7 @@ fn assist_set_active(active: bool) {
 }
 
 #[tauri::command]
-fn quit_rewind(app: tauri::AppHandle) {
+fn quit_cortex(app: tauri::AppHandle) {
     app.exit(0);
 }
 
@@ -312,7 +318,7 @@ fn quit_rewind(app: tauri::AppHandle) {
 fn restore_previous_app(app: tauri::AppHandle) -> Result<(), String> {
     #[cfg(target_os = "macos")]
     {
-        rewind_hotkey::restore_previous_app(&app)
+        cortex_hotkey::restore_previous_app(&app)
     }
     #[cfg(not(target_os = "macos"))]
     {
@@ -332,13 +338,13 @@ fn open_main(app: tauri::AppHandle, page: String) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn reveal_rewind_app() -> Result<(), String> {
+fn reveal_cortex_app() -> Result<(), String> {
     #[cfg(target_os = "macos")]
     {
-        let executable = env::current_exe().map_err(|_| "Could not locate Rewind.".to_string())?;
-        let bundle = executable.parent().and_then(|p| p.parent()).and_then(|p| p.parent()).ok_or_else(|| "Could not locate Rewind.".to_string())?;
+        let executable = env::current_exe().map_err(|_| "Could not locate Cortex.".to_string())?;
+        let bundle = executable.parent().and_then(|p| p.parent()).and_then(|p| p.parent()).ok_or_else(|| "Could not locate Cortex.".to_string())?;
         let status = Command::new("/usr/bin/open").arg("-R").arg(bundle).status().map_err(|_| "Could not open Finder.".to_string())?;
-        if status.success() { Ok(()) } else { Err("Could not reveal Rewind.".into()) }
+        if status.success() { Ok(()) } else { Err("Could not reveal Cortex.".into()) }
     }
     #[cfg(not(target_os = "macos"))]
     { Err("Capture is only available on macOS.".into()) }
@@ -356,7 +362,7 @@ fn open_accessibility_settings() -> Result<(), String> {
 }
 
 #[cfg(target_os = "macos")]
-mod rewind_hotkey {
+mod cortex_hotkey {
     use super::{daemon_call, tap, ASSIST_ACTIVE, ASSIST_CONFIG};
     use block2::RcBlock;
     use objc2_app_kit::{NSApplicationActivationOptions, NSEvent, NSEventMask, NSEventType, NSRunningApplication, NSWorkspace};
@@ -418,7 +424,7 @@ mod rewind_hotkey {
                 if kind == NSEventType::KeyDown {
                     if ASSIST_ACTIVE.load(Ordering::SeqCst) {
                         // Typing while a completion is on its way cancels it.
-                        let _ = monitor_app.emit_to("notch", "rewind-cancel", ());
+                        let _ = monitor_app.emit_to("notch", "cortex-cancel", ());
                     }
                     machine.handle(tap::Event::KeyDown { code: event.keyCode() }, Instant::now())
                 } else if kind == NSEventType::FlagsChanged {
@@ -445,7 +451,7 @@ mod rewind_hotkey {
                 if let Some(window) = main_app.get_webview_window("notch") {
                     let _ = window.show();
                 }
-                let _ = main_app.emit_to("notch", "rewind-tap", count);
+                let _ = main_app.emit_to("notch", "cortex-tap", count);
                 if count == 2 {
                     route_double_tap(main_app);
                 }
@@ -467,7 +473,7 @@ mod rewind_hotkey {
     fn route_double_tap(app: tauri::AppHandle) {
         let config = *ASSIST_CONFIG.lock().unwrap_or_else(|poisoned| poisoned.into_inner());
         if !(config.autocomplete || config.summarize || config.rewrite) {
-            let _ = app.emit_to("notch", "rewind-intent", serde_json::json!({"intent":"compose","hint":null,"context":null}));
+            let _ = app.emit_to("notch", "cortex-intent", serde_json::json!({"intent":"compose","hint":null,"context":null}));
             return;
         }
         tauri::async_runtime::spawn(async move {
@@ -480,7 +486,7 @@ mod rewind_hotkey {
                 Ok(Ok(data)) => data,
                 _ => serde_json::json!({"intent":"compose","hint":"unavailable","context":null}),
             };
-            let _ = app.emit_to("notch", "rewind-intent", payload);
+            let _ = app.emit_to("notch", "cortex-intent", payload);
         });
     }
 
@@ -507,55 +513,47 @@ mod rewind_hotkey {
 
 #[cfg(target_os = "macos")]
 mod macos_notch {
-    use objc2::runtime::{AnyObject, NSObjectProtocol};
-    use objc2::{define_class, sel, ClassType, MainThreadOnly};
-    use objc2_app_kit::{NSPanel, NSWindow, NSWindowCollectionBehavior, NSWindowStyleMask};
+    use objc2::runtime::NSObjectProtocol;
+    use objc2::sel;
+    use objc2_app_kit::{NSWindow, NSWindowCollectionBehavior, NSWindowStyleMask};
 
-    // A non-activating panel can become key (so the compose box takes typing) without activating
-    // Rewind. A plain NSWindow is not shown over another app's full-screen Space, and activating
-    // a regular app can switch Spaces.
-    define_class!(
-        #[unsafe(super(NSPanel))]
-        #[thread_kind = MainThreadOnly]
-        #[name = "RewindNotchPanel"]
-        #[ivars = ()]
-        struct NotchPanel;
-
-        impl NotchPanel {
-            #[unsafe(method(canBecomeKeyWindow))]
-            fn can_become_key_window(&self) -> bool { true }
-
-            #[unsafe(method(canBecomeMainWindow))]
-            fn can_become_main_window(&self) -> bool { false }
-        }
-
-        unsafe impl NSObjectProtocol for NotchPanel {}
-    );
+    // Never change the class of Tauri's live window. In addition to Tauri's ivars,
+    // WebKit/KVO tracks its runtime class; even an equal-sized subclass breaks observers.
+    // Keep the original class and configure only native window properties.
+    fn overlay_style(existing: NSWindowStyleMask) -> NSWindowStyleMask {
+        existing | NSWindowStyleMask::NonactivatingPanel
+    }
 
     pub fn promote(window: &tauri::WebviewWindow) -> tauri::Result<()> {
-        let pointer = window.ns_window()? as *mut AnyObject;
-        if pointer.is_null() {
-            return Ok(());
-        }
+        window.set_focusable(true)?;
+        let pointer = window.ns_window()? as *mut NSWindow;
+        if pointer.is_null() { return Ok(()); }
         unsafe {
-            let object = &*pointer;
-            let _ = AnyObject::set_class(object, NotchPanel::class());
-            let panel = &*(pointer as *mut NSPanel);
-            let window: &NSWindow = panel;
-            window.setStyleMask(NSWindowStyleMask::Borderless | NSWindowStyleMask::NonactivatingPanel);
-            panel.setFloatingPanel(true);
-            panel.setBecomesKeyOnlyIfNeeded(true);
-            panel.setWorksWhenModal(true);
-            // The style bit alone is ignored on a window that already exists; this private setter
-            // updates the window server's tag (the same call other overlay apps make).
+            let native = &*pointer;
+            let style = native.styleMask();
+            let desired = overlay_style(style);
+            if style != desired { native.setStyleMask(desired); }
             let selector = sel!(_setPreventsActivation:);
-            if panel.respondsToSelector(selector) {
-                let _: () = objc2::msg_send![object, _setPreventsActivation: true];
+            if native.respondsToSelector(selector) {
+                let _: () = objc2::msg_send![native, _setPreventsActivation: true];
             }
         }
         Ok(())
     }
 
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn overlay_style_preserves_existing_window_configuration() {
+            let original = NSWindowStyleMask::Borderless | NSWindowStyleMask::FullSizeContentView;
+            let updated = overlay_style(original);
+            assert!(updated.contains(original));
+            assert!(updated.contains(NSWindowStyleMask::NonactivatingPanel));
+            assert_eq!(overlay_style(updated), updated);
+        }
+    }
     pub fn set_collection_behavior(window: &tauri::WebviewWindow, over_full_screen: bool) {
         let Ok(pointer) = window.ns_window() else { return };
         let pointer = pointer as *mut NSWindow;
@@ -594,35 +592,38 @@ fn configure_notch_window(window: &tauri::WebviewWindow) -> tauri::Result<()> {
 }
 
 fn state_dir() -> Result<PathBuf, String> {
-    if let Some(path) = env::var_os("REWIND_STATE_DIR") {
+    if let Some(path) = env::var_os("CORTEX_STATE_DIR") {
         return Ok(PathBuf::from(path));
     }
     #[cfg(target_os = "macos")]
     {
         let home = dirs::home_dir().ok_or_else(|| "Cannot find user home directory".to_string())?;
-        let current = home.join("Library/Application Support/Rewind");
+        let current = home.join("Library/Application Support/Cortex");
         let legacy = home.join("Library/Application Support/Open Memory");
         if !current.exists() && legacy.exists() { let _ = fs::rename(&legacy, &current); }
+        let renamed = home.join("Library/Application Support/Rewind");
+        if !current.exists() && renamed.exists() { let _ = fs::rename(&renamed, &current); }
         return Ok(current);
     }
     #[cfg(target_os = "windows")]
     {
         return env::var_os("LOCALAPPDATA")
-            .map(|root| PathBuf::from(root).join("Rewind"))
+            .map(|root| PathBuf::from(root).join("Cortex"))
             .ok_or_else(|| "Cannot find local application data directory".to_string());
     }
     #[cfg(not(any(target_os = "macos", target_os = "windows")))]
     {
         if let Some(root) = env::var_os("XDG_STATE_HOME") {
-            return Ok(PathBuf::from(root).join("rewind"));
+            return Ok(PathBuf::from(root).join("cortex"));
         }
         dirs::home_dir()
-            .map(|home| home.join(".local/state/rewind"))
+            .map(|home| home.join(".local/state/cortex"))
             .ok_or_else(|| "Cannot find user home directory".to_string())
     }
 }
 
 fn valid_route(method: &str, path: &str) -> bool {
+    if method == "POST" && path.strip_prefix("/v1/workspace/").is_some_and(|op| matches!(op,"create"|"list"|"get"|"resume"|"update"|"claim"|"release"|"events"|"transcript"|"history"|"remember"|"memories"|"forget")) { return true; }
     match (method, path) {
         ("GET", "/v1/health" | "/v1/status" | "/v1/settings") => true,
         ("POST", "/v1/memory/search" | "/v1/memory/retrieve" | "/v1/assistant/prepare" | "/v1/memory/snapshots" | "/v1/privacy/delete" | "/v1/capture/request-permission" | "/v1/assist/prepare" | "/v1/assist/finish" | "/v1/assist/apply" | "/v1/assist/undo" | "/v1/assist/check" | "/v1/eval/capture" | "/v1/eval/reset") => true,
@@ -661,7 +662,7 @@ async fn daemon_call(method: String, path: String, body: Option<Value>) -> Resul
         return tauri::async_runtime::spawn_blocking(move || -> Result<Value,String> {
             use std::{io::{Read,Write},os::unix::net::UnixStream};
             let socket=state.join("local-memory/capture.sock");
-            let mut stream=UnixStream::connect(socket).map_err(|_| "Rewind memory engine is starting or unavailable. Check the engine log in local app storage.".to_string())?;
+            let mut stream=UnixStream::connect(socket).map_err(|_| "Cortex memory engine is starting or unavailable. Check the engine log in local app storage.".to_string())?;
             stream.set_read_timeout(Some(Duration::from_secs(120))).map_err(|e|e.to_string())?;
             stream.set_write_timeout(Some(Duration::from_secs(5))).map_err(|e|e.to_string())?;
             let request=serde_json::json!({"method":method,"path":path,"body":body});
@@ -676,7 +677,7 @@ async fn daemon_call(method: String, path: String, body: Option<Value>) -> Resul
         }).await.map_err(|e|e.to_string())?;
     }
     #[cfg(not(target_os = "macos"))]
-    Err("The Rewind memory engine requires macOS".into())
+    Err("The Cortex memory engine requires macOS".into())
 }
 
 // The key is intentionally kept outside Keychain to avoid repeated prompts when
@@ -924,7 +925,7 @@ mod tests {
     fn local_openrouter_key_is_private_and_replaceable() {
         use super::{read_local_key, save_local_key};
         use std::os::unix::fs::{MetadataExt, PermissionsExt};
-        let dir = std::env::temp_dir().join(format!("rewind-key-test-{}-{}", std::process::id(), std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+        let dir = std::env::temp_dir().join(format!("cortex-key-test-{}-{}", std::process::id(), std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
         let path = dir.join("openrouter.key");
         save_local_key(&path, "first-test-key").unwrap();
         assert_eq!(std::fs::metadata(&path).unwrap().mode() & 0o777, 0o600);
@@ -1021,15 +1022,15 @@ pub fn run() {
             {
                 let executable = install_bundled_daemon()?;
                 let root=state_dir().map_err(io::Error::other)?;
-                let log=fs::OpenOptions::new().create(true).append(true).mode(0o600).open(root.join("rewind-engine.log"))?;
+                let log=fs::OpenOptions::new().create(true).append(true).mode(0o600).open(root.join("cortex-engine.log"))?;
                 let mut engine = Command::new(executable);
                 // Structure-aware chunking (LinkedIn and X) is opt-in: `touch "<state>/segments-on"` to try it.
-                if root.join("segments-on").exists() { engine.env("REWIND_SEGMENTS", "1"); }
+                if root.join("segments-on").exists() { engine.env("CORTEX_SEGMENTS", "1"); }
                 let child = engine
                     .arg("desktop")
-                    .env("REWIND_STATE_DIR", root.join("local-memory"))
-                    .env("REWIND_SETTINGS_DIR", &root)
-                    .env("REWIND_EXIT_ON_STDIN_EOF", "1")
+                    .env("CORTEX_STATE_DIR", root.join("local-memory"))
+                    .env("CORTEX_SETTINGS_DIR", &root)
+                    .env("CORTEX_EXIT_ON_STDIN_EOF", "1")
                     .stdin(Stdio::piped()).stdout(Stdio::null()).stderr(Stdio::from(log))
                     .spawn()?;
                 *daemon_on_start.lock().map_err(|_| io::Error::other("daemon lock poisoned"))? = Some(child);
@@ -1053,7 +1054,12 @@ pub fn run() {
                     .map_err(io::Error::other)?;
             }
             #[cfg(target_os = "macos")]
-            rewind_hotkey::install(app.handle().clone());
+            cortex_hotkey::install(app.handle().clone());
+            // An explicit application launch should open its dashboard, not only a tiny notch.
+            if let Some(main) = app.get_webview_window("main") {
+                main.show()?;
+                main.set_focus()?;
+            }
             Ok(())
         })
         .on_window_event(|window, event| {
@@ -1064,7 +1070,7 @@ pub fn run() {
                 }
             }
         })
-        .invoke_handler(tauri::generate_handler![daemon_request, notch_set_mode, notch_set_visible, notch_preview, open_main, set_rewind_trigger, set_assist_config, set_test_mode, assist_set_active, notch_focus, openrouter_complete, ai_test, restore_previous_app, quit_rewind, openrouter_save_key, openrouter_has_key, openrouter_delete_key, openrouter_chat, openrouter_search_query, open_external_link, reveal_rewind_app, open_accessibility_settings])
+        .invoke_handler(tauri::generate_handler![mcp_connection_info, daemon_request, notch_set_mode, notch_set_visible, notch_preview, open_main, set_cortex_trigger, set_assist_config, set_test_mode, assist_set_active, notch_focus, openrouter_complete, ai_test, restore_previous_app, quit_cortex, openrouter_save_key, openrouter_has_key, openrouter_delete_key, openrouter_chat, openrouter_search_query, open_external_link, reveal_cortex_app, open_accessibility_settings])
         .build(tauri::generate_context!())
         .expect("failed to run desktop shell");
     app.run(move |handle, event| match event {
@@ -1093,18 +1099,18 @@ pub fn run() {
 
 #[cfg(target_os = "macos")]
 fn install_bundled_daemon() -> io::Result<PathBuf> {
-    const DAEMON: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/rewind-daemon"));
+    const DAEMON: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/cortex-daemon"));
     let state = state_dir().map_err(io::Error::other)?;
     fs::create_dir_all(&state)?;
     fs::set_permissions(&state,fs::Permissions::from_mode(0o700))?;
-    let path = state.join("rewind-engine");
+    let path = state.join("cortex-engine");
     if let Ok(meta) = fs::symlink_metadata(&path) {
         if meta.is_file() && meta.uid() == unsafe { libc::geteuid() }
             && meta.mode() & 0o077 == 0 && fs::read(&path).map(|bytes| bytes == DAEMON).unwrap_or(false) {
             return Ok(path);
         }
     }
-    let temp = state.join("rewind-engine.tmp");
+    let temp = state.join("cortex-engine.tmp");
     if temp.exists() { fs::remove_file(&temp)?; }
     let mut file = fs::OpenOptions::new().write(true).create_new(true).mode(0o700).open(&temp)?;
     file.write_all(DAEMON)?;

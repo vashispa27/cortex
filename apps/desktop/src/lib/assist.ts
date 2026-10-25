@@ -43,11 +43,11 @@ export const TONES: { id: RewriteTone; label: string }[] = [
 type Prepared = { messages: { role: "system" | "user"; content: string }[]; max_tokens: number; temperature: number; truncated: boolean };
 
 const COMPOSE_HINTS: Record<string, string> = {
-  secure_field: "Can't read this field — rewind a thought instead",
-  sensitive_app: "Rewind doesn't read this app — rewind a thought instead",
-  excluded_app: "This app is excluded — rewind a thought instead",
-  accessibility_not_granted: "Allow Accessibility to read fields — rewind a thought instead",
-  private_window: "Off in private windows — rewind a thought instead",
+  secure_field: "Can't read this field — ask Cortex instead",
+  sensitive_app: "Cortex doesn't read this app — ask Cortex instead",
+  excluded_app: "This app is excluded — ask Cortex instead",
+  accessibility_not_granted: "Allow Accessibility to read fields — ask Cortex instead",
+  private_window: "Off in private windows — ask Cortex instead",
 };
 
 /** Short text for the compose box when a double-tap could not read the field. */
@@ -76,8 +76,8 @@ export function appInitial(context: FocusContext): string {
 /** Why a write did not land, in words for the notch. */
 export function applyFailureMessage(result: ApplyResult, kind: "autocomplete" | "rewrite"): string {
   if (result.outcome === "applied") return "";
-  if (result.outcome === "recovery") return "Rewind could not confirm the change. Check the field, or copy the text.";
-  if (result.code === "TARGET_STALE") return kind === "rewrite" ? "Your selection changed. Copy the rewrite instead." : "The field changed, so Rewind did not insert.";
+  if (result.outcome === "recovery") return "Cortex could not confirm the change. Check the field, or copy the text.";
+  if (result.code === "TARGET_STALE") return kind === "rewrite" ? "Your selection changed. Copy the rewrite instead." : "The field changed, so Cortex did not insert.";
   return kind === "rewrite" ? "Couldn't replace here. Copy the rewrite instead." : "Couldn't insert here. Copy the text instead.";
 }
 

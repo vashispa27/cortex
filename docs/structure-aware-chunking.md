@@ -1,12 +1,12 @@
 # Structure-aware chunking (v1: LinkedIn and X)
 
-Off by default. `REWIND_SEGMENTS=1` turns it on for ingest; an index that already holds items keeps it on without
+Off by default. `CORTEX_SEGMENTS=1` turns it on for ingest; an index that already holds items keeps it on without
 the flag. With the flag off, nothing in this document runs and every existing path, test and eval is unchanged.
 
 ## What it does
 
 For pages on `linkedin.com`, `x.com` and `twitter.com`, one capture's Accessibility nodes are split into typed
-**items** before any cleaning, with deterministic rules and no model call (`crates/rewind/src/segment.rs`):
+**items** before any cleaning, with deterministic rules and no model call (`crates/cortex/src/segment.rs`):
 
 | kind | what | example |
 |---|---|---|
@@ -55,7 +55,7 @@ path (cleaner, page chunks) unchanged.
 * Item chunks never call the context model (`contextual.rs`); the header replaces it. Unsupported pages keep the
   context path exactly as before.
 * `index_version` gets `:segments-v1`, so an index that mixes the two chunkings demands `--rebuild-index`.
-  `rewind capture --apply-cleaning` refuses to run on a memory that holds items.
+  `cortex capture --apply-cleaning` refuses to run on a memory that holds items.
 
 ## Observed labels the rules rely on
 
@@ -100,7 +100,7 @@ Container labels are in `ancestor_path`; unlabelled generic groups are folded.
 
 ## Promoted posts: a switch, and what it costs
 
-The brief classifies ads and promoted posts as `noise`, and that is the default. `REWIND_SEGMENTS_ADS=1` keeps them
+The brief classifies ads and promoted posts as `noise`, and that is the default. `CORTEX_SEGMENTS_ADS=1` keeps them
 as `post` items marked `ad` (header `X ad · Brand (@brand)`), and promoted trend cards as `other`. The retrieval eval
 on the 309-question gold set shows what the default costs, because the set asks about ads the user scrolled past
 ("was that an ad or a post", "which ads showed up"): see `evals/private/segments-report.md`. This is a product
@@ -127,16 +127,16 @@ choice, not a bug in the rules; the tools to decide with the numbers are in plac
 ```bash
 python3 evals/tools/ax_regions.py 18                  # one snapshot's container tree
 python3 evals/tools/ax_regions.py --site x --labels   # label table over the archive
-cargo build --release -p rewind
-./target/release/rewind segment-report ~/Library/Application\ Support/Rewind/eval-memory > evals/private/segments-report-table.md
+cargo build --release -p cortex
+./target/release/cortex segment-report ~/Library/Application\ Support/Cortex/eval-memory > evals/private/segments-report-table.md
 python3 evals/tools/prepare_segment_archive.py        # builds eval-memory-segments and prints the before/after counts
-python3 evals/tools/run_gold.py --archive ~/Library/Application\ Support/Rewind/eval-memory-segments --out evals/private/retrieval_segments.json
+python3 evals/tools/run_gold.py --archive ~/Library/Application\ Support/Cortex/eval-memory-segments --out evals/private/retrieval_segments.json
 ```
 
 The answer eval costs money and is the user's to run:
 
 ```bash
-EVAL_ARCHIVE="$HOME/Library/Application Support/Rewind/eval-memory-segments" EVAL_CLOUD_MODEL=anthropic/claude-haiku-5.5 evals/run.sh
+EVAL_ARCHIVE="$HOME/Library/Application Support/Cortex/eval-memory-segments" EVAL_CLOUD_MODEL=anthropic/claude-haiku-5.5 evals/run.sh
 ```
 
 Compare it with the baseline `evals/private/answers/cloud-anthropic-claude-haiku-5.5_1021-1513.*`

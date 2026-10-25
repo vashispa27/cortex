@@ -11,7 +11,7 @@ import { sampleActivity, sampleAppUsage, sampleMemories } from "./lib/demo";
 import type { NotchMode } from "./lib/notch";
 import type { Page, SettingsPage } from "./lib/types";
 import type { Preferences, Reminder } from "./lib/storage";
-import RewindMark from "./components/RewindMark";
+import CortexMark from "./components/CortexMark";
 import "./dashboard.css";
 
 type AppRow = { appId: string; count: number; minutes: number | null };
@@ -147,7 +147,7 @@ export function HomeDashboard(props: HomeDashboardProps) {
       </div>
       <div className="dash-welcome-actions">
         <span className={`dash-live ${sample ? "sample" : status ? "online" : "offline"}`}><span className="status-light" />{sample ? "Sample data" : status ? "Local service" : "Offline"}</span>
-        <button type="button" className="button button-secondary dash-preview" onClick={() => props.onPreviewNotch("compose")}><RewindMark className="dash-button-rewind" /> Open Rewind</button>
+        <button type="button" className="button button-secondary dash-preview" onClick={() => props.onPreviewNotch("compose")}><CortexMark className="dash-button-cortex" /> Open Cortex</button>
       </div>
     </header>
 
@@ -224,7 +224,7 @@ export function HomeDashboard(props: HomeDashboardProps) {
           <ControlToggle checked={captureOn} disabled={!status} onChange={() => props.onToggleCapture()} label="Capture memory" description={status?.captureRequested ? "Stored locally, under your control." : "Turn on capture to remember what you see."} />
           <ControlToggle checked={preferences.microphoneConsent} onChange={(value) => props.onUpdatePreferences({ microphoneConsent: value })} label="Voice dictation" description="Allow microphone requests in this build." />
           <ControlToggle checked={preferences.hideDrop} onChange={(value) => props.onSetDropVisible(!value)} label="Hide the drop" description="Tuck the notch away until you reach for it." />
-          <QuickLink label="Rewind key" detail="Double-tap Option, Fn, Shift, or Control." onClick={() => props.onSettings("notch")} />
+          <QuickLink label="Cortex key" detail="Double-tap Option, Fn, Shift, or Control." onClick={() => props.onSettings("notch")} />
           <QuickLink label="Privacy & retention" detail="Review what is stored and for how long." onClick={() => props.onSettings("memory")} />
           <QuickLink label="Notch behavior" detail="Choose how the drop opens and what it shows." onClick={() => props.onSettings("notch")} />
         </div>
@@ -238,10 +238,10 @@ type TimelinePageProps = {
   hits: MemoryHit[];
   busy: boolean;
   error: string;
-  onRewind: () => void;
+  onCortex: () => void;
 };
 
-export function TimelinePage({ sample, hits, busy, error, onRewind }: TimelinePageProps) {
+export function TimelinePage({ sample, hits, busy, error, onCortex }: TimelinePageProps) {
   const groups = useMemo(() => groupHitsByDay(hits), [hits]);
   return <div className="page-content timeline-page">
     <div className="page-heading timeline-heading">
@@ -252,7 +252,7 @@ export function TimelinePage({ sample, hits, busy, error, onRewind }: TimelinePa
     {sample && <div className="callout neutral timeline-note"><Sparkles size={16} /> These days are invented sample data. Your real timeline stays on this Mac.</div>}
     {error && <div className="callout warning">{error}</div>}
     {busy && !groups.length && <div className="loading-state">Loading recent memory…</div>}
-    {!busy && !groups.length && <div className="empty-state timeline-empty"><span className="empty-icon"><Clock3 size={24} /></span><h3>Nothing on the timeline yet</h3><p>Start capture, or open the sample workspace to see how a day of context is organized.</p><button type="button" className="button button-secondary" onClick={onRewind}>Rewind</button></div>}
+    {!busy && !groups.length && <div className="empty-state timeline-empty"><span className="empty-icon"><Clock3 size={24} /></span><h3>Nothing on the timeline yet</h3><p>Start capture, or open the sample workspace to see how a day of context is organized.</p><button type="button" className="button button-secondary" onClick={onCortex}>Cortex</button></div>}
     {groups.length > 0 && <div className="timeline-rail">
       {groups.map((group) => <section className="timeline-group" key={group.key}>
         <header className="timeline-date">
@@ -270,6 +270,6 @@ export function TimelinePage({ sample, hits, busy, error, onRewind }: TimelinePa
       </section>)}
     </div>}
     
-    <div className="timeline-tools"><button type="button" className="button button-secondary" onClick={onRewind}><Search size={15} /> Search memory</button></div>
+    <div className="timeline-tools"><button type="button" className="button button-secondary" onClick={onCortex}><Search size={15} /> Search memory</button></div>
   </div>;
 }

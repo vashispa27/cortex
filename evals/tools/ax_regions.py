@@ -15,7 +15,7 @@ Reads an eval archive (a copy of the memory directory, never local-memory) read-
 """
 import argparse, collections, json, os, sqlite3, sys
 
-DEFAULT = os.path.expanduser("~/Library/Application Support/Rewind/eval-memory")
+DEFAULT = os.path.expanduser("~/Library/Application Support/Cortex/eval-memory")
 SITES = {"linkedin": ("linkedin.com",), "x": ("x.com", "twitter.com")}
 # Containers worth showing even without a label.
 SEMANTIC = {"AXList", "AXHeading", "AXToolbar", "AXWebArea", "AXTable", "AXRow", "AXCell", "AXTabGroup", "AXMenuBar", "AXMenu", "AXLandmarkMain", "AXLandmarkNavigation", "AXLandmarkBanner", "AXLandmarkComplementary", "AXLandmarkContentInfo", "AXArticle"}

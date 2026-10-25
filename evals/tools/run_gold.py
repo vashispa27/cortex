@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Retrieval eval over evals/private/gold.jsonl using `rewind ask` (no LLM needed).
+"""Retrieval eval over evals/private/gold.jsonl using `cortex ask` (no LLM needed).
 
 Runs against a throwaway COPY of the eval archive, never local-memory. For every question with
 support (memory/mixed/clarify) it checks at what rank a supporting snapshot appears; near-duplicate
@@ -17,17 +17,17 @@ from concurrent.futures import ThreadPoolExecutor
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ap = argparse.ArgumentParser()
 ap.add_argument("--gold", default=os.path.join(ROOT, "evals/private/gold.jsonl"))
-ap.add_argument("--archive", default=os.path.expanduser("~/Library/Application Support/Rewind/eval-memory"))
-ap.add_argument("--bin", default=os.path.join(ROOT, "target/release/rewind"))
+ap.add_argument("--archive", default=os.path.expanduser("~/Library/Application Support/Cortex/eval-memory"))
+ap.add_argument("--bin", default=os.path.join(ROOT, "target/release/cortex"))
 ap.add_argument("--split", choices=["dev", "test"])
 ap.add_argument("--out", default=os.path.join(ROOT, "evals/private/retrieval_run.json"))
 ap.add_argument("--jobs", type=int, default=1)
 a = ap.parse_args()
 if not os.path.exists(a.bin):
-    sys.exit(f"{a.bin} missing: run `cargo build --release -p rewind`")
+    sys.exit(f"{a.bin} missing: run `cargo build --release -p cortex`")
 
 os.makedirs(os.path.join(ROOT, "evals/private"), exist_ok=True)
-work = tempfile.mkdtemp(prefix="rewind-evalcopy-", dir=os.path.join(ROOT, "evals/private"))
+work = tempfile.mkdtemp(prefix="cortex-evalcopy-", dir=os.path.join(ROOT, "evals/private"))
 state = os.path.join(work, "state")
 shutil.copytree(a.archive, state)
 
@@ -35,8 +35,8 @@ ITEM = re.compile(r"^\d+\. \[(\d+)\]")
 OTHER = re.compile(r"Other captured versions of this page: ((?:\[\d+\]\s*)+)")
 
 def ask(q):
-    env = dict(os.environ, REWIND_STATE_DIR=state)
-    env.pop("REWIND_LLM_URL", None)  # retrieval only
+    env = dict(os.environ, CORTEX_STATE_DIR=state)
+    env.pop("CORTEX_LLM_URL", None)  # retrieval only
     try:
         result = subprocess.run([a.bin, "ask", q], env=env, capture_output=True, text=True, timeout=60)
         if result.returncode:

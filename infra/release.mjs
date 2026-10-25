@@ -4,7 +4,7 @@ import { createReadStream, existsSync, lstatSync, mkdirSync, readFileSync, write
 import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const PRODUCT = 'rewind';
+const PRODUCT = 'cortex';
 const PLATFORMS = new Set(['macos-universal', 'macos-arm64', 'macos-x64', 'windows-x64']);
 const CHANNELS = new Set(['internal', 'canary', 'stable']);
 const VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/;

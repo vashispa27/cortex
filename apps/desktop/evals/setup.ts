@@ -1,5 +1,5 @@
 // Runs before any page module is imported. The page reads its model choice from localStorage
-// (`rewind.desktop.preferences.v1`); here it comes from the environment instead.
+// (`cortex.desktop.preferences.v1`); here it comes from the environment instead.
 const provider = process.env.EVAL_PROVIDER === "local" ? "local" : "openrouter";
 const preferences = {
   aiProvider: provider,
@@ -7,7 +7,7 @@ const preferences = {
   localEndpoint: process.env.EVAL_LOCAL_ENDPOINT ?? "http://127.0.0.1:8080/v1",
   localModel: process.env.EVAL_LOCAL_MODEL ?? process.env.EVAL_MODEL ?? "",
 };
-const store = new Map<string, string>([["rewind.desktop.preferences.v1", JSON.stringify(preferences)]]);
+const store = new Map<string, string>([["cortex.desktop.preferences.v1", JSON.stringify(preferences)]]);
 Object.assign(globalThis, {
   localStorage: {
     getItem: (k: string) => store.get(k) ?? null,

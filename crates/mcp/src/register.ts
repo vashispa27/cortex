@@ -7,7 +7,7 @@ import { stateDirectory } from './local-api.js';
 
 type JsonObject = Record<string, unknown>;
 type Receipt = { configPath: string; entryHash: string; backupPath: string; removedByUser: boolean };
-const entryName = 'rewind';
+const entryName = 'cortex';
 
 function hash(value: unknown): string {
   return createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -59,7 +59,7 @@ export async function configureClient(configPath: string, action: 'enable' | 'di
 
   if (action === 'enable') {
     if (servers[entryName] !== undefined) {
-      throw new Error('An rewind entry already exists; inspect it before changing it');
+      throw new Error('An cortex entry already exists; inspect it before changing it');
     }
     const entry = bridgeEntry();
     const backupPath = join(stateDir, `mcp-backup-${hash(configPath).slice(0, 24)}-${Date.now()}.json`);
@@ -71,7 +71,7 @@ export async function configureClient(configPath: string, action: 'enable' | 'di
     if (latest.original !== original) throw new Error('Client config changed during setup; retry after reviewing it');
     await atomicWrite(configPath, JSON.stringify(value, null, 2) + '\n', mode);
     await atomicWrite(receiptPath, JSON.stringify({ configPath, entryHash: hash(entry), backupPath, removedByUser: false } satisfies Receipt) + '\n', 0o600);
-    return 'Read-only local memory MCP entry installed. This client can retrieve sanitized captured memory after you enable MCP access in the app.';
+    return 'Cortex MCP entry installed. After you enable Connected AI Apps, this client can search captured memory and read/write shared tasks, transcripts, and permanent memories.';
   }
 
   if (!receipt || receipt.configPath !== configPath) throw new Error('No installation receipt for this config');

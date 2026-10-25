@@ -415,7 +415,7 @@ private let focusTextAfterLimit = 500
 private let focusSelectionLimit = 24_000
 private let focusTailBytes = 4_096
 private let maximumFieldUTF16 = 400_000
-private let ownBundleIDs: Set<String> = ["app.rewind.desktop", "app.rewind.capture"]
+private let ownBundleIDs: Set<String> = ["app.cortex.desktop", "app.cortex.capture"]
 private let textFieldRoles: Set<String> = ["AXTextArea", "AXTextField", "AXComboBox", "AXSearchField", "AXTextView"]
 // Apps whose AX text writes are unreliable go straight to synthesized typing.
 private let typingFirstApps: [String] = [

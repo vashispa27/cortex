@@ -4,7 +4,7 @@ import { isTauri } from "@tauri-apps/api/core";
 import App from "./App";
 import NotchApp from "./Notch";
 import "./styles.css";
-import "./rewind-theme.css";
+import "./cortex-theme.css";
 
 const params = new URLSearchParams(window.location.search);
 const notchWindow = params.get("window") === "notch";

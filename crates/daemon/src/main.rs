@@ -1,6 +1,6 @@
 use axum::{extract::{DefaultBodyLimit,Query,State}, http::{HeaderMap,StatusCode}, response::{IntoResponse,Response}, routing::{get,post}, Json,Router};
-use rewind_contracts::{ApiError,Envelope,ErrorBody,ErrorCode,SearchRequest,SnapshotsRequest,Status,API_VERSION};
-use rewind_memory::{MemoryError,MemoryStore,SettingsPatch};
+use cortex_contracts::{ApiError,Envelope,ErrorBody,ErrorCode,SearchRequest,SnapshotsRequest,Status,API_VERSION};
+use cortex_memory::{MemoryError,MemoryStore,SettingsPatch};
 use rand::RngCore;
 use serde::Deserialize;
 use serde_json::{json,Value};
@@ -15,6 +15,7 @@ static REQUEST_COUNTER: AtomicU64 = AtomicU64::new(1);
 #[derive(Clone)]
 struct AppState {
     store: Arc<MemoryStore>,
+    workspace: Arc<cortex_memory::workspace::WorkspaceStore>,
     token: Arc<String>,
     port: u16,
     #[cfg(target_os="macos")]
@@ -43,12 +44,12 @@ async fn main() -> Result<(),Box<dyn std::error::Error>> {
     #[cfg(target_os="macos")]
     let _instance_lock = lock_instance(&state_dir.join("daemon.lock"))?;
     let store = Arc::new(MemoryStore::open(&state_dir.join("memory.sqlite3"))?);
-    // Older builds captured Rewind's own window while it was frontmost. Those
+    // Older builds captured Cortex's own window while it was frontmost. Those
     // rows are UI chrome, not memory, so remove them without touching user data.
     #[cfg(target_os = "macos")]
-    for app_id in ["app.rewind.desktop"] {
+    for app_id in ["app.cortex.desktop"] {
         if let Ok(count) = store.purge_app_snapshots(app_id, now_ms()) {
-            if count > 0 { eprintln!("Removed {count} Rewind UI captures from local memory."); }
+            if count > 0 { eprintln!("Removed {count} Cortex UI captures from local memory."); }
         }
     }
     if env::args().any(|arg| arg == "--seed-synthetic") {
@@ -57,7 +58,7 @@ async fn main() -> Result<(),Box<dyn std::error::Error>> {
         return Ok(());
     }
     #[cfg(target_os="macos")]
-    if env::var("REWIND_EXIT_ON_STDIN_EOF").as_deref() == Ok("1") {
+    if env::var("CORTEX_EXIT_ON_STDIN_EOF").as_deref() == Ok("1") {
         std::thread::spawn(|| {
             use std::io::Read;
             let mut input = io::stdin();
@@ -71,7 +72,8 @@ async fn main() -> Result<(),Box<dyn std::error::Error>> {
     let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await?;
     let port = listener.local_addr()?.port();
     write_private(&state_dir.join("daemon.port"),port.to_string().as_bytes())?;
-    let state = AppState { store, token, port, #[cfg(target_os="macos")] capture_helper };
+    let workspace = Arc::new(cortex_memory::workspace::WorkspaceStore::open(&state_dir.join("workspace.sqlite3"))?);
+    let state = AppState { store, workspace, token, port, #[cfg(target_os="macos")] capture_helper };
     #[cfg(target_os="macos")]
     tokio::spawn(mac_capture::capture_loop(state.capture_helper.clone(),state.store.clone()));
     let app = Router::new()
@@ -86,33 +88,36 @@ async fn main() -> Result<(),Box<dyn std::error::Error>> {
         .route("/v1/memory/chronicles",get(chronicle))
         .route("/v1/time/report",get(time_report))
         .route("/v1/privacy/delete",post(delete_memory))
+        .route("/v1/workspace/:operation",post(workspace_request))
         .layer(DefaultBodyLimit::max(64*1024))
         .with_state(state);
-    eprintln!("rewind daemon listening on 127.0.0.1:{port}");
+    eprintln!("cortex daemon listening on 127.0.0.1:{port}");
     axum::serve(listener,app).await?;
     Ok(())
 }
 
 fn state_dir() -> io::Result<PathBuf> {
-    if let Some(path) = env::var_os("REWIND_STATE_DIR") { return Ok(PathBuf::from(path)); }
+    if let Some(path) = env::var_os("CORTEX_STATE_DIR") { return Ok(PathBuf::from(path)); }
     #[cfg(target_os="macos")]
     {
         let home = env::var_os("HOME").ok_or_else(|| io::Error::new(io::ErrorKind::NotFound,"HOME unavailable"))?;
-        let current = PathBuf::from(&home).join("Library/Application Support/Rewind");
+        let current = PathBuf::from(&home).join("Library/Application Support/Cortex");
         let legacy = PathBuf::from(&home).join("Library/Application Support/Open Memory");
         if !current.exists() && legacy.exists() { let _ = fs::rename(&legacy, &current); }
+        let renamed = PathBuf::from(&home).join("Library/Application Support/Rewind");
+        if !current.exists() && renamed.exists() { let _ = fs::rename(&renamed, &current); }
         return Ok(current);
     }
     #[cfg(target_os="windows")]
     {
         let base = env::var_os("LOCALAPPDATA").ok_or_else(|| io::Error::new(io::ErrorKind::NotFound,"LOCALAPPDATA unavailable"))?;
-        return Ok(PathBuf::from(base).join("Rewind"));
+        return Ok(PathBuf::from(base).join("Cortex"));
     }
     #[cfg(not(any(target_os="macos",target_os="windows")))]
     {
-        if let Some(path) = env::var_os("XDG_STATE_HOME") { return Ok(PathBuf::from(path).join("rewind")); }
+        if let Some(path) = env::var_os("XDG_STATE_HOME") { return Ok(PathBuf::from(path).join("cortex")); }
         let home = env::var_os("HOME").ok_or_else(|| io::Error::new(io::ErrorKind::NotFound,"HOME unavailable"))?;
-        Ok(PathBuf::from(home).join(".local/state/rewind"))
+        Ok(PathBuf::from(home).join(".local/state/cortex"))
     }
 }
 
@@ -211,7 +216,15 @@ fn store_error(err: MemoryError) -> Response {
     }
 }
 
-async fn health() -> Json<Value> { Json(json!({"service":"rewind-daemon","api_version":API_VERSION})) }
+async fn health() -> Json<Value> { Json(json!({"service":"cortex-daemon","api_version":API_VERSION})) }
+
+async fn workspace_request(State(state): State<AppState>, headers: HeaderMap, axum::extract::Path(operation): axum::extract::Path<String>, Json(body): Json<Value>) -> Response {
+    if let Err(err) = authorize(&headers,&state,true) { return err; }
+    match state.workspace.request(&operation,&body,now_ms()) {
+        Ok(data) => Json(Envelope { request_id: request_id(), data }).into_response(),
+        Err(e) => store_error(e),
+    }
+}
 
 async fn status(State(state): State<AppState>, headers: HeaderMap) -> Response {
     if let Err(err) = authorize(&headers,&state,false) { return err; }
@@ -235,7 +248,7 @@ async fn update_settings(State(state): State<AppState>, headers: HeaderMap, Json
     if patch.capture_enabled == Some(true) {
         #[cfg(target_os="macos")]
         if mac_capture::permission(&state.capture_helper).await != "granted" {
-            return error(StatusCode::FORBIDDEN,ErrorCode::PermissionRequired,"macOS Accessibility permission is required.","Grant access to the current Rewind app, then try again.",false);
+            return error(StatusCode::FORBIDDEN,ErrorCode::PermissionRequired,"macOS Accessibility permission is required.","Grant access to the current Cortex app, then try again.",false);
         }
         #[cfg(not(target_os="macos"))]
         return error(StatusCode::BAD_REQUEST,ErrorCode::InvalidRequest,"Capture is only available on macOS in this build.","Use the macOS app.",false);
@@ -316,7 +329,7 @@ async fn delete_memory(State(state): State<AppState>, headers: HeaderMap, Json(r
 }
 
 fn seed_synthetic(store: &MemoryStore) -> Result<(),Box<dyn std::error::Error>> {
-    use rewind_capture::{BrowserContext,CapturePolicy,RawNode,RawWindow,SessionState};
+    use cortex_capture::{BrowserContext,CapturePolicy,RawNode,RawWindow,SessionState};
     let example = RawWindow { app_id: "example.mail".into(), window_session_id: "synthetic-window".into(), title: "Launch review".into(), browser: BrowserContext::NotBrowser, session: SessionState::Active, observed_ms: now_ms(), timezone: "UTC".into(), source_event: "synthetic_fixture".into(), focus_role: Some("text_field".into()), focus_name: None, focus_path: None, roots: vec![RawNode { role: "text".into(), name: None, value: Some("Synthetic example: launch review moved to Thursday. This is test data, not user activity.".into()), visible: true, protected: false, excluded: false, children: vec![] }] };
     let sanitized = CapturePolicy { consent: true, ..Default::default() }.sanitize(&example)
         .map_err(|reason| io::Error::new(io::ErrorKind::Other,format!("synthetic fixture skipped: {reason:?}")))?;

@@ -62,10 +62,10 @@ export async function answerFromMemory(question: string, history: ChatMessage[])
   await ensureReady(target);
   const { model, endpoint } = target;
   // A summarized selection keeps more of its text, so follow-ups such as "shorter" still see it.
-  const prior: HistoryTurn[] = history.filter((m) => !(m.role === "assistant" && m.body.startsWith("Rewind could not"))).slice(-12).map((m) => ({ role: m.role, content: m.body.slice(0, m.kind === "summarize" ? 12_000 : 3000) }));
+  const prior: HistoryTurn[] = history.filter((m) => !(m.role === "assistant" && m.body.startsWith("Cortex could not"))).slice(-12).map((m) => ({ role: m.role, content: m.body.slice(0, m.kind === "summarize" ? 12_000 : 3000) }));
   let t = performance.now();
   // One natural-language query goes to the same Model2Vec + Qdrant hybrid retrieval and evidence
-  // preparation used by Rewind. No UI-side token search, application-specific ranking, or fallback.
+  // preparation used by Cortex. No UI-side token search, application-specific ranking, or fallback.
   let query = question;
   // What the answering model is told the question means; only set when a rewrite was accepted.
   let meaning = "";

@@ -1,7 +1,7 @@
 // Shared plumbing for the gold-set evaluations (see README.md in this folder).
 //
 // An evaluation run starts two throwaway child processes and never touches the real memory:
-//   1. the Rewind engine (`rewind desktop`) in test mode, on a COPY of the eval archive;
+//   1. the Cortex engine (`cortex desktop`) in test mode, on a COPY of the eval archive;
 //   2. the headless shell bridge (`examples/eval_bridge`), which runs the same commands the UI invokes
 //      (`openrouter_chat` with its read-only tool loop, `openrouter_search_query`, `daemon_request`).
 // The page's real `answerFromMemory` then runs unchanged in Node; `tauri-shim.ts` routes its `invoke`
@@ -34,9 +34,9 @@ export const REPO = resolve(fileURLToPath(new URL(".", import.meta.url)), "../..
 export const PRIVATE = join(REPO, "evals/private");
 export const GOLD = process.env.EVAL_GOLD ?? join(PRIVATE, "gold.jsonl");
 
-const REAL_ROOT = join(homedir(), "Library/Application Support/Rewind");
+const REAL_ROOT = join(homedir(), "Library/Application Support/Cortex");
 const ARCHIVE = process.env.EVAL_ARCHIVE ?? join(REAL_ROOT, "eval-memory");
-const ENGINE_BIN = process.env.EVAL_ENGINE_BIN ?? join(REPO, "target/release/rewind");
+const ENGINE_BIN = process.env.EVAL_ENGINE_BIN ?? join(REPO, "target/release/cortex");
 const BRIDGE_BIN = process.env.EVAL_BRIDGE_BIN ?? join(REPO, "apps/desktop/src-tauri/target/release/examples/eval_bridge");
 
 export function loadGold(): GoldQuestion[] {
@@ -66,7 +66,7 @@ export function bridgeCall<T = unknown>(cmd: string, args: unknown): Promise<T> 
 }
 
 function findModelDir(): string | undefined {
-  if (process.env.REWIND_MODEL_DIR) return process.env.REWIND_MODEL_DIR;
+  if (process.env.CORTEX_MODEL_DIR) return process.env.CORTEX_MODEL_DIR;
   // Only the pinned embedding weights are read from the real folder, never captured data.
   const models = join(REAL_ROOT, "local-memory/models");
   if (!existsSync(models)) return undefined;
@@ -89,7 +89,7 @@ export async function startRig(options: { engine?: boolean } = {}): Promise<stri
     if (!withEngine && name !== "bridge") continue;
     if (!existsSync(path)) throw new Error(`${name} not found at ${path}. See evals/README.md for the build commands.`);
   }
-  workdir = mkdtempSync(join(tmpdir(), "rewind-answer-eval-"));
+  workdir = mkdtempSync(join(tmpdir(), "cortex-answer-eval-"));
   mkdirSync(join(workdir, "local-memory"), { recursive: true });
   const key = join(REAL_ROOT, "openrouter.key");
   if (existsSync(key)) { copyFileSync(key, join(workdir, "openrouter.key")); chmodSync(join(workdir, "openrouter.key"), 0o600); } // the shell refuses symlinks; the copy goes away with the folder
@@ -97,16 +97,16 @@ export async function startRig(options: { engine?: boolean } = {}): Promise<stri
   if (withEngine) {
     cpSync(ARCHIVE, join(workdir, "eval-memory"), { recursive: true });
     // test_mode routes every search, including the tool loop's, to the (copied) eval archive.
-    writeFileSync(join(workdir, "rewind-capture.json"), JSON.stringify({ version: 0, capture_enabled: false, capture_paused: false, mcp_enabled: false, excluded_apps: [], excluded_domains: [], test_mode: true }));
+    writeFileSync(join(workdir, "cortex-capture.json"), JSON.stringify({ version: 0, capture_enabled: false, capture_paused: false, mcp_enabled: false, excluded_apps: [], excluded_domains: [], test_mode: true }));
     const modelDir = findModelDir();
     engine = spawn(ENGINE_BIN, ["desktop"], {
-      env: { ...process.env, REWIND_STATE_DIR: join(workdir, "local-memory"), REWIND_SETTINGS_DIR: workdir, REWIND_EVAL_DIR: join(workdir, "eval-memory"), REWIND_EXIT_ON_STDIN_EOF: "1", ...(modelDir ? { REWIND_MODEL_DIR: modelDir } : {}) },
+      env: { ...process.env, CORTEX_STATE_DIR: join(workdir, "local-memory"), CORTEX_SETTINGS_DIR: workdir, CORTEX_EVAL_DIR: join(workdir, "eval-memory"), CORTEX_EXIT_ON_STDIN_EOF: "1", ...(modelDir ? { CORTEX_MODEL_DIR: modelDir } : {}) },
       stdio: ["pipe", "ignore", "pipe"],
     });
     engine.stderr?.on("data", (chunk) => { engineLog.push(String(chunk)); if (engineLog.length > 50) engineLog.shift(); });
   }
 
-  bridge = spawn(BRIDGE_BIN, [], { env: { ...process.env, REWIND_STATE_DIR: workdir }, stdio: ["pipe", "pipe", "inherit"] });
+  bridge = spawn(BRIDGE_BIN, [], { env: { ...process.env, CORTEX_STATE_DIR: workdir }, stdio: ["pipe", "pipe", "inherit"] });
   createInterface({ input: bridge.stdout! }).on("line", (line) => {
     const msg = JSON.parse(line) as { id: number | null; ok: boolean; data?: unknown; error?: string };
     const waiter = msg.id == null ? undefined : pending.get(msg.id);
@@ -129,7 +129,7 @@ export async function startRig(options: { engine?: boolean } = {}): Promise<stri
 export function stopRig(): void {
   bridge?.stdin?.end();
   bridge?.kill();
-  engine?.stdin?.end(); // REWIND_EXIT_ON_STDIN_EOF makes the engine exit
+  engine?.stdin?.end(); // CORTEX_EXIT_ON_STDIN_EOF makes the engine exit
   engine?.kill();
   bridge = engine = null;
   if (workdir) rmSync(workdir, { recursive: true, force: true });

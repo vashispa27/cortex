@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import {
@@ -14,18 +14,20 @@ import {
 import { demoSearch } from "./lib/demo";
 import {
   dueOccurrence, loadPreferences, loadReminders, savePreferences,
-  saveReminders, type Preferences, type Reminder, type RewindTrigger,
+  saveReminders, type Preferences, type Reminder, type CortexTrigger,
 } from "./lib/storage";
 import { canApplyDraft, classifyWriting, draftSample, type WritingOperation } from "./lib/writing";
 import { testConnection, validLocalEndpoint } from "./lib/provider";
 import { engineChanges, engineSettingsFor } from "./lib/layers";
 import LayerSettings from "./components/LayerSettings";
-import { configureAssist, configureRewindTrigger, configureTestMode, openMain, previewNotch, quitApp, setNotchVisible } from "./lib/notch";
-import { saveSessions, triggerName } from "./lib/rewind";
+import { configureAssist, configureCortexTrigger, configureTestMode, openMain, previewNotch, quitApp, setNotchVisible } from "./lib/notch";
+import { saveSessions, triggerName } from "./lib/cortex";
 import type { Page, SettingsPage } from "./lib/types";
 import { HomeDashboard, TimelinePage } from "./Dashboard";
-import RewindMark from "./components/RewindMark";
+import CortexMark from "./components/CortexMark";
 import AskChat from "./components/AskChat";
+const TasksPage = lazy(() => import("./components/TasksPage"));
+const McpSetup = lazy(() => import("./components/McpSetup"));
 
 const navGroups: { label: string; items: { id: Page; label: string; icon: typeof House }[] }[] = [
   { label: "Overview", items: [
@@ -33,7 +35,8 @@ const navGroups: { label: string; items: { id: Page; label: string; icon: typeof
     { id: "timeline", label: "Timeline", icon: Clock3 },
   ] },
   { label: "Workspace", items: [
-    { id: "ask", label: "Ask Rewind", icon: MessageCircle },
+    { id: "tasks", label: "Tasks & memory", icon: Check },
+    { id: "ask", label: "Ask Cortex", icon: MessageCircle },
     { id: "memory", label: "Memory", icon: Database },
     { id: "wiki", label: "People & things", icon: BookOpen },
     { id: "write", label: "Write", icon: WandSparkles },
@@ -47,7 +50,7 @@ const navItems = navGroups.flatMap((group) => group.items);
 
 const settingsNav: { id: SettingsPage; label: string }[] = [
   { id: "account", label: "Account" }, { id: "ai", label: "AI model" }, { id: "capture", label: "Capture & privacy" },
-  { id: "notch", label: "Rewind & notch" },
+  { id: "notch", label: "Cortex & notch" },
   { id: "shortcuts", label: "Shortcuts" }, { id: "voice", label: "Voice" },
   { id: "appearance", label: "Appearance" }, { id: "memory", label: "Memory" },
   { id: "identity", label: "Identity" }, { id: "notifications", label: "Notifications" },
@@ -61,6 +64,7 @@ function formatTime(value: number): string {
 
 function initialPage(): Page {
   const requested = new URLSearchParams(window.location.search).get("page");
+  if (requested === "tasks") return "tasks";
   return requested === "timeline" || requested === "ask" || requested === "memory" || requested === "wiki" || requested === "write" || requested === "reminders" || requested === "settings" ? requested : "today";
 }
 
@@ -122,16 +126,16 @@ function Onboarding({ preferences, onDone }: { preferences: Preferences; onDone:
       await requestCapturePermission();
       setWaiting(true);
     } catch (err) {
-      setError(`Could not connect to Rewind: ${err instanceof Error ? err.message : String(err)}. Try again.`);
+      setError(`Could not connect to Cortex: ${err instanceof Error ? err.message : String(err)}. Try again.`);
     }
   };
   return <div className="onboarding-wrap"><div className="onboarding-card">
-    <div className="onboarding-top"><span className="brand-inline"><RewindMark className="brand-icon" /> Rewind</span></div>
-    <div className="onboarding-body"><span className="eyebrow">Welcome to Rewind</span><h1>Let Rewind remember<br /><em>what you see.</em></h1>
-      <p>Allow Accessibility access so Rewind can read text in the foreground app and save it locally. Normal browser windows can be read; private/incognito windows, credential apps and protected fields are skipped. You can pause or stop capture anytime.</p>
+    <div className="onboarding-top"><span className="brand-inline"><CortexMark className="brand-icon" /> Cortex</span></div>
+    <div className="onboarding-body"><span className="eyebrow">Welcome to Cortex</span><h1>Let Cortex remember<br /><em>what you see.</em></h1>
+      <p>Allow Accessibility access so Cortex can read text in the foreground app and save it locally. Normal browser windows can be read; private/incognito windows, credential apps and protected fields are skipped. You can pause or stop capture anytime.</p>
       <div className="callout neutral"><ShieldCheck size={18} /> When you ask a question, relevant saved text is sent to your chosen OpenRouter model.</div>
-      {waiting && <div className="callout neutral">Waiting for Accessibility permission. Enable <strong>Rewind</strong> in macOS System Settings; capture will start automatically.</div>}
-      {waiting && <div className="manage-actions"><Button kind="secondary" onClick={() => void invoke("open_accessibility_settings")}>Open Accessibility settings</Button><Button kind="secondary" onClick={() => void invoke("reveal_rewind_app")}>Show Rewind in Finder</Button></div>}
+      {waiting && <div className="callout neutral">Waiting for Accessibility permission. Enable <strong>Cortex</strong> in macOS System Settings; capture will start automatically.</div>}
+      {waiting && <div className="manage-actions"><Button kind="secondary" onClick={() => void invoke("open_accessibility_settings")}>Open Accessibility settings</Button><Button kind="secondary" onClick={() => void invoke("reveal_cortex_app")}>Show Cortex in Finder</Button></div>}
       {error && <p role="alert">{error}</p>}
     </div>
     <div className="onboarding-footer"><Button kind="quiet" onClick={() => onDone(false)}>Not now</Button><Button disabled={waiting} onClick={() => void begin()}>{waiting ? "Waiting for permission…" : "Allow & start"} <ArrowRight size={16} /></Button></div>
@@ -338,7 +342,7 @@ export default function App() {
   useEffect(() => { if (desktopRuntime() && (!loadPreferences().onboardingComplete || !loadPreferences().captureSetupComplete)) void openMain("today"); }, []);
   useEffect(() => { if (desktopRuntime()) void invoke<boolean>("openrouter_has_key").then(setHasOpenrouterKey).catch(() => setHasOpenrouterKey(false)); }, [settingsPage]);
   useEffect(() => { document.documentElement.style.fontSize = `${preferences.textScale}%`; document.documentElement.dataset.reduceMotion = String(preferences.reduceMotion); }, [preferences.textScale, preferences.reduceMotion]);
-  useEffect(() => { void configureRewindTrigger(preferences.rewindTrigger, preferences.rewindHotkey); }, [preferences.rewindTrigger, preferences.rewindHotkey]);
+  useEffect(() => { void configureCortexTrigger(preferences.cortexTrigger, preferences.cortexHotkey); }, [preferences.cortexTrigger, preferences.cortexHotkey]);
   useEffect(() => {
     void configureAssist({
       autocomplete: preferences.autocompleteOnTap, summarize: preferences.summarizeOnTap, rewrite: preferences.rewriteOnTap,
@@ -351,7 +355,7 @@ export default function App() {
     let unlisten: (() => void) | undefined;
     void listen<string>("navigate", (event) => {
       const target = event.payload;
-      if (target === "ask") window.dispatchEvent(new Event("rewind:handoff"));
+      if (target === "ask") window.dispatchEvent(new Event("cortex:handoff"));
       if (target === "settings") setSettingsPage("notch");
       setPage(target === "ask" ? "ask" : target === "timeline" ? "timeline" : target === "memory" ? "memory" : target === "settings" ? "settings" : "today");
     }).then((off) => {
@@ -395,7 +399,7 @@ export default function App() {
         if (changes.local_endpoint !== undefined && changes.local_endpoint !== "" && !validLocalEndpoint(changes.local_endpoint)) delete changes.local_endpoint;
         if (!Object.keys(changes).length) return;
         const next = await patchSettings(changes);
-        if (next.reindex) setSettingsNotice("Contextual indexing is on. Rewind is re-indexing your memory once; search may be slow for a minute.");
+        if (next.reindex) setSettingsNotice("Contextual indexing is on. Cortex is re-indexing your memory once; search may be slow for a minute.");
       } catch (error) { setSettingsNotice(`Could not apply the contextual indexing settings: ${error instanceof Error ? error.message : String(error)}`); }
     }, 500);
     return () => window.clearTimeout(timer);
@@ -488,7 +492,7 @@ export default function App() {
     } catch (error) { setSettingsNotice(`Eval archive was not erased: ${error instanceof Error ? error.message : String(error)}`); }
   };
   const performDelete = async () => {
-    if (deletePhrase !== "DELETE ALL LOCAL MEMORY" || !status) return;
+    if (deletePhrase !== "DELETE CAPTURED ACTIVITY" || !status) return;
     setDeleteBusy(true); setDeleteError("");
     try {
       const receipt = await deleteAllMemory();
@@ -526,10 +530,11 @@ export default function App() {
   if (!preferences.onboardingComplete || !preferences.captureSetupComplete) return <Onboarding preferences={preferences} onDone={(enabled) => { setPreferences({ ...preferences, onboardingComplete: true, captureSetupComplete: true, captureConsent: enabled || preferences.captureConsent }); setPage("today"); void refreshStatus(); }} />;
 
   return <div className="app-shell">
-    <aside className="sidebar"><div className="sidebar-top"><button className="brand" onClick={() => setPage("today")} aria-label="Rewind home"><RewindMark className="brand-icon" /><span>Rewind<span className="brand-dot">.</span></span></button><span className="edition">LOCAL PREVIEW</span></div><nav aria-label="Main navigation">{navGroups.map((group) => <div className="nav-group" key={group.label}><span className="nav-group-label">{group.label}</span>{group.items.map(({ id, label, icon: Icon }) => <button key={id} className={`nav-item ${page === id ? "active" : ""}`} onClick={() => setPage(id)}><Icon size={18} /><span>{label}</span>{id === "reminders" && notices.length > 0 && <span className="nav-count">{notices.length}</span>}</button>)}</div>)}</nav><div className="sidebar-bottom"><div className="capture-card"><div className="capture-line"><span className={`status-light ${sample ? "sample" : status?.captureEnabled && !status.capturePaused ? "good" : ""}`} /><strong>{sample ? "Sample workspace" : status?.captureEnabled ? status.capturePaused ? "Capture paused" : "Capture on" : "Capture off"}</strong></div><p>{sample ? "Invented activity only" : status ? "Local service connected" : "Local service offline"}</p><button onClick={() => openSettingsPage("capture")}>Manage privacy <ChevronRight size={14} /></button></div><div className="sidebar-footnote">Local-first memory, under your control.</div></div></aside>
-    <main className="main"><header className="topbar"><div className="breadcrumb"><Orbit size={16} /><span>{navItems.find((item) => item.id === page)?.label}</span></div><div className="topbar-actions"><span className={`top-status ${sample ? "sample" : status ? "online" : "offline"}`}><span className="status-light" />{sample ? "Sample data" : status ? "Local service" : "Offline"}</span><IconButton label="Open Rewind" onClick={() => void previewNotch("compose")}><RewindMark className="topbar-rewind" /></IconButton><IconButton label="Open settings" onClick={() => setPage("settings")}><Settings2 size={18} /></IconButton></div></header>
+    <aside className="sidebar"><div className="sidebar-top"><button className="brand" onClick={() => setPage("today")} aria-label="Cortex home"><CortexMark className="brand-icon" /><span>Cortex<span className="brand-dot">.</span></span></button><span className="edition">LOCAL PREVIEW</span></div><nav aria-label="Main navigation">{navGroups.map((group) => <div className="nav-group" key={group.label}><span className="nav-group-label">{group.label}</span>{group.items.map(({ id, label, icon: Icon }) => <button key={id} className={`nav-item ${page === id ? "active" : ""}`} onClick={() => setPage(id)}><Icon size={18} /><span>{label}</span>{id === "reminders" && notices.length > 0 && <span className="nav-count">{notices.length}</span>}</button>)}</div>)}</nav><div className="sidebar-bottom"><div className="capture-card"><div className="capture-line"><span className={`status-light ${sample ? "sample" : status?.captureEnabled && !status.capturePaused ? "good" : ""}`} /><strong>{sample ? "Sample workspace" : status?.captureEnabled ? status.capturePaused ? "Capture paused" : "Capture on" : "Capture off"}</strong></div><p>{sample ? "Invented activity only" : status ? "Local service connected" : "Local service offline"}</p><button onClick={() => openSettingsPage("capture")}>Manage privacy <ChevronRight size={14} /></button></div><div className="sidebar-footnote">Local-first memory, under your control.</div></div></aside>
+    <main className="main"><header className="topbar"><div className="breadcrumb"><Orbit size={16} /><span>{navItems.find((item) => item.id === page)?.label}</span></div><div className="topbar-actions"><span className={`top-status ${sample ? "sample" : status ? "online" : "offline"}`}><span className="status-light" />{sample ? "Sample data" : status ? "Local service" : "Offline"}</span><IconButton label="Open Cortex" onClick={() => void previewNotch("compose")}><CortexMark className="topbar-cortex" /></IconButton><IconButton label="Open settings" onClick={() => setPage("settings")}><Settings2 size={18} /></IconButton></div></header>
       {page === "today" && <HomeDashboard sample={sample} status={status} preferences={preferences} reminders={reminders} hits={memoryData?.results ?? []} busy={memoryBusy} error={memoryError} chatCount={chatCount} onNavigate={setPage} onSettings={openSettingsPage} onSearch={searchFromDashboard} onToggleCapture={() => void toggleCaptureFromDashboard()} onUpdatePreferences={updateSetting} onSetDropVisible={setDropVisible} onPreviewNotch={(mode) => void previewNotch(mode)} />}
-      {page === "timeline" && <TimelinePage sample={sample} hits={memoryData?.results ?? []} busy={memoryBusy} error={memoryError} onRewind={() => setPage("memory")} />}
+      {page === "timeline" && <TimelinePage sample={sample} hits={memoryData?.results ?? []} busy={memoryBusy} error={memoryError} onCortex={() => setPage("memory")} />}
+      {page === "tasks" && <Suspense fallback={<div className="loading-state">Opening workspace…</div>}><TasksPage sample={sample} onConnect={() => openSettingsPage("connected")} /></Suspense>}
       <div hidden={page !== "ask"} className="chat-host"><AskChat sample={sample} active={page === "ask"} onSessionCount={setChatCount} /></div>
       {page === "memory" && <div className="page-content"><div className="page-heading"><span className="eyebrow">Your local archive</span><h1>Memory</h1><p>Find moments from your recent activity.</p></div><form className="search-bar" onSubmit={(event) => { event.preventDefault(); void runSearch(search); }}><Search size={20} /><input aria-label="Search memory" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search a topic, person, or phrase" /><Button type="submit" disabled={memoryBusy}>Search</Button></form><div className="results-top"><span>{memoryData ? `${memoryData.results.length} ${memoryData.results.length === 1 ? "result" : "results"}` : "Recent memory"}</span><button className="text-link" onClick={() => { setSearch(""); void runSearch("", true); }}>Recent activity</button></div>{memoryError ? <div className="callout warning">{memoryError}</div> : memoryBusy ? <div className="loading-state">Searching…</div> : memoryData?.results.length ? <div className="memory-list">{memoryData.results.map((hit) => <MemoryCard key={hit.snapshot_id} hit={hit} />)}</div> : <EmptyState icon={<Search size={25} />} title="Nothing found yet" body={sample ? "Try a word from the sample workspace, such as review, Maya, or accessibility." : "The service may be offline, or this topic may not have been captured."} />}{memoryData && <div className="coverage-note"><CircleHelp size={16} /> Coverage: {memoryData.coverage.state}{memoryData.coverage.reason ? ` · ${memoryData.coverage.reason.replaceAll("_", " ")}` : ""}</div>}</div>}
       {page === "wiki" && <div className="page-content"><div className="page-heading"><span className="eyebrow">Connections and context</span><h1>People & things</h1><p>People and projects you have encountered.</p></div><div className="search-bar"><Search size={20} /><input aria-label="Search people and things" value={wikiQuery} onChange={(event) => setWikiQuery(event.target.value)} placeholder="Find a person, project, or place" /></div>{sample ? <div className="entity-grid">{[{ name: "Maya", type: "Person", body: "Mentioned the Thursday design review and onboarding copy.", ids: [101, 103] }, { name: "Ravi", type: "Person", body: "Expected to share a test plan.", ids: [103] }, { name: "Design review", type: "Project", body: "Moved to Thursday; accessibility pass remains open.", ids: [101] }].filter((entity) => `${entity.name} ${entity.type}`.toLowerCase().includes(wikiQuery.toLowerCase())).map((entity) => <article className="surface-card entity-card" key={entity.name}><span className="entity-icon"><UserRound size={22} /></span><span className="eyebrow">{entity.type}</span><h2>{entity.name}</h2><p>{entity.body}</p></article>)}</div> : <EmptyState icon={<BookOpen size={26} />} title="Entity wiki is not ready" body="The local service currently exposes source search. Entity extraction and evidence-linked pages are a later integration step." />}</div>}
@@ -570,12 +575,12 @@ export default function App() {
           <div className="surface-card"><h3>AI answers</h3><p>Configure OpenRouter under AI model. Captured text is sent only when you ask a question.</p><Button kind="secondary" onClick={() => setSettingsPage("ai")}>Open AI model settings</Button></div>
         </div>}
         {settingsPage === "notch" && <div className="settings-stack">
-          <div className="callout neutral"><RewindMark className="settings-rewind" /> Rewind lives in the notch. Click the logo for a single rewind, or the chat bubble to browse every session.</div>
+          <div className="callout neutral"><CortexMark className="settings-cortex" /> Cortex lives in the notch. Click the logo for a quick question, or the chat bubble to browse every session.</div>
           <div className="surface-card"><h3>The drop</h3>
-            <Toggle checked={!preferences.hideDrop} onChange={(visible) => { setDropVisible(visible); setSettingsNotice(visible ? "Rewind is visible on the notch." : "Rewind is hidden. You can bring it back here."); }} label="Show Rewind on the notch" description="Keeps a small rewind mark and chat button beside the camera. Chat and typing panels open below the notch." />
-            <Toggle checked={preferences.rewindHotkey} onChange={(value) => { updateSetting({ rewindHotkey: value }); void configureRewindTrigger(preferences.rewindTrigger, value); }} label="Double-tap to rewind" description="Start a new rewind from any app without touching the notch." />
-            <label className="field-label" htmlFor="rewind-trigger">Rewind key</label>
-            <select id="rewind-trigger" value={preferences.rewindTrigger} onChange={(event) => { const value = event.target.value as RewindTrigger; updateSetting({ rewindTrigger: value }); void configureRewindTrigger(value, preferences.rewindHotkey); }}>
+            <Toggle checked={!preferences.hideDrop} onChange={(visible) => { setDropVisible(visible); setSettingsNotice(visible ? "Cortex is visible on the notch." : "Cortex is hidden. You can bring it back here."); }} label="Show Cortex on the notch" description="Keeps a small cortex mark and chat button beside the camera. Chat and typing panels open below the notch." />
+            <Toggle checked={preferences.cortexHotkey} onChange={(value) => { updateSetting({ cortexHotkey: value }); void configureCortexTrigger(preferences.cortexTrigger, value); }} label="Double-tap to cortex" description="Start a new chat from any app without touching the notch." />
+            <label className="field-label" htmlFor="cortex-trigger">Cortex key</label>
+            <select id="cortex-trigger" value={preferences.cortexTrigger} onChange={(event) => { const value = event.target.value as CortexTrigger; updateSetting({ cortexTrigger: value }); void configureCortexTrigger(value, preferences.cortexHotkey); }}>
               <option value="rightOption">Right Option (⌥)</option>
               <option value="leftOption">Left Option (⌥)</option>
               <option value="fn">Globe / Fn (fn)</option>
@@ -586,13 +591,13 @@ export default function App() {
               <option value="rightCommand">Right Command (⌘)</option>
               <option value="leftCommand">Left Command (⌘)</option>
             </select>
-            {(preferences.rewindTrigger === "rightCommand" || preferences.rewindTrigger === "leftCommand") && <p className="fine-print">Double-tapping Command can also be the macOS Dictation shortcut. Check System Settings → Keyboard → Dictation → Shortcut so the two do not collide. Shortcuts such as ⌘C never count as taps.</p>}
-            {preferences.rewindTrigger === "fn" && <p className="fine-print">Globe / Fn may be set to show emoji, change the input source or start dictation (System Settings → Keyboard → “Press 🌐 key to”). A double-tap runs that action as well.</p>}
-            <p className="fine-print">Double-tap the selected key. The notch shows × 1 on the first tap, then × 2 opens a fresh single-entry rewind, or completes, rewrites or summarizes when you are typing or have text selected. macOS may ask for Input Monitoring or Accessibility permission. Current trigger: {triggerName(preferences.rewindTrigger)}.</p>
+            {(preferences.cortexTrigger === "rightCommand" || preferences.cortexTrigger === "leftCommand") && <p className="fine-print">Double-tapping Command can also be the macOS Dictation shortcut. Check System Settings → Keyboard → Dictation → Shortcut so the two do not collide. Shortcuts such as ⌘C never count as taps.</p>}
+            {preferences.cortexTrigger === "fn" && <p className="fine-print">Globe / Fn may be set to show emoji, change the input source or start dictation (System Settings → Keyboard → “Press 🌐 key to”). A double-tap runs that action as well.</p>}
+            <p className="fine-print">Double-tap the selected key. The notch shows × 1 on the first tap, then × 2 opens a fresh single-entry prompt, or completes, rewrites or summarizes when you are typing or have text selected. macOS may ask for Input Monitoring or Accessibility permission. Current trigger: {triggerName(preferences.cortexTrigger)}.</p>
           </div>
           <div className="surface-card"><h3>Double-tap actions</h3>
-            <p>What a double-tap does depends on where you are. Rewind reads the focused field only at the moment you tap, never while you type.</p>
-            <Toggle checked={preferences.autocompleteOnTap} onChange={(value) => updateSetting({ autocompleteOnTap: value })} label="Autocomplete" description="Double-tap while typing and Rewind finishes your sentence in place, using who you are replying to. It never presses Return." />
+            <p>What a double-tap does depends on where you are. Cortex reads the focused field only at the moment you tap, never while you type.</p>
+            <Toggle checked={preferences.autocompleteOnTap} onChange={(value) => updateSetting({ autocompleteOnTap: value })} label="Autocomplete" description="Double-tap while typing and Cortex finishes your sentence in place, using who you are replying to. It never presses Return." />
             <label className="field-label" htmlFor="autocomplete-length">Autocomplete length</label>
             <select id="autocomplete-length" value={preferences.autocompleteLength} disabled={!preferences.autocompleteOnTap} onChange={(event) => updateSetting({ autocompleteLength: event.target.value as Preferences["autocompleteLength"] })}>
               <option value="phrase">A few words</option>
@@ -600,36 +605,37 @@ export default function App() {
               <option value="reply">A short reply</option>
             </select>
             <Toggle checked={preferences.summarizeOnTap} onChange={(value) => updateSetting({ summarizeOnTap: value })} label="Summarize a selection" description="Select text on a page or document, double-tap, and the summary opens in the notch chat." />
-            <Toggle checked={preferences.rewriteOnTap} onChange={(value) => updateSetting({ rewriteOnTap: value })} label="Rewrite a selection in a text field" description="Shows a preview first. Rewind never replaces your text without a click. When off, selections in text fields are summarized." />
-            <Toggle checked={preferences.showOverFullScreen} onChange={(value) => updateSetting({ showOverFullScreen: value })} label="Show the notch over full-screen apps" description="Keeps Rewind on the notch when another app is full screen." />
+            <Toggle checked={preferences.rewriteOnTap} onChange={(value) => updateSetting({ rewriteOnTap: value })} label="Rewrite a selection in a text field" description="Shows a preview first. Cortex never replaces your text without a click. When off, selections in text fields are summarized." />
+            <Toggle checked={preferences.showOverFullScreen} onChange={(value) => updateSetting({ showOverFullScreen: value })} label="Show the notch over full-screen apps" description="Keeps Cortex on the notch when another app is full screen." />
             <Toggle checked={preferences.allowPasteInsert} onChange={(value) => updateSetting({ allowPasteInsert: value })} label="Allow paste as a last resort" description="If typing into a field fails, paste instead. Your clipboard is restored right after." />
             <Toggle checked={preferences.assistInPrivateWindows} onChange={(value) => updateSetting({ assistInPrivateWindows: value })} label="Allow in private browser windows" description="Off by default. Text from private windows is sent to your AI provider only if this is on." />
-            <p className="fine-print">Secure fields, password managers and apps you excluded are never read. Everything is redacted before it is sent to your AI provider, and text is never logged. Needs Accessibility access for Rewind Capture.</p>
+            <p className="fine-print">Secure fields, password managers and apps you excluded are never read. Everything is redacted before it is sent to your AI provider, and text is never logged. Needs Accessibility access for Cortex Capture.</p>
           </div>
-          <div className="surface-card"><h3>Try it</h3><p>Preview the single-entry rewind or the history drop without leaving this window.</p>
-            <div className="manage-actions"><Button kind="secondary" onClick={() => void previewNotch("compose")}><RewindMark className="button-rewind" /> Single rewind</Button><Button kind="secondary" onClick={() => void previewNotch("history")}><MessageCircle size={15} /> Chat history</Button></div>
+          <div className="surface-card"><h3>Try it</h3><p>Preview the single-entry prompt or the history drop without leaving this window.</p>
+            <div className="manage-actions"><Button kind="secondary" onClick={() => void previewNotch("compose")}><CortexMark className="button-cortex" /> Quick ask</Button><Button kind="secondary" onClick={() => void previewNotch("history")}><MessageCircle size={15} /> Chat history</Button></div>
           </div>
           <div className="surface-card"><h3>How it works</h3>
-            <div className="shortcut-row"><span>Rewind logo</span><kbd>Open a single input</kbd></div>
-            <div className="shortcut-row"><span>Chat bubble</span><kbd>Browse rewind history</kbd></div>
+            <div className="shortcut-row"><span>Cortex logo</span><kbd>Open a single input</kbd></div>
+            <div className="shortcut-row"><span>Chat bubble</span><kbd>Browse chat history</kbd></div>
             <div className="shortcut-row"><span>Settings in Chats</span><kbd>Open preferences</kbd></div>
-            <div className="shortcut-row"><span>Double-tap {triggerName(preferences.rewindTrigger)}</span><kbd>Rewind from anywhere</kbd></div>
+            <div className="shortcut-row"><span>Double-tap {triggerName(preferences.cortexTrigger)}</span><kbd>Cortex from anywhere</kbd></div>
             <div className="shortcut-row"><span>Escape</span><kbd>Close the drop</kbd></div>
-            <p className="fine-print">Preferences are shared by the dashboard and the notch window. Rewind searches local evidence; it does not capture screen content by itself.</p>
+            <p className="fine-print">Preferences are shared by the dashboard and the notch window. Cortex searches local evidence; it does not capture screen content by itself.</p>
           </div>
         </div>}
-        {settingsPage === "shortcuts" && <div className="settings-stack"><div className="surface-card"><h3>Keyboard</h3><p>Double-tap your chosen modifier key to open Rewind from any app. Change the key in Notch settings.</p><div className="shortcut-row"><span>New rewind</span><kbd>Double-tap {triggerName(preferences.rewindTrigger)}</kbd></div><div className="shortcut-row"><span>Submit a memory search</span><kbd>Return</kbd></div></div></div>}
+        {settingsPage === "shortcuts" && <div className="settings-stack"><div className="surface-card"><h3>Keyboard</h3><p>Double-tap your chosen modifier key to open Cortex from any app. Change the key in Notch settings.</p><div className="shortcut-row"><span>New cortex</span><kbd>Double-tap {triggerName(preferences.cortexTrigger)}</kbd></div><div className="shortcut-row"><span>Submit a memory search</span><kbd>Return</kbd></div></div></div>}
         {settingsPage === "voice" && <div className="settings-stack"><div className="surface-card"><h3>Microphone</h3><Toggle checked={preferences.microphoneConsent} onChange={(value) => updateSetting({ microphoneConsent: value })} label="Allow microphone requests" description="The browser or OS still asks permission when you press Record." /><Button kind="secondary" onClick={() => setShowVoice(true)}><Mic size={16} /> Open voice scratchpad</Button></div><div className="callout neutral">Audio is not uploaded. Transcription and insertion are unavailable until an authenticated speech service and native target validation are connected.</div></div>}
         {settingsPage === "appearance" && <div className="settings-stack"><div className="surface-card"><h3>Display</h3><label className="field-label" htmlFor="text-scale">Text size: {preferences.textScale}%</label><input id="text-scale" type="range" min="85" max="130" step="5" value={preferences.textScale} onChange={(event) => updateSetting({ textScale: Number(event.target.value) })} /><Toggle checked={preferences.reduceMotion} onChange={(value) => updateSetting({ reduceMotion: value })} label="Reduce motion" description="Stops decorative animation and notch resizing transitions." /></div></div>}
-        {settingsPage === "memory" && <div className="settings-stack"><div className="surface-card"><h3>Archive</h3><div className="status-details"><span>Indexed observations</span><strong>{status?.indexedCount ?? "Unknown"}</strong><span>Storage</span><strong>Local service</strong></div><label className="field-label" htmlFor="retention">Retention (coming soon)</label><select id="retention" disabled value={preferences.retentionDays} onChange={(event) => updateSetting({ retentionDays: Number(event.target.value) })}><option value="30">30 days</option><option value="90">90 days</option><option value="365">1 year</option></select><p className="fine-print">Automatic deletion is not available yet. This control does not change or delete your archive.</p></div><div className="surface-card"><h3>Manage data</h3><p>Browse or delete your local memory. Export is not yet available.</p><div className="manage-actions"><Button kind="secondary" onClick={() => setPage("memory")}>Inspect memory <ArrowRight size={15} /></Button><Button kind="secondary" disabled={!status} onClick={() => setShowDelete(true)}><Trash2 size={15} /> Delete all memory</Button></div></div></div>}
+        {settingsPage === "memory" && <div className="settings-stack"><div className="surface-card"><h3>Archive</h3><div className="status-details"><span>Indexed observations</span><strong>{status?.indexedCount ?? "Unknown"}</strong><span>Storage</span><strong>Local service</strong></div><label className="field-label" htmlFor="retention">Retention (coming soon)</label><select id="retention" disabled value={preferences.retentionDays} onChange={(event) => updateSetting({ retentionDays: Number(event.target.value) })}><option value="30">30 days</option><option value="90">90 days</option><option value="365">1 year</option></select><p className="fine-print">Automatic deletion is not available yet. This control does not change or delete your archive.</p></div><div className="surface-card"><h3>Manage data</h3><p>Browse or delete captured activity. Tasks, imported transcripts, and permanent memories are managed in Tasks & memory.</p><div className="manage-actions"><Button kind="secondary" onClick={() => setPage("memory")}>Inspect memory <ArrowRight size={15} /></Button><Button kind="secondary" disabled={!status} onClick={() => setShowDelete(true)}><Trash2 size={15} /> Delete captured activity</Button></div></div></div>}
         {settingsPage === "identity" && <div className="settings-stack"><div className="surface-card"><h3>About you</h3><p>Write a note about how you prefer to communicate. This stays in this shell and is not sent to an AI model.</p><label className="field-label" htmlFor="identity">My context</label><textarea id="identity" className="identity-field" value={preferences.identity} onChange={(event) => updateSetting({ identity: event.target.value })} placeholder="I prefer concise, warm writing…" /></div></div>}
         {settingsPage === "notifications" && <div className="settings-stack"><div className="surface-card"><h3>Proactive messages</h3><Toggle disabled checked={false} onChange={(value) => updateSetting({ proactive: value })} label="Allow evidence-backed nudges" description="Saved as a preference. Automatic nudge generation is not active in this build." /><p>Scheduled reminders you create appear in the app while it is open.</p><Button kind="secondary" onClick={() => setPage("reminders")}>Open reminders</Button></div></div>}
-        {settingsPage === "connected" && <div className="settings-stack"><div className="surface-card"><h3>AI clients</h3><p>External AI clients can receive local memory only after a separate, explicit setup. No clients are connected from this UI.</p><Toggle checked={status ? preferences.mcpConsent : false} onChange={(value) => void updateMcpConsent(value)} disabled={!status} label="Allow MCP memory access" description="Effective daemon setting. Separate from capture and cloud inference; client registration still requires an explicit action." /><div className="callout neutral"><LockKeyhole size={16} /> The local MCP bridge is installed separately. Enabling this switch does not register or launch an AI client.</div></div></div>}
+        {settingsPage === "connected" && <div className="settings-stack"><div className="surface-card"><h3>AI clients</h3><p>Connect your harnesses to share tasks, handoffs, and saved memories. Connected clients can search captured activity and create or edit tasks, import selected transcripts, and save or archive permanent memories.</p><Toggle checked={status ? preferences.mcpConsent : false} onChange={(value) => void updateMcpConsent(value)} disabled={!status} label="Allow Cortex MCP access" description="Applies to every connected local client. Separate from screen capture and Cortex's model settings." /><div className="callout neutral"><LockKeyhole size={16} /> Register the Cortex MCP bridge in each harness. This switch controls access; it does not launch a client.</div><Button kind="secondary" onClick={() => setPage("tasks")}>Open tasks & memory <ArrowRight size={15}/></Button></div></div>}
+        {settingsPage === "connected" && <Suspense fallback={<div className="loading-state">Loading connection details…</div>}><McpSetup /></Suspense>}
         {settingsPage === "diagnostics" && <div className="settings-stack"><div className="surface-card"><h3>Connection</h3><div className="status-details"><span>Runtime</span><strong>{desktopRuntime() ? "Tauri" : "Browser preview"}</strong><span>Service</span><strong>{status ? "Connected" : "Offline"}</strong><span>Search</span><strong>{status?.raw.retrieval_engine === "qdrant_edge_hybrid" ? "Semantic + keyword (Qdrant)" : "Unavailable"}</strong><span>Indexed chunks</span><strong>{String(status?.raw.indexed_chunks ?? "—")}</strong><span>Version</span><strong>{status?.version || "Unknown"}</strong></div><Button kind="secondary" onClick={() => void refreshStatus()}>Run connection check</Button>{statusError && <p className="fine-print">{statusError}</p>}</div><div className="surface-card"><h3>Privacy status</h3><p>Diagnostics shown here contain no memory text. The local daemon owns its own sanitized logs.</p></div></div>}
-        {settingsPage === "updates" && <div className="settings-stack"><div className="surface-card"><h3>Build information</h3><p>Rewind desktop shell 0.1.0 · local development build</p><div className="callout neutral"><Moon size={16} /> Automatic signed updates are not configured for this build.</div></div><div className="surface-card"><h3>Application</h3><p>Rewind runs as a menu-bar-style notch app. The dashboard stays hidden until you open it from the notch.</p><Button kind="secondary" onClick={() => void quitApp()}>Quit Rewind</Button></div></div>}
+        {settingsPage === "updates" && <div className="settings-stack"><div className="surface-card"><h3>Build information</h3><p>Cortex desktop shell 0.1.0 · local development build</p><div className="callout neutral"><Moon size={16} /> Automatic signed updates are not configured for this build.</div></div><div className="surface-card"><h3>Application</h3><p>Cortex runs as a menu-bar-style notch app. The dashboard stays hidden until you open it from the notch.</p><Button kind="secondary" onClick={() => void quitApp()}>Quit Cortex</Button></div></div>}
       </div></div>}
     </main>
-    {showDelete && <div className="modal-backdrop" role="presentation" onMouseDown={() => !deleteBusy && setShowDelete(false)}><div className="modal" role="dialog" aria-modal="true" aria-label="Delete all local memory" onMouseDown={(event) => event.stopPropagation()}><div className="modal-top"><div><span className="eyebrow">Permanent deletion</span><h2>Delete local memory?</h2></div><IconButton label="Close deletion dialog" onClick={() => setShowDelete(false)}><X size={20} /></IconButton></div><p>This pauses capture and removes the local archive and its derived records. It also clears reminders and identity notes stored by this shell. Backups outside this app may remain.</p><label className="field-label" htmlFor="delete-phrase">Type DELETE ALL LOCAL MEMORY to confirm</label><input className="confirm-input" id="delete-phrase" value={deletePhrase} onChange={(event) => setDeletePhrase(event.target.value)} autoComplete="off" />{deleteError && <div className="callout warning" role="alert">{deleteError}</div>}<div className="modal-actions"><Button kind="quiet" onClick={() => setShowDelete(false)}>Cancel</Button><Button disabled={deletePhrase !== "DELETE ALL LOCAL MEMORY" || deleteBusy} onClick={() => void performDelete()}>{deleteBusy ? "Deleting…" : "Delete all local memory"}</Button></div></div></div>}
+    {showDelete && <div className="modal-backdrop" role="presentation" onMouseDown={() => !deleteBusy && setShowDelete(false)}><div className="modal" role="dialog" aria-modal="true" aria-label="Delete captured activity" onMouseDown={(event) => event.stopPropagation()}><div className="modal-top"><div><span className="eyebrow">Permanent deletion</span><h2>Delete captured activity?</h2></div><IconButton label="Close deletion dialog" onClick={() => setShowDelete(false)}><X size={20} /></IconButton></div><p>This pauses capture and removes the local archive and its derived records. It also clears reminders and identity notes stored by this shell. Tasks, imported transcripts, and permanent memories are managed separately in Tasks & memory. Backups outside this app may remain.</p><label className="field-label" htmlFor="delete-phrase">Type DELETE CAPTURED ACTIVITY to confirm</label><input className="confirm-input" id="delete-phrase" value={deletePhrase} onChange={(event) => setDeletePhrase(event.target.value)} autoComplete="off" />{deleteError && <div className="callout warning" role="alert">{deleteError}</div>}<div className="modal-actions"><Button kind="quiet" onClick={() => setShowDelete(false)}>Cancel</Button><Button disabled={deletePhrase !== "DELETE CAPTURED ACTIVITY" || deleteBusy} onClick={() => void performDelete()}>{deleteBusy ? "Deleting…" : "Delete captured activity"}</Button></div></div></div>}
     {showVoice && <div className="modal-backdrop" role="presentation" onMouseDown={() => setShowVoice(false)}><div className="modal voice-modal" role="dialog" aria-modal="true" aria-label="Voice scratchpad" onMouseDown={(event) => event.stopPropagation()}><div className="modal-top"><div><span className="eyebrow">Voice</span><h2>Speak, then review</h2></div><IconButton label="Close voice" onClick={() => setShowVoice(false)}><X size={20} /></IconButton></div><VoicePanel enabled={preferences.microphoneConsent} onTranscript={(value) => { setVoiceText(value); setShowVoice(false); setPage("write"); }} /></div></div>}
   </div>;
 }

@@ -6,18 +6,18 @@ import { desktopRuntime, getServiceSettings, setEvalCapture } from "./lib/api";
 import { demoSearch } from "./lib/demo";
 import { answerFromMemory } from "./lib/answer";
 import { loadPreferences } from "./lib/storage";
-import { configureAssist, configureRewindTrigger, configureTestMode, focusNotch, openMain, restorePreviousApp, setAssistActive, setNotchMode, setNotchVisible, writeActiveSession, type NotchMode } from "./lib/notch";
+import { configureAssist, configureCortexTrigger, configureTestMode, focusNotch, openMain, restorePreviousApp, setAssistActive, setNotchMode, setNotchVisible, writeActiveSession, type NotchMode } from "./lib/notch";
 import {
   appInitial, applyFailureMessage, applyText, assistChip, composeHint, generateCompletion, generateRewrite, generateSummary, originLabel,
   TONES, TRUNCATED_NOTE, targetStillCurrent, undoInsertion, type FocusContext, type IntentPayload, type RewriteTone, type UndoToken,
 } from "./lib/assist";
 import {
   appendMessage, commitSession, composeAnswer, loadSessions, newSession, newSummarySession, sessionsStorageKey, sessionTime, triggerSymbol,
-  type RewindSession,
-} from "./lib/rewind";
+  type CortexSession,
+} from "./lib/cortex";
 import type { ChatMessage } from "./lib/types";
-import RewindMark from "./components/RewindMark";
-import RewindChatMark from "./components/RewindChatMark";
+import CortexMark from "./components/CortexMark";
+import CortexChatMark from "./components/CortexChatMark";
 import "./notch.css";
 
 const params = new URLSearchParams(window.location.search);
@@ -29,10 +29,10 @@ const isPreview = params.get("preview") === "1";
 function SelectionQuote({ message }: { message: ChatMessage }) {
   const [open, setOpen] = useState(false);
   const long = message.body.length > 240 || message.body.split("\n").length > 3;
-  return <div className="rewind-quote">
+  return <div className="cortex-quote">
     {message.origin && <small>{message.origin}</small>}
     <blockquote data-open={open || !long}>{message.body}</blockquote>
-    {message.note && <small className="rewind-quote-note">{message.note}</small>}
+    {message.note && <small className="cortex-quote-note">{message.note}</small>}
     {long && <button type="button" onClick={() => setOpen(!open)}>{open ? "Show less" : "Show more"}</button>}
   </div>;
 }
@@ -46,15 +46,15 @@ type Assist =
 
 const idleAssist: Assist = { phase: "idle" };
 
-function RewindThread({ session, busy }: { session: RewindSession; busy: boolean }) {
+function CortexThread({ session, busy }: { session: CortexSession; busy: boolean }) {
   return <>
     {session.messages.map((message, index) => message.role === "user"
-      ? <div className="rewind-message user" key={`${session.id}-${index}`}>{message.kind === "summarize" ? <SelectionQuote message={message} /> : <div className="rewind-user-bubble">{message.body}</div>}</div>
-      : <div className="rewind-message assistant" key={`${session.id}-${index}`}>
-        <span className="rewind-message-mark"><RewindMark /></span>
-        <div className="rewind-assistant-body"><AnswerSourceLabel source={message.source} /><AnswerContent text={message.body} /></div>
+      ? <div className="cortex-message user" key={`${session.id}-${index}`}>{message.kind === "summarize" ? <SelectionQuote message={message} /> : <div className="cortex-user-bubble">{message.body}</div>}</div>
+      : <div className="cortex-message assistant" key={`${session.id}-${index}`}>
+        <span className="cortex-message-mark"><CortexMark /></span>
+        <div className="cortex-assistant-body"><AnswerSourceLabel source={message.source} /><AnswerContent text={message.body} /></div>
       </div>)}
-    {busy && <div className="rewind-message assistant"><span className="rewind-message-mark"><RewindMark processing /></span><div className="rewind-assistant-body rewind-typing"><span /><span /><span /></div></div>}
+    {busy && <div className="cortex-message assistant"><span className="cortex-message-mark"><CortexMark processing /></span><div className="cortex-assistant-body cortex-typing"><span /><span /><span /></div></div>}
   </>;
 }
 
@@ -63,7 +63,7 @@ export default function NotchApp() {
   const sample = preferences.sampleMode || !desktopRuntime();
   const previewStage = isPreview || !desktopRuntime();
   const [mode, setMode] = useState<NotchMode>(initialMode);
-  const [sessions, setSessions] = useState<RewindSession[]>(loadSessions);
+  const [sessions, setSessions] = useState<CortexSession[]>(loadSessions);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [historyInput, setHistoryInput] = useState("");
@@ -91,15 +91,15 @@ export default function NotchApp() {
   const assistRef = useRef<Assist>(idleAssist);
   const modeRef = useRef<NotchMode>(initialMode);
   const actionsRef = useRef({
-    startNewRewind: (_source: "mouse" | "hotkey") => {}, openHistory: () => {}, closeDrop: () => {}, collapseOnly: () => {},
+    startNewCortex: (_source: "mouse" | "hotkey") => {}, openHistory: () => {}, closeDrop: () => {}, collapseOnly: () => {},
     onIntent: (_payload: IntentPayload) => {}, cancelAssist: () => {},
   });
 
   const activeSession = sessions.find((session) => session.id === activeSessionId) ?? null;
   const effectiveMode: NotchMode = (mode === "answer" || mode === "thinking") && !activeSession ? "compose" : mode;
-  const trigger = triggerSymbol(preferences.rewindTrigger);
+  const trigger = triggerSymbol(preferences.cortexTrigger);
 
-  const commit = (session: RewindSession) => {
+  const commit = (session: CortexSession) => {
     setSessions(commitSession(session));
   };
 
@@ -123,7 +123,7 @@ export default function NotchApp() {
     if (preferences.hideDrop) window.setTimeout(() => { void setNotchVisible(false); }, 180);
   };
 
-  const startNewRewind = (source: "mouse" | "hotkey" = "mouse", reason: string | null = null) => {
+  const startNewCortex = (source: "mouse" | "hotkey" = "mouse", reason: string | null = null) => {
     if (busyRef.current) return;
     assistSeqRef.current += 1;
     assistRef.current = idleAssist;
@@ -167,7 +167,7 @@ export default function NotchApp() {
   const handleBrand = () => {
     if (effectiveMode === "thinking") return;
     if (effectiveMode === "compose") { closeDrop(); return; }
-    startNewRewind("mouse");
+    startNewCortex("mouse");
   };
 
   const submitQuestion = async (raw: string, target: "bar" | "history") => {
@@ -216,7 +216,7 @@ export default function NotchApp() {
     } catch (reason) {
       const assistant: ChatMessage = {
         role: "assistant",
-        body: `Rewind could not answer: ${reason instanceof Error ? reason.message : String(reason)}`,
+        body: `Cortex could not answer: ${reason instanceof Error ? reason.message : String(reason)}`,
       };
       commit(appendMessage(session, assistant));
       if (target === "bar") setMode((current) => current === "thinking" ? "answer" : current);
@@ -247,7 +247,7 @@ export default function NotchApp() {
     if (assistSeqRef.current !== seq) return;
     void setAssistActive(false);
     const message = reason instanceof Error ? reason.message : String(reason);
-    showAssist({ phase: "result", kind, context, original, text: "", tone: null, busy: false, message: message || "Rewind could not do that.", copied: false }, "assist-result");
+    showAssist({ phase: "result", kind, context, original, text: "", tone: null, busy: false, message: message || "Cortex could not do that.", copied: false }, "assist-result");
   };
 
   const runAutocomplete = async (context: FocusContext) => {
@@ -322,7 +322,7 @@ export default function NotchApp() {
       if (!summary.text.trim()) throw new Error("The model returned no summary.");
       commit(appendMessage(session, { role: "assistant", body: summary.text, source: "selection" }));
     } catch (reason) {
-      commit(appendMessage(session, { role: "assistant", body: `Rewind could not summarize: ${reason instanceof Error ? reason.message : String(reason)}` }));
+      commit(appendMessage(session, { role: "assistant", body: `Cortex could not summarize: ${reason instanceof Error ? reason.message : String(reason)}` }));
     } finally {
       setBusy(false);
       busyRef.current = false;
@@ -412,7 +412,7 @@ export default function NotchApp() {
     if (context && payload.intent === "autocomplete") void runAutocomplete(context);
     else if (context && payload.intent === "rewrite") void runRewrite(context);
     else if (context && payload.intent === "summarize") void runSummarize(context);
-    else startNewRewind("hotkey", payload.hint);
+    else startNewCortex("hotkey", payload.hint);
   };
 
   const cancelAssist = () => {
@@ -430,14 +430,14 @@ export default function NotchApp() {
     void submitQuestion(historyInput, "history");
   };
 
-  actionsRef.current = { startNewRewind, openHistory, closeDrop, collapseOnly, onIntent, cancelAssist };
+  actionsRef.current = { startNewCortex, openHistory, closeDrop, collapseOnly, onIntent, cancelAssist };
   modeRef.current = mode;
 
   useEffect(() => { sessionsRef.current = sessions; }, [sessions]);
   useEffect(() => { busyRef.current = busy; }, [busy]);
 
   useEffect(() => {
-    // Sessions started or continued in the dashboard's Ask Rewind page.
+    // Sessions started or continued in the dashboard's Ask Cortex page.
     const syncSessions = (event: StorageEvent) => { if (event.key === sessionsStorageKey) setSessions(loadSessions()); };
     window.addEventListener("storage", syncSessions);
     return () => window.removeEventListener("storage", syncSessions);
@@ -458,7 +458,7 @@ export default function NotchApp() {
     const shouldFocus = effectiveMode !== "collapsed" && !assistMode && (effectiveMode === "compose" || effectiveMode === "history" || !hotkeyRef.current);
     void setNotchMode(effectiveMode, shouldFocus, preferences.reduceMotion);
   }, [effectiveMode, preferences.reduceMotion]);
-  useEffect(() => { void configureRewindTrigger(preferences.rewindTrigger, preferences.rewindHotkey); }, [preferences.rewindTrigger, preferences.rewindHotkey]);
+  useEffect(() => { void configureCortexTrigger(preferences.cortexTrigger, preferences.cortexHotkey); }, [preferences.cortexTrigger, preferences.cortexHotkey]);
   useEffect(() => {
     void configureAssist({
       autocomplete: preferences.autocompleteOnTap, summarize: preferences.summarizeOnTap, rewrite: preferences.rewriteOnTap,
@@ -499,7 +499,7 @@ export default function NotchApp() {
     let unlisten: (() => void) | undefined;
     void listen<NotchMode>("notch-mode", (event) => {
       const next = event.payload;
-      if (next === "compose") actionsRef.current.startNewRewind("mouse");
+      if (next === "compose") actionsRef.current.startNewCortex("mouse");
       else if (next === "history") actionsRef.current.openHistory();
       else if (next === "collapsed") actionsRef.current.collapseOnly();
       else if (next === "thinking" || next === "answer") setMode(next);
@@ -514,11 +514,11 @@ export default function NotchApp() {
     if (!desktopRuntime()) return;
     let disposed = false;
     let unlisten: (() => void) | undefined;
-    void listen<number>("rewind-tap", (event) => {
+    void listen<number>("cortex-tap", (event) => {
       const count = Number(event.payload) >= 2 ? 2 : 1;
       if (tapTimerRef.current !== null) window.clearTimeout(tapTimerRef.current);
       setTapCount(count);
-      // The second tap only shows the badge; `rewind-intent` says what it means once the field is read.
+      // The second tap only shows the badge; `cortex-intent` says what it means once the field is read.
       tapTimerRef.current = window.setTimeout(() => {
         tapTimerRef.current = null;
         setTapCount(0);
@@ -538,8 +538,8 @@ export default function NotchApp() {
     if (!desktopRuntime()) return;
     let disposed = false;
     const offs: (() => void)[] = [];
-    void listen<IntentPayload>("rewind-intent", (event) => actionsRef.current.onIntent(event.payload)).then((off) => { if (disposed) off(); else offs.push(off); });
-    void listen("rewind-cancel", () => actionsRef.current.cancelAssist()).then((off) => { if (disposed) off(); else offs.push(off); });
+    void listen<IntentPayload>("cortex-intent", (event) => actionsRef.current.onIntent(event.payload)).then((off) => { if (disposed) off(); else offs.push(off); });
+    void listen("cortex-cancel", () => actionsRef.current.cancelAssist()).then((off) => { if (disposed) off(); else offs.push(off); });
     return () => { disposed = true; offs.forEach((off) => off()); };
   }, []);
 
@@ -594,143 +594,143 @@ export default function NotchApp() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const shell = <div className="rewind-window" data-reduce-motion={preferences.reduceMotion} data-busy={busy} data-mode={effectiveMode} data-tap={tapCount > 0 ? "true" : "false"}>
-    <div className="rewind-bar">
-      <button type="button" className="rewind-brand" onClick={handleBrand} aria-label={effectiveMode === "compose" ? "Close Rewind" : "Start a new rewind"}>
-        <RewindMark processing={busy} />
-        {tapCount > 0 && <span className="rewind-tap-badge">{trigger} × {tapCount}</span>}
+  const shell = <div className="cortex-window" data-reduce-motion={preferences.reduceMotion} data-busy={busy} data-mode={effectiveMode} data-tap={tapCount > 0 ? "true" : "false"}>
+    <div className="cortex-bar">
+      <button type="button" className="cortex-brand" onClick={handleBrand} aria-label={effectiveMode === "compose" ? "Close Cortex" : "Start a new chat"}>
+        <CortexMark processing={busy} />
+        {tapCount > 0 && <span className="cortex-tap-badge">{trigger} × {tapCount}</span>}
       </button>
 
-      {effectiveMode === "compose" && <form className="rewind-compose" onSubmit={submitBar}>
-        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} aria-label="Rewind a thought" placeholder={hint ?? (sample ? "Rewind a thought in sample memory…" : "Rewind a thought…")} />
-        <button type="submit" className="rewind-enter" aria-label="Send to Rewind" title="Enter" disabled={!input.trim() || busy}><CornerDownLeft size={13} /></button>
+      {effectiveMode === "compose" && <form className="cortex-compose" onSubmit={submitBar}>
+        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} aria-label="Ask Cortex" placeholder={hint ?? (sample ? "Ask Cortex in sample memory…" : "Ask Cortex…")} />
+        <button type="submit" className="cortex-enter" aria-label="Send to Cortex" title="Enter" disabled={!input.trim() || busy}><CornerDownLeft size={13} /></button>
       </form>}
 
-      {effectiveMode === "answer" && <span className="rewind-history-label">Chat</span>}
+      {effectiveMode === "answer" && <span className="cortex-history-label">Chat</span>}
 
-      {effectiveMode === "thinking" && <div className="rewind-thinking-label"><span>Rewinding</span><i /><i /><i /></div>}
+      {effectiveMode === "thinking" && <div className="cortex-thinking-label"><span>Thinking</span><i /><i /><i /></div>}
 
-      {effectiveMode === "assist" && assist.phase === "working" && <div className="rewind-assist-chip" role="status">
-        <span className="rewind-app-dot" aria-hidden="true">{appInitial(assist.context)}</span>
+      {effectiveMode === "assist" && assist.phase === "working" && <div className="cortex-assist-chip" role="status">
+        <span className="cortex-app-dot" aria-hidden="true">{appInitial(assist.context)}</span>
         <span>{assistChip(assist.context, assist.kind)}</span>
       </div>}
 
       {effectiveMode === "assist-done" && assist.phase === "done" && <>
-        <div className="rewind-assist-done" role="status"><Check size={14} aria-hidden="true" /><span>{assist.label}</span></div>
-        {assist.label === "Inserted" && <button type="button" className="rewind-assist-button" disabled={assist.undoState !== "ready"} onMouseDown={(event) => event.preventDefault()} onClick={() => void undoLastInsertion()}>
+        <div className="cortex-assist-done" role="status"><Check size={14} aria-hidden="true" /><span>{assist.label}</span></div>
+        {assist.label === "Inserted" && <button type="button" className="cortex-assist-button" disabled={assist.undoState !== "ready"} onMouseDown={(event) => event.preventDefault()} onClick={() => void undoLastInsertion()}>
           {assist.undoState === "busy" ? "Undoing…" : assist.undoState === "ready" ? "Undo" : "Use ⌘Z"}
         </button>}
       </>}
 
       {effectiveMode === "assist-result" && assist.phase === "result" && <>
-        <div className="rewind-assist-chip">
-          <span className="rewind-app-dot" aria-hidden="true">{appInitial(assist.context)}</span>
+        <div className="cortex-assist-chip">
+          <span className="cortex-app-dot" aria-hidden="true">{appInitial(assist.context)}</span>
           <span>{assist.kind === "rewrite" ? "Rewrite" : "Suggestion"}</span>
         </div>
-        <div className="rewind-actions"><button type="button" className="rewind-icon" aria-label="Dismiss" title="Dismiss" onMouseDown={(event) => event.preventDefault()} onClick={closeDrop}><X size={13} /></button></div>
+        <div className="cortex-actions"><button type="button" className="cortex-icon" aria-label="Dismiss" title="Dismiss" onMouseDown={(event) => event.preventDefault()} onClick={closeDrop}><X size={13} /></button></div>
       </>}
 
       {effectiveMode === "history" && <>
-        <span className="rewind-history-label">Chats</span>
-        <div className="rewind-actions">
-          <button type="button" className="rewind-icon" aria-label="Open settings" title="Settings" onClick={openSettings}><Settings2 size={13} /></button>
-          <button type="button" className="rewind-icon" aria-label="Undock chat" title="Open full chat" onClick={undock}><Maximize2 size={13} /></button>
-          <button type="button" className="rewind-icon active" aria-label="Close chat history" title="Close" onClick={toggleChat}><RewindChatMark /></button>
+        <span className="cortex-history-label">Chats</span>
+        <div className="cortex-actions">
+          <button type="button" className="cortex-icon" aria-label="Open settings" title="Settings" onClick={openSettings}><Settings2 size={13} /></button>
+          <button type="button" className="cortex-icon" aria-label="Undock chat" title="Open full chat" onClick={undock}><Maximize2 size={13} /></button>
+          <button type="button" className="cortex-icon active" aria-label="Close chat history" title="Close" onClick={toggleChat}><CortexChatMark /></button>
         </div>
       </>}
 
       {effectiveMode === "collapsed" && <>
-        <button type="button" className="rewind-open-area" aria-label="Open a new rewind" onClick={() => startNewRewind("mouse")} />
-        <div className="rewind-actions">
-          {testMode && <button type="button" className="rewind-icon rewind-eval" data-recording={evalRecording} data-error={evalError !== ""} disabled={evalBusy}
+        <button type="button" className="cortex-open-area" aria-label="Open a new chat" onClick={() => startNewCortex("mouse")} />
+        <div className="cortex-actions">
+          {testMode && <button type="button" className="cortex-icon cortex-eval" data-recording={evalRecording} data-error={evalError !== ""} disabled={evalBusy}
             aria-label={evalRecording ? "Pause eval recording" : "Start eval recording"}
             title={evalError || (evalRecording ? "Recording to the eval archive. Click to pause." : "Test mode. Click to record this screen to the eval archive.")}
             onClick={() => void toggleEvalCapture()}>{evalRecording ? <Pause size={13} /> : <Play size={13} />}</button>}
-          <button type="button" className="rewind-icon" aria-label="Open rewind chats" title="Chats" onClick={toggleChat}><RewindChatMark /></button>
+          <button type="button" className="cortex-icon" aria-label="Open chats" title="Chats" onClick={toggleChat}><CortexChatMark /></button>
         </div>
       </>}
     </div>
 
-    {effectiveMode === "assist" && <span className="rewind-scan-track rewind-assist-track"><i /></span>}
+    {effectiveMode === "assist" && <span className="cortex-scan-track cortex-assist-track"><i /></span>}
 
-    {effectiveMode === "assist-result" && assist.phase === "result" && <section className="rewind-assist-panel">
-      <div className="rewind-assist-text" data-busy={assist.busy} data-empty={!assist.text}>{assist.busy ? "Working…" : assist.text || assist.message}</div>
-      {assist.text && assist.message && <p className="rewind-assist-note">{assist.message}</p>}
-      {assist.kind === "rewrite" && <div className="rewind-tones" role="group" aria-label="Tone">
+    {effectiveMode === "assist-result" && assist.phase === "result" && <section className="cortex-assist-panel">
+      <div className="cortex-assist-text" data-busy={assist.busy} data-empty={!assist.text}>{assist.busy ? "Working…" : assist.text || assist.message}</div>
+      {assist.text && assist.message && <p className="cortex-assist-note">{assist.message}</p>}
+      {assist.kind === "rewrite" && <div className="cortex-tones" role="group" aria-label="Tone">
         {TONES.map((tone) => <button type="button" key={tone.id} data-active={assist.tone === tone.id} disabled={assist.busy} onMouseDown={(event) => event.preventDefault()} onClick={() => void runRewrite(assist.context, tone.id)}>{tone.label}</button>)}
       </div>}
-      <footer className="rewind-assist-actions">
-        {assist.kind === "rewrite" && <button type="button" className="rewind-assist-button primary" disabled={assist.busy || !assist.text.trim()} onMouseDown={(event) => event.preventDefault()} onClick={() => void replaceWithRewrite()}>Replace</button>}
-        {assist.kind === "autocomplete" && assist.text.trim() !== "" && <button type="button" className="rewind-assist-button primary" disabled={assist.busy} onMouseDown={(event) => event.preventDefault()} onClick={() => void insertSuggestion()}>Insert</button>}
-        {assist.kind === "rewrite" && <button type="button" className="rewind-assist-button" disabled={assist.busy} onMouseDown={(event) => event.preventDefault()} onClick={summarizeInstead}>Summarize instead</button>}
-        {assist.text.trim() !== "" && <button type="button" className="rewind-assist-button" onMouseDown={(event) => event.preventDefault()} onClick={() => void copyResult()}>{assist.copied ? "Copied" : "Copy"}</button>}
-        <button type="button" className="rewind-assist-button" onMouseDown={(event) => event.preventDefault()} onClick={closeDrop}>Dismiss</button>
+      <footer className="cortex-assist-actions">
+        {assist.kind === "rewrite" && <button type="button" className="cortex-assist-button primary" disabled={assist.busy || !assist.text.trim()} onMouseDown={(event) => event.preventDefault()} onClick={() => void replaceWithRewrite()}>Replace</button>}
+        {assist.kind === "autocomplete" && assist.text.trim() !== "" && <button type="button" className="cortex-assist-button primary" disabled={assist.busy} onMouseDown={(event) => event.preventDefault()} onClick={() => void insertSuggestion()}>Insert</button>}
+        {assist.kind === "rewrite" && <button type="button" className="cortex-assist-button" disabled={assist.busy} onMouseDown={(event) => event.preventDefault()} onClick={summarizeInstead}>Summarize instead</button>}
+        {assist.text.trim() !== "" && <button type="button" className="cortex-assist-button" onMouseDown={(event) => event.preventDefault()} onClick={() => void copyResult()}>{assist.copied ? "Copied" : "Copy"}</button>}
+        <button type="button" className="cortex-assist-button" onMouseDown={(event) => event.preventDefault()} onClick={closeDrop}>Dismiss</button>
         {assist.kind === "rewrite" && assist.text.trim() !== "" && <small>Double-tap {trigger} to replace</small>}
       </footer>
     </section>}
 
-    {effectiveMode === "thinking" && <div className="rewind-cloud">
-      <span className="rewind-scan-track"><i /></span>
+    {effectiveMode === "thinking" && <div className="cortex-cloud">
+      <span className="cortex-scan-track"><i /></span>
       <small>Searching your memory</small>
     </div>}
 
-    {effectiveMode === "answer" && activeSession && <section className="rewind-answer-panel">
-      <header className="rewind-panel-head">
-        <div><span className="rewind-eyebrow">Rewind answer</span><h2>{activeSession.title}</h2></div>
-        <div className="rewind-actions">
-          <button type="button" className="rewind-icon" aria-label="Expand chat" title="Open in full window" onClick={undock}><Maximize2 size={13} /></button>
-          <button type="button" className="rewind-icon" aria-label="Close Rewind" title="Close" onClick={closeDrop}><X size={13} /></button>
+    {effectiveMode === "answer" && activeSession && <section className="cortex-answer-panel">
+      <header className="cortex-panel-head">
+        <div><span className="cortex-eyebrow">Cortex answer</span><h2>{activeSession.title}</h2></div>
+        <div className="cortex-actions">
+          <button type="button" className="cortex-icon" aria-label="Expand chat" title="Open in full window" onClick={undock}><Maximize2 size={13} /></button>
+          <button type="button" className="cortex-icon" aria-label="Close Cortex" title="Close" onClick={closeDrop}><X size={13} /></button>
         </div>
       </header>
-      <div className="rewind-thread-scroll" ref={answerScrollRef}>
-        <RewindThread session={activeSession} busy={busy && busySessionId === activeSession.id} />
+      <div className="cortex-thread-scroll" ref={answerScrollRef}>
+        <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} />
       </div>
-      <footer className="rewind-panel-foot">
+      <footer className="cortex-panel-foot">
         <span>{sample ? "Sample workspace" : testMode ? "Test mode · eval archive" : "Your memory"}</span>
-        <button type="button" onClick={openHistory}><RewindChatMark /> All chats</button>
+        <button type="button" onClick={openHistory}><CortexChatMark /> All chats</button>
       </footer>
-      <form className="rewind-history-form rewind-answer-form" onSubmit={submitBar}>
+      <form className="cortex-history-form cortex-answer-form" onSubmit={submitBar}>
         <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label="Ask a follow-up" placeholder="Ask a follow-up…" />
-        <button type="submit" className="rewind-enter" aria-label="Send follow-up" title="Enter" disabled={!input.trim() || busy}><CornerDownLeft size={13} /></button>
+        <button type="submit" className="cortex-enter" aria-label="Send follow-up" title="Enter" disabled={!input.trim() || busy}><CornerDownLeft size={13} /></button>
       </form>
     </section>}
 
-    {effectiveMode === "history" && <section className="rewind-history-panel">
-      <aside className="rewind-session-list">
-        <div className="rewind-session-head"><span className="rewind-eyebrow">Rewinds</span><button type="button" className="rewind-icon" aria-label="New rewind" title="New rewind" onClick={() => startNewRewind("mouse")}><Plus size={13} /></button></div>
-        <div className="rewind-session-scroll">
-          {sessions.length ? sessions.map((session) => <button type="button" className={`rewind-session ${session.id === activeSessionId ? "active" : ""}`} key={session.id} onClick={() => setActiveSessionId(session.id)}>
+    {effectiveMode === "history" && <section className="cortex-history-panel">
+      <aside className="cortex-session-list">
+        <div className="cortex-session-head"><span className="cortex-eyebrow">Chats</span><button type="button" className="cortex-icon" aria-label="New chat" title="New chat" onClick={() => startNewCortex("mouse")}><Plus size={13} /></button></div>
+        <div className="cortex-session-scroll">
+          {sessions.length ? sessions.map((session) => <button type="button" className={`cortex-session ${session.id === activeSessionId ? "active" : ""}`} key={session.id} onClick={() => setActiveSessionId(session.id)}>
             <strong>{session.title}</strong>
             <small>{sessionTime(session.updatedAt)} · {session.messages.length} {session.messages.length === 1 ? "message" : "messages"}</small>
-          </button>) : <p className="rewind-empty-small">No rewinds yet.</p>}
+          </button>) : <p className="cortex-empty-small">No chats yet.</p>}
         </div>
       </aside>
-      <div className="rewind-history-thread">
+      <div className="cortex-history-thread">
         {activeSession ? <>
-          <header className="rewind-thread-head">
-            <div><span className="rewind-eyebrow">Chat</span><h2>{activeSession.title}</h2></div>
-            <span className="rewind-pill">{sessionTime(activeSession.updatedAt)}</span>
+          <header className="cortex-thread-head">
+            <div><span className="cortex-eyebrow">Chat</span><h2>{activeSession.title}</h2></div>
+            <span className="cortex-pill">{sessionTime(activeSession.updatedAt)}</span>
           </header>
-          <div className="rewind-thread-scroll" ref={historyScrollRef}>
-            <RewindThread session={activeSession} busy={busy && busySessionId === activeSession.id} />
+          <div className="cortex-thread-scroll" ref={historyScrollRef}>
+            <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} />
           </div>
-          <form className="rewind-history-form" onSubmit={submitHistory}>
+          <form className="cortex-history-form" onSubmit={submitHistory}>
             <input ref={historyInputRef} value={historyInput} onChange={(event) => setHistoryInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label="Ask a follow-up" placeholder="Ask a follow-up…" />
-            <button type="submit" className="rewind-enter" aria-label="Send follow-up" title="Enter" disabled={!historyInput.trim() || busy}><CornerDownLeft size={13} /></button>
+            <button type="submit" className="cortex-enter" aria-label="Send follow-up" title="Enter" disabled={!historyInput.trim() || busy}><CornerDownLeft size={13} /></button>
           </form>
-        </> : <div className="rewind-history-empty">
-          <RewindMark />
-          <h2>No rewind selected</h2>
-          <p>Start a new rewind or pick a chat on the left.</p>
-          <button type="button" className="rewind-primary" onClick={() => startNewRewind("mouse")}>Start a rewind</button>
+        </> : <div className="cortex-history-empty">
+          <CortexMark />
+          <h2>No chat selected</h2>
+          <p>Start a new chat or pick a chat on the left.</p>
+          <button type="button" className="cortex-primary" onClick={() => startNewCortex("mouse")}>Start a chat</button>
         </div>}
       </div>
     </section>}
   </div>;
 
   if (!previewStage) return shell;
-  return <div className="rewind-stage">
+  return <div className="cortex-stage">
     {shell}
-    <p className="rewind-stage-note">Rewind · click rewind to ask · open chats for history and settings</p>
+    <p className="cortex-stage-note">Cortex · click the brain to ask · open chats for history and settings</p>
   </div>;
 }

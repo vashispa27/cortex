@@ -3,7 +3,7 @@
 `native/Capture.swift` is a read-only, one-shot helper. Build it with:
 
 ```sh
-swiftc crates/platform-mac/native/Capture.swift -o /tmp/rewind-capture-helper
+swiftc crates/platform-mac/native/Capture.swift -o /tmp/cortex-capture-helper
 ```
 
 `--permission` reports whether Accessibility permission is already granted. It does not open a permission prompt. `--request-permission` is the only mode that asks macOS to show the Accessibility permission prompt. `--read-frontmost` emits one JSON line: `{"status":"ok","window":...}` with the `RawWindow` shape from `crates/capture`, or `{"status":"skipped","reason":"..."}`. The `ok` envelope may include `idle_ms`. Repeated `--exclude-app=<bundle-id>` flags reject matching foreground apps before AX access.

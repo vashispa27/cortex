@@ -16,13 +16,13 @@ Off by default. Configuration:
 
 | Variable | Default / meaning |
 |---|---|
-| `REWIND_CONTEXT_ENABLED` | `1` enables context generation and contextual indexing |
-| `REWIND_CONTEXT_PROVIDER` | `local` by default; the eval helper explicitly sets `openrouter` |
-| `REWIND_CONTEXT_URL` | Provider default: loopback HTTP for local; `https://openrouter.ai/api/v1/chat/completions` for OpenRouter. Other cloud hosts, proxies and redirects are refused |
-| `REWIND_CONTEXT_MODEL` | Local default `mlx-community/Qwen3.5-4B-MLX-4bit`; OpenRouter default `anthropic/claude-haiku-4.5` |
-| `REWIND_CONTEXT_API_KEY` / `OPENROUTER_API_KEY` | OpenRouter credentials; falls back to the private `Rewind/openrouter.key` saved by Settings |
-| `REWIND_CONTEXT_MAX_TOKENS` | `160`, positive integer |
-| `REWIND_CONTEXT_STRICT` | `1` fails on model errors or captures over 24,000 bytes; otherwise stores no context |
+| `CORTEX_CONTEXT_ENABLED` | `1` enables context generation and contextual indexing |
+| `CORTEX_CONTEXT_PROVIDER` | `local` by default; the eval helper explicitly sets `openrouter` |
+| `CORTEX_CONTEXT_URL` | Provider default: loopback HTTP for local; `https://openrouter.ai/api/v1/chat/completions` for OpenRouter. Other cloud hosts, proxies and redirects are refused |
+| `CORTEX_CONTEXT_MODEL` | Local default `mlx-community/Qwen3.5-4B-MLX-4bit`; OpenRouter default `anthropic/claude-haiku-4.5` |
+| `CORTEX_CONTEXT_API_KEY` / `OPENROUTER_API_KEY` | OpenRouter credentials; falls back to the private `Cortex/openrouter.key` saved by Settings |
+| `CORTEX_CONTEXT_MAX_TOKENS` | `160`, positive integer |
+| `CORTEX_CONTEXT_STRICT` | `1` fails on model errors or captures over 24,000 bytes; otherwise stores no context |
 
 Temperature is zero; OpenRouter reasoning is disabled. Cloud requests set
 `provider.data_collection=deny` ([OpenRouter routing docs](https://openrouter.ai/docs/guides/routing/provider-selection)). Validation collapses whitespace,
@@ -35,7 +35,7 @@ Legacy category columns may remain unused in existing databases; no destructive 
 ## Prepare and benchmark
 
 Read [TEST_MODE.md](../evals/TEST_MODE.md). Never access real memory, except pinned embedding model
-files via `REWIND_MODEL_DIR`. The helper backs up `eval-memory` using SQLite's backup API and copies
+files via `CORTEX_MODEL_DIR`. The helper backs up `eval-memory` using SQLite's backup API and copies
 `captures.jsonl` into `eval-memory-context-haiku`; the baseline and category archive are preserved.
 Only a marked unfinished copy may resume. A completed archive cannot be overwritten.
 Progress commits per snapshot, keeping requests for one capture consecutive. A generation
@@ -44,20 +44,20 @@ Only the pinned 32M embedding model runs locally during indexing, with two worke
 Generation logs stay under gitignored `evals/private/`.
 
 ```bash
-cargo build --release -p rewind
+cargo build --release -p cortex
 python3 evals/tools/prepare_context_archive.py
-# Uses your saved OpenRouter key, or OPENROUTER_API_KEY / REWIND_CONTEXT_API_KEY.
-# Helper invokes: rewind prepare-context-eval <output-dir>
-# Completion marker: .rewind-context-eval-ready
+# Uses your saved OpenRouter key, or OPENROUTER_API_KEY / CORTEX_CONTEXT_API_KEY.
+# Helper invokes: cortex prepare-context-eval <output-dir>
+# Completion marker: .cortex-context-eval-ready
 
 # User runs this separately; answering stays 4B and the judge stays Jev:
 # This answer benchmark still requires the baseline local answer server; preparation does not.
 evals/run-context.sh
 # EVAL_RUN, EVAL_GOLD and EVAL_ARCHIVE overrides are honored.
 
-REWIND_MODEL_DIR="$HOME/Library/Application Support/Rewind/local-memory/models/1e5a03f8eeb2c98b928fbbd846f22f816360919f" \
+CORTEX_MODEL_DIR="$HOME/Library/Application Support/Cortex/local-memory/models/1e5a03f8eeb2c98b928fbbd846f22f816360919f" \
 RAYON_NUM_THREADS=2 OMP_NUM_THREADS=2 python3 evals/tools/run_gold.py \
-  --archive "$HOME/Library/Application Support/Rewind/eval-memory-context-haiku" \
+  --archive "$HOME/Library/Application Support/Cortex/eval-memory-context-haiku" \
   --gold evals/private/gold-v1.jsonl --out evals/private/retrieval_context.json
 python3 evals/tools/compare_runs.py baseline.judged.jsonl candidate.judged.jsonl \
   > evals/private/context-comparison.md

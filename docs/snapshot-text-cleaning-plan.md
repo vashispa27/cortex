@@ -2,11 +2,11 @@
 
 ## Implementation status (16 October 2026)
 
-Implemented in the macOS `rewind` CLI as cleaner v3. The helper now records bounded AX ancestor paths and visible bounds. SQLite stores the original AX JSON, cleaned body, quality, coverage, and per-node removal reasons. Search indexes clean message/paragraph chunks in Qdrant Edge. `capture --clean-dry-run` previews changes; `capture --apply-cleaning` backs up SQLite, reprocesses saved AX nodes, merges duplicate observations, regenerates derived records, and rebuilds Qdrant. The reviewed ChatGPT example retained the recommendation and nutrition quantities while removing sidebar and action controls. Eight old local rows lacked AX JSON and remain preserved but unindexed. Fresh live output from the revised helper still needs app-by-app inspection; generic unknown regions are deliberately marked `uncertain`.
+Implemented in the macOS `cortex` CLI as cleaner v3. The helper now records bounded AX ancestor paths and visible bounds. SQLite stores the original AX JSON, cleaned body, quality, coverage, and per-node removal reasons. Search indexes clean message/paragraph chunks in Qdrant Edge. `capture --clean-dry-run` previews changes; `capture --apply-cleaning` backs up SQLite, reprocesses saved AX nodes, merges duplicate observations, regenerates derived records, and rebuilds Qdrant. The reviewed ChatGPT example retained the recommendation and nutrition quantities while removing sidebar and action controls. Eight old local rows lacked AX JSON and remain preserved but unindexed. Fresh live output from the revised helper still needs app-by-app inspection; generic unknown regions are deliberately marked `uncertain`.
 
 ## What is wrong today
 
-`rewind` currently turns every visible AX node into a `role [context]: value` line in `snapshots.body`. That mixes answer text with browser tabs, navigation, feedback buttons, the prompt box, and repeated labels. The helper also flattens its output (`children: []`), so the Rust code has little information about which part of the window a node belongs to. The installed Rewind database is separate; its captured sidebar example shows why selecting the content region matters as much as stripping AX tags.
+`cortex` currently turns every visible AX node into a `role [context]: value` line in `snapshots.body`. That mixes answer text with browser tabs, navigation, feedback buttons, the prompt box, and repeated labels. The helper also flattens its output (`children: []`), so the Rust code has little information about which part of the window a node belongs to. The installed Cortex database is separate; its captured sidebar example shows why selecting the content region matters as much as stripping AX tags.
 
 ## Desired stored result
 

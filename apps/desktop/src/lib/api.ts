@@ -116,7 +116,7 @@ export type RetrievalData = {
 
 function assertSemanticEngine(data: RetrievalData): void {
   if (data.retrieval?.engine !== "qdrant_edge_hybrid" || !data.retrieval.dense || !data.retrieval.bm25) {
-    throw new LocalApiError("The semantic memory engine is unavailable. Restart Rewind.", "WRONG_ENGINE");
+    throw new LocalApiError("The semantic memory engine is unavailable. Restart Cortex.", "WRONG_ENGINE");
   }
 }
 

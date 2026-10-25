@@ -43,7 +43,7 @@ jobs:
         run: cargo test --workspace --locked
       - name: Build local daemon for MCP integration
         if: runner.os == 'Linux'
-        run: cargo build -p rewind-daemon --locked
+        run: cargo build -p cortex-daemon --locked
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         if: runner.os == 'Linux' || runner.os == 'macOS'
         with:
@@ -51,7 +51,7 @@ jobs:
           package-manager-cache: false
       - name: Test MCP against the local daemon
         if: runner.os == 'Linux'
-        run: npm ci --prefix crates/mcp && REWIND_DAEMON_BIN="$PWD/target/debug/rewind-daemon" npm test --prefix crates/mcp
+        run: npm ci --prefix crates/mcp && CORTEX_DAEMON_BIN="$PWD/target/debug/cortex-daemon" npm test --prefix crates/mcp
       - name: Build and test native desktop shell
         if: runner.os == 'macOS'
         run: npm ci --prefix apps/desktop && npm run build --prefix apps/desktop && cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml --locked && npm --prefix apps/desktop run tauri build -- --no-bundle

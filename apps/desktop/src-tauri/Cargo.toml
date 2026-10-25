@@ -1,12 +1,12 @@
 [package]
-name = "rewind"
+name = "cortex"
 version = "0.1.0"
 description = "Local-first desktop memory shell"
-authors = ["Rewind contributors"]
+authors = ["Cortex contributors"]
 edition = "2021"
 
 [lib]
-name = "rewind_lib"
+name = "cortex_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
