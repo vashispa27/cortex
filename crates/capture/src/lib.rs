@@ -2,7 +2,6 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
-pub mod edit;
 
 pub const REDACTION_VERSION: u32 = 1;
 pub const MAX_NODES: usize = 5_000;

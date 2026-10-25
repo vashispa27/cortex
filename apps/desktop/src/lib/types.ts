@@ -1,6 +1,7 @@
+import type { PendingIntent } from "./intent";
 import type { MemoryHit } from "./api";
 
-export type Page = "today" | "timeline" | "ask" | "memory" | "wiki" | "write" | "reminders" | "settings" | "tasks";
+export type Page = "today" | "timeline" | "ask" | "memories" | "scheduled" | "agents" | "settings";
 
 export type SettingsPage =
   | "account"
@@ -8,7 +9,6 @@ export type SettingsPage =
   | "capture"
   | "notch"
   | "shortcuts"
-  | "voice"
   | "appearance"
   | "memory"
   | "identity"
@@ -27,6 +27,8 @@ export type ChatMessage = {
   kind?: "summarize";
   /** Where the selection came from, for example "Safari · nytimes.com". */
   origin?: string;
+  /** A clarification may resume only this explicitly requested schedule. */
+  pendingIntent?: PendingIntent;
   /** A visible note about the excerpt, for example that it was cut. */
   note?: string;
 };

@@ -1,6 +1,6 @@
 {
   "identifier": "default",
   "description": "Main workspace and notch drop may invoke approved local commands only",
-  "windows": ["main", "notch"],
+  "windows": ["main", "notch", "notch-display-*"],
   "permissions": ["core:default"]
 }

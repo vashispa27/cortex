@@ -1,18 +1,14 @@
 import { AnswerContent, AnswerSourceLabel } from "./components/AnswerContent";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Check, CornerDownLeft, Maximize2, Pause, Play, Plus, Settings2, X } from "lucide-react";
+import { CornerDownLeft, Maximize2, Pause, Play, Plus, Settings2, X } from "lucide-react";
 import { listen } from "@tauri-apps/api/event";
 import { desktopRuntime, getServiceSettings, setEvalCapture } from "./lib/api";
 import { demoSearch } from "./lib/demo";
-import { answerFromMemory } from "./lib/answer";
+import { answerCortex } from "./lib/answer";
 import { loadPreferences } from "./lib/storage";
-import { configureAssist, configureCortexTrigger, configureTestMode, focusNotch, openMain, restorePreviousApp, setAssistActive, setNotchMode, setNotchVisible, writeActiveSession, type NotchMode } from "./lib/notch";
+import { configureNotchDisplay, configureCortexTrigger, configureTestMode, focusNotch, openMain, restorePreviousApp, setNotchMode, setNotchVisible, writeActiveSession, type NotchMode } from "./lib/notch";
 import {
-  appInitial, applyFailureMessage, applyText, assistChip, composeHint, generateCompletion, generateRewrite, generateSummary, originLabel,
-  TONES, TRUNCATED_NOTE, targetStillCurrent, undoInsertion, type FocusContext, type IntentPayload, type RewriteTone, type UndoToken,
-} from "./lib/assist";
-import {
-  appendMessage, commitSession, composeAnswer, loadSessions, newSession, newSummarySession, sessionsStorageKey, sessionTime, triggerSymbol,
+  appendMessage, commitSession, composeAnswer, loadSessions, newSession, sessionsStorageKey, sessionTime, triggerSymbol,
   type CortexSession,
 } from "./lib/cortex";
 import type { ChatMessage } from "./lib/types";
@@ -36,15 +32,6 @@ function SelectionQuote({ message }: { message: ChatMessage }) {
     {long && <button type="button" onClick={() => setOpen(!open)}>{open ? "Show less" : "Show more"}</button>}
   </div>;
 }
-
-/** What the assist panels in the notch are showing. */
-type Assist =
-  | { phase: "idle" }
-  | { phase: "working"; kind: "autocomplete" | "rewrite"; context: FocusContext }
-  | { phase: "done"; label: string; undo: UndoToken | null; undoState: "ready" | "busy" | "disabled" }
-  | { phase: "result"; kind: "autocomplete" | "rewrite"; context: FocusContext; original: string; text: string; tone: RewriteTone | null; busy: boolean; message: string; copied: boolean };
-
-const idleAssist: Assist = { phase: "idle" };
 
 function CortexThread({ session, busy }: { session: CortexSession; busy: boolean }) {
   return <>
@@ -70,8 +57,6 @@ export default function NotchApp() {
   const [busy, setBusy] = useState(false);
   const [busySessionId, setBusySessionId] = useState<string | null>(null);
   const [tapCount, setTapCount] = useState(0);
-  const [assist, setAssist] = useState<Assist>(idleAssist);
-  const [hint, setHint] = useState<string | null>(null);
   // Test mode (Settings): searches use the separate eval archive and this button records into it.
   const [testMode, setTestMode] = useState(false);
   const [evalRecording, setEvalRecording] = useState(false);
@@ -85,14 +70,8 @@ export default function NotchApp() {
   const busyRef = useRef(false);
   const sessionsRef = useRef(sessions);
   const tapTimerRef = useRef<number | null>(null);
-  // Bumped to cancel whatever assist request is in flight; a late reply from an older one is dropped.
-  const assistSeqRef = useRef(0);
-  const assistTimerRef = useRef<number | null>(null);
-  const assistRef = useRef<Assist>(idleAssist);
-  const modeRef = useRef<NotchMode>(initialMode);
   const actionsRef = useRef({
     startNewCortex: (_source: "mouse" | "hotkey") => {}, openHistory: () => {}, closeDrop: () => {}, collapseOnly: () => {},
-    onIntent: (_payload: IntentPayload) => {}, cancelAssist: () => {},
   });
 
   const activeSession = sessions.find((session) => session.id === activeSessionId) ?? null;
@@ -104,12 +83,6 @@ export default function NotchApp() {
   };
 
   const collapseOnly = () => {
-    assistSeqRef.current += 1;
-    if (assistTimerRef.current !== null) { window.clearTimeout(assistTimerRef.current); assistTimerRef.current = null; }
-    void setAssistActive(false);
-    assistRef.current = idleAssist;
-    setAssist(idleAssist);
-    setHint(null);
     hotkeyRef.current = false;
     setMode("collapsed");
     setActiveSessionId(null);
@@ -123,12 +96,8 @@ export default function NotchApp() {
     if (preferences.hideDrop) window.setTimeout(() => { void setNotchVisible(false); }, 180);
   };
 
-  const startNewCortex = (source: "mouse" | "hotkey" = "mouse", reason: string | null = null) => {
+  const startNewCortex = (source: "mouse" | "hotkey" = "mouse") => {
     if (busyRef.current) return;
-    assistSeqRef.current += 1;
-    assistRef.current = idleAssist;
-    setAssist(idleAssist);
-    setHint(composeHint(reason));
     hotkeyRef.current = source === "hotkey";
     setTapCount(0);
     setActiveSessionId(null);
@@ -197,7 +166,7 @@ export default function NotchApp() {
     try {
       const delay = base ? 500 : 1350;
       const [answer] = await Promise.all([
-        sample ? Promise.resolve().then(() => { const found = demoSearch(question); return { body: composeAnswer(question, found.results, true), hits: found.results.slice(0, 3), source: "memory" as const }; }) : answerFromMemory(question, base?.messages ?? []),
+        sample ? Promise.resolve().then(() => { const found = demoSearch(question); return { body: composeAnswer(question, found.results, true), hits: found.results.slice(0, 3), source: "memory" as const }; }) : answerCortex(question, base?.messages ?? []),
         new Promise((resolve) => window.setTimeout(resolve, delay)),
       ]);
       const assistant: ChatMessage = {
@@ -205,6 +174,7 @@ export default function NotchApp() {
         body: answer.body,
         hits: answer.hits,
         source: answer.source,
+        ...("pendingIntent" in answer ? { pendingIntent: answer.pendingIntent } : {}),
       };
       commit(appendMessage(session, assistant));
       if (target === "bar") {
@@ -227,199 +197,6 @@ export default function NotchApp() {
     }
   };
 
-  // ---- Double-tap assist: autocomplete, rewrite and summarize -------------------------------------
-
-  const showAssist = (next: Assist, nextMode: NotchMode) => {
-    assistRef.current = next;
-    setAssist(next);
-    setMode(nextMode);
-  };
-
-  const scheduleCollapse = (seq: number, ms: number) => {
-    if (assistTimerRef.current !== null) window.clearTimeout(assistTimerRef.current);
-    assistTimerRef.current = window.setTimeout(() => {
-      assistTimerRef.current = null;
-      if (assistSeqRef.current === seq) actionsRef.current.collapseOnly();
-    }, ms);
-  };
-
-  const failedAssist = (seq: number, kind: "autocomplete" | "rewrite", context: FocusContext, original: string, reason: unknown) => {
-    if (assistSeqRef.current !== seq) return;
-    void setAssistActive(false);
-    const message = reason instanceof Error ? reason.message : String(reason);
-    showAssist({ phase: "result", kind, context, original, text: "", tone: null, busy: false, message: message || "Cortex could not do that.", copied: false }, "assist-result");
-  };
-
-  const runAutocomplete = async (context: FocusContext) => {
-    const seq = ++assistSeqRef.current;
-    hotkeyRef.current = true;
-    showAssist({ phase: "working", kind: "autocomplete", context }, "assist");
-    void setAssistActive(true);
-    try {
-      const text = await generateCompletion(context);
-      if (assistSeqRef.current !== seq) return;
-      // From here the write cannot be cancelled by typing: the guard decides whether it still applies.
-      void setAssistActive(false);
-      if (!text.trim()) {
-        showAssist({ phase: "result", kind: "autocomplete", context, original: "", text: "", tone: null, busy: false, message: "No suggestion", copied: false }, "assist-result");
-        scheduleCollapse(seq, 1800);
-        return;
-      }
-      const result = await applyText(context, text);
-      if (assistSeqRef.current !== seq) return;
-      if (result.outcome === "applied") {
-        showAssist({ phase: "done", label: "Inserted", undo: result.undo, undoState: result.undo ? "ready" : "disabled" }, "assist-done");
-        scheduleCollapse(seq, 4000);
-      } else {
-        showAssist({ phase: "result", kind: "autocomplete", context, original: "", text, tone: null, busy: false, message: applyFailureMessage(result, "autocomplete"), copied: false }, "assist-result");
-      }
-    } catch (reason) {
-      failedAssist(seq, "autocomplete", context, "", reason);
-    }
-  };
-
-  const runRewrite = async (context: FocusContext, tone: RewriteTone | null = null) => {
-    const seq = ++assistSeqRef.current;
-    hotkeyRef.current = true;
-    const original = context.selected_text;
-    const previous = assistRef.current;
-    if (previous.phase === "result" && previous.kind === "rewrite") {
-      showAssist({ ...previous, tone, busy: true, message: "" }, "assist-result");
-    } else {
-      showAssist({ phase: "working", kind: "rewrite", context }, "assist");
-    }
-    void setAssistActive(true);
-    try {
-      const text = await generateRewrite(context, tone ?? undefined);
-      if (assistSeqRef.current !== seq) return;
-      void setAssistActive(false);
-      showAssist({ phase: "result", kind: "rewrite", context, original, text, tone, busy: false, message: text.trim() ? "" : "No rewrite suggested", copied: false }, "assist-result");
-    } catch (reason) {
-      failedAssist(seq, "rewrite", context, original, reason);
-    }
-  };
-
-  const runSummarize = async (context: FocusContext) => {
-    if (busyRef.current) return;
-    assistSeqRef.current += 1;
-    void setAssistActive(false);
-    setAssist(idleAssist);
-    assistRef.current = idleAssist;
-    const excerpt = context.selected_text.slice(0, 24_000);
-    const truncated = context.selected_text.length >= 24_000;
-    const session = newSummarySession(excerpt, originLabel(context), truncated ? TRUNCATED_NOTE : undefined);
-    commit(session);
-    setActiveSessionId(session.id);
-    setBusy(true);
-    busyRef.current = true;
-    setBusySessionId(session.id);
-    // Opened without focus, so reading the summary does not pull focus from the page.
-    hotkeyRef.current = true;
-    setInput("");
-    setMode("answer");
-    try {
-      const summary = await generateSummary(context);
-      if (!summary.text.trim()) throw new Error("The model returned no summary.");
-      commit(appendMessage(session, { role: "assistant", body: summary.text, source: "selection" }));
-    } catch (reason) {
-      commit(appendMessage(session, { role: "assistant", body: `Cortex could not summarize: ${reason instanceof Error ? reason.message : String(reason)}` }));
-    } finally {
-      setBusy(false);
-      busyRef.current = false;
-      setBusySessionId(null);
-    }
-  };
-
-  const replaceWithRewrite = async () => {
-    const current = assistRef.current;
-    if (current.phase !== "result" || current.kind !== "rewrite" || !current.text.trim() || current.busy) return;
-    const seq = ++assistSeqRef.current;
-    showAssist({ ...current, busy: true, message: "" }, "assist-result");
-    try {
-      const result = await applyText(current.context, current.text);
-      if (assistSeqRef.current !== seq) return;
-      if (result.outcome === "applied") {
-        showAssist({ phase: "done", label: "Replaced", undo: null, undoState: "disabled" }, "assist-done");
-        scheduleCollapse(seq, 1600);
-      } else {
-        showAssist({ ...current, busy: false, message: applyFailureMessage(result, "rewrite") }, "assist-result");
-      }
-    } catch (reason) {
-      failedAssist(seq, "rewrite", current.context, current.original, reason);
-    }
-  };
-
-  const insertSuggestion = async () => {
-    const current = assistRef.current;
-    if (current.phase !== "result" || current.kind !== "autocomplete" || !current.text.trim() || current.busy) return;
-    const seq = ++assistSeqRef.current;
-    showAssist({ ...current, busy: true, message: "" }, "assist-result");
-    try {
-      const result = await applyText(current.context, current.text);
-      if (assistSeqRef.current !== seq) return;
-      if (result.outcome === "applied") {
-        showAssist({ phase: "done", label: "Inserted", undo: result.undo, undoState: result.undo ? "ready" : "disabled" }, "assist-done");
-        scheduleCollapse(seq, 4000);
-      } else {
-        showAssist({ ...current, busy: false, message: applyFailureMessage(result, "autocomplete") }, "assist-result");
-      }
-    } catch (reason) {
-      failedAssist(seq, "autocomplete", current.context, "", reason);
-    }
-  };
-
-  const undoLastInsertion = async () => {
-    const current = assistRef.current;
-    if (current.phase !== "done" || !current.undo || current.undoState !== "ready") return;
-    const token = current.undo;
-    showAssist({ ...current, undoState: "busy" }, "assist-done");
-    try {
-      const result = await undoInsertion(token);
-      if (result.outcome === "applied") actionsRef.current.collapseOnly();
-      else showAssist({ ...current, undoState: "disabled" }, "assist-done");
-    } catch {
-      showAssist({ ...current, undoState: "disabled" }, "assist-done");
-    }
-  };
-
-  const copyResult = async () => {
-    const current = assistRef.current;
-    if (current.phase !== "result" || !current.text) return;
-    try {
-      await navigator.clipboard.writeText(current.text);
-      showAssist({ ...current, copied: true }, "assist-result");
-      window.setTimeout(() => { if (assistRef.current.phase === "result") showAssist({ ...(assistRef.current as Extract<Assist, { phase: "result" }>), copied: false }, "assist-result"); }, 1200);
-    } catch {
-      showAssist({ ...current, message: "Couldn't copy. Select the text and copy it." }, "assist-result");
-    }
-  };
-
-  const summarizeInstead = () => {
-    const current = assistRef.current;
-    if (current.phase !== "result") return;
-    void runSummarize(current.context);
-  };
-
-  const onIntent = (payload: IntentPayload) => {
-    setTapCount(0);
-    const context = payload.context;
-    const current = assistRef.current;
-    // A double-tap while a request is on its way cancels it.
-    if (current.phase === "working") { actionsRef.current.cancelAssist(); return; }
-    // A further double-tap while a rewrite preview is open means Replace.
-    if (current.phase === "result" && current.kind === "rewrite" && current.text.trim() && modeRef.current === "assist-result") { void replaceWithRewrite(); return; }
-    if (busyRef.current) return;
-    if (context && payload.intent === "autocomplete") void runAutocomplete(context);
-    else if (context && payload.intent === "rewrite") void runRewrite(context);
-    else if (context && payload.intent === "summarize") void runSummarize(context);
-    else startNewCortex("hotkey", payload.hint);
-  };
-
-  const cancelAssist = () => {
-    const current = assistRef.current;
-    if (current.phase === "working") actionsRef.current.collapseOnly();
-  };
-
   const submitBar = (event: FormEvent) => {
     event.preventDefault();
     void submitQuestion(input, "bar");
@@ -430,8 +207,7 @@ export default function NotchApp() {
     void submitQuestion(historyInput, "history");
   };
 
-  actionsRef.current = { startNewCortex, openHistory, closeDrop, collapseOnly, onIntent, cancelAssist };
-  modeRef.current = mode;
+  actionsRef.current = { startNewCortex, openHistory, closeDrop, collapseOnly };
 
   useEffect(() => { sessionsRef.current = sessions; }, [sessions]);
   useEffect(() => { busyRef.current = busy; }, [busy]);
@@ -454,17 +230,13 @@ export default function NotchApp() {
   }, []);
 
   useEffect(() => {
-    const assistMode = effectiveMode === "assist" || effectiveMode === "assist-done" || effectiveMode === "assist-result";
-    const shouldFocus = effectiveMode !== "collapsed" && !assistMode && (effectiveMode === "compose" || effectiveMode === "history" || !hotkeyRef.current);
+    const shouldFocus = effectiveMode !== "collapsed" && (effectiveMode === "compose" || effectiveMode === "history" || !hotkeyRef.current);
     void setNotchMode(effectiveMode, shouldFocus, preferences.reduceMotion);
   }, [effectiveMode, preferences.reduceMotion]);
   useEffect(() => { void configureCortexTrigger(preferences.cortexTrigger, preferences.cortexHotkey); }, [preferences.cortexTrigger, preferences.cortexHotkey]);
   useEffect(() => {
-    void configureAssist({
-      autocomplete: preferences.autocompleteOnTap, summarize: preferences.summarizeOnTap, rewrite: preferences.rewriteOnTap,
-      privateWindows: preferences.assistInPrivateWindows, showOverFullScreen: preferences.showOverFullScreen,
-    });
-  }, [preferences.autocompleteOnTap, preferences.summarizeOnTap, preferences.rewriteOnTap, preferences.assistInPrivateWindows, preferences.showOverFullScreen]);
+    void configureNotchDisplay(preferences.showOverFullScreen);
+  }, [preferences.showOverFullScreen]);
   useEffect(() => { if (preferences.hideDrop) void setNotchVisible(false); }, [preferences.hideDrop]);
 
   // Clicking away from the open notch dismisses it (not while thinking). Ignore the blur until the window has had focus.
@@ -536,7 +308,7 @@ export default function NotchApp() {
       const count = Number(event.payload) >= 2 ? 2 : 1;
       if (tapTimerRef.current !== null) window.clearTimeout(tapTimerRef.current);
       setTapCount(count);
-      // The second tap only shows the badge; `cortex-intent` says what it means once the field is read.
+      // The second tap only shows the badge; `cortex-compose` opens the question box.
       tapTimerRef.current = window.setTimeout(() => {
         tapTimerRef.current = null;
         setTapCount(0);
@@ -556,24 +328,9 @@ export default function NotchApp() {
     if (!desktopRuntime()) return;
     let disposed = false;
     const offs: (() => void)[] = [];
-    void listen<IntentPayload>("cortex-intent", (event) => actionsRef.current.onIntent(event.payload)).then((off) => { if (disposed) off(); else offs.push(off); });
-    void listen("cortex-cancel", () => actionsRef.current.cancelAssist()).then((off) => { if (disposed) off(); else offs.push(off); });
+    void listen("cortex-compose", () => actionsRef.current.startNewCortex("hotkey")).then((off) => { if (disposed) off(); else offs.push(off); });
     return () => { disposed = true; offs.forEach((off) => off()); };
   }, []);
-
-  // While a rewrite preview is open, watch the field: if its text or selection moves, the preview is stale.
-  useEffect(() => {
-    if (assist.phase !== "result" || assist.kind !== "rewrite" || assist.busy || !desktopRuntime()) return;
-    const context = assist.context;
-    let misses = 0;
-    const timer = window.setInterval(() => {
-      void targetStillCurrent(context).then((current) => {
-        misses = current ? 0 : misses + 1;
-        if (misses >= 2) actionsRef.current.collapseOnly();
-      }).catch(() => { misses += 1; });
-    }, 1000);
-    return () => window.clearInterval(timer);
-  }, [assist]);
 
   useEffect(() => {
     if (!desktopRuntime() || isPreview) return;
@@ -624,33 +381,13 @@ export default function NotchApp() {
       </button>
 
       {effectiveMode === "compose" && <form className="cortex-compose" onSubmit={submitBar}>
-        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} aria-label="Ask Cortex" placeholder={hint ?? (sample ? "Ask Cortex in sample memory…" : "Ask Cortex…")} />
+        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} aria-label="Ask Cortex" placeholder={sample ? "Ask Cortex in sample memory…" : "Ask Cortex…"} />
         <button type="submit" className="cortex-enter" aria-label="Send to Cortex" title="Enter" disabled={!input.trim() || busy}><CornerDownLeft size={13} /></button>
       </form>}
 
       {effectiveMode === "answer" && <span className="cortex-history-label">Chat</span>}
 
       {effectiveMode === "thinking" && <div className="cortex-thinking-label"><span>Thinking</span><i /><i /><i /></div>}
-
-      {effectiveMode === "assist" && assist.phase === "working" && <div className="cortex-assist-chip" role="status">
-        <span className="cortex-app-dot" aria-hidden="true">{appInitial(assist.context)}</span>
-        <span>{assistChip(assist.context, assist.kind)}</span>
-      </div>}
-
-      {effectiveMode === "assist-done" && assist.phase === "done" && <>
-        <div className="cortex-assist-done" role="status"><Check size={14} aria-hidden="true" /><span>{assist.label}</span></div>
-        {assist.label === "Inserted" && <button type="button" className="cortex-assist-button" disabled={assist.undoState !== "ready"} onMouseDown={(event) => event.preventDefault()} onClick={() => void undoLastInsertion()}>
-          {assist.undoState === "busy" ? "Undoing…" : assist.undoState === "ready" ? "Undo" : "Use ⌘Z"}
-        </button>}
-      </>}
-
-      {effectiveMode === "assist-result" && assist.phase === "result" && <>
-        <div className="cortex-assist-chip">
-          <span className="cortex-app-dot" aria-hidden="true">{appInitial(assist.context)}</span>
-          <span>{assist.kind === "rewrite" ? "Rewrite" : "Suggestion"}</span>
-        </div>
-        <div className="cortex-actions"><button type="button" className="cortex-icon" aria-label="Dismiss" title="Dismiss" onMouseDown={(event) => event.preventDefault()} onClick={closeDrop}><X size={13} /></button></div>
-      </>}
 
       {effectiveMode === "history" && <>
         <span className="cortex-history-label">Chats</span>
@@ -672,24 +409,6 @@ export default function NotchApp() {
         </div>
       </>}
     </div>
-
-    {effectiveMode === "assist" && <span className="cortex-scan-track cortex-assist-track"><i /></span>}
-
-    {effectiveMode === "assist-result" && assist.phase === "result" && <section className="cortex-assist-panel">
-      <div className="cortex-assist-text" data-busy={assist.busy} data-empty={!assist.text}>{assist.busy ? "Working…" : assist.text || assist.message}</div>
-      {assist.text && assist.message && <p className="cortex-assist-note">{assist.message}</p>}
-      {assist.kind === "rewrite" && <div className="cortex-tones" role="group" aria-label="Tone">
-        {TONES.map((tone) => <button type="button" key={tone.id} data-active={assist.tone === tone.id} disabled={assist.busy} onMouseDown={(event) => event.preventDefault()} onClick={() => void runRewrite(assist.context, tone.id)}>{tone.label}</button>)}
-      </div>}
-      <footer className="cortex-assist-actions">
-        {assist.kind === "rewrite" && <button type="button" className="cortex-assist-button primary" disabled={assist.busy || !assist.text.trim()} onMouseDown={(event) => event.preventDefault()} onClick={() => void replaceWithRewrite()}>Replace</button>}
-        {assist.kind === "autocomplete" && assist.text.trim() !== "" && <button type="button" className="cortex-assist-button primary" disabled={assist.busy} onMouseDown={(event) => event.preventDefault()} onClick={() => void insertSuggestion()}>Insert</button>}
-        {assist.kind === "rewrite" && <button type="button" className="cortex-assist-button" disabled={assist.busy} onMouseDown={(event) => event.preventDefault()} onClick={summarizeInstead}>Summarize instead</button>}
-        {assist.text.trim() !== "" && <button type="button" className="cortex-assist-button" onMouseDown={(event) => event.preventDefault()} onClick={() => void copyResult()}>{assist.copied ? "Copied" : "Copy"}</button>}
-        <button type="button" className="cortex-assist-button" onMouseDown={(event) => event.preventDefault()} onClick={closeDrop}>Dismiss</button>
-        {assist.kind === "rewrite" && assist.text.trim() !== "" && <small>Double-tap {trigger} to replace</small>}
-      </footer>
-    </section>}
 
     {effectiveMode === "thinking" && <div className="cortex-cloud">
       <span className="cortex-scan-track"><i /></span>

@@ -60,7 +60,7 @@ describe("cortex sessions", () => {
   });
 });
 
-describe("summaries and the command key", () => {
+describe("the command key", () => {
   it("names the Command trigger", async () => {
     const { triggerName: name, triggerSymbol: symbol } = await import("./cortex");
     expect(symbol("rightCommand")).toBe("⌘");
@@ -69,12 +69,4 @@ describe("summaries and the command key", () => {
     expect(name("leftCommand")).toBe("Left Command");
   });
 
-  it("starts a summary chat with the excerpt as a collapsed quote and a short title", async () => {
-    const { newSummarySession } = await import("./cortex");
-    const created = newSummarySession("The council voted on Tuesday to approve the new transit levy after a long debate.", "Safari · example.com", "Summarized the first ~24k characters", 5);
-    expect(created.title).toBe("Summary: The council voted on Tuesday to");
-    expect(created.messages).toHaveLength(1);
-    expect(created.messages[0]).toMatchObject({ role: "user", kind: "summarize", origin: "Safari · example.com", note: "Summarized the first ~24k characters" });
-    expect(created.messages[0].body).toContain("transit levy");
-  });
 });

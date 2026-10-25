@@ -6,7 +6,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const DEFAULT_PLANS = Object.freeze({ free: { request_limit: 100, features: ['rewrite', 'answer', 'extract', 'summarize'] } });
+const DEFAULT_PLANS = Object.freeze({ free: { request_limit: 100, features: ['answer', 'extract', 'summarize'] } });
 function send(res, status, value) { res.writeHead(status, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-content-type-options': 'nosniff' }); res.end(JSON.stringify(value)); }
 function error(res, status, code, message) { send(res, status, { error: { code, message } }); }
 function equalSecret(a, b) { const x = Buffer.from(a || ''); const y = Buffer.from(b || ''); return x.length === y.length && timingSafeEqual(x, y); }
@@ -20,7 +20,7 @@ async function readBody(req, max = 64_000) {
 
 export function createControl({ dbPath = ':memory:', secret, plans = DEFAULT_PLANS, webhookSecret = '', releases = {} } = {}) {
   if (!secret || secret.length < 16) throw new Error('GF_CONTROL_SECRET must contain at least 16 characters');
-  if (!plans.free || Object.values(plans).some((p) => !Number.isInteger(p.request_limit) || p.request_limit < 0 || !Array.isArray(p.features) || p.features.some((f) => !['rewrite','answer','extract','summarize','transcribe'].includes(f)))) throw new Error('Invalid plan configuration');
+  if (!plans.free || Object.values(plans).some((p) => !Number.isInteger(p.request_limit) || p.request_limit < 0 || !Array.isArray(p.features) || p.features.some((f) => !['answer','extract','summarize'].includes(f)))) throw new Error('Invalid plan configuration');
   if (dbPath !== ':memory:') mkdirSync(dirname(dbPath), { recursive: true });
   const db = new DatabaseSync(dbPath);
   db.exec('PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; PRAGMA busy_timeout=5000;');

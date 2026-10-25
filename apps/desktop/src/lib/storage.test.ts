@@ -1,26 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { afterEach, vi } from "vitest";
-import { defaultLayers, dueOccurrence, loadPreferences, type Reminder } from "./storage";
-
-const base: Reminder = {
-  id: "test", text: "Review", at: "2026-10-16T09:00:00.000Z", repeat: "none", delivered: [],
-};
-
-describe("reminder occurrence deduplication", () => {
-  it("delivers a one-time reminder only after its time and once", () => {
-    expect(dueOccurrence(base, new Date("2026-10-16T08:59:59Z"))).toBeNull();
-    expect(dueOccurrence(base, new Date("2026-10-16T09:00:01Z"))).toBe(base.at);
-    expect(dueOccurrence({ ...base, delivered: [base.at] }, new Date("2026-10-16T09:01:00Z"))).toBeNull();
-  });
-
-  it("delivers one occurrence per local day for repeating reminders", () => {
-    const recurring = { ...base, repeat: "daily" as const };
-    const now = new Date("2026-10-18T09:01:00Z");
-    const key = dueOccurrence(recurring, now);
-    expect(key).not.toBeNull();
-    expect(dueOccurrence({ ...recurring, delivered: [key!] }, now)).toBeNull();
-  });
-});
+import { defaultLayers, loadPreferences } from "./storage";
 
 describe("per-step model settings", () => {
   const stored = (value: unknown) => vi.stubGlobal("localStorage", { getItem: () => JSON.stringify(value), setItem: () => {}, removeItem: () => {} });
@@ -35,10 +15,12 @@ describe("per-step model settings", () => {
     expect(prefs.layers.context.provider).toBe("local");
   });
 
-  it("moves the old autocomplete model into the autocomplete step", () => {
-    stored({ fastModel: " a/fast ", openrouterModel: "a/main" });
+  it("discards obsolete feature preferences", () => {
+    stored({ fastModel: " a/fast ", microphoneConsent: true, autocompleteOnTap: true, rewriteOnTap: true, openrouterModel: "a/main", excludedApps: "com.example.private" });
     const prefs = loadPreferences();
-    expect(prefs.layers.autocomplete.cloudModel).toBe("a/fast");
+    for (const key of ["fastModel", "microphoneConsent", "autocompleteOnTap", "rewriteOnTap"]) expect(prefs).not.toHaveProperty(key);
+    expect(prefs.excludedApps).toBe("com.example.private");
+    expect(prefs.layers).not.toHaveProperty("autocomplete");
     expect(prefs.layers.answer.cloudModel).toBe("");
     expect(prefs.openrouterModel).toBe("a/main");
   });
@@ -47,6 +29,6 @@ describe("per-step model settings", () => {
     stored({ layers: { answer: { provider: "local", localModel: "q" } } });
     const prefs = loadPreferences();
     expect(prefs.layers.answer).toEqual({ provider: "local", cloudModel: "", localModel: "q" });
-    expect(prefs.layers.writing).toEqual(defaultLayers().writing);
+    expect(prefs.layers.context).toEqual(defaultLayers().context);
   });
 });

@@ -59,14 +59,6 @@ export function newSession(question: string, now = Date.now()): CortexSession {
   };
 }
 
-/** A new chat that opens with a selection to summarize. The excerpt stays in the session so follow-ups see it. */
-export function newSummarySession(excerpt: string, origin: string, note?: string, now = Date.now()): CortexSession {
-  const words = excerpt.replace(/\s+/g, " ").trim().split(" ").slice(0, 6).join(" ");
-  const session = newSession(words, now);
-  const message: ChatMessage = { role: "user", body: excerpt, kind: "summarize", origin, ...(note ? { note } : {}) };
-  return { ...session, title: sessionTitle(`Summary: ${words}`), messages: [message] };
-}
-
 export function appendMessage(session: CortexSession, message: ChatMessage, now = Date.now()): CortexSession {
   return { ...session, updatedAt: now, messages: [...session.messages, message] };
 }

@@ -4,7 +4,6 @@ mod answer_checks;
 mod answer_pipeline;
 mod answer_eval;
 mod appscope;
-mod assist;
 mod blocklist;
 mod cleaner;
 mod contextual;

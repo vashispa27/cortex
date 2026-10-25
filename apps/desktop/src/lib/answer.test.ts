@@ -6,7 +6,7 @@ vi.mock("@tauri-apps/api/core", () => ({ invoke: vi.fn() }));
 vi.mock("./api", () => ({ prepareAssistantRequest: vi.fn() }));
 const prefs = vi.hoisted(() => {
   const step = { provider: "default", cloudModel: "", localModel: "" };
-  const base = { openrouterModel: "example/model", aiProvider: "openrouter", localOnly: false, layers: { answer: { ...step }, followup: { ...step }, autocomplete: { ...step }, writing: { ...step }, context: { ...step } } } as Record<string, any>;
+  const base = { openrouterModel: "example/model", aiProvider: "openrouter", localOnly: false, layers: { answer: { ...step }, followup: { ...step }, context: { ...step } } } as Record<string, any>;
   return { base, current: base };
 });
 vi.mock("./storage", () => ({ loadPreferences: () => prefs.current }));
@@ -210,5 +210,17 @@ describe("per-step providers", () => {
     for (const call of vi.mocked(invoke).mock.calls) if (call[0] === "openrouter_chat" || call[0] === "openrouter_search_query") expect(call[1]).toMatchObject({ endpoint: "http://127.0.0.1:8080/v1", model: "qwen-main" });
     expect(invoke).not.toHaveBeenCalledWith("openrouter_has_key");
     prefs.current = prefs.base;
+  });
+});
+
+describe('mixed permanent and activity evidence', () => {
+  it('passes saved facts through the engine redaction boundary, separately from snapshot evidence', async () => {
+    vi.resetAllMocks();
+    prefs.current = prefs.base;
+    script('SOURCE: memory\nRajesh’s saved phone is 213132 [fact:f1]; yesterday he shared another number [42].');
+    vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared());
+    const fact = { id: 'f1', kind: 'personal_fact' as const, subject: 'Rajesh', attribute: 'phone', value: '213132', source: 'User request', channel: 'chat' as const, key: '', revision: 1, created_ms: 0, updated_ms: 0 };
+    await answerFromMemory('Compare Rajesh’s phone with yesterday', [], [fact]);
+    expect(prepareAssistantRequest).toHaveBeenCalledWith('Compare Rajesh’s phone with yesterday', 'Compare Rajesh’s phone with yesterday', [], expect.stringContaining('"id":"f1"'));
   });
 });

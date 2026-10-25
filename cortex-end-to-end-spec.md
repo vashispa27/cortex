@@ -1,8 +1,10 @@
 # Cortex-style desktop memory assistant
-## Reverse-engineered product specification and end-to-end implementation plan
+## Architecture research and implementation plan
 
-**Research date:** 16 October 2026  
-**Scope:** macOS and Windows desktop product, local memory engine, inline writing, voice, chat, MCP, cloud services, distribution, and public website.  
+> The current shipped workspace scope is [Cortex workspace](docs/workspace.md): Scheduled tasks / Reminders, Ask Cortex, Memories and Agent Space. Research proposals below are not claims of implemented behavior. Active API and scheduler contracts are in the linked feature documents.
+
+**Research date:** 16 October 2026
+**Scope:** macOS and Windows desktop product, local memory engine, schedules, chat, permanent memory, Agent Space, MCP, cloud services, distribution, and public website.
 **Status:** engineering specification for an independently implemented equivalent; no claim to possess Cortex’s source code.
 
 ## 1. Executive assessment
@@ -13,11 +15,11 @@ The implementation proposed here has five cooperating components:
 
 1. A native platform adapter reads permitted foreground UI text and safely edits supported fields.
 2. A local daemon stores sanitized observations, tracks activity, maintains derived memory, and serves retrieval.
-3. A desktop shell provides the assistant panel, inline overlay, settings, onboarding, and optional animated pet.
+3. A desktop shell provides the assistant panel, workspace, settings, onboarding, and optional animated pet.
 4. A local MCP bridge lets approved AI clients retrieve memory.
 5. A small cloud control plane authenticates accounts, enforces entitlements, routes selected inference requests, and distributes signed releases.
 
-**Build priority:** prove capture and insertion reliability first; then memory quality; then proactive behavior and visual polish. A convincing web demo is much easier than dependable operation across real desktop applications.
+**Build priority:** prove read-only capture and workspace reliability first; then memory quality; then proactive behavior and visual polish. A convincing web demo is much easier than dependable operation across real desktop applications.
 
 ### Evidence labels
 
@@ -34,9 +36,6 @@ All architecture, algorithms, thresholds, schemas, sample APIs, estimates, and a
 | Area | Established behavior | Evidence |
 |---|---|---|
 | Capture | DOCUMENTED: reads foreground accessibility text on macOS and Windows; no screenshot or screen-recording pipeline | [Introduction](https://docs.cortex.sh/) |
-| Inline writing | DOCUMENTED: a key can transform an instruction, rewrite a selection, infer a reply in an empty field, or answer a `/g` request | [Cortex key](https://docs.cortex.sh/guides/the-cortex-key/) |
-| Editing | DOCUMENTED: hold or double-tap opens iterative editing with typed or spoken instructions | [Edit mode](https://docs.cortex.sh/guides/edit-mode/) |
-| Speech | DOCUMENTED: hold-to-dictate, release to insert, and hands-free gestures | [Voice dictation](https://docs.cortex.sh/guides/voice-dictation/) |
 | Chat | DOCUMENTED: movable edge panel, memory questions, reminders, briefs, nudges, and desktop pet | [Chat](https://docs.cortex.sh/guides/chat/) |
 | Local memory | DOCUMENTED: local SQLite plus related files; selected context is sent for AI processing | [Privacy policy](https://cortex.sh/privacy) |
 | Cloud route | DOCUMENTED: Cloudflare routes requests to a private Azure OpenAI deployment; the vendor states zero retention | [Privacy policy](https://cortex.sh/privacy) |
@@ -63,7 +62,7 @@ The first release is a single-user, single-device application. Cross-device sync
 
 ### 3.1 Onboarding
 
-DOCUMENTED: sign-in supports Google or email/password; macOS needs Accessibility, and microphone access is relevant to dictation. The tutorial teaches a rewrite in a real input field. [Installation](https://docs.cortex.sh/get-started/installation/), [Tutorial](https://docs.cortex.sh/get-started/tutorial/)
+The current onboarding offers an explicit capture choice and requests Accessibility permission only when chosen. Account sign-in remains a separate implementation dependency.
 
 Proposed sequence:
 
@@ -74,33 +73,11 @@ Proposed sequence:
 5. Show a live permission check and a harmless local sample demonstrating what can be read.
 6. Offer pause and exclusion controls before capture begins.
 7. Detect keyboard layout and let the user test their activation key in a sandboxed tutorial field.
-8. Run a real draft generation; show cancellation and undo.
-9. Offer microphone and MCP setup as separately explained capabilities.
+8. Open Ask Cortex and inspect a source-backed answer.
+9. Offer MCP setup as a separately explained capability.
 10. Finish with capture status, memory age, and a first useful question.
 
-Store onboarding progress per step. Restarting should resume rather than duplicate enrollment. A user who declines microphone access can still use text features. A user who revokes Accessibility sees a clear degraded state with no repeated permission spam.
-
-### 3.2 Inline writing
-
-DOCUMENTED: field contents determine the operation; selected text scopes the edit; an empty input triggers context-sensitive drafting; `/g` invokes a direct answer. The documented busy indicator is a fish near the caret, and cancellation is available before replacement. [Cortex key](https://docs.cortex.sh/guides/the-cortex-key/)
-
-Proposed decision order:
-
-| Condition at activation | Operation | Replacement scope |
-|---|---|---|
-| Valid nonempty selection | Rewrite selection using surrounding context | Selection only |
-| No selection; input begins with `/g` | Answer direct request | Existing request text |
-| No selection; nonempty input | Interpret as writing instruction or draft | Captured input range |
-| No selection; empty input | Draft likely response | Empty insertion range |
-| Read-only, secure, inaccessible, or unsupported input | Explain limitation and offer assistant panel | No insertion |
-
-Preserve ambiguity: if the instruction cannot be safely resolved, return a draft or short clarification rather than inventing a commitment, price, date, or completed action. Generating text never submits a form or presses Send.
-
-### 3.3 Edit mode
-
-Keep the target application and field bound to the editing session. Each instruction uses the latest validated draft revision. Show the current operation, cancel, apply, and undo states. Keep edit history local with a short retention window. If the original field disappears, retain the generated draft in the panel and offer Copy.
-
-A command bar can take focus while the target remains separately identified. Restoring focus is an explicit platform operation; it must not rely on the current active window happening to be correct.
+Store onboarding progress per step. Restarting should resume rather than duplicate enrollment. A user who revokes Accessibility sees a clear degraded state with no repeated permission spam.
 
 ### 3.4 Memory chat
 
@@ -108,15 +85,9 @@ Support these intent classes: recent activity, date-range reconstruction, factua
 
 If the archive has no evidence, say so. Missing capture, private browsing, or an excluded app must never be represented as proof that an event did not occur.
 
-### 3.5 Voice
-
-Implement push-to-talk and latched recording. A clear indicator shows when audio is being collected. Stop recording on cancellation, session lock, device loss, or the configured duration limit. Offer the recognized transcript for recovery when an editing action fails. Never silently restart the microphone after a crash.
-
-DOCUMENTED gestures include double-tap or a left-Control combination for hands-free use. The docs’ wording about “sending” text does not establish whether this means submitting to the recognizer or sending a message in the destination app. For this implementation, finishing dictation inserts text only; external submission remains a separate user action. [Voice dictation](https://docs.cortex.sh/guides/voice-dictation/)
-
 ### 3.6 Settings and memory management
 
-Use these product areas: Account; Capture and Privacy; Shortcuts; Voice; Appearance; Memory; Identity; Notifications; Connected AI Apps; Diagnostics; Updates. Show effective settings and their source when organization policy applies.
+Use these product areas: Account; Capture and Privacy; Shortcuts; Appearance; Memory; Identity; Notifications; Connected AI Apps; Diagnostics; Updates. Show effective settings and their source when organization policy applies.
 
 DOCUMENTED settings include text scaling, edge placement, hover opening, identity editing, entity-type filters, proactive-message control, and integration configuration. The source’s navigation terminology varies between separate shortcut pages and a consolidated page; choose one consistent information architecture. [Settings](https://docs.cortex.sh/reference/settings/)
 
@@ -138,9 +109,9 @@ Add implementation-specific controls for retention period, disk budget, backgrou
  │       ↑          ↓                                                  │
  │  retrieval ← summaries, entities, identity, commitments              │
  │       ↑                                                             │
- │ desktop shell / inline editor / scheduler / local MCP bridge         │
+ │ desktop shell / memory / scheduler / local MCP bridge         │
  │       ↓                                     ↕                       │
- │ validated insertion                 approved external AI client     │
+ │ persisted workspace                 approved external AI client     │
  └───────────────────────┬─────────────────────────────────────────────┘
                          │ selected task context, TLS
                   CLOUD INFERENCE BOUNDARY
@@ -186,8 +157,8 @@ apps/website/          # landing page, FAQ, blog, legal, download UI
 apps/docs/             # implementation and user documentation
 crates/daemon/         # service lifecycle, command handling
 crates/capture/        # policy, normalization, redaction, ingest
-crates/platform-mac/   # AX, key events, text insertion, overlays
-crates/platform-win/   # UIA, key events, text insertion, overlays
+crates/platform-mac/   # AX, key events, overlays
+crates/platform-win/   # UIA feasibility probe
 crates/memory/         # schema, FTS, retrieval, derivation
 crates/mcp/            # local bridge and tools
 crates/contracts/      # versioned requests, errors, events
@@ -211,10 +182,6 @@ interface PlatformAdapter {
   foreground(): WindowRef | null;
   subscribe(onEvent: (event: UIEvent) => void): Disposable;
   readWindow(ref: WindowRef, budget: ReadBudget): CaptureResult;
-  focusedEditable(): FocusTarget | null;
-  readTarget(target: FocusTarget): TargetRevision;
-  applyEdit(target: FocusTarget, expected: TargetRevision, edit: TextEdit): ApplyResult;
-  caretBounds(target: FocusTarget): Rect | null;
   idleMilliseconds(): number;
   sessionState(): "active" | "locked" | "asleep";
 }
@@ -222,7 +189,7 @@ interface PlatformAdapter {
 
 macOS: use `AXUIElement` for hierarchy, attributes, geometry, and supported actions, with observer notifications where available. Query attribute availability and writable status; never assume every application exposes the same tree. [Apple Accessibility API](https://developer.apple.com/documentation/applicationservices/axuielement)
 
-Windows: use UI Automation focus events and supported control patterns. Use text patterns for extraction and selection, and supported value/edit mechanisms for insertion. TextPattern alone is not a general text-writing API. Handle process integrity boundaries without elevating the entire assistant. [Microsoft control patterns](https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternsoverview)
+Windows: use UI Automation focus events and supported control patterns. Use text patterns for read-only extraction. Handle process integrity boundaries without elevating the entire assistant. [Microsoft control patterns](https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternsoverview)
 
 ### 5.2 Capture scheduling and bounds
 
@@ -263,7 +230,7 @@ If a browser URL or private-window state cannot be established, apply a document
 
 Retain: opaque ID; first observation; app ID; window session ID; sanitized title/URL; sanitized text; language; extraction quality; truncation flag; focus role/name/path; capture adapter version; redaction version; normalized content hash.
 
-Do not store keystroke streams, password values, screenshots, entire clipboard histories, or hidden-window contents. A clipboard read required for a supported insertion fallback is a temporary operation, not permission to archive the clipboard.
+Do not store keystroke streams, password values, screenshots, entire clipboard histories, or hidden-window contents.
 
 ### 5.5 Deduplication and time
 
@@ -299,7 +266,7 @@ Maintain distinct tool sets: retrieval; local preference changes; local schedule
 
 ### 6.3 Deletion and retention
 
-A deletion operation must first stop capture and workers, advance a memory-generation epoch, cancel in-flight requests, and reject results from the old epoch. Then delete source records and all dependents: FTS, vectors, summaries, wiki facts, profile examples, drafts, audio, caches, job payloads, and diagnostic attachments.
+A deletion operation must first stop capture and workers, advance a memory-generation epoch, cancel in-flight requests, and reject results from the old epoch. Then delete source records and all dependents: FTS, vectors, summaries, wiki facts, profile examples, caches, job payloads, and diagnostic attachments.
 
 For selective deletion, maintain source-to-derived dependency edges. Recompute surviving summaries using retained sources. Do not preserve a deleted fact because it was copied into a higher-level summary.
 
@@ -440,7 +407,6 @@ FTS5 supplies local lexical retrieval; index consistency is part of the write tr
 | `identity_versions` | user-authored profile, inferred suggestions, version, accepted status |
 | `commitments` | actor, action, subject, due time/timezone, state, evidence, confidence |
 | `conversation_messages` | local thread ID, role, content, evidence refs, generation epoch |
-| `rewrite_sessions` | target fingerprint, revision, operation, result status; short retention |
 | `schedules` | timezone, schedule expression, misfire policy, enabled, next occurrence |
 | `schedule_runs` | schedule ID + occurrence unique key, state, output message ID |
 | `settings` | typed key/value, source, version, changed time |
@@ -487,12 +453,6 @@ For hierarchical summaries, retain transitive provenance. A month-level answer m
 
 Extract typed candidates, normalize aliases, and link facts to evidence. Merge only when multiple identifiers agree or the user confirms. Two people named Alex remain separate without reliable evidence. Preserve negative statements, dates, and uncertainty. A wiki page is a generated view over facts and corrections, not the sole source of truth.
 
-### 8.4 Learning writing style
-
-Use explicit preferences first. Additional style examples should have reasonable evidence of authorship: text produced in a known user-owned input, user-approved samples, or a verified sent-message identity. Reading another person’s message must not train the user’s style.
-
-Represent style as editable properties: typical length, punctuation, greetings, formality, language, favored phrasing, emoji frequency, and recipient-specific conventions. Keep factual personal information separate from stylistic patterns. User-edited output can be feedback, but merely leaving generated text on screen is weak evidence of acceptance and no proof that it was sent.
-
 ### 8.5 Retrieval algorithm
 
 1. Resolve intent and time expressions using the user’s timezone.
@@ -521,76 +481,6 @@ Reports must say tracked foreground activity. They cannot establish all working 
 Extract `actor`, `action`, `recipient`, `due_at`, `timezone`, `evidence`, and `confidence`. Dates can be null. Use states `candidate → confirmed → in_progress → completed/dismissed`. A proposed draft does not complete a commitment. Completion needs explicit user input or affirmative source evidence.
 
 Calendar/email information seen on screen is partial. Store “observed at” and freshness, never infer unseen cancellations or fabricate missing times. Show preparation suggestions as based on observed context.
-
-## 9. Inline editing as a validated transaction
-
-This is the highest-risk correctness path. Desktop accessibility providers do not generally offer an atomic cross-application compare-and-swap primitive. The design therefore uses best-effort precondition checks, adapter-specific operations, and conservative fallback. Do not advertise absolute atomicity.
-
-### 9.1 State machine
-
-```text
-IDLE → KEY_PENDING → CLASSIFY → SNAPSHOT_TARGET → RETRIEVE → GENERATE
-                                                               ↓
-                   RESULT_IN_PANEL ← STALE/UNSUPPORTED ← REVALIDATE
-                                                               ↓
-                                                    APPLY → VERIFY
-                                                               ↓
-                                                   APPLIED / RECOVERY
-```
-
-Cancellation from any pre-apply state leads to `CANCELLED`, leaving the field untouched. A completed request is ignored if its request ID, target generation, or memory epoch is no longer current.
-
-### 9.2 Target revision contract
-
-```ts
-type TargetRevision = {
-  appId: string;
-  processId: number;
-  processStartedAt: number;
-  windowSessionId: string;
-  elementHandle: string;       // opaque, ephemeral, never blindly persisted
-  elementFingerprint: string;
-  fieldTextHash: string;
-  selection: {start: number; end: number; unit: "utf16"};
-  selectedTextHash: string;
-  capturedAt: number;
-};
-```
-
-Normalize platform string offsets carefully. Test emoji, combining marks, bidirectional text, and input-method composition. A UTF-16 offset is not a Unicode character count. Cancel if the selection or field changed in a way the adapter cannot reconcile safely.
-
-Before applying, confirm application identity, process lifetime, window, target editability, secure-field status, content revision, and selection. On mismatch, keep the result in the assistant panel and let the user choose Copy or a new attempt.
-
-### 9.3 Insertion strategies
-
-| Strategy | Use | Failure policy |
-|---|---|---|
-| Native selected-text setter | Provider supports the exact range write | Re-read and verify |
-| Native value setter | Plain text field and whole-value replacement is valid | Preserve expected surrounding content |
-| Clipboard paste into verified range | Tested adapter; native setter unavailable | Preserve clipboard conditionally; never press Return |
-| Assistant panel + Copy | Unsupported/rich/unstable input | No speculative keystrokes |
-
-Clipboard fallback must snapshot available clipboard formats, paste only after focus validation, and restore the previous clipboard only if its change counter still matches the assistant’s write. Do not overwrite a clipboard the user updated meanwhile. Avoid fallback in terminals or command fields where pasted newlines might execute commands; use panel-only behavior there unless a dedicated safe adapter is proven.
-
-After insertion, verify the expected plain-text change. If verification is inconclusive, report that state; do not repeatedly paste or blindly roll back. Undo is offered only if the target still matches the inserted revision. Preserve rich-text formatting through range-specific providers where possible; whole-field replacement of a rich editor is not an acceptable generic fallback.
-
-### 9.4 Keyboard recognition
-
-DOCUMENTED defaults are right Option on Mac, right Shift on Windows, right Command for Japanese Mac keyboards, and platform-specific fallback chords. The shortcut docs explicitly distinguish clean taps from ordinary modifier combinations. [Shortcuts](https://docs.cortex.sh/reference/shortcuts/)
-
-Proposed recognition: track key-down/up, intervening non-modifier keys, hold duration, double-tap window, and composition state. Initial hold threshold: 350 ms; double-tap window: 250 ms. Delay tap dispatch enough to distinguish double-tap, or allow reversible prefetch without applying a first-tap result. Test layout switching, AltGr, capital typing, remote sessions, stuck keys, and key repeat. Global hooks must not become a key logger.
-
-## 10. Voice pipeline
-
-```text
-gesture → permission check → audio device → bounded in-memory buffer
-        → authenticated speech request → transcript
-        → optional punctuation/cleanup → target revalidation → insert
-```
-
-Use the speech service’s supported encoding and sample rate through an adapter; resample only when necessary. Keep raw audio in memory where possible and delete temporary files after completion, cancellation, or crash recovery. Bound recording duration and upload size. Distinguish recording, uploading, transcribing, editing, and failed states.
-
-When voice is an edit instruction, feed the transcript into the current edit session. When it is dictation, avoid rewriting its factual meaning. Provide a choice to copy the raw transcript if cleanup fails. On microphone disconnect, stop and preserve only the audio already explicitly captured for that operation.
 
 ## 11. Chat, reminders, and proactive behavior
 
@@ -639,13 +529,12 @@ The public docs establish a local `cortex-mcp` executable, stdio configuration, 
 | `GET /v1/time/report` | Activity aggregation | From, to, timezone, group |
 | `GET /v1/commitments` | Obligations and evidence | Status, subject, cursor |
 | `POST /v1/chat/runs` | Start streamed answer | Message, thread ID, client request ID |
-| `POST /v1/rewrite/runs` | Start a bound rewrite | Target ticket, operation, instruction |
 | `POST /v1/runs/{id}/cancel` | Idempotent cancellation | Request ID |
 | `PATCH /v1/settings` | Typed settings update | Expected version, changed fields |
 | `POST /v1/capture/pause` | Pause/resume | Duration or indefinite |
 | `POST /v1/privacy/delete` | Confirmed deletion | Scope, confirmation nonce, epoch |
 
-Use POST for search when avoiding query text in URL logs. The UI should receive a privileged opaque target ticket, not be able to submit arbitrary native handles. Retrieval scopes and mutation scopes are distinct.
+Use POST for search when avoiding query text in URL logs. Retrieval scopes and mutation scopes are distinct.
 
 ```json
 {
@@ -668,7 +557,7 @@ Use POST for search when avoiding query text in URL logs. The UI should receive 
 
 All sample data is synthetic. Treat result limits as maximums, not promises of completeness. Use stable opaque cursors and a total response-size cap.
 
-Errors: `PERMISSION_REQUIRED`, `CAPTURE_PAUSED`, `TARGET_STALE`, `TARGET_UNSUPPORTED`, `NO_EVIDENCE`, `AUTH_EXPIRED`, `RATE_LIMITED`, `MODEL_UNAVAILABLE`, `INDEX_REBUILDING`, `DISK_FULL`, and `CANCELLED`. Include retryability and a user-facing recovery action without leaking source text into logs.
+Errors: `PERMISSION_REQUIRED`, `CAPTURE_PAUSED`, `NO_EVIDENCE`, `AUTH_EXPIRED`, `RATE_LIMITED`, `MODEL_UNAVAILABLE`, `INDEX_REBUILDING`, `DISK_FULL`, and `CANCELLED`. Include retryability and a user-facing recovery action without leaking source text into logs.
 
 ### 12.3 MCP tool surface
 
@@ -712,11 +601,9 @@ Separate local memory availability from cloud account state. Signing out should 
 ### 13.3 Inference routes
 
 ```text
-POST /v1/inference/rewrite
 POST /v1/inference/answer
 POST /v1/inference/extract
 POST /v1/inference/summarize
-POST /v1/inference/transcribe
 GET  /v1/account/entitlements
 POST /v1/devices/register
 POST /v1/billing/checkout
@@ -725,15 +612,15 @@ POST /v1/billing/webhook
 GET  /v1/releases/{channel}/{platform}
 ```
 
-The gateway authenticates, validates schema, enforces payload/token/audio caps, reserves quota, calls an allowlisted provider deployment, streams output, and settles actual usage. Use an idempotency key for billable requests and a unique provider-event ID for billing webhooks. Cancel downstream inference when practical if the user cancels.
+The gateway authenticates, validates schema, enforces payload/token caps, reserves quota, calls an allowlisted provider deployment, streams output, and settles actual usage. Use an idempotency key for billable requests and a unique provider-event ID for billing webhooks. Cancel downstream inference when practical if the user cancels.
 
-Return typed streaming events: `started`, `token`, `evidence`, `completed`, `error`, `cancelled`. Inline insertion waits for a completed validated result; chat can render partial output. Do not cache personal response bodies on shared infrastructure. Keep background job payloads on the device.
+Return typed streaming events: `started`, `token`, `evidence`, `completed`, `error`, `cancelled`. Clients display validated results. Do not cache personal response bodies on shared infrastructure. Keep background job payloads on the device.
 
 ### 13.4 Model routing and prompts
 
-Use a low-latency text deployment for inline work, a structured-output-capable economical deployment for extraction, a stronger answer model when needed, and a supported speech deployment for dictation. Exact model IDs are configuration, not hardcoded assumptions about the reference product.
+Use a structured-output-capable deployment for extraction and a stronger answer model when needed. Exact model IDs are configuration, not hardcoded assumptions about the reference product.
 
-Each prompt package includes a version, input schema, output schema, token cap, grounding rules, and regression cases. A rewrite response can include `replacement_text`, `evidence_ids`, and `uncertainties`; the insertion engine uses only the validated replacement. Schema validity does not establish factual correctness, so check grounded dates, names, amounts, and commitments separately.
+Each prompt package includes a version, input schema, output schema, token cap, grounding rules, and regression cases. Answer responses include evidence IDs and uncertainties. Schema validity does not establish factual correctness, so check grounded dates, names, amounts, and commitments separately.
 
 ### 13.5 Entitlements and economics
 
@@ -745,11 +632,10 @@ Use an explicit cost model rather than an unsupported per-user price:
 monthly inference cost/user =
   Σ_task [(input_tokens_task / 1e6 × input_rate)
         + (output_tokens_task / 1e6 × output_rate)]
-  + audio_minutes × transcription_rate
   + gateway + metadata + egress allocations
 ```
 
-For an initial workload estimate, simulate 20 inline requests/day, 5 chat requests/day, session-based summarization, and a configurable speech allowance. Calculate with the provider’s contracted rates before launch. Background summarization is the main uncontrolled-volume risk: debounce, summarize deltas, cap daily spending, and prioritize explicit requests over maintenance.
+For an initial workload estimate, simulate 5 chat requests/day, scheduled tasks and session-based summarization. Calculate with the provider’s contracted rates before launch. Background summarization is the main uncontrolled-volume risk: debounce, summarize deltas, cap daily spending, and prioritize explicit requests over maintenance.
 
 ## 14. Distribution, updates, and operations
 
@@ -763,7 +649,7 @@ DOCUMENTED reference behavior uses a universal macOS application and Windows x64
 4. Produce a software bill of materials and immutable checksum records.
 5. Upload immutable installers and signed update metadata.
 6. Roll out to internal, canary, then stable cohorts.
-7. Download in the background; defer restart during dictation, active edits, or unfinished database migration.
+7. Download in the background; defer restart during active tasks or unfinished database migration.
 8. Verify signature and hash before installing; reject mismatched or downgraded artifacts unless explicitly supported.
 9. Recheck permissions, helper health, database version, and MCP launch paths after upgrade.
 
@@ -777,7 +663,7 @@ Support additive managed exclusions and auto-update control initially, matching 
 
 ### Diagnostics and resilience
 
-Collect event names, durations, error categories, app-adapter category, version, and resource counts. Do not collect titles, URLs, prompts, clipboard content, audio, or retrieved excerpts. Crash dumps require content-aware handling because process memory may contain private text.
+Collect event names, durations, error categories, app-adapter category, version, and resource counts. Do not collect titles, URLs, prompts, clipboard content or retrieved excerpts. Crash dumps require content-aware handling because process memory may contain private text.
 
 Expose local health states: running, paused, permission missing, indexing, offline, quota exhausted, storage full, and degraded adapter. Support user-reviewed diagnostic bundles with an inventory of included files. Test recovery from daemon crash, hung UI provider, network loss, corrupt index, revoked permission, and full disk.
 
@@ -824,7 +710,7 @@ Create an original brand identity and artwork. Use the reference’s hierarchy a
 
 Desktop: centered hero, generous vertical whitespace, two CTAs on one row, framed product demo, restrained transitions. Mobile: 20–24 px side padding, stacked CTAs, a simplified navigation menu, readable tab controls, and no mascot overlap with text. Proposed breakpoints are 640 and 960 px; responsive behavior was not measured across devices in this inspection.
 
-Build the demo as a deterministic state machine with synthetic data: draft in a message field; retrieve a source-backed answer; request context from another assistant. An HTML simulation gives accessible text and deliberate timing; a captioned video is simpler. Honor reduced motion, pause when off-screen, and let user interaction suspend auto-cycling.
+Build the demo as a deterministic state machine with synthetic data: create a schedule; retrieve a source-backed answer; request context from another assistant. An HTML simulation gives accessible text and deliberate timing; a captioned video is simpler. Honor reduced motion, pause when off-screen, and let user interaction suspend auto-cycling.
 
 Routes: `/`, `/faq`, `/blog`, `/blog/:slug`, `/privacy`, `/tos`, `/dpa`, docs, and platform download redirects. Use semantic headings, keyboard-operable accordions, visible focus, metadata, sitemap, and download tracking limited to content-free events. Privacy and legal copy must describe the actual shipped data flow.
 
@@ -840,13 +726,10 @@ All figures below are proposed release gates, not measured reference performance
 |---|---|
 | Activation visual feedback | p95 ≤ 100 ms |
 | Local lexical search over 1 million chunks | p95 ≤ 300 ms on benchmark laptop |
-| Inline generation, ≤150 output tokens | p50 ≤ 2.5 s; p95 ≤ 6 s under defined network/model conditions |
 | Local answer preparation before provider request | p95 ≤ 500 ms |
 | Daemon memory, excluding renderer/model | ≤ 250 MiB steady state in baseline workload |
 | Idle daemon CPU | Median < 1% of one core; no sustained polling spikes |
 | Active capture CPU | Median < 3% of one core in representative apps |
-| Supported-field insertion success | ≥ 99% in explicit supported-app test matrix |
-| Destructive stale-target writes | Zero in release test suite; always a release blocker |
 | Exact synthetic-secret leaks | Zero in covered fixtures across persistence and egress |
 | Scheduled delivery duplicates | Zero for a single occurrence under crash/retry tests |
 
@@ -858,7 +741,7 @@ Test macOS on Apple silicon and Intel where supported; Windows x64; minimum supp
 
 Application categories: browser plain inputs; contenteditable editors; Gmail/Outlook web; Slack/Teams-style apps; native mail; plain text editors; document editors; Electron apps; code editors; password managers; private browser windows; remote desktop; terminals; elevated Windows applications. Classify each as supported, read-only capture, excluded, or panel-only fallback.
 
-Each supported app/version needs tests for selection, full-field replacement, empty draft, Unicode, rich formatting, focus change during inference, composition, window close/reopen, undo, screen scaling, and clipboard races. “Works anywhere” is not an engineering acceptance criterion.
+Each supported app/version needs tests for bounded capture, Unicode, focus changes, window close/reopen and screen scaling. “Works anywhere” is not an engineering acceptance criterion.
 
 ### 16.3 Essential automated scenarios
 
@@ -868,8 +751,6 @@ Each supported app/version needs tests for selection, full-field replacement, em
 4. A secret appears in body, title, URL, generated summary, and error: no raw value persists or leaves through automatic processing.
 5. Identical content appears Monday and Friday: no four-day activity segment is created.
 6. A message is visible but authored by someone else: it is not a user-style example.
-7. User types during generation: insertion is rejected as stale; draft remains recoverable.
-8. User switches windows/process restarts: never insert into the new target.
 9. Clipboard changes during paste: preserve the user’s newer clipboard.
 10. Emoji and composed characters cross the selected range: untouched text remains byte-equivalent after normalization rules.
 11. Pause, lock, and sleep close active time segments correctly.
@@ -881,13 +762,13 @@ Each supported app/version needs tests for selection, full-field replacement, em
 17. A summary loses its source through retention: exact-source UI reports unavailable evidence.
 18. Update or migration crashes: local data opens consistently on the next supported launch.
 
-### 16.4 Retrieval and writing evaluation
+### 16.4 Retrieval evaluation
 
-Build a consented or synthetic evaluation set of at least 200 recall questions and 200 rewrite tasks, split by date, app, entity ambiguity, language, and missing evidence. Include contradictory and deliberately absent facts. Do not use personal production archives as a default test fixture.
+Build a consented or synthetic evaluation set of at least 200 recall questions, split by date, app, entity ambiguity, language, and missing evidence. Include contradictory and deliberately absent facts. Do not use personal production archives as a default test fixture.
 
-Starting gates: recall@10 ≥ 0.90 for known-answer retrieval cases; ≥ 95% of answer claims supported by cited evidence in human review; ≥ 95% correct abstention on absent-fact cases. Evaluate writing on instruction compliance, factual preservation, recipient fit, style similarity, and edit distance after user correction. Treat these as separate dimensions rather than one opaque satisfaction score.
+Starting gates: recall@10 ≥ 0.90 for known-answer retrieval cases; ≥ 95% of answer claims supported by cited evidence in human review; ≥ 95% correct abstention on absent-fact cases. Treat these as separate dimensions rather than one opaque satisfaction score.
 
-Release only when both retrieval and insertion gates pass. Better prose cannot compensate for incorrect evidence or writing into the wrong window.
+Release only when retrieval gates pass. Unsupported evidence must not be presented as a remembered fact.
 
 ## 17. Delivery plan and staffing
 
@@ -897,11 +778,9 @@ Suggested team: one macOS engineer, one Windows/Rust engineer, one backend/memor
 
 | Phase | Approximate window | Deliverable and exit gate |
 |---|---|---|
-| 0. Native feasibility | Weeks 1–2 | Read and edit fixture apps on both OSes; demonstrate stale-target rejection; choose supported OS baseline |
+| 0. Native feasibility | Weeks 1–2 | Read fixture apps on the supported OS; demonstrate privacy exclusions; choose supported OS baseline |
 | 1. Local foundation | Weeks 3–5 | Daemon, capture policy, redaction, SQLite, FTS, pause/delete; privacy tests pass |
-| 2. Inline vertical slice | Weeks 6–8 | Account/gateway, one-key writing, target validation, cancellation, onboarding; defined app matrix passes |
 | 3. Useful memory | Weeks 9–12 | Source-grounded chat, chronicles, wiki, identity, time accounting, retrieval evaluation |
-| 4. Voice and integrations | Weeks 13–15 | Dictation, edit mode, read-only MCP, safe client setup; configuration and audio tests pass |
 | 5. Proactive features | Weeks 16–18 | Reminders, commitments, briefs, nudge controls, memory-management UX |
 | 6. Beta hardening | Weeks 19–24 | Signing, updates, recovery, enterprise policy, website, accessibility, battery and security evaluation |
 
@@ -910,11 +789,10 @@ A narrower macOS private alpha can ship after Phase 2 with a small supported-app
 ### First engineering tickets
 
 - Define platform adapter contracts and synthetic accessibility fixtures.
-- Build one capture/read/write proof per OS, with selection and stale-focus tests.
+- Build a bounded read-only capture proof on supported platforms, with exclusion tests.
 - Specify exclusion precedence and unknown-browser-context behavior.
 - Implement source/observation/activity separation and baseline migration.
 - Implement a redaction fixture suite before enabling persistence.
-- Build one complete inline path with a deterministic mock model.
 - Add authenticated inference and structured result validation.
 - Build evidence-linked search/chat before summaries and vectors.
 - Add dependency-aware deletion and memory epochs.
@@ -929,7 +807,6 @@ A narrower macOS private alpha can ship after Phase 2 with a small supported-app
 | Vector retrieval | Optional, deferred | Measured lift over FTS/entity retrieval |
 | Background AI | Separately disclosed and controllable | Quality/cost study with representative sessions |
 | Memory encryption | OS protection initially; application encryption if requirements demand | Threat model, key recovery, migration budget |
-| Rich editors | Explicit adapter support; otherwise Copy fallback | Formatting and selection regression coverage |
 | MCP enrollment | Clear client selection and consent | Actual current client configuration formats |
 | Retention | User-visible configurable cap | Measured storage and retrieval needs |
 | Pricing | Server-defined entitlements, no assumed price | Business model and contracted inference cost |
@@ -939,7 +816,7 @@ Unverified reference details to investigate if exact parity becomes necessary: i
 
 ## 19. Research provenance
 
-Public research covered the rendered homepage, FAQ, blog, installation, onboarding, inline key, edit mode, voice, chat, privacy, settings, shortcuts, MCP, managed installation, and MDM documentation. Native APIs, SQLite, Tauri, and MCP transport choices were checked against their primary documentation, linked near the relevant decisions.
+Public research covered the rendered homepage, FAQ, blog, installation, onboarding, chat, privacy, settings, shortcuts, MCP, managed installation, and MDM documentation. Native APIs, SQLite, Tauri, and MCP transport choices were checked against their primary documentation, linked near the relevant decisions.
 
 A locally installed `cortex/SKILL.md` integration guide supplied the static local-API and memory-layer contract labeled LOCAL CONTRACT. It was not used to search the user’s activity, open private memory, read credentials, or inspect their conversations. No desktop binary was decompiled, no account was created, and no software was installed for this research.
 

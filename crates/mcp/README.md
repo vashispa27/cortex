@@ -22,3 +22,7 @@ Tools: `create_task`, `list_tasks`, `get_task_resume_pack`, `claim_task` (also h
 No background transcript scanning, automatic harness launch, cross-device sync, or guaranteed automatic tool use is provided. Follow the harness instructions in the workflow guide for automatic task lifecycle calls where supported by your harness.
 
 For strict JSON MCP client configurations, `node dist/register.js --enable /absolute/path/to/config.json` merges a single `cortex` entry. Run it only after reviewing the retrieval scope and enabling MCP access in the app. `--disable` removes only an unchanged entry installed by this tool. A 0600 backup and receipt are stored in the state directory. Commented/JSONC configs require manual setup so comments cannot be silently discarded. Client discovery and app-driven registration are future integration work; do not use this CLI as a substitute for user consent.
+
+## Scheduled tasks and reminders
+
+The same bridge exposes `create_schedule`, `list_schedules`, `get_schedule`, `update_schedule`, `pause_schedule`, `resume_schedule`, `cancel_schedule` and `get_schedule_history`. These use the shared workspace database and require structured timing plus an explicit IANA timezone. The running Cortex engine executes schedules independently of the MCP connection. See [the scheduling API and runtime guide](../../docs/scheduled-tasks.md) for arguments, recurrence/DST/recovery semantics, desktop integration, notification permissions and live-answer provider configuration.

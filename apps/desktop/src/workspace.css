@@ -1,0 +1,27 @@
+/* Workspace pages use the same glass materials and blue focus as Ask Cortex. */
+.nav-item span { white-space: normal; text-align: left; line-height: 1.4; }
+.nav-item svg { flex-shrink: 0; }
+.memories-tabs button { border-color: var(--cx-line-strong); color: var(--cx-muted); border-radius: 11px; }
+.memories-tabs [aria-selected="true"] { color: var(--cx-text); background: rgba(61,135,255,.18); border-color: rgba(121,179,255,.35); }
+.memories-field input, .schedule-form input, .schedule-form select, .schedule-form textarea { background: rgba(255,255,255,.035); border-color: var(--cx-line-strong); color: var(--cx-text); border-radius: 9px; }
+.memories-editor, .schedule-form, .schedule-list article, .schedule-run { padding: 24px; border: 1px solid var(--cx-line); border-radius: 18px; background: var(--cx-panel); box-shadow: var(--cx-shadow); }
+.memories-editor { max-width: 720px; }
+.memories-field { color: var(--cx-muted); font-size: .85rem; }
+.memories-page .evidence-card { background: var(--cx-panel); }
+.scheduled-page { width: 100%; }
+.scheduled-page > header { margin-bottom: 26px; }
+.schedule-form fieldset { border-color: var(--cx-line); }
+.schedule-form option { background: var(--cx-bg); color: var(--cx-text); }
+.scheduled-page button { border-color: var(--cx-line-strong); border-radius: 10px; font-size: .85rem; }
+.scheduled-page button:hover:not(:disabled) { background: rgba(61,135,255,.15); }
+.scheduled-page button[type="submit"] { color: white; background: var(--cx-blue); }
+.scheduled-error { color: #ffb5a8; }
+.schedule-run a { color: var(--cx-cyan); }
+.workspace-error { margin: 28px; }
+@media (max-width: 850px) { .schedule-form { grid-template-columns: minmax(0,1fr); } .scheduled-page { padding: 24px; } }
+@media (max-width: 600px) { .memories-editor, .schedule-form, .schedule-list article, .schedule-run { padding: 16px; } .scheduled-page { padding: 18px; } }
+
+.agent-space-page { flex: 1; min-height: 0; overflow-y: auto; }
+.agent-space-page > .page-content { overflow: visible; flex: none; }
+.agent-space-page > section[aria-label="Agent Space MCP setup"] { padding-top: 0; }
+.memories-page { min-height: 0; }

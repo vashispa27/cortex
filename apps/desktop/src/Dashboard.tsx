@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   ArrowRight, ArrowUpRight, Bell, Clock3, Mail,
   Plus, Search, Sparkles,
@@ -10,7 +10,8 @@ import {
 import { sampleActivity, sampleAppUsage, sampleMemories } from "./lib/demo";
 import type { NotchMode } from "./lib/notch";
 import type { Page, SettingsPage } from "./lib/types";
-import type { Preferences, Reminder } from "./lib/storage";
+import type { Preferences } from "./lib/storage";
+import type { Schedule } from "./lib/schedules";
 import CortexMark from "./components/CortexMark";
 import "./dashboard.css";
 
@@ -30,7 +31,7 @@ type HomeDashboardProps = {
   sample: boolean;
   status: ServiceStatus | null;
   preferences: Preferences;
-  reminders: Reminder[];
+  schedules: Schedule[];
   hits: MemoryHit[];
   busy: boolean;
   error: string;
@@ -83,7 +84,8 @@ function QuickLink({ label, detail, onClick }: { label: string; detail: string; 
 }
 
 export function HomeDashboard(props: HomeDashboardProps) {
-  const { sample, status, preferences, reminders, hits, busy, error, chatCount } = props;
+  const [memoryQuery, setMemoryQuery] = useState("");
+  const { sample, status, preferences, schedules, hits, busy, error, chatCount } = props;
   const apps = useMemo<AppRow[]>(() => {
     if (sample) return sampleAppUsage.map((app) => ({ appId: app.appId, minutes: app.minutes, count: 0 }));
     return groupByApp(hits).map((app) => ({ appId: app.appId, minutes: null, count: app.count }));
@@ -102,11 +104,11 @@ export function HomeDashboard(props: HomeDashboardProps) {
       { value: String(hits.length), label: "Actions" },
       { value: String(activeApps), label: "Apps" },
       { value: String(chatCount), label: "Chats" },
-      { value: String(reminders.length), label: "Reminders" },
+      { value: String(schedules.length), label: "Reminders" },
     ];
   const chips = sample
-    ? [`${sampleActivity.rewrites} rewrites`, `${sampleActivity.voiceNotes} voice notes`, `${sampleActivity.edits} edits`, `${sampleActivity.mcpCalls} MCP calls`]
-    : [`${groupHitsByDay(hits).length} active days`, `${reminders.length} reminders`, status?.capturePaused ? "capture paused" : status ? "capture ready" : "service offline"];
+    ? [`${sampleActivity.chats} chats`, `${sampleActivity.edits} saved moments`,  `${sampleActivity.mcpCalls} MCP calls`]
+    : [`${groupHitsByDay(hits).length} active days`, `${schedules.length} reminders`, status?.capturePaused ? "capture paused" : status ? "capture ready" : "service offline"];
   const appMax = Math.max(1, ...apps.map((app) => app.minutes ?? app.count));
   const captureOn = Boolean(status?.captureRequested && !status.capturePaused);
   const sampleTodos: TodoItem[] = [
@@ -129,27 +131,33 @@ export function HomeDashboard(props: HomeDashboardProps) {
   ];
   const todos: TodoItem[] = sample
     ? sampleTodos
-    : reminders.slice(0, 3).map((reminder) => ({
+    : schedules.slice(0, 3).map((reminder) => ({
       id: reminder.id,
-      title: reminder.text,
-      detail: reminder.repeat === "daily" ? "Repeats every day while the app is open." : "One-time reminder scheduled in this workspace.",
+      title: reminder.title,
+      detail: reminder.timing.type === "daily" ? "Repeats daily in the local scheduler." : "Scheduled in the local service.",
       source: "Reminder",
-      when: Date.parse(reminder.at) || Date.now(),
+      when: reminder.next_due_ms ?? Date.now(),
       reminder: true,
     }));
 
   return <div className="dash-page">
     <header className="dash-welcome">
       <div>
-        <span className="eyebrow">Home</span>
+        <span className="eyebrow">Your personal memory</span>
         <h1>Welcome back<span className="accent">.</span></h1>
         <p>Your memory at a glance. {sample ? "You are exploring an invented sample workspace." : status ? "Your memory stays on this Mac." : "Connect the local service or turn on sample mode to explore."}</p>
       </div>
       <div className="dash-welcome-actions">
-        <span className={`dash-live ${sample ? "sample" : status ? "online" : "offline"}`}><span className="status-light" />{sample ? "Sample data" : status ? "Local service" : "Offline"}</span>
+        <button type="button" className="button button-primary" onClick={() => props.onNavigate("ask")}><Sparkles size={15} /> Ask Cortex</button>
         <button type="button" className="button button-secondary dash-preview" onClick={() => props.onPreviewNotch("compose")}><CortexMark className="dash-button-cortex" /> Open Cortex</button>
       </div>
     </header>
+
+    <form className="dash-search" role="search" onSubmit={(event) => { event.preventDefault(); props.onSearch(memoryQuery.trim()); }}>
+      <Search size={18} />
+      <input aria-label="Search your memory" value={memoryQuery} onChange={(event) => setMemoryQuery(event.target.value)} placeholder="A thought, a conversation, something you saw…" />
+      <button className="button button-secondary" type="submit" aria-label="Search memory"><span>Find in memory</span><ArrowRight size={15} /></button>
+    </form>
 
     <div className="dash-grid">
       <section className="dash-card dash-activity">
@@ -181,7 +189,7 @@ export function HomeDashboard(props: HomeDashboardProps) {
             <span className="app-duration">{app.minutes !== null ? formatMinutes(app.minutes) : `${app.count} src`}</span>
           </button>) : <p className="dash-empty">No app activity yet. Start capture or explore sample mode.</p>}
         </div>
-        <button type="button" className="text-link dash-link" onClick={() => props.onNavigate("memory")}>Browse memory <ArrowRight size={14} /></button>
+        <button type="button" className="text-link dash-link" onClick={() => props.onNavigate("memories")}>Browse memory <ArrowRight size={14} /></button>
       </section>
 
       <section className="dash-card dash-timeline">
@@ -200,7 +208,7 @@ export function HomeDashboard(props: HomeDashboardProps) {
       <section className="dash-card dash-todo">
         <div className="dash-card-head">
           <div><span className="eyebrow">To do</span><h2>Small things, kept close</h2></div>
-          <button type="button" className="text-link" onClick={() => props.onNavigate("reminders")}><Plus size={14} /> Add</button>
+          <button type="button" className="text-link" onClick={() => props.onNavigate("scheduled")}><Plus size={14} /> Add</button>
         </div>
         <div className="todo-list">
           {todos.length ? todos.map((todo) => <div className="todo-row" key={todo.id}>
@@ -210,8 +218,8 @@ export function HomeDashboard(props: HomeDashboardProps) {
               <p>{todo.detail}</p>
               <div className="todo-meta"><span className="todo-source">{todo.source}</span><span>{relative(todo.when)}</span></div>
             </div>
-            <button type="button" className="todo-open" onClick={() => props.onNavigate("reminders")}>Open <ArrowUpRight size={12} /></button>
-          </div>) : <div className="dash-empty"><Sparkles size={18} /><span>No loose ends right now.</span><button type="button" className="text-link" onClick={() => props.onNavigate("reminders")}>Add a reminder</button></div>}
+            <button type="button" className="todo-open" onClick={() => props.onNavigate("scheduled")}>Open <ArrowUpRight size={12} /></button>
+          </div>) : <div className="dash-empty"><Sparkles size={18} /><span>No loose ends right now.</span><button type="button" className="text-link" onClick={() => props.onNavigate("scheduled")}>Add a reminder</button></div>}
         </div>
       </section>
 
@@ -222,7 +230,6 @@ export function HomeDashboard(props: HomeDashboardProps) {
         </div>
         <div className="quick-controls">
           <ControlToggle checked={captureOn} disabled={!status} onChange={() => props.onToggleCapture()} label="Capture memory" description={status?.captureRequested ? "Stored locally, under your control." : "Turn on capture to remember what you see."} />
-          <ControlToggle checked={preferences.microphoneConsent} onChange={(value) => props.onUpdatePreferences({ microphoneConsent: value })} label="Voice dictation" description="Allow microphone requests in this build." />
           <ControlToggle checked={preferences.hideDrop} onChange={(value) => props.onSetDropVisible(!value)} label="Hide the drop" description="Tuck the notch away until you reach for it." />
           <QuickLink label="Cortex key" detail="Double-tap Option, Fn, Shift, or Control." onClick={() => props.onSettings("notch")} />
           <QuickLink label="Privacy & retention" detail="Review what is stored and for how long." onClick={() => props.onSettings("memory")} />

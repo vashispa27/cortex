@@ -42,12 +42,12 @@
         "shadow": false,
         "focus": false,
         "acceptFirstMouse": true,
-        "visible": true,
+        "visible": false,
         "theme": "Dark"
       }
     ],
     "security": {
-      "csp": "default-src 'self'; img-src 'self' data:; media-src 'self' blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ipc: http://ipc.localhost"
+      "csp": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ipc: http://ipc.localhost"
     }
   },
   "bundle": {

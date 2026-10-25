@@ -126,3 +126,68 @@ npm --prefix apps/desktop run build
 For the real desktop-engine integration test, additionally set `CORTEX_DESKTOP_BIN` to the built `target/debug/cortex` and `CORTEX_MODEL_DIR` to an existing directory containing the pinned model's `config.json`, `tokenizer.json` and `model.safetensors`. The test verifies access enable/disable and task persistence across a full desktop-engine restart without recording screen activity or reading the real archive.
 
 Workspace tests cover persistence, conflicting claims and revisions, expired lease takeover, transcript replay/rollback, and memory archive/recovery. MCP tests exercise real stdio protocol and consent-gated HTTP requests plus private-socket transport. They use temporary directories and synthetic data.
+
+## Agent Space
+
+`apps/desktop/src/components/AgentSpacePage.tsx` exports both named and default
+`AgentSpacePage`. Render `<AgentSpacePage sample={false} onConnect={openSettings} />`
+in a host when ready to expose it. `sample` defaults to false. `onConnect` is
+optional; without it the connection button scrolls to the embedded `McpSetup`.
+`App.tsx` now mounts this page at **Agent Space**, the fourth workspace destination. The page composes the
+existing `TasksPage` in agent-only mode and `TaskDetail`; it does not introduce a
+second task store. Human schedules/reminders remain on `ScheduledTasksPage` and
+`/v1/schedules/*`, outside Agent Space. Legacy task-derived notes remain available through the shared backend.
+
+Agent Space offers query, exact project, status, owner harness, and lease-state
+filters; task details include follow-ups, artifact references, ownership/session,
+source transcripts, resume-pack export, and automatically loaded paginated
+handoff/activity history. Status `done` means complete; `parked` means released for
+later work. Expired claims are explicitly labeled and do not imply a process died.
+
+The service contract remains authenticated `POST /v1/workspace/<operation>` on
+both desktop and daemon. Existing MCP tool names and mutation revisions remain
+unchanged. Additions are optional and work with existing databases:
+
+- `create_task` / `create`: supply **both** `harness` (1–100 bytes) and
+  `session_id` (1–200 bytes) to record immutable `task.origin`. Omitting both
+  preserves compatibility. Legacy tasks have no origin; it is not fabricated
+  from transcript imports or subsequent owners. Origin is client-reported
+  attribution, not authenticated harness identity. A retry with an explicit
+  different origin for the same stable task ID is rejected.
+- `list_tasks` / `list`: `owner_harness` filters the recorded owner exactly;
+  `ownership` accepts `all` (default), `claimed` (live lease), `unclaimed`
+  (no owner), or `expired` (recorded owner with expired lease). Filters apply
+  before pagination. Search never matches private lease tokens.
+- `get_task_events` / `events`: mutation snapshots include `record.actor`,
+  derived from the claimant or matching lease holder before release clears the
+  owner. It is null for edits without an owned claim. Historical events are
+  immutable; older events without actor retain their original data. Actor,
+  origin, handoff, next_action, blockers and artifacts are returned without
+  lease tokens. Renewals keep the owning harness/session identity.
+
+There is no launch integration: creating, releasing, exporting or retrieving a
+handoff never starts or messages Claude, Codex, OpenCode, or any other harness.
+To continue, open the receiving harness yourself, connect the same MCP bridge,
+read `get_task_resume_pack` (and `get_task_events`/transcript pages as needed),
+then `claim_task` using its own harness/session and the latest revision. Use
+`update_task` for progress and `release_task(status="done")` to finish.
+
+### Verification
+
+```sh
+cargo test -p cortex-memory --lib
+npm --prefix apps/desktop test -- src/lib/workspace.test.ts src/components/AgentSpacePage.test.tsx
+npm --prefix apps/desktop run build
+npm --prefix crates/mcp test
+cargo build -p cortex-daemon
+CORTEX_DAEMON_BIN="$PWD/target/debug/cortex-daemon" node --test crates/mcp/dist/workspace.integration.test.js
+```
+
+The real-daemon integration uses two independent MCP stdio clients identified
+as Codex and Claude, an isolated temporary state directory, and explicit local
+MCP consent. It tests create → claim → progress → release/handoff → claim from
+another harness → complete, child tasks, transcript retention, stale revisions,
+a competing claim, stale tokens, owner filters, and persistence across restart.
+Rust tests additionally race claims through independent SQLite connections and
+cover OpenCode takeover and expired-lease fencing. The integration test skips
+unless `CORTEX_DAEMON_BIN` is set; it needs no inference model or live archive.

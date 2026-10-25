@@ -13,13 +13,13 @@ describe("ai provider", () => {
   it("lets each step run somewhere else, with its own model for that provider", () => {
     const p = prefs();
     p.layers.answer = { provider: "cloud", cloudModel: "a/big", localModel: "qwen-big" };
-    p.layers.autocomplete = { provider: "local", cloudModel: "a/fast", localModel: "qwen-small" };
-    p.layers.writing = { provider: "default", cloudModel: "", localModel: "" };
+    p.layers.followup = { provider: "local", cloudModel: "a/fast", localModel: "qwen-small" };
+    p.layers.context = { provider: "default", cloudModel: "", localModel: "" };
     expect(aiTarget(p, "answer")).toEqual({ model: "a/big", endpoint: null, local: false });
-    expect(aiTarget(p, "autocomplete")).toEqual({ model: "qwen-small", endpoint: "http://127.0.0.1:8080/v1", local: true });
+    expect(aiTarget(p, "followup")).toEqual({ model: "qwen-small", endpoint: "http://127.0.0.1:8080/v1", local: true });
     // Untouched steps still use the defaults.
-    expect(aiTarget(p, "writing")).toEqual({ model: "a/main", endpoint: null, local: false });
-    expect(aiTarget(p, "followup").local).toBe(false);
+    expect(aiTarget(p, "context")).toEqual({ model: "a/main", endpoint: null, local: false });
+
   });
 
   it("falls back to the default local model when the step names none", () => {
@@ -31,7 +31,7 @@ describe("ai provider", () => {
   it("local only forces every step onto the local server, whatever it chose", () => {
     const p = prefs({ localOnly: true, aiProvider: "openrouter" });
     p.layers.answer = { provider: "cloud", cloudModel: "a/big", localModel: "" };
-    for (const layer of ["answer", "followup", "autocomplete", "writing", "context"] as const) {
+    for (const layer of ["answer", "followup", "context"] as const) {
       expect(layerIsLocal(p, layer)).toBe(true);
       expect(aiTarget(p, layer).local).toBe(true);
       expect(aiTarget(p, layer).endpoint).toBe("http://127.0.0.1:8080/v1");

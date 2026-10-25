@@ -7,6 +7,9 @@ use std::path::Path;
 use std::sync::Mutex;
 use thiserror::Error;
 pub mod workspace;
+pub mod facts;
+pub mod schedules;
+pub mod schedule_runtime;
 
 const MAX_RESULTS: usize = 50;
 const MAX_SNAPSHOT_IDS: usize = 25;

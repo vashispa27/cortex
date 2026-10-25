@@ -542,8 +542,17 @@ fn route(
     if request["client"] == "mcp" && !settings.mcp_enabled {
         bail!("MCP_DISABLED: Enable Connected AI Apps in Cortex settings");
     }
-    if request["client"] == "mcp" && !(path.starts_with("/v1/workspace/") || path.starts_with("/v1/memory/") || path == "/v1/time/report") {
+    if request["client"] == "mcp" && !(path.starts_with("/v1/workspace/") || path.starts_with("/v1/schedules/") || path.starts_with("/v1/memory/") || path == "/v1/time/report") {
         bail!("MCP route is unavailable");
+    }
+    if method == "POST" && path == "/v1/schedules/wake" {
+        if request["client"] == "mcp" { bail!("Wake events are desktop-only"); }
+        cortex_memory::schedule_runtime::wake(root)?;
+        return Ok(json!({"accepted":true}));
+    }
+    if method == "POST" && path.starts_with("/v1/schedules/") {
+        let workspace = cortex_memory::workspace::WorkspaceStore::open(&root.join("workspace.sqlite3"))?;
+        return Ok(workspace.schedule_request(&path[14..], body, now_ms())?);
     }
     if method == "POST" && path.starts_with("/v1/workspace/") {
         let workspace = cortex_memory::workspace::WorkspaceStore::open(&root.join("workspace.sqlite3"))?;
@@ -701,13 +710,18 @@ fn route(
                 .unwrap_or(query);
             let timezone = answer_pipeline::system_timezone();
             let history = body["history"].as_array().map(Vec::as_slice).unwrap_or(&[]);
-            let prepared = answer_pipeline::prepare(&answer_pipeline::Request {
+            let mut prepared = answer_pipeline::prepare(&answer_pipeline::Request {
                 query,
                 history: if assistant { history } else { &[] },
                 timezone: &timezone,
                 tools: assistant && body["tools"] == true,
                 ..answer_pipeline::Request::new(question, &result.hits, params.chunks_per_result, result.abstained)
             })?;
+            if assistant {
+                if let Some(facts) = body["permanent_facts"].as_str() {
+                    answer_pipeline::add_permanent_facts(&mut prepared, facts)?;
+                }
+            }
             let results: Vec<_> = result
                 .hits
                 .iter()
@@ -773,73 +787,7 @@ fn route(
             let text = body["text"].as_str().context("text missing")?;
             Ok(json!({"text":redact_cloud(text)?}))
         }
-        ("POST", "/v1/assist/focus") => {
-            // Reads the focused field on an explicit double-tap and says what the tap means.
-            let started = std::time::Instant::now();
-            let flags: assist::RouteFlags = serde_json::from_value(body.clone()).unwrap_or_default();
-            let mut args = vec!["--focus".to_owned()];
-            if body["copy_fallback"] == true {
-                args.push("--copy-fallback".into());
-            }
-            args.extend(settings.excluded_apps.iter().map(|app| format!("--exclude-app={app}")));
-            let reply = run_helper_raw(helper, &args, None, 4).and_then(|bytes| serde_json::from_slice::<Value>(&bytes).context("invalid Accessibility response"));
-            let mut context: cortex_contracts::FocusContext = match reply.and_then(|value| serde_json::from_value(value).context("invalid focus context")) {
-                Ok(context) => context,
-                Err(_) => serde_json::from_value(json!({"status":"skipped","reason":"focus_unavailable"}))?,
-            };
-            let domain = context.url.as_deref().and_then(|s| url::Url::parse(s).ok()).and_then(|u| u.host_str().map(str::to_owned));
-            let excluded_domain = domain.is_some_and(|d| settings.excluded_domains.iter().any(|s| d == *s || d.ends_with(&format!(".{s}"))));
-            if context.status == "ok" && (excluded_domain || settings.excluded_apps.iter().any(|a| a.eq_ignore_ascii_case(&context.app_id))) {
-                context = serde_json::from_value(json!({"status":"skipped","reason":"excluded_app"}))?;
-            }
-            let (intent, hint) = assist::classify(&context, &flags);
-            eprintln!("assist focus: intent={intent:?} status={} reason={} ms={}", context.status, context.reason.as_deref().unwrap_or("-"), started.elapsed().as_millis());
-            Ok(json!({"intent":intent,"hint":hint,"context":context}))
-        }
-        ("POST", "/v1/assist/prepare") => {
-            let context: cortex_contracts::FocusContext = serde_json::from_value(body["context"].clone()).context("Invalid focus context")?;
-            let timezone = answer_pipeline::system_timezone();
-            let now = answer_pipeline::time_anchor(Local::now().fixed_offset(), &timezone);
-            let prepared = assist::prepare(
-                body["kind"].as_str().unwrap_or(""), &context, body["length"].as_str().unwrap_or("sentence"),
-                body["tone"].as_str().unwrap_or(""), body["me"].as_str().unwrap_or(""), &now, body["private_windows"] == true,
-            )?;
-            Ok(json!({"messages":prepared.messages,"max_tokens":prepared.max_tokens,"temperature":prepared.temperature,"truncated":prepared.truncated,"prompt_version":assist::PROMPT_VERSION}))
-        }
-        ("POST", "/v1/assist/finish") => {
-            let raw = body["raw"].as_str().context("raw missing")?;
-            let text = if body["kind"] == "autocomplete" {
-                let app_id = body["app_id"].as_str().unwrap_or("");
-                let keep_newlines = body["multiline"] == true && !assist::types_into(app_id);
-                assist::sanitize_completion(raw, body["text_before_caret"].as_str().unwrap_or(""), keep_newlines)
-            } else {
-                assist::sanitize_rewrite(raw, body["original"].as_str().unwrap_or(""))
-            };
-            Ok(json!({"text":text,"empty":text.trim().is_empty()}))
-        }
-        ("POST", "/v1/assist/apply" | "/v1/assist/undo" | "/v1/assist/check") => {
-            let exclude: Vec<String> = settings.excluded_apps.clone();
-            let mut editor = assist::HelperEditor::new(helper, exclude, body["allow_paste"] == true);
-            let started = std::time::Instant::now();
-            let result = match path {
-                "/v1/assist/apply" => {
-                    let target: cortex_contracts::TargetRevision = serde_json::from_value(body["target"].clone()).context("Invalid target")?;
-                    let text = body["text"].as_str().filter(|t| t.chars().count() <= 24_000).context("Invalid text")?;
-                    let request_id = body["request_id"].as_str().unwrap_or("assist");
-                    assist::apply(&mut editor, &target, text, request_id, 0)
-                }
-                "/v1/assist/undo" => {
-                    let token: cortex_capture::edit::UndoToken = serde_json::from_value(body["token"].clone()).context("Invalid undo token")?;
-                    assist::undo(&mut editor, &token)
-                }
-                _ => {
-                    let target: cortex_contracts::TargetRevision = serde_json::from_value(body["target"].clone()).context("Invalid target")?;
-                    json!({"current":assist::still_current(&mut editor, &target)})
-                }
-            };
-            eprintln!("assist {}: outcome={} ms={}", &path[11..], result["outcome"].as_str().unwrap_or("-"), started.elapsed().as_millis());
-            Ok(result)
-        }
+
         ("POST", "/v1/memory/snapshots") => {
             let ids: Vec<i64> = serde_json::from_value(body["ids"].clone())?;
             if ids.len() > 25 {
@@ -958,6 +906,7 @@ pub fn serve(state: &Path) -> Result<()> {
     let listener = UnixListener::bind(&socket)?;
     fs::set_permissions(&socket, fs::Permissions::from_mode(0o600))?;
     listener.set_nonblocking(true)?;
+    cortex_memory::schedule_runtime::start(&root)?;
     let mut settings = load_settings(&root)?;
     let helper = install_capture_bundle(&root)?;
     let mut db = open_db(state)?;

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Orbit, Plus, UserRound } from "lucide-react";
 import { AnswerContent, AnswerSourceLabel } from "./AnswerContent";
-import { answerFromMemory } from "../lib/answer";
+import { answerCortex } from "../lib/answer";
 import { demoSearch } from "../lib/demo";
 import { takeActiveSession } from "../lib/notch";
 import {
@@ -68,8 +68,8 @@ export default function AskChat({ sample, active, onSessionCount }: Props) {
     try {
       const answer = sample
         ? (() => { const found = demoSearch(question); return { body: composeAnswer(question, found.results, true), hits: found.results.slice(0, 3), source: "memory" as const }; })()
-        : await answerFromMemory(question, session?.messages ?? []);
-      commit(appendMessage(next, { role: "assistant", body: answer.body, hits: answer.hits, source: answer.source }));
+        : await answerCortex(question, session?.messages ?? []);
+      commit(appendMessage(next, { role: "assistant", body: answer.body, hits: answer.hits, source: answer.source, ...("pendingIntent" in answer ? { pendingIntent: answer.pendingIntent } : {}) }));
     } catch (error) {
       commit(appendMessage(next, { role: "assistant", body: `Cortex could not answer: ${error instanceof Error ? error.message : String(error)}` }));
     } finally {

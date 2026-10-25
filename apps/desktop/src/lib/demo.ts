@@ -107,8 +107,6 @@ export const sampleAppUsage: { appId: string; minutes: number }[] = [
 export const sampleActivity = {
   actions: 84,
   hours: 6.4,
-  rewrites: 12,
-  voiceNotes: 4,
   chats: 18,
   edits: 9,
   mcpCalls: 3,

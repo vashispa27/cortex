@@ -66,7 +66,7 @@ function text(value: unknown): string {
 
 async function request<T>(method: "GET" | "POST" | "PATCH", path: string, body?: unknown): Promise<T> {
   if (!isTauri()) {
-    throw new LocalApiError("The local service is available in the desktop app. Use sample mode in this browser preview.", "DESKTOP_ONLY");
+    throw new LocalApiError("The local service is available in the desktop app. Open Cortex desktop to use this feature.", "DESKTOP_ONLY");
   }
   try {
     const response = await invoke<Envelope<T> | T>("daemon_request", {
@@ -83,7 +83,7 @@ async function request<T>(method: "GET" | "POST" | "PATCH", path: string, body?:
   }
 }
 
-/** Calls any allow-listed local engine route; used by the double-tap assist flow. */
+/** Calls allow-listed local engine routes for the workspace services. */
 export const localRequest = request;
 
 export function desktopRuntime(): boolean {
@@ -132,8 +132,8 @@ export type AssistantRequest = RetrievalData & { messages: { role: "system" | "u
 /** Retrieves on `query`, then lets the local engine build the full model request: shared prompt,
  *  current date and time, redacted evidence (or an explicit no-evidence marker), chat history and a
  *  note that read-only tools (`search_memory`) are available. */
-export async function prepareAssistantRequest(query: string, question: string, history: HistoryTurn[]): Promise<AssistantRequest> {
-  const data = await request<AssistantRequest>("POST", "/v1/assistant/prepare", { query, question, history, tools: true });
+export async function prepareAssistantRequest(query: string, question: string, history: HistoryTurn[], permanentFacts?: string): Promise<AssistantRequest> {
+  const data = await request<AssistantRequest>("POST", "/v1/assistant/prepare", { query, question, history, tools: true, ...(permanentFacts ? { permanent_facts: permanentFacts } : {}) });
   assertSemanticEngine(data);
   return data;
 }

@@ -58,13 +58,13 @@ export function createGateway({ controlUrl = 'http://127.0.0.1:8788', controlSec
         const result = await internal(`/internal/releases/${encodeURIComponent(release[1])}/${encodeURIComponent(release[2])}`);
         return reply(res, result.status, result.data);
       }
-      const match = url.pathname.match(/^\/v1\/inference\/(rewrite|answer|extract|summarize|transcribe)$/);
+      const match = url.pathname.match(/^\/v1\/inference\/(answer|extract|summarize)$/);
       if (!match || req.method !== 'POST') return fail(res, 404, 'not_found', 'Unknown route');
       const task = match[1];
       if (!req.headers['content-type']?.startsWith('application/json')) return fail(res, 415, 'unsupported_media_type', 'JSON required');
       const idempotency = req.headers['idempotency-key'];
       if (typeof idempotency !== 'string' || !/^[A-Za-z0-9._:-]{8,128}$/.test(idempotency)) return fail(res, 400, 'idempotency_required', 'A unique Idempotency-Key is required');
-      const maxBytes = task === 'transcribe' ? 2_700_000 : 70_000;
+      const maxBytes = 70_000;
       const { json } = await body(req, maxBytes);
       const input = validateRequest(task, json);
       if (sensitiveCategory(input)) return fail(res, 400, 'sensitive_input', 'Potential credential or payment identifier in selected context');
@@ -112,7 +112,7 @@ export function createGateway({ controlUrl = 'http://127.0.0.1:8788', controlSec
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const devMode = process.env.GF_DEV_MODE === '1';
   const authenticate = createAuthenticator({ devMode, devToken: process.env.GF_DEV_TOKEN || '', issuer: process.env.GF_OIDC_ISSUER, audience: process.env.GF_OIDC_AUDIENCE, jwksUrl: process.env.GF_OIDC_JWKS_URL });
-  const provider = devMode && (process.env.GF_PROVIDER_MODE || 'mock') === 'mock' ? new MockProvider() : new CompatibleProvider({ baseUrl: process.env.GF_PROVIDER_BASE_URL, allowedOrigin: process.env.GF_PROVIDER_ALLOWED_ORIGIN, apiKey: process.env.GF_PROVIDER_API_KEY, models: { inline: process.env.GF_MODEL_INLINE, answer: process.env.GF_MODEL_ANSWER, structured: process.env.GF_MODEL_STRUCTURED, speech: process.env.GF_MODEL_SPEECH } });
+  const provider = devMode && (process.env.GF_PROVIDER_MODE || 'mock') === 'mock' ? new MockProvider() : new CompatibleProvider({ baseUrl: process.env.GF_PROVIDER_BASE_URL, allowedOrigin: process.env.GF_PROVIDER_ALLOWED_ORIGIN, apiKey: process.env.GF_PROVIDER_API_KEY, models: { answer: process.env.GF_MODEL_ANSWER, structured: process.env.GF_MODEL_STRUCTURED } });
   const signingKey = process.env.GF_ENTITLEMENT_PRIVATE_KEY_FILE ? readFileSync(process.env.GF_ENTITLEMENT_PRIVATE_KEY_FILE) : undefined;
   if (!devMode && !signingKey) throw new Error('GF_ENTITLEMENT_PRIVATE_KEY_FILE is required outside dev mode');
   const gateway = createGateway({ controlUrl: process.env.GF_CONTROL_URL || 'http://127.0.0.1:8788', controlSecret: process.env.GF_CONTROL_SECRET, authenticate, provider, signingKey, keyId: process.env.GF_ENTITLEMENT_KEY_ID || (devMode ? 'dev-ephemeral' : 'production') });

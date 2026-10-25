@@ -8,7 +8,7 @@ const prefs = (changes: Partial<Preferences> = {}): Preferences => ({ ...default
 describe("where each step runs", () => {
   it("lists every step and marks contextual indexing off until it is enabled", () => {
     const rows = whereEachStepRuns(prefs());
-    expect(rows.map((row) => row.id)).toEqual(["answer", "followup", "autocomplete", "writing", "context"]);
+    expect(rows.map((row) => row.id)).toEqual(["answer", "followup", "context"]);
     expect(rows.find((row) => row.id === "answer")).toMatchObject({ where: "cloud", model: "a/main" });
     expect(rows.find((row) => row.id === "context")?.where).toBe("off");
   });
@@ -18,7 +18,7 @@ describe("where each step runs", () => {
     p.layers.answer.provider = "local";
     p.layers.context.provider = "cloud";
     const rows = Object.fromEntries(whereEachStepRuns(p).map((row) => [row.id, row.where]));
-    expect(rows).toEqual({ answer: "local", followup: "cloud", autocomplete: "cloud", writing: "cloud", context: "cloud" });
+    expect(rows).toEqual({ answer: "local", followup: "cloud", context: "cloud" });
     const only = whereEachStepRuns({ ...p, localOnly: true });
     expect(only.every((row) => row.where === "local")).toBe(true);
   });

@@ -4,7 +4,11 @@ import { isTauri } from "@tauri-apps/api/core";
 import App from "./App";
 import NotchApp from "./Notch";
 import "./styles.css";
+import "./components/tasks.css";
 import "./cortex-theme.css";
+import "./workspace.css";
+
+document.documentElement.dataset.runtime = isTauri() ? "desktop" : "browser";
 
 const params = new URLSearchParams(window.location.search);
 const notchWindow = params.get("window") === "notch";

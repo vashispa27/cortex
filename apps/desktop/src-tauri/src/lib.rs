@@ -1,5 +1,5 @@
 use serde_json::Value;
-use std::{env, fs, io, path::PathBuf, sync::atomic::{AtomicBool, Ordering as AtomicOrdering}, time::Duration};
+use std::{collections::BTreeMap, env, fs, io, path::PathBuf, sync::atomic::{AtomicBool, Ordering as AtomicOrdering}, time::Duration};
 use tauri::{Emitter, Manager};
 #[cfg(target_os = "macos")]
 use std::{io::Write, os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt}, process::{Child, Command, Stdio}, sync::{Arc, Mutex}};
@@ -24,54 +24,76 @@ const NOTCH_ANSWER_WIDTH: f64 = 500.0;
 const NOTCH_ANSWER_HEIGHT: f64 = 320.0;
 const NOTCH_HISTORY_WIDTH: f64 = 620.0;
 const NOTCH_HISTORY_HEIGHT: f64 = 400.0;
-const NOTCH_ASSIST_WIDTH: f64 = 440.0;
-const NOTCH_ASSIST_HEIGHT: f64 = 64.0;
-const NOTCH_ASSIST_RESULT_WIDTH: f64 = 500.0;
-const NOTCH_ASSIST_RESULT_HEIGHT: f64 = 220.0;
 
-static NOTCH_COLLAPSED_SIZE: std::sync::Mutex<(f64, f64)> = std::sync::Mutex::new((NOTCH_FALLBACK_WIDTH, NOTCH_FALLBACK_HEIGHT));
-static NOTCH_MODE: std::sync::Mutex<String> = std::sync::Mutex::new(String::new());
+/// One webview per display: Spaces membership alone does not duplicate a window across monitors.
+#[derive(Clone, Copy, Debug, PartialEq)]
+struct NotchScreen {
+    x: f64, y: f64, width: f64, height: f64,
+    cutout_width: f64, safe_top: f64,
+}
+#[derive(Clone)]
+struct NotchDisplay {
+    screen: NotchScreen,
+    mode: String,
+    animation: std::sync::Arc<std::sync::atomic::AtomicU64>,
+}
+static NOTCH_DISPLAYS: std::sync::Mutex<BTreeMap<String, NotchDisplay>> = std::sync::Mutex::new(BTreeMap::new());
+static ACTIVE_NOTCH: std::sync::Mutex<String> = std::sync::Mutex::new(String::new());
+static NOTCH_VISIBLE: AtomicBool = AtomicBool::new(true);
+static NOTCH_OVER_FULL_SCREEN: AtomicBool = AtomicBool::new(true);
 
-/// The screen the notch sits on, in the top-left-origin global coordinates `set_position` uses.
-#[derive(Clone, Copy)]
-struct NotchScreen { x: f64, y: f64, width: f64 }
-static NOTCH_SCREEN: std::sync::Mutex<Option<NotchScreen>> = std::sync::Mutex::new(None);
+fn is_notch(label: &str) -> bool { label == "notch" || label.starts_with("notch-display-") }
 
-/// What a double-tap may do besides opening the compose box. Set from Settings.
-#[derive(Clone, Copy, Default)]
-struct AssistConfig { autocomplete: bool, summarize: bool, rewrite: bool, private_windows: bool }
-static ASSIST_CONFIG: std::sync::Mutex<AssistConfig> = std::sync::Mutex::new(AssistConfig { autocomplete: false, summarize: false, rewrite: false, private_windows: false });
-/// True while an autocomplete or rewrite request is in flight; typing then cancels it.
-static ASSIST_ACTIVE: AtomicBool = AtomicBool::new(false);
+fn notch_windows(app: &tauri::AppHandle) -> Vec<tauri::WebviewWindow> {
+    app.webview_windows().into_values().filter(|window| is_notch(window.label())).collect()
+}
+
+fn active_notch_label() -> String {
+    let label = ACTIVE_NOTCH.lock().unwrap_or_else(|p| p.into_inner()).clone();
+    if label.is_empty() { "notch".into() } else { label }
+}
+
+fn notch_display(label: &str) -> Option<NotchDisplay> {
+    NOTCH_DISPLAYS.lock().unwrap_or_else(|p| p.into_inner()).get(label).cloned()
+}
+
+fn set_notch_mode_state(label: &str, mode: &str) {
+    if let Some(display) = NOTCH_DISPLAYS.lock().unwrap_or_else(|p| p.into_inner()).get_mut(label) {
+        display.mode = mode.into();
+    }
+    if mode != "collapsed" {
+        *ACTIVE_NOTCH.lock().unwrap_or_else(|p| p.into_inner()) = label.into();
+    }
+}
 
 /// Test mode adds a record button to the collapsed notch, which needs a little more room each side.
 static TEST_MODE_BAR: AtomicBool = AtomicBool::new(false);
 const NOTCH_TEST_MODE_EXTRA: f64 = 24.0;
 
-fn collapsed_notch_size() -> (f64, f64) {
-    let (notch_width, height) = *NOTCH_COLLAPSED_SIZE.lock().unwrap_or_else(|poisoned| poisoned.into_inner());
+fn collapsed_notch_size(label: &str) -> (f64, f64) {
+    let (notch_width, height) = notch_display(label)
+        .map(|display| (display.screen.cutout_width, display.screen.safe_top))
+        .unwrap_or((NOTCH_FALLBACK_WIDTH, NOTCH_FALLBACK_HEIGHT));
     let extra = NOTCH_SIDE_EXTRA + if TEST_MODE_BAR.load(AtomicOrdering::SeqCst) { NOTCH_TEST_MODE_EXTRA } else { 0.0 };
     (notch_width + extra * 2.0, height)
 }
 
-fn notch_size(mode: &str) -> (f64, f64) {
+fn notch_size(label: &str, mode: &str) -> (f64, f64) {
     match mode {
         "compose" => (NOTCH_COMPOSE_WIDTH, NOTCH_COMPOSE_HEIGHT),
         "thinking" => (NOTCH_THINKING_WIDTH, NOTCH_THINKING_HEIGHT),
         "answer" => (NOTCH_ANSWER_WIDTH, NOTCH_ANSWER_HEIGHT),
         "history" => (NOTCH_HISTORY_WIDTH, NOTCH_HISTORY_HEIGHT),
-        "assist" | "assist-done" => (NOTCH_ASSIST_WIDTH, NOTCH_ASSIST_HEIGHT),
-        "assist-result" => (NOTCH_ASSIST_RESULT_WIDTH, NOTCH_ASSIST_RESULT_HEIGHT),
-        _ => collapsed_notch_size(),
+        _ => collapsed_notch_size(label),
     }
 }
 
-fn notch_target_position(app: &tauri::AppHandle, width: f64, expanded: bool) -> (f64, f64) {
+fn notch_target_position(app: &tauri::AppHandle, label: &str, width: f64, expanded: bool) -> (f64, f64) {
     // Expanded controls belong below the hardware cutout, in logical points.
-    let safe_top = collapsed_notch_size().1;
+    let safe_top = collapsed_notch_size(label).1;
     let offset = if expanded { safe_top + 6.0 } else { 0.0 };
-    if let Some(screen) = *NOTCH_SCREEN.lock().unwrap_or_else(|poisoned| poisoned.into_inner()) {
-        return (screen.x + ((screen.width - width) / 2.0).max(0.0), screen.y + offset);
+    if let Some(display) = notch_display(label) {
+        return display.screen.position(width, expanded);
     }
     let monitor = app.primary_monitor().ok().flatten();
     let scale = monitor.as_ref().map(tauri::Monitor::scale_factor).unwrap_or(1.0);
@@ -85,32 +107,39 @@ fn notch_target_position(app: &tauri::AppHandle, width: f64, expanded: bool) -> 
 }
 
 fn place_notch(app: &tauri::AppHandle, window: &tauri::WebviewWindow, width: f64, height: f64) -> Result<(), String> {
-    let (x, y) = notch_target_position(app, width, height > collapsed_notch_size().1);
-    window.set_size(tauri::LogicalSize::new(width, height)).map_err(|error| error.to_string())?;
-    window.set_position(tauri::LogicalPosition::new(x, y)).map_err(|error| error.to_string())?;
-    Ok(())
+    let (x, y) = notch_target_position(app, window.label(), width, height > collapsed_notch_size(window.label()).1);
+    #[cfg(target_os = "macos")]
+    return macos_notch::set_frame(window, x, y, width, height);
+    #[cfg(not(target_os = "macos"))]
+    {
+        window.set_size(tauri::LogicalSize::new(width, height)).map_err(|error| error.to_string())?;
+        window.set_position(tauri::LogicalPosition::new(x, y)).map_err(|error| error.to_string())?;
+        Ok(())
+    }
 }
 
-/// Makes the notch the key window so it can take typing. The notch is a plain borderless window, which
-/// only receives keystrokes while its app is active, so remember the app in front and activate Cortex.
-/// The notch is on every Space, so activating does not switch Spaces.
+fn show_notch(window: &tauri::WebviewWindow) -> Result<(), String> {
+    #[cfg(target_os = "macos")]
+    return macos_notch::set_visible(window, true);
+    #[cfg(not(target_os = "macos"))]
+    window.show().map_err(|error| error.to_string())
+}
+
+fn hide_notch(window: &tauri::WebviewWindow) -> Result<(), String> {
+    #[cfg(target_os = "macos")]
+    return macos_notch::set_visible(window, false);
+    #[cfg(not(target_os = "macos"))]
+    window.hide().map_err(|error| error.to_string())
+}
+
+/// A non-activating panel can accept typing without activating Cortex or leaving full screen.
 fn focus_notch(window: &tauri::WebviewWindow) {
     #[cfg(target_os = "macos")]
     {
         let handle = window.clone();
         let _ = window.run_on_main_thread(move || {
-            use objc2_app_kit::{NSApplication, NSWindow};
             cortex_hotkey::remember_previous_app();
-            if let Some(mtm) = objc2::MainThreadMarker::new() {
-                #[allow(deprecated)]
-                NSApplication::sharedApplication(mtm).activateIgnoringOtherApps(true);
-            }
-            if let Ok(pointer) = handle.ns_window() {
-                let pointer = pointer as *mut NSWindow;
-                if !pointer.is_null() {
-                    unsafe { (&*pointer).makeKeyAndOrderFront(None) };
-                }
-            }
+            if let Some(native) = macos_notch::native(&handle) { native.makeKeyAndOrderFront(None); }
         });
     }
     #[cfg(not(target_os = "macos"))]
@@ -118,108 +147,220 @@ fn focus_notch(window: &tauri::WebviewWindow) {
 }
 
 #[cfg(target_os = "macos")]
-static NOTCH_ANIMATION_GENERATION: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
-
-#[cfg(target_os = "macos")]
 fn animate_notch(app: tauri::AppHandle, window: tauri::WebviewWindow, width: f64, height: f64, focus: bool) {
     use std::sync::atomic::Ordering;
-    let generation = NOTCH_ANIMATION_GENERATION.fetch_add(1, Ordering::SeqCst) + 1;
-    let (target_x, target_y) = notch_target_position(&app, width, height > collapsed_notch_size().1);
-    std::thread::spawn(move || {
-        let scale = window.scale_factor().unwrap_or(1.0);
-        let start_size = window.inner_size().ok();
-        let start_position = window.outer_position().ok();
-        let start_width = start_size.map(|size| size.width as f64 / scale).unwrap_or(width);
-        let start_height = start_size.map(|size| size.height as f64 / scale).unwrap_or(height);
-        let start_x = start_position.map(|position| position.x as f64 / scale).unwrap_or(target_x);
-        let start_y = start_position.map(|position| position.y as f64 / scale).unwrap_or(target_y);
-        let steps = 14;
-        for step in 1..=steps {
-            if NOTCH_ANIMATION_GENERATION.load(Ordering::SeqCst) != generation {
-                return;
+    let animation = notch_display(window.label()).map(|display| display.animation)
+        .unwrap_or_else(|| std::sync::Arc::new(std::sync::atomic::AtomicU64::new(0)));
+    let generation = animation.fetch_add(1, Ordering::SeqCst) + 1;
+    let (target_x, target_y) = notch_target_position(&app, window.label(), width, height > collapsed_notch_size(window.label()).1);
+    let handle = window.clone();
+    let _ = window.run_on_main_thread(move || {
+        let (start_x, start_y, start_width, start_height) = macos_notch::frame(&handle)
+            .unwrap_or((target_x, target_y, width, height));
+        std::thread::spawn(move || {
+            for step in 1..=14 {
+                if animation.load(Ordering::SeqCst) != generation { return; }
+                let eased = 1.0 - (1.0 - step as f64 / 14.0).powi(3);
+                let _ = macos_notch::set_frame(&handle,
+                    start_x + (target_x - start_x) * eased,
+                    start_y + (target_y - start_y) * eased,
+                    start_width + (width - start_width) * eased,
+                    start_height + (height - start_height) * eased);
+                std::thread::sleep(Duration::from_millis(16));
             }
-            let progress = step as f64 / steps as f64;
-            let eased = 1.0 - (1.0 - progress).powi(3);
-            let current_width = start_width + (width - start_width) * eased;
-            let current_height = start_height + (height - start_height) * eased;
-            let current_x = start_x + (target_x - start_x) * eased;
-            let current_y = start_y + (target_y - start_y) * eased;
-            let _ = window.set_size(tauri::LogicalSize::new(current_width, current_height));
-            let _ = window.set_position(tauri::LogicalPosition::new(current_x, current_y));
-            std::thread::sleep(Duration::from_millis(16));
-        }
-        if NOTCH_ANIMATION_GENERATION.load(Ordering::SeqCst) == generation && focus {
-            focus_notch(&window);
-        }
+            if animation.load(Ordering::SeqCst) == generation && focus { focus_notch(&handle); }
+        });
     });
 }
 
-/// Picks the screen for the notch: the one with a camera housing if there is one, otherwise the main
-/// screen. Size and position both come from it, so they can never disagree. Main thread only.
+impl NotchScreen {
+    /// Cocoa uses bottom-left screen coordinates; Tauri uses top-left logical coordinates.
+    fn from_frame(x: f64, y: f64, width: f64, height: f64, primary_height: f64, cutout_width: f64, safe_top: f64) -> Self {
+        Self {
+            x, y: primary_height - (y + height), width, height,
+            cutout_width: if cutout_width > 100.0 && safe_top > 20.0 { cutout_width } else { NOTCH_FALLBACK_WIDTH },
+            safe_top: if safe_top > 20.0 { safe_top } else { NOTCH_FALLBACK_HEIGHT },
+        }
+    }
+
+    fn position(self, width: f64, expanded: bool) -> (f64, f64) {
+        (self.x + ((self.width - width) / 2.0).max(0.0), self.y + if expanded { self.safe_top + 6.0 } else { 0.0 })
+    }
+
+    fn contains(self, x: f64, y: f64) -> bool {
+        x >= self.x && x < self.x + self.width && y >= self.y && y < self.y + self.height
+    }
+}
+
+/// Use the display under the pointer for global shortcuts and dashboard previews.
+fn preferred_notch(app: &tauri::AppHandle) -> Option<tauri::WebviewWindow> {
+    #[cfg(target_os = "macos")]
+    {
+        use objc2_app_kit::NSEvent;
+        let point = NSEvent::mouseLocation();
+        let displays = NOTCH_DISPLAYS.lock().unwrap_or_else(|p| p.into_inner());
+        // The primary display's Tauri y-origin is zero, so its height converts Cocoa mouse y.
+        if let Some(primary) = displays.get("notch") {
+            let y = primary.screen.height - point.y;
+            if let Some((label, _)) = displays.iter().find(|(_, display)| display.screen.contains(point.x, y)) {
+                if let Some(window) = app.get_webview_window(label) { return Some(window); }
+            }
+        }
+    }
+    app.get_webview_window(&active_notch_label()).or_else(|| app.get_webview_window("notch"))
+}
+
+/// Main thread only. Reconcile hot-plugged displays without sharing geometry or animations.
 #[cfg(target_os = "macos")]
-fn refresh_notch_screen() {
+fn sync_notch_displays(app: &tauri::AppHandle) -> Result<(), String> {
     use objc2::MainThreadMarker;
     use objc2_app_kit::NSScreen;
-    let Some(mtm) = MainThreadMarker::new() else { return };
+    use objc2_foundation::{ns_string, NSNumber};
+    let mtm = MainThreadMarker::new().ok_or("Display reconciliation requires the main thread")?;
     let screens = NSScreen::screens(mtm);
-    let Some(primary) = screens.iter().next() else { return };
+    let Some(primary) = screens.iter().next() else { return Ok(()) };
     let primary_height = primary.frame().size.height;
-    let chosen = screens.iter().find(|screen| screen.safeAreaInsets().top > 0.0).or_else(|| NSScreen::mainScreen(mtm));
-    let Some(screen) = chosen else { return };
-    let frame = screen.frame();
-    *NOTCH_SCREEN.lock().unwrap_or_else(|poisoned| poisoned.into_inner()) = Some(NotchScreen {
-        x: frame.origin.x,
-        y: primary_height - (frame.origin.y + frame.size.height),
-        width: frame.size.width,
-    });
-    let left = screen.auxiliaryTopLeftArea();
-    let right = screen.auxiliaryTopRightArea();
-    let width = frame.size.width - left.size.width - right.size.width;
-    let height = screen.safeAreaInsets().top;
-    *NOTCH_COLLAPSED_SIZE.lock().unwrap_or_else(|poisoned| poisoned.into_inner()) =
-        if width > 100.0 && height > 20.0 { (width, height) } else { (NOTCH_FALLBACK_WIDTH, NOTCH_FALLBACK_HEIGHT) };
+    let mut next = BTreeMap::new();
+    for (index, screen) in screens.iter().enumerate() {
+        let number = screen.deviceDescription().objectForKey(ns_string!("NSScreenNumber"))
+            .and_then(|value| value.downcast::<NSNumber>().ok()).map(|number| number.unsignedIntValue());
+        let label = if index == 0 { "notch".into() } else { format!("notch-display-{}", number.unwrap_or(index as u32)) };
+        let frame = screen.frame();
+        let cutout = frame.size.width - screen.auxiliaryTopLeftArea().size.width - screen.auxiliaryTopRightArea().size.width;
+        let geometry = NotchScreen::from_frame(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height, primary_height, cutout, screen.safeAreaInsets().top);
+        let previous = notch_display(&label);
+        let display = previous.unwrap_or_else(|| NotchDisplay {
+            screen: geometry, mode: "collapsed".into(), animation: std::sync::Arc::new(std::sync::atomic::AtomicU64::new(0)),
+        });
+        display.animation.fetch_add(1, AtomicOrdering::SeqCst);
+        next.insert(label, NotchDisplay { screen: geometry, ..display });
+    }
+    {
+        let mut displays = NOTCH_DISPLAYS.lock().unwrap_or_else(|p| p.into_inner());
+        for (label, display) in displays.iter() {
+            if !next.contains_key(label) { display.animation.fetch_add(1, AtomicOrdering::SeqCst); }
+        }
+        *displays = next.clone();
+    }
+    // Clone the existing notch configuration so new webviews inherit its security and native flags.
+    let template = app.config().app.windows.iter().find(|config| config.label == "notch").cloned()
+        .ok_or("Notch window configuration is missing")?;
+    for (label, display) in &next {
+        let window = if let Some(window) = app.get_webview_window(label) { window } else {
+            let mut config = template.clone();
+            config.label = label.clone();
+            config.visible = false;
+            config.focus = false;
+            tauri::WebviewWindowBuilder::from_config(app, &config).map_err(|error| error.to_string())?
+                .build().map_err(|error| error.to_string())?
+        };
+        configure_notch_window(&window).map_err(|error| error.to_string())?;
+        let (width, height) = notch_size(label, &display.mode);
+        place_notch(app, &window, width, height)?;
+        if NOTCH_VISIBLE.load(AtomicOrdering::SeqCst) { show_notch(&window)?; }
+        log_notch_visibility(&window, "configured");
+    }
+    for window in notch_windows(app) {
+        if !next.contains_key(window.label()) {
+            macos_notch::dispose(&window);
+            let _ = window.destroy();
+        }
+    }
+    Ok(())
 }
 
-/// Re-places the notch when a display is plugged in or out or its resolution changes.
+/// Space changes can reorder native windows. Restore the overlay without activating Cortex.
+#[cfg(target_os = "macos")]
+fn raise_notches(app: &tauri::AppHandle) {
+    if !NOTCH_VISIBLE.load(AtomicOrdering::SeqCst) { return; }
+    for window in notch_windows(app) {
+        macos_notch::set_collection_behavior(&window, NOTCH_OVER_FULL_SCREEN.load(AtomicOrdering::SeqCst));
+        if let Some(native) = macos_notch::native(&window) {
+            native.orderFrontRegardless();
+            log_notch_visibility(&window, "space-change");
+        }
+    }
+}
+
+/// Opt-in diagnostics for this app's own overlays; no foreground-app content is recorded.
+#[cfg(target_os = "macos")]
+fn log_notch_visibility(window: &tauri::WebviewWindow, context: &str) {
+    use objc2::{ClassType, runtime::NSObjectProtocol};
+    use objc2_app_kit::NSPanel;
+    let Ok(dir) = state_dir() else { return };
+    if !dir.join("notch-debug").exists() { return; }
+    let Some(native) = macos_notch::native(window) else { return };
+    if let Ok(mut file) = fs::OpenOptions::new().create(true).append(true).open(dir.join("notch-debug.log")) {
+        let _ = writeln!(file, "{context} {} panel={} visible={} active-space={} occlusion={:?} level={} behavior={:?} frame={:?}", window.label(), native.isKindOfClass(NSPanel::class()), native.isVisible(), native.isOnActiveSpace(), native.occlusionState(), native.level(), native.collectionBehavior(), native.frame());
+    }
+}
+
+#[cfg(target_os = "macos")]
+fn watch_notch_visibility(app: tauri::AppHandle) {
+    let Ok(dir) = state_dir() else { return };
+    let flag = dir.join("notch-debug");
+    if !flag.exists() { return; }
+    // Occlusion updates arrive after a Space's transition animation completes.
+    std::thread::spawn(move || {
+        while flag.exists() {
+            let handle = app.clone();
+            if app.run_on_main_thread(move || {
+                for window in notch_windows(&handle) { log_notch_visibility(&window, "settled"); }
+            }).is_err() { break; }
+            std::thread::sleep(Duration::from_secs(1));
+        }
+    });
+}
+
 #[cfg(target_os = "macos")]
 fn watch_screen_changes(app: tauri::AppHandle) {
     use block2::RcBlock;
-    use objc2_app_kit::NSApplicationDidChangeScreenParametersNotification;
+    use objc2_app_kit::{NSApplicationDidChangeScreenParametersNotification, NSWorkspace, NSWorkspaceActiveSpaceDidChangeNotification};
     use objc2_foundation::{NSNotification, NSNotificationCenter};
     use std::ptr::NonNull;
+    let display_app = app.clone();
     let block = RcBlock::new(move |_notification: NonNull<NSNotification>| {
-        refresh_notch_screen();
-        if let Some(window) = app.get_webview_window("notch") {
-            let mode = NOTCH_MODE.lock().unwrap_or_else(|poisoned| poisoned.into_inner()).clone();
-            let (width, height) = notch_size(&mode);
-            let _ = place_notch(&app, &window, width, height);
-        }
+        if let Err(error) = sync_notch_displays(&display_app) { eprintln!("Could not update Cortex displays: {error}"); }
     });
-    let center = NSNotificationCenter::defaultCenter();
-    let observer = unsafe {
-        center.addObserverForName_object_queue_usingBlock(Some(NSApplicationDidChangeScreenParametersNotification), None, None, &block)
-    };
+    let observer = unsafe { NSNotificationCenter::defaultCenter().addObserverForName_object_queue_usingBlock(Some(NSApplicationDidChangeScreenParametersNotification), None, None, &block) };
+    std::mem::forget(observer);
+    std::mem::forget(block);
+    let block = RcBlock::new(move |_notification: NonNull<NSNotification>| { raise_notches(&app); });
+    let observer = unsafe { NSWorkspace::sharedWorkspace().notificationCenter().addObserverForName_object_queue_usingBlock(Some(NSWorkspaceActiveSpaceDidChangeNotification), None, None, &block) };
     std::mem::forget(observer);
     std::mem::forget(block);
 }
 
+/// Native wake and session-activation events do not depend on a mounted web page.
+#[cfg(target_os = "macos")]
+fn watch_schedule_activity() {
+    use block2::RcBlock;
+    use objc2_app_kit::{NSWorkspace, NSWorkspaceDidWakeNotification, NSWorkspaceSessionDidBecomeActiveNotification};
+    use objc2_foundation::NSNotification;
+    use std::ptr::NonNull;
+    for name in unsafe { [NSWorkspaceDidWakeNotification, NSWorkspaceSessionDidBecomeActiveNotification] } {
+        let block = RcBlock::new(move |_notification: NonNull<NSNotification>| {
+            tauri::async_runtime::spawn(async {
+                if let Err(error) = daemon_call("POST".into(), "/v1/schedules/wake".into(), Some(serde_json::json!({}))).await {
+                    eprintln!("Could not report schedule activity: {error}");
+                }
+            });
+        });
+        let observer = unsafe { NSWorkspace::sharedWorkspace().notificationCenter().addObserverForName_object_queue_usingBlock(Some(name), None, None, &block) };
+        std::mem::forget(observer);
+        std::mem::forget(block);
+    }
+}
+
 #[tauri::command]
-fn notch_set_mode(app: tauri::AppHandle, mode: String, focus: bool, reduce_motion: Option<bool>) -> Result<(), String> {
-    let window = app.get_webview_window("notch").ok_or_else(|| "Notch window is unavailable".to_string())?;
-    *NOTCH_MODE.lock().unwrap_or_else(|poisoned| poisoned.into_inner()) = mode.clone();
-    let (width, height) = notch_size(&mode);
+fn notch_set_mode(app: tauri::AppHandle, window: tauri::WebviewWindow, mode: String, focus: bool, reduce_motion: Option<bool>) -> Result<(), String> {
+    if !is_notch(window.label()) { return Err("Only a notch window can change its mode".into()); }
+    set_notch_mode_state(window.label(), &mode);
+    let (width, height) = notch_size(window.label(), &mode);
     #[cfg(target_os = "macos")]
     {
-        use tauri::window::{Effect, EffectState, EffectsBuilder};
-        refresh_notch_screen();
-        if mode == "collapsed" {
-            window.set_effects(None).map_err(|error| error.to_string())?;
-        } else {
-            window.set_effects(EffectsBuilder::new().effect(Effect::Popover)
-                .state(EffectState::Active).radius(20.0).build()).map_err(|error| error.to_string())?;
-        }
         if reduce_motion.unwrap_or(false) {
-            NOTCH_ANIMATION_GENERATION.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+            if let Some(display) = notch_display(window.label()) { display.animation.fetch_add(1, AtomicOrdering::SeqCst); }
             place_notch(&app, &window, width, height)?;
             if focus && mode != "collapsed" { focus_notch(&window); }
         } else {
@@ -240,36 +381,38 @@ fn notch_set_mode(app: tauri::AppHandle, mode: String, focus: bool, reduce_motio
 
 /// Lets the follow-up field take typing without activating Cortex.
 #[tauri::command]
-fn notch_focus(app: tauri::AppHandle) -> Result<(), String> {
-    let window = app.get_webview_window("notch").ok_or_else(|| "Notch window is unavailable".to_string())?;
+fn notch_focus(window: tauri::WebviewWindow) -> Result<(), String> {
+    if !is_notch(window.label()) { return Err("Only a notch window can request notch focus".into()); }
     focus_notch(&window);
     Ok(())
 }
 
 #[tauri::command]
 fn notch_set_visible(app: tauri::AppHandle, visible: bool) -> Result<(), String> {
-    let window = app.get_webview_window("notch").ok_or_else(|| "Notch window is unavailable".to_string())?;
-    if visible {
-        let (width, height) = collapsed_notch_size();
-        place_notch(&app, &window, width, height)?;
-        app.emit_to("notch", "notch-mode", "collapsed".to_string()).map_err(|error| error.to_string())?;
-        window.show().map_err(|error| error.to_string())
-    } else {
-        window.hide().map_err(|error| error.to_string())
+    NOTCH_VISIBLE.store(visible, AtomicOrdering::SeqCst);
+    for window in notch_windows(&app) {
+        if visible {
+            set_notch_mode_state(window.label(), "collapsed");
+            let (width, height) = collapsed_notch_size(window.label());
+            place_notch(&app, &window, width, height)?;
+            app.emit_to(window.label(), "notch-mode", "collapsed".to_string()).map_err(|error| error.to_string())?;
+            show_notch(&window)?;
+        } else { hide_notch(&window)?; }
     }
+    Ok(())
 }
 
 #[tauri::command]
 fn notch_preview(app: tauri::AppHandle, mode: String) -> Result<(), String> {
-    let window = app.get_webview_window("notch").ok_or_else(|| "Notch window is unavailable".to_string())?;
+    let window = preferred_notch(&app).ok_or_else(|| "Notch window is unavailable".to_string())?;
     let normalized = match mode.as_str() {
         "compose" | "thinking" | "answer" | "history" => mode.as_str(),
         _ => "collapsed",
     };
-    notch_set_mode(app.clone(), normalized.to_string(), true, None)?;
-    window.show().map_err(|error| error.to_string())?;
+    notch_set_mode(app.clone(), window.clone(), normalized.to_string(), true, None)?;
+    show_notch(&window)?;
     focus_notch(&window);
-    app.emit_to("notch", "notch-mode", normalized.to_string()).map_err(|error| error.to_string())?;
+    app.emit_to(window.label(), "notch-mode", normalized.to_string()).map_err(|error| error.to_string())?;
     Ok(())
 }
 
@@ -281,12 +424,12 @@ fn set_cortex_trigger(trigger: String, enabled: bool) {
     let _ = (trigger, enabled);
 }
 
-/// Which double-tap actions are on, and whether the notch may show over full-screen apps.
+/// Whether the notch may show over full-screen apps.
 #[tauri::command]
-fn set_assist_config(app: tauri::AppHandle, autocomplete: bool, summarize: bool, rewrite: bool, private_windows: bool, show_over_full_screen: bool) {
-    *ASSIST_CONFIG.lock().unwrap_or_else(|poisoned| poisoned.into_inner()) = AssistConfig { autocomplete, summarize, rewrite, private_windows };
+fn set_notch_display(app: tauri::AppHandle, show_over_full_screen: bool) {
+    NOTCH_OVER_FULL_SCREEN.store(show_over_full_screen, AtomicOrdering::SeqCst);
     #[cfg(target_os = "macos")]
-    if let Some(window) = app.get_webview_window("notch") {
+    for window in notch_windows(&app) {
         let handle = window.clone();
         let _ = window.run_on_main_thread(move || macos_notch::set_collection_behavior(&handle, show_over_full_screen));
     }
@@ -300,19 +443,12 @@ fn set_test_mode(app: tauri::AppHandle, enabled: bool) {
     if TEST_MODE_BAR.swap(enabled, AtomicOrdering::SeqCst) == enabled {
         return;
     }
-    let mode = NOTCH_MODE.lock().unwrap_or_else(|poisoned| poisoned.into_inner()).clone();
-    if mode.is_empty() || mode == "collapsed" {
-        if let Some(window) = app.get_webview_window("notch") {
-            let (width, height) = collapsed_notch_size();
+    for window in notch_windows(&app) {
+        if notch_display(window.label()).is_none_or(|display| display.mode == "collapsed") {
+            let (width, height) = collapsed_notch_size(window.label());
             let _ = place_notch(&app, &window, width, height);
         }
     }
-}
-
-/// Marks an autocomplete or rewrite request as in flight, so typing cancels it.
-#[tauri::command]
-fn assist_set_active(active: bool) {
-    ASSIST_ACTIVE.store(active, AtomicOrdering::SeqCst);
 }
 
 #[tauri::command]
@@ -369,14 +505,14 @@ fn open_accessibility_settings() -> Result<(), String> {
 
 #[cfg(target_os = "macos")]
 mod cortex_hotkey {
-    use super::{daemon_call, tap, ASSIST_ACTIVE, ASSIST_CONFIG};
+    use super::{preferred_notch, tap, ACTIVE_NOTCH};
     use block2::RcBlock;
     use objc2_app_kit::{NSApplicationActivationOptions, NSEvent, NSEventMask, NSEventType, NSRunningApplication, NSWorkspace};
     use std::ptr::NonNull;
     use std::sync::atomic::{AtomicI32, Ordering};
     use std::sync::Mutex;
-    use std::time::{Duration, Instant};
-    use tauri::{Emitter, Manager};
+    use std::time::Instant;
+    use tauri::Emitter;
 
     static MACHINE: Mutex<tap::Machine> = Mutex::new(tap::Machine::new());
     static PREVIOUS_APP_PID: AtomicI32 = AtomicI32::new(0);
@@ -428,10 +564,6 @@ mod cortex_hotkey {
                     Err(poisoned) => poisoned.into_inner(),
                 };
                 if kind == NSEventType::KeyDown {
-                    if ASSIST_ACTIVE.load(Ordering::SeqCst) {
-                        // Typing while a completion is on its way cancels it.
-                        let _ = monitor_app.emit_to("notch", "cortex-cancel", ());
-                    }
                     machine.handle(tap::Event::KeyDown { code: event.keyCode() }, Instant::now())
                 } else if kind == NSEventType::FlagsChanged {
                     machine.handle(tap::Event::FlagsChanged { code: event.keyCode(), flags: event.modifierFlags().0 as u64 }, Instant::now())
@@ -454,12 +586,12 @@ mod cortex_hotkey {
                     remember_previous_app();
                 }
                 // Showing the notch must not take focus: routing may leave the user's app frontmost.
-                if let Some(window) = main_app.get_webview_window("notch") {
-                    let _ = window.show();
-                }
-                let _ = main_app.emit_to("notch", "cortex-tap", count);
-                if count == 2 {
-                    route_double_tap(main_app);
+                if let Some(window) = preferred_notch(&main_app) {
+                    let label = window.label().to_string();
+                    *ACTIVE_NOTCH.lock().unwrap_or_else(|p| p.into_inner()) = label.clone();
+                    let _ = super::show_notch(&window);
+                    let _ = main_app.emit_to(&label, "cortex-tap", count);
+                    if count == 2 { route_double_tap(main_app, label); }
                 }
             });
         });
@@ -474,26 +606,8 @@ mod cortex_hotkey {
         }
     }
 
-    /// Reads the focused field and tells the notch what the double-tap means. The read is short and
-    /// bounded; if it fails or is slow the notch simply opens the compose box.
-    fn route_double_tap(app: tauri::AppHandle) {
-        let config = *ASSIST_CONFIG.lock().unwrap_or_else(|poisoned| poisoned.into_inner());
-        if !(config.autocomplete || config.summarize || config.rewrite) {
-            let _ = app.emit_to("notch", "cortex-intent", serde_json::json!({"intent":"compose","hint":null,"context":null}));
-            return;
-        }
-        tauri::async_runtime::spawn(async move {
-            let body = serde_json::json!({
-                "autocomplete": config.autocomplete, "summarize": config.summarize, "rewrite": config.rewrite,
-                "private_windows": config.private_windows, "copy_fallback": config.summarize,
-            });
-            let reply = tokio::time::timeout(Duration::from_millis(1200), daemon_call("POST".into(), "/v1/assist/focus".into(), Some(body))).await;
-            let payload = match reply {
-                Ok(Ok(data)) => data,
-                _ => serde_json::json!({"intent":"compose","hint":"unavailable","context":null}),
-            };
-            let _ = app.emit_to("notch", "cortex-intent", payload);
-        });
+    fn route_double_tap(app: tauri::AppHandle, label: String) {
+        let _ = app.emit_to(&label, "cortex-compose", ());
     }
 
     /// Notes the app in front so it can regain focus later; keeps the earlier note while Cortex itself is frontmost.
@@ -520,32 +634,135 @@ mod cortex_hotkey {
 
 #[cfg(target_os = "macos")]
 mod macos_notch {
+    use std::{cell::RefCell, collections::BTreeMap};
+    use objc2::{define_class, msg_send, MainThreadMarker, MainThreadOnly};
+    use objc2::rc::Retained;
     use objc2::runtime::NSObjectProtocol;
-    use objc2::sel;
-    use objc2_app_kit::{NSWindow, NSWindowCollectionBehavior, NSWindowStyleMask};
+    use objc2_app_kit::{NSAutoresizingMaskOptions, NSBackingStoreType, NSPanel, NSView, NSVisualEffectView, NSVisualEffectMaterial, NSVisualEffectState, NSVisualEffectBlendingMode, NSWindow, NSWindowCollectionBehavior, NSWindowStyleMask};
+    use objc2_foundation::{NSPoint, NSRect, NSSize};
+    use objc2_quartz_core::CACornerMask;
 
-    // Never change the class of Tauri's live window. In addition to Tauri's ivars,
-    // WebKit/KVO tracks its runtime class; even an equal-sized subclass breaks observers.
-    // Keep the original class and configure only native window properties.
-    fn overlay_style(existing: NSWindowStyleMask) -> NSWindowStyleMask {
-        existing | NSWindowStyleMask::NonactivatingPanel
+    // Create a genuine panel; changing Tauri's existing window class corrupts its ivars/KVO.
+    // Keep Tauri's original window alive and host its content view in the panel instead.
+    define_class!(
+        #[unsafe(super = NSPanel)]
+        #[thread_kind = MainThreadOnly]
+        struct CortexOverlayPanel;
+        unsafe impl NSObjectProtocol for CortexOverlayPanel {}
+        impl CortexOverlayPanel {
+            #[unsafe(method(canBecomeKeyWindow))]
+            fn can_become_key_window(&self) -> bool { true }
+            #[unsafe(method(canBecomeMainWindow))]
+            fn can_become_main_window(&self) -> bool { false }
+        }
+    );
+
+    struct HostedPanel {
+        panel: Retained<CortexOverlayPanel>,
+        original: Retained<NSWindow>,
+        content: Retained<NSView>,
+    }
+    thread_local! {
+        static PANELS: RefCell<BTreeMap<String, HostedPanel>> = RefCell::new(BTreeMap::new());
     }
 
     pub fn promote(window: &tauri::WebviewWindow) -> tauri::Result<()> {
-        window.set_focusable(true)?;
+        if PANELS.with(|panels| panels.borrow().contains_key(window.label())) { return Ok(()); }
+        let mtm = MainThreadMarker::new().expect("Notch panels are created on the main thread");
         let pointer = window.ns_window()? as *mut NSWindow;
         if pointer.is_null() { return Ok(()); }
-        unsafe {
-            let native = &*pointer;
-            let style = native.styleMask();
-            let desired = overlay_style(style);
-            if style != desired { native.setStyleMask(desired); }
-            let selector = sel!(_setPreventsActivation:);
-            if native.respondsToSelector(selector) {
-                let _: () = objc2::msg_send![native, _setPreventsActivation: true];
-            }
-        }
+        let original = unsafe { Retained::retain(pointer).expect("Tauri window is live") };
+        let content = original.contentView().expect("Notch webview has a content view");
+        let style = NSWindowStyleMask::Borderless | NSWindowStyleMask::NonactivatingPanel;
+        let panel: Retained<CortexOverlayPanel> = unsafe {
+            msg_send![CortexOverlayPanel::alloc(mtm), initWithContentRect: original.frame(), styleMask: style, backing: NSBackingStoreType::Buffered, defer: false]
+        };
+        unsafe { panel.setReleasedWhenClosed(false); }
+        panel.setTitle(&original.title());
+        panel.setFloatingPanel(true);
+        panel.setHidesOnDeactivate(false);
+        panel.setBecomesKeyOnlyIfNeeded(false);
+        panel.setWorksWhenModal(true);
+        original.orderOut(None);
+        // Tao still asks its original NSWindow for a content view when obtaining raw handles.
+        // Keep a placeholder there, and route all overlay operations to the real panel below.
+        let placeholder = NSView::initWithFrame(NSView::alloc(mtm), content.bounds());
+        original.setContentView(Some(&placeholder));
+        let material = NSVisualEffectView::initWithFrame(NSVisualEffectView::alloc(mtm), content.bounds());
+        material.setMaterial(NSVisualEffectMaterial::Popover);
+        material.setBlendingMode(NSVisualEffectBlendingMode::BehindWindow);
+        material.setState(NSVisualEffectState::Active);
+        material.setWantsLayer(true);
+        panel.setContentView(Some(&material));
+        content.setFrame(material.bounds());
+        content.setAutoresizingMask(NSAutoresizingMaskOptions::ViewWidthSizable | NSAutoresizingMaskOptions::ViewHeightSizable);
+        material.addSubview(&content);
+        PANELS.with(|panels| { panels.borrow_mut().insert(window.label().into(), HostedPanel { panel, original, content }); });
+        clip_material(window);
         Ok(())
+    }
+
+    /// CSS clips the webview, but the native frost behind it needs the same silhouette.
+    fn clip_material(window: &tauri::WebviewWindow) {
+        let Some(native) = native(window) else { return };
+        let Some(layer) = native.contentView().and_then(|view| view.layer()) else { return };
+        let collapsed = super::notch_display(window.label()).is_none_or(|display| display.mode == "collapsed");
+        layer.setMasksToBounds(true);
+        layer.setCornerRadius(if collapsed { 10.0 } else { 20.0 });
+        // AppKit's unflipped material view has its bottom corners at minY.
+        layer.setMaskedCorners(if collapsed {
+            CACornerMask::LayerMinXMinYCorner | CACornerMask::LayerMaxXMinYCorner
+        } else {
+            CACornerMask::all()
+        });
+    }
+
+    pub fn native(window: &tauri::WebviewWindow) -> Option<Retained<NSWindow>> {
+        if let Some(panel) = PANELS.with(|panels| panels.borrow().get(window.label()).map(|host| host.panel.clone())) {
+            return Some(panel.into_super().into_super());
+        }
+        let pointer = window.ns_window().ok()? as *mut NSWindow;
+        unsafe { Retained::retain(pointer) }
+    }
+
+    fn primary_height() -> f64 {
+        super::notch_display("notch").map(|display| display.screen.height).unwrap_or(956.0)
+    }
+
+    pub fn frame(window: &tauri::WebviewWindow) -> Option<(f64, f64, f64, f64)> {
+        let frame = native(window)?.frame();
+        Some((frame.origin.x, primary_height() - frame.origin.y - frame.size.height, frame.size.width, frame.size.height))
+    }
+
+    pub fn set_frame(window: &tauri::WebviewWindow, x: f64, y: f64, width: f64, height: f64) -> Result<(), String> {
+        let handle = window.clone();
+        window.run_on_main_thread(move || {
+            if let Some(native) = native(&handle) {
+                native.setFrame_display(NSRect::new(NSPoint::new(x, primary_height() - y - height), NSSize::new(width, height)), true);
+                clip_material(&handle);
+            }
+        }).map_err(|error| error.to_string())
+    }
+
+    pub fn set_visible(window: &tauri::WebviewWindow, visible: bool) -> Result<(), String> {
+        let handle = window.clone();
+        window.run_on_main_thread(move || {
+            if let Some(native) = native(&handle) {
+                if visible { native.orderFrontRegardless(); } else { native.orderOut(None); }
+                super::log_notch_visibility(&handle, if visible { "show" } else { "hide" });
+            }
+        }).map_err(|error| error.to_string())
+    }
+
+    pub fn dispose(window: &tauri::WebviewWindow) {
+        PANELS.with(|panels| {
+            if let Some(host) = panels.borrow_mut().remove(window.label()) {
+                host.panel.orderOut(None);
+                host.content.removeFromSuperview();
+                host.original.setContentView(Some(&host.content));
+                host.panel.close();
+            }
+        });
     }
 
     #[cfg(test)]
@@ -553,40 +770,51 @@ mod macos_notch {
         use super::*;
 
         #[test]
-        fn overlay_style_preserves_existing_window_configuration() {
-            let original = NSWindowStyleMask::Borderless | NSWindowStyleMask::FullSizeContentView;
-            let updated = overlay_style(original);
-            assert!(updated.contains(original));
-            assert!(updated.contains(NSWindowStyleMask::NonactivatingPanel));
-            assert_eq!(overlay_style(updated), updated);
+        fn overlay_joins_other_apps_spaces_and_never_becomes_a_full_screen_tile() {
+            let behavior = collection_behavior(true, true);
+            assert!(behavior.contains(NSWindowCollectionBehavior::CanJoinAllSpaces));
+            assert!(behavior.contains(NSWindowCollectionBehavior::CanJoinAllApplications));
+            assert!(behavior.contains(NSWindowCollectionBehavior::FullScreenAuxiliary));
+            assert!(behavior.contains(NSWindowCollectionBehavior::FullScreenDisallowsTiling));
+            assert!(!behavior.intersects(NSWindowCollectionBehavior::Primary | NSWindowCollectionBehavior::Auxiliary | NSWindowCollectionBehavior::FullScreenPrimary | NSWindowCollectionBehavior::FullScreenNone));
+        }
+
+        #[test]
+        fn full_screen_opt_out_and_older_macos_do_not_keep_conflicting_flags() {
+            let disabled = collection_behavior(false, true);
+            assert!(disabled.contains(NSWindowCollectionBehavior::CanJoinAllSpaces | NSWindowCollectionBehavior::FullScreenNone));
+            assert!(!disabled.intersects(NSWindowCollectionBehavior::CanJoinAllApplications | NSWindowCollectionBehavior::FullScreenAuxiliary));
+            let legacy = collection_behavior(true, false);
+            assert!(legacy.contains(NSWindowCollectionBehavior::FullScreenAuxiliary));
+            assert!(!legacy.contains(NSWindowCollectionBehavior::CanJoinAllApplications));
         }
     }
-    pub fn set_collection_behavior(window: &tauri::WebviewWindow, over_full_screen: bool) {
-        let Ok(pointer) = window.ns_window() else { return };
-        let pointer = pointer as *mut NSWindow;
-        if pointer.is_null() {
-            return;
-        }
+    fn collection_behavior(over_full_screen: bool, modern_spaces: bool) -> NSWindowCollectionBehavior {
         let mut behavior = NSWindowCollectionBehavior::CanJoinAllSpaces
             | NSWindowCollectionBehavior::Stationary
-            | NSWindowCollectionBehavior::IgnoresCycle;
+            | NSWindowCollectionBehavior::IgnoresCycle
+            | NSWindowCollectionBehavior::FullScreenDisallowsTiling;
         if over_full_screen {
             behavior |= NSWindowCollectionBehavior::FullScreenAuxiliary;
+            if modern_spaces { behavior |= NSWindowCollectionBehavior::CanJoinAllApplications; }
+        } else {
+            behavior |= NSWindowCollectionBehavior::FullScreenNone;
         }
-        unsafe { (&*pointer).setCollectionBehavior(behavior) };
+        behavior
+    }
+
+    pub fn set_collection_behavior(window: &tauri::WebviewWindow, over_full_screen: bool) {
+        let Some(native) = native(window) else { return };
+        let behavior = collection_behavior(over_full_screen, objc2::available!(macos = 13.0));
+        native.setCollectionBehavior(behavior);
     }
 }
 
 #[cfg(target_os = "macos")]
 fn configure_notch_window(window: &tauri::WebviewWindow) -> tauri::Result<()> {
-    use objc2_app_kit::{NSColor, NSScreenSaverWindowLevel, NSWindow};
+    use objc2_app_kit::{NSColor, NSScreenSaverWindowLevel};
     macos_notch::promote(window)?;
-    let pointer = window.ns_window()? as *mut NSWindow;
-    if pointer.is_null() {
-        return Ok(());
-    }
-    unsafe {
-        let native = &*pointer;
+    if let Some(native) = macos_notch::native(window) {
         native.setLevel(NSScreenSaverWindowLevel);
         native.setHidesOnDeactivate(false);
         native.setHasShadow(false);
@@ -594,7 +822,7 @@ fn configure_notch_window(window: &tauri::WebviewWindow) -> tauri::Result<()> {
         native.setMovable(false);
         native.setBackgroundColor(Some(&NSColor::clearColor()));
     }
-    macos_notch::set_collection_behavior(window, true);
+    macos_notch::set_collection_behavior(window, NOTCH_OVER_FULL_SCREEN.load(AtomicOrdering::SeqCst));
     Ok(())
 }
 
@@ -630,10 +858,11 @@ fn state_dir() -> Result<PathBuf, String> {
 }
 
 fn valid_route(method: &str, path: &str) -> bool {
-    if method == "POST" && path.strip_prefix("/v1/workspace/").is_some_and(|op| matches!(op,"create"|"list"|"get"|"resume"|"update"|"claim"|"release"|"events"|"transcript"|"history"|"remember"|"memories"|"forget")) { return true; }
+    if method == "POST" && path.strip_prefix("/v1/schedules/").is_some_and(|op| matches!(op,"create"|"list"|"get"|"update"|"pause"|"resume"|"cancel"|"history")) { return true; }
+    if method == "POST" && path.strip_prefix("/v1/workspace/").is_some_and(|op| matches!(op,"create"|"list"|"get"|"resume"|"update"|"claim"|"release"|"events"|"transcript"|"history"|"remember"|"memories"|"forget"|"facts"|"recall_facts"|"remember_fact"|"update_fact"|"delete_fact")) { return true; }
     match (method, path) {
         ("GET", "/v1/health" | "/v1/status" | "/v1/settings") => true,
-        ("POST", "/v1/memory/search" | "/v1/memory/retrieve" | "/v1/assistant/prepare" | "/v1/memory/snapshots" | "/v1/privacy/delete" | "/v1/capture/request-permission" | "/v1/assist/prepare" | "/v1/assist/finish" | "/v1/assist/apply" | "/v1/assist/undo" | "/v1/assist/check" | "/v1/eval/capture" | "/v1/eval/reset") => true,
+        ("POST", "/v1/memory/search" | "/v1/memory/retrieve" | "/v1/assistant/prepare" | "/v1/memory/snapshots" | "/v1/privacy/delete" | "/v1/capture/request-permission" | "/v1/eval/capture" | "/v1/eval/reset") => true,
         ("PATCH", "/v1/settings") => true,
         ("GET", p) if p.starts_with("/v1/memory/recent?") => {
             p[18..].split('&').all(|part| {
@@ -804,25 +1033,6 @@ async fn openrouter_chat(model: String, messages: Vec<Value>, endpoint: Option<S
     Ok(serde_json::json!({"content": outcome.content, "hits": outcome.hits, "tool_rounds": outcome.tool_rounds}))
 }
 
-/// One plain completion for autocomplete, rewrite and summary: no tools, no memory loop. The messages
-/// come from the local engine (`/v1/assist/prepare`), already redacted.
-#[tauri::command]
-async fn openrouter_complete(model: String, messages: Vec<Value>, max_tokens: u32, temperature: f64, endpoint: Option<String>) -> Result<String, String> {
-    let model = model.trim();
-    if model.is_empty() || model.len() > 160 || model.chars().any(char::is_whitespace) {
-        return Err("Set a model name in Settings → AI model.".into());
-    }
-    let size: usize = messages.iter().map(|m| m["content"].as_str().map_or(0, str::len)).sum();
-    let valid = !messages.is_empty() && messages.len() <= 4
-        && messages.iter().all(|m| matches!(m["role"].as_str(), Some("system" | "user")) && m["content"].as_str().is_some());
-    if !valid || size > 120_000 || !(0.0..=1.5).contains(&temperature) {
-        return Err("The request is too long.".into());
-    }
-    // An empty reply is a valid answer here ("no suggestion"), so it is not turned into an error.
-    let message = Provider::resolve(endpoint.as_deref())?.send(model, &messages, None, max_tokens.clamp(16, 1_500), Some(temperature)).await.map_err(|e| e.message)?;
-    Ok(message["content"].as_str().unwrap_or("").to_owned())
-}
-
 /// Settings → "Test connection": one tiny request, so a wrong address or model name shows up at once.
 #[tauri::command]
 async fn ai_test(model: String, endpoint: Option<String>) -> Result<(), String> {
@@ -967,13 +1177,29 @@ mod tests {
         assert!(!valid_route("POST", "/v1/status"));
         assert!(valid_route("POST", "/v1/assistant/prepare"));
         assert!(!valid_route("GET", "/v1/assistant/prepare"));
-        assert!(valid_route("POST", "/v1/assist/prepare") && valid_route("POST", "/v1/assist/apply"));
-        assert!(!valid_route("POST", "/v1/assist/focus"), "the focus read is routed by the shell, not the page");
-        assert!(!valid_route("GET", "/v1/assist/apply"));
     }
 }
 
 mod tools;
+
+/// Plain completion shared by the headless answer judge; never registered as a native UI command.
+async fn eval_complete(model: String, messages: Vec<Value>, max_tokens: u32, temperature: f64, endpoint: Option<String>) -> Result<String, String> {
+    let model = model.trim();
+    if model.is_empty() || model.len() > 160 || model.chars().any(char::is_whitespace) {
+        return Err("Set a model name in Settings → AI model.".into());
+    }
+    let size: usize = messages.iter().map(|m| m["content"].as_str().map_or(0, str::len)).sum();
+    let valid = !messages.is_empty() && messages.len() <= 4
+        && messages.iter().all(|m| matches!(m["role"].as_str(), Some("system" | "user")) && m["content"].as_str().is_some());
+    if !valid || size > 120_000 || !(0.0..=1.5).contains(&temperature) {
+        return Err("The request is too long.".into());
+    }
+    // An empty reply is a valid answer here ("no suggestion"), so it is not turned into an error.
+    let message = Provider::resolve(endpoint.as_deref())?.send(model, &messages, None, max_tokens.clamp(16, 1_500), Some(temperature)).await.map_err(|e| e.message)?;
+    Ok(message["content"].as_str().unwrap_or("").to_owned())
+}
+
+
 
 /// Runs the shell commands the answer flow uses without a window, for `examples/eval_bridge.rs`.
 /// `args` are the same camelCase argument objects the page passes to `invoke`, so the page's own
@@ -991,7 +1217,7 @@ pub async fn headless_invoke(command: &str, args: Value) -> Result<Value, String
         "openrouter_complete" => {
             let max_tokens = args["maxTokens"].as_u64().unwrap_or(300) as u32;
             let temperature = args["temperature"].as_f64().unwrap_or(0.0);
-            openrouter_complete(text("model").unwrap_or_default(), list("messages"), max_tokens, temperature, endpoint).await.map(Value::String)
+            eval_complete(text("model").unwrap_or_default(), list("messages"), max_tokens, temperature, endpoint).await.map(Value::String)
         }
         "openrouter_decide" => openrouter_decide(text("model").unwrap_or_default(), args["state"].clone(), args["questions"].clone()).await,
         other => Err(format!("`{other}` is not available in the evaluation bridge")),
@@ -1027,6 +1253,10 @@ pub fn run() {
         .setup(move |app| {
             #[cfg(target_os = "macos")]
             {
+                // Regular foreground applications are excluded from other apps' full-screen
+                // Spaces. Cortex is a notch utility; keep its overlays eligible even while
+                // its dashboard is open. Do not switch back to Regular when showing main.
+                app.set_activation_policy(tauri::ActivationPolicy::Accessory);
                 let executable = install_bundled_daemon()?;
                 let root=state_dir().map_err(io::Error::other)?;
                 let log=fs::OpenOptions::new().create(true).append(true).mode(0o600).open(root.join("cortex-engine.log"))?;
@@ -1048,17 +1278,18 @@ pub fn run() {
                 main.set_effects(EffectsBuilder::new().effect(Effect::UnderWindowBackground)
                     .state(EffectState::Active).build())?;
             }
+            #[cfg(target_os = "macos")]
+            {
+                sync_notch_displays(app.handle()).map_err(io::Error::other)?;
+                watch_screen_changes(app.handle().clone());
+                watch_schedule_activity();
+                watch_notch_visibility(app.handle().clone());
+            }
+            #[cfg(not(target_os = "macos"))]
             if let Some(notch) = app.get_webview_window("notch") {
-                #[cfg(target_os = "macos")]
-                {
-                    configure_notch_window(&notch).map_err(|error| io::Error::other(error.to_string()))?;
-                    refresh_notch_screen();
-                    watch_screen_changes(app.handle().clone());
-                }
                 let _ = notch.set_visible_on_all_workspaces(true);
-                let (width, height) = collapsed_notch_size();
-                place_notch(app.handle(), &notch, width, height)
-                    .map_err(io::Error::other)?;
+                let (width, height) = collapsed_notch_size(notch.label());
+                place_notch(app.handle(), &notch, width, height).map_err(io::Error::other)?;
             }
             #[cfg(target_os = "macos")]
             cortex_hotkey::install(app.handle().clone());
@@ -1077,7 +1308,7 @@ pub fn run() {
                 }
             }
         })
-        .invoke_handler(tauri::generate_handler![mcp_connection_info, daemon_request, notch_set_mode, notch_set_visible, notch_preview, open_main, set_cortex_trigger, set_assist_config, set_test_mode, assist_set_active, notch_focus, openrouter_complete, ai_test, restore_previous_app, quit_cortex, openrouter_save_key, openrouter_has_key, openrouter_delete_key, openrouter_chat, openrouter_search_query, open_external_link, reveal_cortex_app, open_accessibility_settings])
+        .invoke_handler(tauri::generate_handler![mcp_connection_info, daemon_request, notch_set_mode, notch_set_visible, notch_preview, open_main, set_cortex_trigger, set_notch_display, set_test_mode, notch_focus, ai_test, restore_previous_app, quit_cortex, openrouter_save_key, openrouter_has_key, openrouter_delete_key, openrouter_chat, openrouter_search_query, open_external_link, reveal_cortex_app, open_accessibility_settings])
         .build(tauri::generate_context!())
         .expect("failed to run desktop shell");
     app.run(move |handle, event| match event {
@@ -1092,8 +1323,8 @@ pub fn run() {
         }
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Reopen { .. } => {
-            if let Some(notch) = handle.get_webview_window("notch") {
-                let _ = notch.show();
+            for notch in notch_windows(handle) {
+                if NOTCH_VISIBLE.load(AtomicOrdering::SeqCst) { let _ = show_notch(&notch); }
             }
             if let Some(window) = handle.get_webview_window("main") {
                 let _ = window.show();
@@ -1125,4 +1356,36 @@ fn install_bundled_daemon() -> io::Result<PathBuf> {
     fs::set_permissions(&temp,fs::Permissions::from_mode(0o700))?;
     fs::rename(&temp,&path)?;
     Ok(path)
+}
+
+#[cfg(test)]
+mod display_tests {
+    use super::*;
+
+    #[test]
+    fn extended_displays_keep_their_own_origins_and_cutout_sizes() {
+        let laptop = NotchScreen::from_frame(0.0, 0.0, 1440.0, 900.0, 900.0, 180.0, 37.0);
+        let left = NotchScreen::from_frame(-1920.0, 0.0, 1920.0, 1080.0, 900.0, 1920.0, 0.0);
+        let above = NotchScreen::from_frame(0.0, 900.0, 1920.0, 1080.0, 900.0, 0.0, 0.0);
+        let below = NotchScreen::from_frame(0.0, -1080.0, 1920.0, 1080.0, 900.0, 0.0, 0.0);
+        assert_eq!(laptop.position(236.0, false), (602.0, 0.0));
+        assert_eq!(laptop.position(440.0, true), (500.0, 43.0));
+        assert_eq!(left.position(440.0, true), (-1180.0, -142.0));
+        assert_eq!(above.position(440.0, true), (740.0, -1042.0));
+        assert_eq!(below.position(440.0, false), (740.0, 900.0));
+        assert_eq!(laptop.cutout_width, 180.0);
+        assert_eq!(left.cutout_width, NOTCH_FALLBACK_WIDTH);
+        assert_eq!(left.safe_top, NOTCH_FALLBACK_HEIGHT);
+    }
+
+    #[test]
+    fn pointer_routing_uses_logical_screen_bounds_including_negative_origins() {
+        let primary = NotchScreen::from_frame(0.0, 0.0, 1440.0, 900.0, 900.0, 180.0, 37.0);
+        let left = NotchScreen::from_frame(-1920.0, 0.0, 1920.0, 1080.0, 900.0, 0.0, 0.0);
+        assert!(left.contains(-400.0, 100.0));
+        assert!(!primary.contains(-400.0, 100.0));
+        assert!(!left.contains(0.0, 100.0));
+        assert!(primary.contains(0.0, 100.0));
+        assert!(!primary.contains(1440.0, 100.0));
+    }
 }

@@ -4,7 +4,7 @@ import { createHmac } from 'node:crypto';
 import { createControl } from '../server.mjs';
 
 test('quota reservation is unique, bounded, and cancellable', async (t) => {
-  const control = createControl({ secret: 'test-secret-123456789', plans: { free: { request_limit: 1, features: ['rewrite'] } } });
+  const control = createControl({ secret: 'test-secret-123456789', plans: { free: { request_limit: 1, features: ['answer'] } } });
   await new Promise((resolve) => control.server.listen(0, '127.0.0.1', resolve));
   t.after(() => control.close());
   const base = `http://127.0.0.1:${control.server.address().port}`;
@@ -12,16 +12,16 @@ test('quota reservation is unique, bounded, and cancellable', async (t) => {
     const res = await fetch(base + path, { method: 'POST', headers: { authorization: 'Bearer test-secret-123456789', 'content-type': 'application/json' }, body: JSON.stringify(body) });
     return { status: res.status, body: await res.json() };
   };
-  assert.equal((await post('/internal/quota/reserve', { account_id: 'user:1', key: 'k1', task: 'rewrite' })).status, 200);
-  assert.equal((await post('/internal/quota/reserve', { account_id: 'user:1', key: 'k1', task: 'rewrite' })).body.error.code, 'duplicate_request');
-  assert.equal((await post('/internal/quota/reserve', { account_id: 'user:1', key: 'k2', task: 'rewrite' })).status, 429);
+  assert.equal((await post('/internal/quota/reserve', { account_id: 'user:1', key: 'k1', task: 'answer' })).status, 200);
+  assert.equal((await post('/internal/quota/reserve', { account_id: 'user:1', key: 'k1', task: 'answer' })).body.error.code, 'duplicate_request');
+  assert.equal((await post('/internal/quota/reserve', { account_id: 'user:1', key: 'k2', task: 'answer' })).status, 429);
   assert.equal((await post('/internal/quota/cancel', { key: 'k1' })).status, 200);
-  assert.equal((await post('/internal/quota/reserve', { account_id: 'user:1', key: 'k2', task: 'rewrite' })).status, 200);
+  assert.equal((await post('/internal/quota/reserve', { account_id: 'user:1', key: 'k2', task: 'answer' })).status, 200);
   assert.equal((await post('/internal/quota/settle', { key: 'k2', input_tokens: 5, output_tokens: 2 })).status, 200);
 });
 
 test('billing event retries and out-of-order delivery cannot duplicate or reverse plan', async (t) => {
-  const control = createControl({ secret: 'test-secret-123456789', webhookSecret: 'webhook-secret-123456789', plans: { free: { request_limit: 1, features: ['rewrite'] }, pro: { request_limit: 10, features: ['rewrite', 'answer'] } } });
+  const control = createControl({ secret: 'test-secret-123456789', webhookSecret: 'webhook-secret-123456789', plans: { free: { request_limit: 1, features: ['answer'] }, pro: { request_limit: 10, features: ['answer'] } } });
   await new Promise((resolve) => control.server.listen(0, '127.0.0.1', resolve));
   t.after(() => control.close());
   const base = `http://127.0.0.1:${control.server.address().port}`;

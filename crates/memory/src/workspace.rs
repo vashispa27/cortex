@@ -4,7 +4,7 @@ use rusqlite::{params, Connection, OptionalExtension};
 use serde_json::{json, Value};
 use std::{path::Path, sync::Mutex};
 
-pub struct WorkspaceStore(Mutex<Connection>);
+pub struct WorkspaceStore(pub(crate) Mutex<Connection>);
 
 fn invalid(message: &'static str) -> MemoryError {
     MemoryError::InvalidRequest(message)
@@ -80,6 +80,9 @@ impl WorkspaceStore {
     fn initialize(db: Connection) -> Result<Self, MemoryError> {
         db.busy_timeout(std::time::Duration::from_secs(2))?;
         db.execute_batch("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;
+          CREATE TABLE IF NOT EXISTS schedules(id TEXT PRIMARY KEY,body TEXT NOT NULL);
+          CREATE TABLE IF NOT EXISTS schedule_runs(id TEXT PRIMARY KEY,schedule_id TEXT NOT NULL,due_ms INTEGER NOT NULL,started_ms INTEGER NOT NULL,status TEXT NOT NULL,body TEXT NOT NULL,UNIQUE(schedule_id,due_ms));
+          CREATE INDEX IF NOT EXISTS schedule_runs_history ON schedule_runs(schedule_id,started_ms DESC);
           CREATE TABLE IF NOT EXISTS workspace_records(kind TEXT NOT NULL,id TEXT NOT NULL,body TEXT NOT NULL,PRIMARY KEY(kind,id));
           CREATE TABLE IF NOT EXISTS workspace_events(id INTEGER PRIMARY KEY AUTOINCREMENT,task_id TEXT NOT NULL,action TEXT NOT NULL,body TEXT NOT NULL,at_ms INTEGER NOT NULL);
           CREATE INDEX IF NOT EXISTS workspace_events_task ON workspace_events(task_id,id);
@@ -92,10 +95,16 @@ impl WorkspaceStore {
         if input.to_string().len() > 60_000 {
             return Err(invalid("workspace request too large"));
         }
+        if matches!(operation, "facts" | "recall_facts" | "remember_fact" | "update_fact" | "delete_fact") {
+            return self.fact_request(operation, input, now);
+        }
         let mut db = self.0.lock().map_err(|_| MemoryError::LockPoisoned)?;
         let tx = db.transaction()?;
         let result = match operation {
             "create" => {
+                let origin = if input.get("harness").is_some() || input.get("session_id").is_some() {
+                    json!({"harness":text(input, "harness", 100)?,"session_id":text(input, "session_id", 200)?})
+                } else { Value::Null };
                 let title = text(input, "title", 300)?;
                 let objective = input["objective"].as_str().unwrap_or(title);
                 if objective.len() > 12_000 {
@@ -121,6 +130,7 @@ impl WorkspaceStore {
                         || record["objective"] != objective
                         || record["project"] != input["project"].as_str().unwrap_or("")
                         || record["parent_id"] != input["parent_id"]
+                        || (!origin.is_null() && record["origin"] != origin)
                     {
                         return Err(invalid("task ID already used for different input"));
                     }
@@ -135,7 +145,7 @@ impl WorkspaceStore {
                     if let Some(parent) = parent {
                         load(&tx, "task", parent)?;
                     }
-                    let record = json!({"id":id,"title":title,"objective":objective,"project":project,"parent_id":parent,"status":"inbox","priority":"normal","revision":1,"created_ms":now,"updated_ms":now,"handoff":"","next_action":"","blockers":"","artifacts":[],"owner":null,"lease_until_ms":null});
+                    let record = json!({"id":id,"title":title,"objective":objective,"project":project,"parent_id":parent,"status":"inbox","priority":"normal","revision":1,"created_ms":now,"updated_ms":now,"handoff":"","next_action":"","blockers":"","artifacts":[],"owner":null,"lease_until_ms":null,"origin":origin});
                     save(&tx, "task", &record)?;
                     event(&tx, &id, "created", &record, now)?;
                     record
@@ -153,6 +163,11 @@ impl WorkspaceStore {
                 }
                 let filter = input["status"].as_str();
                 let project = input["project"].as_str();
+                let harness = input["owner_harness"].as_str();
+                let ownership = input["ownership"].as_str().unwrap_or("all");
+                if !matches!(ownership, "all" | "claimed" | "unclaimed" | "expired") {
+                    return Err(invalid("invalid ownership filter"));
+                }
                 let mut stmt = tx.prepare("SELECT body FROM workspace_records WHERE kind=?1 ORDER BY json_extract(body,'$.updated_ms') DESC,id")?;
                 let records = stmt.query_map([kind], |r| r.get::<_, String>(0))?;
                 let mut items = Vec::new();
@@ -168,10 +183,18 @@ impl WorkspaceStore {
                     {
                         continue;
                     }
+                    if kind == "task" {
+                        let claimed = !item["owner"].is_null();
+                        let expired = claimed && item["lease_until_ms"].as_i64().unwrap_or(0) <= now;
+                        if harness.is_some_and(|h| item["owner"]["harness"] != h)
+                            || (ownership == "claimed" && (!claimed || expired))
+                            || (ownership == "unclaimed" && claimed)
+                            || (ownership == "expired" && !expired) { continue; }
+                    }
+                    item.as_object_mut().unwrap().remove("lease_token");
                     if !query.is_empty() && !item.to_string().to_lowercase().contains(&query) {
                         continue;
                     }
-                    item.as_object_mut().unwrap().remove("lease_token");
                     if item["status"] == "running" {
                         item["stale"] = json!(item["lease_until_ms"].as_i64().unwrap_or(0) <= now);
                     }
@@ -212,6 +235,7 @@ impl WorkspaceStore {
                 let id = text(input, "task_id", 100)?;
                 let mut task = load(&tx, "task", id)?;
                 revision(&task, input)?;
+                let previous_owner = task["owner"].clone();
                 let active = task["lease_until_ms"].as_i64().unwrap_or(0) > now;
                 let owns = input["lease_token"].as_str().is_some()
                     && input["lease_token"] == task["lease_token"];
@@ -226,7 +250,11 @@ impl WorkspaceStore {
                     }
                     let harness = text(input, "harness", 100)?;
                     let session = text(input, "session_id", 200)?;
-                    task["owner"] = json!({"harness":harness,"session_id":session});
+                    let identity = json!({"harness":harness,"session_id":session});
+                    if owns && previous_owner != identity {
+                        return Err(invalid("renewal must retain the owning harness and session"));
+                    }
+                    task["owner"] = identity;
                     task["lease_token"] = if owns {
                         task["lease_token"].clone()
                     } else {
@@ -300,6 +328,10 @@ impl WorkspaceStore {
                 save(&tx, "task", &task)?;
                 let mut audit = task.clone();
                 audit.as_object_mut().unwrap().remove("lease_token");
+                // Preserve the releasing identity even after ownership is cleared. These
+                // fields describe recorded work, never an external process launch.
+                audit["actor"] = if operation == "claim" { task["owner"].clone() }
+                    else if owns { previous_owner } else { Value::Null };
                 event(&tx, id, operation, &audit, now)?;
                 if operation != "claim" {
                     task.as_object_mut().unwrap().remove("lease_token");
@@ -544,6 +576,85 @@ mod tests {
             4
         );
     }
+    #[test]
+    fn agent_space_cross_harness_lifecycle_retains_origin_and_handoffs() {
+        let s = store();
+        let run = |op: &str, v: Value, t| s.request(op, &v, t).unwrap();
+        let created = run("create", json!({"id":"shared","title":"Ship","harness":"codex","session_id":"c1"}), 1);
+        assert_eq!(created["origin"], json!({"harness":"codex","session_id":"c1"}));
+        assert!(s.request("create", &json!({"title":"Missing session","harness":"codex"}), 1).is_err());
+        let first = run("claim", json!({"task_id":"shared","expected_revision":1,"harness":"codex","session_id":"c1"}), 2);
+        let progress = run("update", json!({"task_id":"shared","expected_revision":2,"lease_token":first["lease_token"],"handoff":"Implemented","next_action":"Verify","artifacts":[{"name":"diff","location":"/repo/change.patch"}]}), 3);
+        assert_eq!(progress["revision"], 3);
+        assert!(s.request("update", &json!({"task_id":"shared","expected_revision":2,"lease_token":first["lease_token"],"handoff":"Lost update"}), 4).is_err());
+        assert_eq!(run("list", json!({"owner_harness":"codex","ownership":"claimed"}), 4)["total"], 1);
+        assert_eq!(run("list", json!({"owner_harness":"claude"}), 4)["total"], 0);
+        run("create", json!({"id":"child","title":"Follow up","parent_id":"shared","harness":"codex","session_id":"c1"}), 4);
+        run("release", json!({"task_id":"shared","expected_revision":3,"lease_token":first["lease_token"],"handoff":"Ready for verification","next_action":"Run checks","blockers":"Needs reviewer"}), 5);
+        let pack = run("resume", json!({"task_id":"shared"}), 6);
+        assert_eq!(pack["task"]["next_action"], "Run checks");
+        assert_eq!(pack["task"]["artifacts"][0]["location"], "/repo/change.patch");
+        assert_eq!(pack["follow_ups"][0]["id"], "child");
+        assert_eq!(run("list", json!({"ownership":"unclaimed"}), 6)["total"], 2);
+        let second = run("claim", json!({"task_id":"shared","expected_revision":4,"harness":"opencode","session_id":"o1"}), 7);
+        assert_ne!(second["lease_token"], first["lease_token"]);
+        assert!(s.request("update", &json!({"task_id":"shared","expected_revision":5,"lease_token":first["lease_token"]}), 8).is_err());
+        run("release", json!({"task_id":"shared","expected_revision":5,"lease_token":second["lease_token"],"handoff":"Checks passed","blockers":"","next_action":"","status":"done"}), 9);
+        let events = run("events", json!({"task_id":"shared"}), 10);
+        let history = events["items"].as_array().unwrap();
+        assert_eq!(history.len(), 6);
+        assert_eq!(history[3]["record"]["actor"], created["origin"]);
+        assert_eq!(history[3]["record"]["handoff"], "Ready for verification");
+        assert_eq!(history[5]["record"]["actor"]["harness"], "opencode");
+        assert_eq!(history[5]["record"]["status"], "done");
+        assert!(!events.to_string().contains("lease_token"));
+        assert_eq!(run("resume", json!({"task_id":"shared"}), 10)["task"]["origin"], created["origin"]);
+    }
+
+    #[test]
+    fn agent_space_origin_retries_renewals_and_lease_filters() {
+        let s = store();
+        let create = json!({"id":"a","title":"Build","harness":"other-mcp","session_id":"s"});
+        assert_eq!(s.request("create", &create, 0).unwrap()["revision"], 1);
+        assert_eq!(s.request("create", &create, 1).unwrap()["revision"], 1);
+        assert!(s.request("create", &json!({"id":"a","title":"Build","harness":"claude","session_id":"s"}), 1).is_err());
+        let first = s.request("claim", &json!({"task_id":"a","expected_revision":1,"harness":"other-mcp","session_id":"s","lease_seconds":30}), 2).unwrap();
+        assert!(s.request("claim", &json!({"task_id":"a","expected_revision":2,"lease_token":first["lease_token"],"harness":"claude","session_id":"s"}), 3).is_err());
+        let renewal = s.request("claim", &json!({"task_id":"a","expected_revision":2,"lease_token":first["lease_token"],"harness":"other-mcp","session_id":"s","lease_seconds":30}), 4).unwrap();
+        assert_eq!(renewal["lease_token"], first["lease_token"]);
+        assert_eq!(s.request("list", &json!({"query":first["lease_token"]}), 5).unwrap()["total"], 0);
+        assert_eq!(s.request("list", &json!({"ownership":"expired"}), 30_005).unwrap()["total"], 1);
+        assert_eq!(s.request("list", &json!({"ownership":"claimed"}), 30_005).unwrap()["total"], 0);
+        assert!(s.request("list", &json!({"ownership":"invalid"}), 5).is_err());
+        s.request("release", &json!({"task_id":"a","expected_revision":3,"lease_token":first["lease_token"],"status":"blocked","blockers":"Waiting on review"}), 6).unwrap();
+        assert_eq!(s.request("list", &json!({"ownership":"unclaimed","status":"blocked"}), 7).unwrap()["total"], 1);
+        // Existing clients can keep creating and retrieving tasks without origin metadata.
+        let legacy = s.request("create", &json!({"id":"legacy","title":"Legacy"}), 8).unwrap();
+        assert!(legacy["origin"].is_null());
+    }
+
+    #[test]
+    fn independent_connections_compete_for_one_revision() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("workspace.sqlite3");
+        WorkspaceStore::open(&path).unwrap().request("create", &json!({"id":"race","title":"Race"}), 0).unwrap();
+        let barrier = std::sync::Arc::new(std::sync::Barrier::new(2));
+        let handles: Vec<_> = ["claude", "codex"].into_iter().map(|harness| {
+            let s = WorkspaceStore::open(&path).unwrap();
+            let barrier = barrier.clone();
+            std::thread::spawn(move || {
+                barrier.wait();
+                s.request("claim", &json!({"task_id":"race","expected_revision":1,"harness":harness,"session_id":harness}), 1)
+            })
+        }).collect();
+        let results: Vec<_> = handles.into_iter().map(|h| h.join().unwrap()).collect();
+        assert_eq!(results.iter().filter(|r| r.is_ok()).count(), 1);
+        let s = WorkspaceStore::open(&path).unwrap();
+        let task = s.request("resume", &json!({"task_id":"race"}), 2).unwrap();
+        assert_eq!(task["task"]["revision"], 2);
+        assert_eq!(s.request("events", &json!({"task_id":"race"}), 2).unwrap()["items"].as_array().unwrap().len(), 2);
+    }
+
     #[test]
     fn transcript_retry_is_idempotent_and_invalid_batches_rollback() {
         let s = store();

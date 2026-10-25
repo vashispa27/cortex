@@ -59,6 +59,10 @@ Capture includes normal and private browser windows when Accessibility exposes t
 
 With Accessibility granted, Terminal 1 ran `target/debug/cortex capture --print` while a Safari page containing an invented chat was foreground. It reported `new #2`, the full `file:///private/tmp/cortex-browser-check.html` URL, sender and displayed time lines, then `seen #2` on later polls. SQLite contained one snapshot with rising `sightings` and observations, and its `embedding_model`/`indexed` fields confirmed Model2Vec indexing. Terminal 2 ran `target/debug/cortex ask "What did Lokesh say about openings?"`; Qdrant hybrid retrieval returned the Safari snapshot and original source URL. A separate Chrome Incognito window on the same local page was captured with its full file URL and `some_element_bounds_unavailable:2`; snapshot #9 was marked `browser_private`. A private window was therefore read on this Mac; coverage of other browsers and protected or canvas content remains app dependent.
 
+## Workspace
+
+Scheduled tasks / Reminders → Ask Cortex → Memories (Permanent memory / Recent activity memory) → Agent Space. Home, Timeline, capture/privacy settings and MCP setup remain available. See [workspace behavior, migration and dependencies](docs/workspace.md).
+
 ## Run on macOS
 
 Requirements: Rust/Cargo, Swift compiler/Xcode command-line tools, Node.js 20+, and npm. The Tauri build embeds the local daemon and its macOS Accessibility helper; opening the app starts the daemon automatically. Capture stays off until you enable it.
@@ -71,7 +75,7 @@ npm run tauri dev
 
 In **Settings → Capture & privacy**, record your capture choice, enter any excluded app bundle IDs, and press **Start capture**. The app requests macOS Accessibility access only after that action. Grant access to the Cortex capture helper in System Settings, return to the app, and press Start capture again. Pause and Stop are in the same screen. Normal browser windows can be read; private/incognito and unknown browser contexts, credential apps, and protected fields are skipped. Cortex's own windows are excluded from capture.
 
-The desktop shell is notch-first: a neon Cortex logo sits at the top center of the primary display with settings and chat controls. Click the logo (or double-tap the configured key anywhere) for a single-entry cortex. The input collapses into the cortex animation and returns an answer with local sources plus an empty field for follow-ups. The chat control opens session history with a scrolling session list, per-session threads, and an undock button. Configure the trigger in **Settings → Cortex & notch**; macOS may ask for Input Monitoring or Accessibility permission for the global double-tap. In the browser preview, `/index.html?window=notch&preview=1&mode=compose` shows the same drop without the native shell.
+The desktop shell is notch-first: a Cortex logo sits at the top center of every connected display, including full-screen Spaces and Stage Manager with settings and chat controls. Click a display’s logo (or double-tap the configured key to use the display under the pointer) for a single-entry cortex. The input collapses into the cortex animation and returns an answer with local sources plus an empty field for follow-ups. The chat control opens session history with a scrolling session list, per-session threads, and an undock button. Configure the trigger in **Settings → Cortex & notch**; macOS may ask for Input Monitoring or Accessibility permission for the global double-tap. In the browser preview, `/index.html?window=notch&preview=1&mode=compose` shows the same drop without the native shell.
 
 To build the development macOS app bundle:
 
@@ -79,7 +83,7 @@ To build the development macOS app bundle:
 npm run tauri build -- --bundles app
 ```
 
-The browser-only preview is `npm run dev` from `apps/desktop`; select **Explore sample workspace** during onboarding. The browser preview cannot call the authenticated daemon. For an isolated invented source, run `cargo build -p cortex-daemon` and `CORTEX_STATE_DIR="$(mktemp -d)" target/debug/cortex-daemon --seed-synthetic` from the repository root. Do not use your normal state directory for fixtures.
+The browser-only preview is `npm run dev` from `apps/desktop`; choose **Not now** during onboarding. The browser preview cannot call the authenticated daemon. For an isolated invented source, run `cargo build -p cortex-daemon` and `CORTEX_STATE_DIR="$(mktemp -d)" target/debug/cortex-daemon --seed-synthetic` from the repository root. Do not use your normal state directory for fixtures.
 
 ## Retrieval evals
 
@@ -108,7 +112,7 @@ The model may call tools before answering (OpenAI-style `tools` / `tool_calls`, 
 - `search_memory(query, from?, to?, app?)`: another targeted search of the captured evidence, for example after resolving "yesterday" to a date or when the first evidence misses a person. `from`/`to` are `YYYY-MM-DD` or `YYYY-MM-DDTHH:MM` in local time (a bare `to` date includes that day). The engine runs it (`POST /v1/assistant/search`) with the same retrieval, evidence preparation and redaction as the first search. Hits it finds are added to the answer's evidence when the answer cites memory.
 - `list_calendar_events(from, to)`: defined behind a `Calendar` interface and offered only when a calendar is connected. None is connected yet (real access is Phase 3); tests use a fake.
 
-Tool results are untrusted data like evidence: capped at 12,000 characters, and anything not already redacted by the engine goes through the engine's cloud redaction (`POST /v1/assistant/redact`) before it reaches the provider; if redaction fails, nothing is sent. There are no write tools.
+Tool results are untrusted data like evidence: capped at 12,000 characters, and anything not already redacted by the engine goes through the engine's cloud redaction (`POST /v1/assistant/redact`) before it reaches the provider; if redaction fails, nothing is sent. The model tool loop has no write tools. The chat intent router separately handles explicit fact and schedule commands before invoking this answer loop.
 
 **Models.** Tool calling needs a model that supports it; on OpenRouter, filter the model list by the `tools` supported parameter. If the provider rejects the request with tools (HTTP 400, 404 or 422), Cortex retries once without tools and answers from the evidence it already has, so an unsupported model still works. No model has been tested live yet; do not read this section as a recommendation of one.
 
@@ -119,7 +123,7 @@ Tool results are untrusted data like evidence: capped at 12,000 characters, and 
 | `crates/capture`, `crates/memory`, `crates/daemon` | Consent-gated sanitization, SQLite/FTS, macOS capture worker, authenticated local API, settings, and deletion |
 | `crates/platform-mac` | Bounded read-only foreground Accessibility helper; the desktop daemon reads normal browser windows and skips private/unknown browser contexts; protected controls are omitted |
 | `crates/platform-win` | Earlier feasibility probe only; Windows implementation is out of scope |
-| `apps/desktop` | Tauri/React onboarding, privacy controls, sample writing, local search, evidence inspection, and preview reminders |
+| `apps/desktop` | Tauri/React onboarding, privacy controls, Scheduled tasks / Reminders, Ask Cortex, Memories, and Agent Space |
 | `crates/mcp` | Shared task/memory MCP bridge and explicit client-config helper; [workflow and setup](docs/shared-workspace.md) |
 | `services/control`, `services/gateway`, `packages/prompts` | Account metadata/quota, authenticated inference gateway, prompt contracts, and a deterministic development provider |
 | `apps/website` | Responsive public preview with disabled downloads until artifacts are configured |

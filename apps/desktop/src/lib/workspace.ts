@@ -6,6 +6,7 @@ export type SharedTask = {
   status: TaskStatus; priority: 'low' | 'normal' | 'high' | 'urgent'; revision: number;
   created_ms: number; updated_ms: number; handoff: string; next_action: string; blockers: string;
   artifacts: { name: string; location: string }[];
+  origin?: { harness: string; session_id: string } | null;
   owner: { harness: string; session_id: string } | null; lease_until_ms: number | null; stale?: boolean;
 };
 export type PermanentMemory = {

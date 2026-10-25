@@ -3,6 +3,9 @@ import { prepareAssistantRequest, type HistoryTurn, type MemoryHit } from "./api
 import { aiTarget, ensureReady } from "./provider";
 import { loadPreferences } from "./storage";
 import type { AnswerSource, ChatMessage } from "./types";
+import { memoryService, type PersonalFact } from "./memories";
+import { scheduleService } from "./schedules";
+import { executeIntent, routeIntent, type RoutedAnswer, type RoutingContext } from "./intent";
 
 export type Answer = {
   body: string;
@@ -56,7 +59,18 @@ export function fallbackQuery(question: string, history: HistoryTurn[]): string 
   return previous ? `${previous} ${question}` : question;
 }
 
-export async function answerFromMemory(question: string, history: ChatMessage[]): Promise<Answer> {
+/** Keep complete records and explicitly report omissions within the model context budget. */
+function permanentContext(facts: PersonalFact[]): string {
+  const selected: unknown[] = [];
+  for (const { id, subject, attribute, value, source, updated_ms } of facts) {
+    const next = { id, subject, attribute, value, source, updated_ms };
+    if (JSON.stringify({ facts: [...selected, next], omitted: facts.length }).length > 24_000) break;
+    selected.push(next);
+  }
+  return JSON.stringify({ facts: selected, omitted: facts.length - selected.length });
+}
+
+export async function answerFromMemory(question: string, history: ChatMessage[], facts?: PersonalFact[]): Promise<Answer> {
   const preferences = loadPreferences();
   const target = aiTarget(preferences, "answer");
   await ensureReady(target);
@@ -87,7 +101,9 @@ export async function answerFromMemory(question: string, history: ChatMessage[])
   // The model keeps the user's own words and also sees how the follow-up was resolved, because with a
   // longer chat it otherwise tends to attach "him" to an earlier person.
   const shown = meaning && meaning !== question ? `${question}\n(Meaning: ${meaning})` : question;
-  const request = await prepareAssistantRequest(query, shown, prior);
+  const request = facts?.length
+    ? await prepareAssistantRequest(query, shown, prior, permanentContext(facts))
+    : await prepareAssistantRequest(query, shown, prior);
   const prepare = performance.now() - t;
   t = performance.now();
   // The shell runs the model's read-only tool calls (a bounded loop) and returns the final reply.
@@ -114,4 +130,16 @@ export async function answerFromMemory(question: string, history: ChatMessage[])
     hits: source === "memory" || source === "mixed" ? found.filter((hit, i) => found.findIndex((other) => other.snapshot_id === hit.snapshot_id) === i) : [],
     timings: { rewrite, prepare, model: model_ },
   };
+}
+
+/** All natural-language chat entry points share routing before retrieval or provider setup. */
+export async function answerCortex(question: string, history: ChatMessage[], context?: RoutingContext): Promise<RoutedAnswer> {
+  const routing = {
+    now: context?.now ?? new Date(), timezone: context?.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone,
+    pending: context?.pending ?? (history.at(-1)?.role === 'assistant' ? history.at(-1)?.pendingIntent : undefined),
+  };
+  return executeIntent(routeIntent(question, routing), history, {
+    memories: memoryService, schedules: scheduleService, answer: answerFromMemory,
+    newId: () => crypto.randomUUID(),
+  });
 }

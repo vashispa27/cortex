@@ -6,7 +6,7 @@ import { createAuthenticator } from '../auth.mjs';
 import { MockProvider } from '../provider.mjs';
 
 async function setup(t, provider = new MockProvider(), limit = 3) {
-  const control = createControl({ secret: 'control-secret-123456789', plans: { free: { request_limit: limit, features: ['rewrite', 'answer', 'extract', 'summarize', 'transcribe'] } } });
+  const control = createControl({ secret: 'control-secret-123456789', plans: { free: { request_limit: limit, features: ['answer', 'extract', 'summarize'] } } });
   await new Promise((resolve) => control.server.listen(0, '127.0.0.1', resolve));
   const gateway = createGateway({ controlUrl: `http://127.0.0.1:${control.server.address().port}`, controlSecret: 'control-secret-123456789', authenticate: createAuthenticator({ devMode: true, devToken: 'dev-token-123456789' }), provider });
   await new Promise((resolve) => gateway.server.listen(0, '127.0.0.1', resolve));
@@ -63,5 +63,15 @@ test('credential-bearing context never reaches provider', async (t) => {
   const res = await fetch(`${base}/v1/inference/answer`, { method: 'POST', headers, body: JSON.stringify({ ...example, evidence: [{ id: 'source-1', text: 'password=super-secret-value' }] }) });
   assert.equal(res.status, 400);
   assert.equal((await res.json()).error.code, 'sensitive_input');
+  assert.equal(calls, 0);
+});
+
+test('retired writing and speech endpoints are unavailable', async (t) => {
+  let calls = 0;
+  const base = await setup(t, { infer: async () => { calls++; throw new Error('Unexpected provider call'); } });
+  for (const route of ['rewrite', 'transcribe']) {
+    const response = await fetch(`${base}/v1/inference/${route}`, { method: 'POST', headers, body: JSON.stringify(example) });
+    assert.equal(response.status, 404);
+  }
   assert.equal(calls, 0);
 });

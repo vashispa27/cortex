@@ -46,10 +46,16 @@ test('real desktop engine shares tasks with MCP and enforces live access setting
     const enabled=await socketRequest('PATCH','/v1/settings',{expected_version:settings.version,mcp_enabled:true});assert.equal(enabled.ok,true,enabled.error);
     const created=await client.callTool({name:'create_task',arguments:{id:'portable',title:'Desktop to harness'}});assert.notEqual(created.isError,true,JSON.stringify(created));
     const listed=await socketRequest('POST','/v1/workspace/list',{});assert.equal(listed.data.items[0].title,'Desktop to harness');
+    const scheduled = await client.callTool({name:'create_schedule',arguments:{id:'desktop-reminder',schedule:{title:'Desktop reminder',timezone:'UTC',timing:{type:'daily',time:'08:00'},action:{type:'reminder',message:'Send resume'}}}});
+    assert.notEqual(scheduled.isError,true,JSON.stringify(scheduled));
+    const schedules=await socketRequest('POST','/v1/schedules/list',{});assert.equal(schedules.data.items[0].title,'Desktop reminder');
+    const paused=await socketRequest('POST','/v1/schedules/pause',{schedule_id:'desktop-reminder',expected_revision:1});assert.equal(paused.ok,true,paused.error);
     await stop();await start();
+    const recovered=await client.callTool({name:'get_schedule',arguments:{schedule_id:'desktop-reminder'}});assert.notEqual(recovered.isError,true,JSON.stringify(recovered));assert.match(JSON.stringify(recovered.content),/paused/);
     const pack=await client.callTool({name:'get_task_resume_pack',arguments:{task_id:'portable'}});assert.notEqual(pack.isError,true,JSON.stringify(pack));assert.match(JSON.stringify(pack.content),/Desktop to harness/);
     settings=(await socketRequest('GET','/v1/settings')).data;
     await socketRequest('PATCH','/v1/settings',{expected_version:settings.version,mcp_enabled:false});
     const disabled=await client.callTool({name:'list_tasks',arguments:{}});assert.equal(disabled.isError,true);
+    const schedulesDisabled=await client.callTool({name:'list_schedules',arguments:{}});assert.equal(schedulesDisabled.isError,true);
   } finally {await client.close();await stop();await rm(root,{recursive:true,force:true});}
 });

@@ -73,6 +73,7 @@ async fn main() -> Result<(),Box<dyn std::error::Error>> {
     let port = listener.local_addr()?.port();
     write_private(&state_dir.join("daemon.port"),port.to_string().as_bytes())?;
     let workspace = Arc::new(cortex_memory::workspace::WorkspaceStore::open(&state_dir.join("workspace.sqlite3"))?);
+    cortex_memory::schedule_runtime::start(&state_dir)?;
     let state = AppState { store, workspace, token, port, #[cfg(target_os="macos")] capture_helper };
     #[cfg(target_os="macos")]
     tokio::spawn(mac_capture::capture_loop(state.capture_helper.clone(),state.store.clone()));
@@ -89,6 +90,7 @@ async fn main() -> Result<(),Box<dyn std::error::Error>> {
         .route("/v1/time/report",get(time_report))
         .route("/v1/privacy/delete",post(delete_memory))
         .route("/v1/workspace/:operation",post(workspace_request))
+        .route("/v1/schedules/:operation",post(schedule_request))
         .layer(DefaultBodyLimit::max(64*1024))
         .with_state(state);
     eprintln!("cortex daemon listening on 127.0.0.1:{port}");
@@ -217,6 +219,22 @@ fn store_error(err: MemoryError) -> Response {
 }
 
 async fn health() -> Json<Value> { Json(json!({"service":"cortex-daemon","api_version":API_VERSION})) }
+
+async fn schedule_request(State(state): State<AppState>, headers: HeaderMap, axum::extract::Path(operation): axum::extract::Path<String>, Json(body): Json<Value>) -> Response {
+    if let Err(err) = authorize(&headers,&state,true) { return err; }
+    if operation == "wake" {
+        if headers.get("X-Memory-Client").and_then(|v|v.to_str().ok()) == Some("mcp") {
+            return error(StatusCode::FORBIDDEN,ErrorCode::InvalidRequest,"Wake events are desktop-only","Use the native activity source.",false);
+        }
+        // The daemon shares the same store; activity claims run through the shared runner.
+        let root = match state_dir() { Ok(root) => root, Err(_) => return store_error(MemoryError::InvalidRequest("state directory unavailable")) };
+        return match cortex_memory::schedule_runtime::wake(&root) { Ok(()) => Json(Envelope { request_id:request_id(),data:json!({"accepted":true}) }).into_response(), Err(e) => store_error(e) };
+    }
+    match state.workspace.schedule_request(&operation,&body,now_ms()) {
+        Ok(data) => Json(Envelope { request_id: request_id(), data }).into_response(),
+        Err(e) => store_error(e),
+    }
+}
 
 async fn workspace_request(State(state): State<AppState>, headers: HeaderMap, axum::extract::Path(operation): axum::extract::Path<String>, Json(body): Json<Value>) -> Response {
     if let Err(err) = authorize(&headers,&state,true) { return err; }

@@ -14,3 +14,6 @@ test('abstains without a cited source and rejects invented dates', () => {
   assert.match(validateOutput('answer', request, { answer: 'Definitely Tuesday.', evidence_ids: [], uncertainties: [] }).answer, /couldn't find enough evidence/);
   assert.throws(() => validateOutput('answer', request, { answer: 'Review is Tuesday.', evidence_ids: ['s1'], uncertainties: [] }), { code: 'ungrounded_fact' });
 });
+test('retired task contracts cannot reach inference', () => {
+  for (const task of ['rewrite', 'transcribe']) assert.throws(() => validateRequest(task, { cloud_consent: true, text: 'Example' }), { code: 'unknown_task' });
+});

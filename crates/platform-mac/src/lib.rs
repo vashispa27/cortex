@@ -1,4 +1,4 @@
-//! macOS native feasibility boundary. Accessibility capture and edits require explicit
+//! macOS native feasibility boundary. Accessibility capture requires explicit
 //! OS permission and adapter-specific validation; no worker is started by this crate.
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

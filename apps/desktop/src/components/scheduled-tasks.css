@@ -1,0 +1,15 @@
+.scheduled-page { width: 100%; color: inherit; }
+.schedule-main { display: flex; gap: 13px; align-items: flex-start; min-width: 0; }
+.schedule-main > div { min-width: 0; }
+.schedule-icon { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9px; background: rgba(255,255,255,.06); color: var(--cx-muted, #a4aab6); }
+.schedule-icon.task { background: rgba(52,136,255,.14); color: var(--cx-cyan, #8cc5ff); }
+.schedule-body { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.schedule-callout { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; }
+.schedule-run { display: block; padding: 0; }
+.schedule-run summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 18px; cursor: pointer; list-style: none; }
+.schedule-run summary::-webkit-details-marker { display: none; }
+.schedule-run[open] .schedule-chevron { transform: rotate(180deg); }
+.schedule-chevron { flex: none; color: var(--cx-dim, #858d9c); transition: transform .15s; }
+.schedule-output { padding: 0 18px 16px 18px; font-size: .8rem; line-height: 1.6; overflow-wrap: anywhere; color: var(--cx-muted, #a4aab6); }
+.schedule-output a { color: var(--cx-cyan, #8cc5ff); text-decoration: underline; }
+.schedule-note { margin-top: 22px !important; }

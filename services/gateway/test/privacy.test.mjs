@@ -27,7 +27,7 @@ test('recognizes common credential and payment formats in nested selected contex
 });
 
 test('provider origin is pinned and URL credentials are rejected', () => {
-  const options = { apiKey: 'test-key', models: { inline: 'test' }, allowedOrigin: 'https://api.example.com' };
+  const options = { apiKey: 'test-key', models: { answer: 'test' }, allowedOrigin: 'https://api.example.com' };
   assert.throws(() => new CompatibleProvider({ ...options, baseUrl: 'http://api.example.com/v1' }));
   assert.throws(() => new CompatibleProvider({ ...options, baseUrl: 'https://other.example.com/v1' }));
   assert.throws(() => new CompatibleProvider({ ...options, baseUrl: 'https://user:pass@api.example.com/v1' }));

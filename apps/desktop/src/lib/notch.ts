@@ -1,8 +1,8 @@
 import { invoke, isTauri } from "@tauri-apps/api/core";
 
-export type NotchMode = "collapsed" | "compose" | "thinking" | "answer" | "history" | "assist" | "assist-done" | "assist-result";
+export type NotchMode = "collapsed" | "compose" | "thinking" | "answer" | "history";
 
-export type MainPage = "today" | "timeline" | "ask" | "memory" | "settings";
+export type MainPage = import("./types").Page;
 
 const activeSessionKey = "cortex.cortex.active-session.v1";
 
@@ -45,22 +45,9 @@ export async function configureCortexTrigger(trigger: string, enabled: boolean):
   }
 }
 
-export type AssistConfig = {
-  autocomplete: boolean;
-  summarize: boolean;
-  rewrite: boolean;
-  privateWindows: boolean;
-  showOverFullScreen: boolean;
-};
-
-/** Tells the shell which double-tap actions are on and whether the notch may show over full-screen apps. */
-export async function configureAssist(config: AssistConfig): Promise<void> {
+export async function configureNotchDisplay(showOverFullScreen: boolean): Promise<void> {
   if (!isTauri()) return;
-  try {
-    await invoke("set_assist_config", config);
-  } catch {
-    // Without it, a double-tap just opens the compose box.
-  }
+  try { await invoke("set_notch_display", { showOverFullScreen }); } catch { /* Optional shell display preference. */ }
 }
 
 /** Test mode adds a record button to the collapsed notch; the shell widens the notch to fit it. */
@@ -70,15 +57,6 @@ export async function configureTestMode(enabled: boolean): Promise<void> {
     await invoke("set_test_mode", { enabled });
   } catch {
     // Without it the button is merely cramped.
-  }
-}
-
-export async function setAssistActive(active: boolean): Promise<void> {
-  if (!isTauri()) return;
-  try {
-    await invoke("assist_set_active", { active });
-  } catch {
-    // Cancel-on-typing is best effort.
   }
 }
 
