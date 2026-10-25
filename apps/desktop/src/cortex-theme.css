@@ -879,36 +879,37 @@ code, kbd { background: rgba(60,130,255,.16); color: #bcd8ff; }
 
 /* Notch: frosted blue glass. The native popover blur shows through; tints and borders carry the electric blue. */
 html[data-window="notch"] { color-scheme: dark; }
-.cortex-window { --neon: #4aa8ff; --ice: #eaf3ff; --muted: #a9c3e8; --line: rgba(120,190,255,.2); color: var(--ice); }
+.cortex-window { --neon: #7cc4ff; --ice: #ffffff; --muted: #d3e6ff; --line: rgba(255,255,255,.26); color: var(--ice); }
 .cortex-window:not([data-mode="collapsed"]) {
-  border: 1px solid rgba(140,205,255,.45);
-  background: linear-gradient(155deg, rgba(40,110,255,.26), rgba(10,30,90,.34) 55%, rgba(5,16,50,.42));
-  box-shadow: inset 0 1px 0 rgba(200,230,255,.55), inset 0 0 22px rgba(60,150,255,.14), 0 8px 40px rgba(10,60,200,.35);
+  border: 1px solid rgba(200,230,255,.6);
+  background: linear-gradient(155deg, rgba(50,140,255,.55), rgba(14,70,215,.5) 52%, rgba(6,32,140,.6));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.7), inset 0 0 26px rgba(120,190,255,.2), 0 10px 44px rgba(10,70,230,.45);
 }
+.cortex-window:not([data-mode="collapsed"])::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(120% 60% at 14% -8%, rgba(255,255,255,.3), transparent 58%), radial-gradient(70% 50% at 100% 100%, rgba(80,200,255,.22), transparent 70%); }
 .cortex-window[data-busy="true"]:not([data-mode="collapsed"]) { animation: cortex-thinking-edge 1.1s ease-in-out infinite; }
 @keyframes cortex-thinking-edge { 50% { border-color: #bfe3ff; box-shadow: inset 0 1px 0 #e3f3ff, inset 0 0 26px rgba(90,180,255,.35), 0 8px 44px rgba(40,140,255,.6); } }
-.cortex-icon { color: #9cc9f7; }
+.cortex-icon { color: #d6ecff; }
 .cortex-icon:hover, .cortex-icon.active { color: #e3f2ff; background: rgba(120,190,255,.18); box-shadow: inset 0 0 12px rgba(120,190,255,.2), 0 0 10px rgba(60,150,255,.25); }
 .cortex-window button:focus-visible { outline-color: #8fdcff; }
 .cortex-compose input, .cortex-history-form input { color: #f2f8ff; caret-color: #8fdcff; }
-.cortex-compose input::placeholder, .cortex-history-form input::placeholder { color: rgba(200,225,255,.62); }
+.cortex-compose input::placeholder, .cortex-history-form input::placeholder { color: rgba(225,240,255,.7); }
 .cortex-enter, .cortex-user-bubble, .cortex-assist-button.primary, .cortex-app-dot { background: linear-gradient(180deg, rgba(80,165,255,.95), rgba(30,100,235,.95)); border-color: rgba(190,225,255,.65); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 0 16px rgba(50,140,255,.4); }
 .cortex-enter:hover:not(:disabled) { background: linear-gradient(180deg, #7cc0ff, #3d8bff); box-shadow: 0 0 20px rgba(110,190,255,.65); }
-.cortex-thinking-label, .cortex-history-label, .cortex-eyebrow, .cortex-quote small { color: #9bd0ff; }
-.cortex-cloud small, .cortex-source small, .cortex-session small, .cortex-empty-small, .cortex-pill, .cortex-panel-foot, .cortex-history-empty p, .cortex-assist-text[data-empty="true"], .cortex-assist-text[data-busy="true"], .cortex-assist-actions small, .cortex-stage-note { color: #b4cdee; }
+.cortex-thinking-label, .cortex-history-label, .cortex-eyebrow, .cortex-quote small { color: #d6ecff; }
+.cortex-cloud small, .cortex-source small, .cortex-session small, .cortex-empty-small, .cortex-pill, .cortex-panel-foot, .cortex-history-empty p, .cortex-assist-text[data-empty="true"], .cortex-assist-text[data-busy="true"], .cortex-assist-actions small, .cortex-stage-note { color: #d3e6ff; }
 .cortex-window h2 { color: #f4f9ff; }
 /* Glass panes: translucent white-blue over the frosted shell, with a bright top edge. */
 .cortex-assistant-body, .cortex-source, .cortex-panel-head > div, .cortex-thread-head > div, .cortex-panel-foot > span, .cortex-panel-foot > button, .cortex-pill, .cortex-assist-chip, .cortex-assist-text, .cortex-quote, .cortex-session, .cortex-assist-button {
-  background: rgba(150,205,255,.12); border: 1px solid rgba(170,215,255,.24); color: #eef6ff;
-  box-shadow: inset 0 1px 0 rgba(220,240,255,.22); backdrop-filter: blur(14px) saturate(1.3); -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  background: linear-gradient(180deg, rgba(255,255,255,.2), rgba(255,255,255,.08)); border: 1px solid rgba(255,255,255,.34); color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 4px 16px rgba(5,40,160,.22); backdrop-filter: blur(14px) saturate(1.4); -webkit-backdrop-filter: blur(14px) saturate(1.4);
 }
 .cortex-assistant-body { border-radius: 5px 16px 16px 16px; }
 .cortex-assistant-body .answer-content a { color: #9fdcff; }
 .cortex-source strong, .cortex-session strong { color: #f0f7ff; }
 .cortex-source-mark { background: rgba(110,185,255,.25); color: #cfe9ff; }
-.cortex-panel-foot > button, .cortex-quote button, .cortex-assist-button { color: #bfe0ff; }
-.cortex-session:hover, .cortex-assist-button:hover:not(:disabled) { background: rgba(150,205,255,.22); }
-.cortex-session.active { background: rgba(80,160,255,.3); border-color: rgba(170,220,255,.65); box-shadow: inset 2px 0 0 #7cc4ff, inset 0 1px 0 rgba(230,245,255,.3), 0 0 14px rgba(60,150,255,.25); }
+.cortex-panel-foot > button, .cortex-quote button, .cortex-assist-button { color: #e6f3ff; }
+.cortex-session:hover, .cortex-assist-button:hover:not(:disabled) { background: linear-gradient(180deg, rgba(255,255,255,.3), rgba(255,255,255,.14)); }
+.cortex-session.active { background: linear-gradient(180deg, rgba(120,200,255,.5), rgba(60,150,255,.36)); border-color: rgba(220,240,255,.8); box-shadow: inset 3px 0 0 #bfe6ff, inset 0 1px 0 rgba(255,255,255,.55), 0 0 18px rgba(110,190,255,.45); }
 .cortex-assist-done { color: #7cf0b4; }
 .cortex-assist-done svg { background: rgba(124,240,180,.18); }
 .cortex-assist-note, .cortex-quote .cortex-quote-note { color: #ffc98a; }
@@ -920,9 +921,9 @@ html[data-window="notch"] { color-scheme: dark; }
 .cortex-typing span, .cortex-thinking-label i { background: #9fdcff; box-shadow: 0 0 9px #4aa8ff; }
 .cortex-scan-track { background: rgba(150,205,255,.22); }
 .cortex-scan-track i { background: linear-gradient(90deg,transparent,#d4eeff,transparent); }
-.cortex-session-list, .cortex-answer-panel, .cortex-history-panel, .cortex-panel-foot, .cortex-history-form, .cortex-assist-panel { border-color: rgba(150,205,255,.22); }
+.cortex-session-list, .cortex-answer-panel, .cortex-history-panel, .cortex-panel-foot, .cortex-history-form, .cortex-assist-panel { border-color: rgba(255,255,255,.26); }
 .cortex-stage { background: linear-gradient(160deg, #1b4fd0, #0a1c52); }
-@media (prefers-reduced-transparency: reduce) { .cortex-window:not([data-mode="collapsed"]) { background: #0c2260; } }
+@media (prefers-reduced-transparency: reduce) { .cortex-window:not([data-mode="collapsed"]) { background: #1346b8; } }
 .cortex-window .cortex-mark { width: 32px; height: 24px; }
 .cortex-window[data-mode="collapsed"] .cortex-mark { width: 24px; height: 18px; }
 .cortex-message-mark .cortex-mark { width: 26px; height: 20px; }
