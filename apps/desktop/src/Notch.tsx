@@ -467,9 +467,9 @@ export default function NotchApp() {
   }, [preferences.autocompleteOnTap, preferences.summarizeOnTap, preferences.rewriteOnTap, preferences.assistInPrivateWindows, preferences.showOverFullScreen]);
   useEffect(() => { if (preferences.hideDrop) void setNotchVisible(false); }, [preferences.hideDrop]);
 
-  // Clicking away from the compose box dismisses it. Ignore the blur until the window has actually had focus.
+  // Clicking away from the open notch dismisses it (not while thinking). Ignore the blur until the window has had focus.
   useEffect(() => {
-    if (effectiveMode !== "compose") return;
+    if (effectiveMode !== "compose" && effectiveMode !== "answer" && effectiveMode !== "history") return;
     let focused = document.hasFocus();
     const onFocus = () => { focused = true; };
     const onBlur = () => {
