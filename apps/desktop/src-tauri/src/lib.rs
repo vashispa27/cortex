@@ -858,7 +858,7 @@ fn state_dir() -> Result<PathBuf, String> {
 }
 
 fn valid_route(method: &str, path: &str) -> bool {
-    if method == "POST" && path.strip_prefix("/v1/schedules/").is_some_and(|op| matches!(op,"create"|"list"|"get"|"update"|"pause"|"resume"|"cancel"|"history")) { return true; }
+    if method == "POST" && path.strip_prefix("/v1/schedules/").is_some_and(|op| matches!(op,"create"|"list"|"get"|"update"|"pause"|"resume"|"cancel"|"snooze"|"history")) { return true; }
     if method == "POST" && path.strip_prefix("/v1/workspace/").is_some_and(|op| matches!(op,"create"|"list"|"get"|"resume"|"update"|"claim"|"release"|"events"|"transcript"|"history"|"remember"|"memories"|"forget"|"facts"|"recall_facts"|"remember_fact"|"update_fact"|"delete_fact")) { return true; }
     match (method, path) {
         ("GET", "/v1/health" | "/v1/status" | "/v1/settings") => true,

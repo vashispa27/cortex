@@ -1,11 +1,19 @@
 //! Persistent scheduling shared by the daemon and desktop engine.
 use crate::{workspace::WorkspaceStore, MemoryError};
-use chrono::{DateTime, Datelike, Days, LocalResult, NaiveDateTime, NaiveTime, TimeZone};
+use chrono::{DateTime, Datelike, Days, LocalResult, NaiveDate, NaiveDateTime, NaiveTime, TimeZone};
 use chrono_tz::Tz;
 use rusqlite::{params, OptionalExtension, TransactionBehavior};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
+const MIN_INTERVAL_MINUTES: u32 = 15;
+const MAX_INTERVAL_MINUTES: u32 = 525_600;
+fn last_day_of_month(year: i32, month: u32) -> u32 {
+    let (y, m) = if month == 12 { (year + 1, 1) } else { (year, month + 1) };
+    NaiveDate::from_ymd_opt(y, m, 1)
+        .and_then(|d| d.pred_opt())
+        .map_or(28, |d| d.day())
+}
 fn invalid(s: &'static str) -> MemoryError {
     MemoryError::InvalidRequest(s)
 }
@@ -23,6 +31,23 @@ pub enum Timing {
     AfterWake {
         time: String,
         window_end: String,
+        #[serde(default)]
+        weekdays: Vec<u32>,
+    },
+    /// `day` is 1..=31, or -1 for the last day. Days a short month lacks clamp to its last day.
+    Monthly {
+        day: i32,
+        time: String,
+    },
+    /// Fires every `every_minutes` (>= 15) counted from `start_local`. Optional daily
+    /// `[window_start, window_end]` and weekday filters; a window may not cross midnight.
+    Interval {
+        every_minutes: u32,
+        start_local: String,
+        #[serde(default)]
+        window_start: Option<String>,
+        #[serde(default)]
+        window_end: Option<String>,
         #[serde(default)]
         weekdays: Vec<u32>,
     },
@@ -126,6 +151,48 @@ impl ScheduleInput {
                     }
                 }
             }
+            Timing::Monthly { day, time } => {
+                parse_time(time)?;
+                if *day != -1 && !(1..=31).contains(day) {
+                    return Err(invalid("monthly day must be 1..31, or -1 for the last day"));
+                }
+            }
+            Timing::Interval {
+                every_minutes,
+                start_local,
+                window_start,
+                window_end,
+                weekdays,
+            } => {
+                if !(MIN_INTERVAL_MINUTES..=MAX_INTERVAL_MINUTES).contains(every_minutes) {
+                    return Err(invalid("interval every_minutes must be 15..525600"));
+                }
+                if start_local.len() != 16
+                    || NaiveDateTime::parse_from_str(start_local, "%Y-%m-%dT%H:%M").is_err()
+                {
+                    return Err(invalid("start_local must be YYYY-MM-DDTHH:MM"));
+                }
+                match (window_start, window_end) {
+                    (None, None) => {}
+                    (Some(a), Some(b)) => {
+                        if parse_time(b)? <= parse_time(a)? {
+                            return Err(invalid(
+                                "interval window_end must be later than window_start; windows cannot cross midnight",
+                            ));
+                        }
+                    }
+                    _ => {
+                        return Err(invalid(
+                            "interval window_start and window_end must be given together",
+                        ))
+                    }
+                }
+                if weekdays.len() > 7 || weekdays.iter().any(|d| !(1..=7).contains(d)) {
+                    return Err(invalid(
+                        "weekdays must be ISO Monday=1..Sunday=7, at most seven entries",
+                    ));
+                }
+            }
         }
         Ok(())
     }
@@ -135,6 +202,11 @@ impl ScheduleInput {
         if let Timing::Once { local_at } = &self.timing {
             let dt = NaiveDateTime::parse_from_str(local_at, "%Y-%m-%dT%H:%M").unwrap();
             return Ok(local_ms(tz, dt).filter(|ms| *ms > after));
+        }
+        match &self.timing {
+            Timing::Monthly { day, time } => return self.next_monthly(tz, *day, time, after),
+            Timing::Interval { .. } => return self.next_interval(tz, after),
+            _ => {}
         }
         let (time, weekdays) = match &self.timing {
             Timing::Daily { time, weekdays } | Timing::AfterWake { time, weekdays, .. } => {
@@ -161,6 +233,82 @@ impl ScheduleInput {
         }
         Err(invalid("no next occurrence in supported date range"))
     }
+    /// Clamp to the month's last day; a month whose local time falls in a DST gap is skipped.
+    fn next_monthly(
+        &self,
+        tz: Tz,
+        day: i32,
+        time: &str,
+        after: i64,
+    ) -> Result<Option<i64>, MemoryError> {
+        let time = parse_time(time)?;
+        let start = DateTime::from_timestamp_millis(after)
+            .ok_or_else(|| invalid("timestamp out of range"))?
+            .with_timezone(&tz)
+            .date_naive();
+        let (mut year, mut month) = (start.year(), start.month());
+        for _ in 0..30 {
+            let last = last_day_of_month(year, month);
+            let wanted = if day == -1 { last } else { (day as u32).min(last) };
+            if let Some(date) = NaiveDate::from_ymd_opt(year, month, wanted) {
+                if let Some(ms) = local_ms(tz, date.and_time(time)) {
+                    if ms > after {
+                        return Ok(Some(ms));
+                    }
+                }
+            }
+            if month == 12 {
+                year += 1;
+                month = 1;
+            } else {
+                month += 1;
+            }
+        }
+        Err(invalid("no next occurrence in supported date range"))
+    }
+    /// Occurrences are `start_local + k * every_minutes` in absolute time, filtered by local
+    /// weekday and window. Filtered-out slots are skipped, never queued up.
+    fn next_interval(&self, tz: Tz, after: i64) -> Result<Option<i64>, MemoryError> {
+        let Timing::Interval {
+            every_minutes,
+            start_local,
+            window_start,
+            window_end,
+            weekdays,
+        } = &self.timing
+        else {
+            return Ok(None);
+        };
+        let anchor = local_ms(
+            tz,
+            NaiveDateTime::parse_from_str(start_local, "%Y-%m-%dT%H:%M")
+                .map_err(|_| invalid("start_local must be YYYY-MM-DDTHH:MM"))?,
+        )
+        .ok_or_else(|| invalid("interval start_local falls in a nonexistent local time"))?;
+        let window = match (window_start, window_end) {
+            (Some(a), Some(b)) => Some((parse_time(a)?, parse_time(b)?)),
+            _ => None,
+        };
+        let step = *every_minutes as i64 * 60_000;
+        let mut candidate = if after < anchor {
+            anchor
+        } else {
+            anchor + ((after - anchor) / step + 1) * step
+        };
+        for _ in 0..200_000 {
+            let local = DateTime::from_timestamp_millis(candidate)
+                .ok_or_else(|| invalid("timestamp out of range"))?
+                .with_timezone(&tz);
+            let day_ok = weekdays.is_empty()
+                || weekdays.contains(&local.weekday().number_from_monday());
+            let time_ok = window.is_none_or(|(a, b)| local.time() >= a && local.time() <= b);
+            if day_ok && time_ok {
+                return Ok(Some(candidate));
+            }
+            candidate += step;
+        }
+        Err(invalid("no next occurrence in supported date range"))
+    }
     fn wake_due(&self, now: i64) -> Result<Option<i64>, MemoryError> {
         let Timing::AfterWake {
             time,
@@ -181,6 +329,23 @@ impl ScheduleInput {
         let end = local_ms(tz, dt.date_naive().and_time(parse_time(window_end)?));
         Ok(start.filter(|s| *s <= now && end.is_some_and(|e| now < e)))
     }
+}
+/// API view of a schedule: the stored fields plus `next_due_local` (YYYY-MM-DDTHH:MM in the
+/// schedule's own timezone), so a caller can confirm the time back to the user without zone math.
+/// Computed on the way out; never stored.
+fn present(s: &Schedule) -> Value {
+    let mut value = json!(s);
+    let local = s.next_due_ms.and_then(|ms| {
+        let tz: Tz = s.spec.timezone.parse().ok()?;
+        Some(
+            DateTime::from_timestamp_millis(ms)?
+                .with_timezone(&tz)
+                .format("%Y-%m-%dT%H:%M")
+                .to_string(),
+        )
+    });
+    value["next_due_local"] = json!(local);
+    value
 }
 fn decode<T: serde::de::DeserializeOwned>(s: String) -> Result<T, MemoryError> {
     serde_json::from_str(&s).map_err(|_| invalid("invalid stored schedule"))
@@ -248,7 +413,7 @@ impl WorkspaceStore {
                     if s.spec != c.schedule {
                         return Err(invalid("id already used with different schedule"));
                     }
-                    json!(s)
+                    present(&s)
                 } else {
                     let next = c.schedule.next_after(now)?;
                     if next.is_none() {
@@ -264,10 +429,10 @@ impl WorkspaceStore {
                         updated_ms: now,
                     };
                     save(&tx, &s)?;
-                    json!(s)
+                    present(&s)
                 }
             }
-            "get" => json!(get(&tx, id(input)?)?),
+            "get" => present(&get(&tx, id(input)?)?),
             "list" => {
                 let mut all = records(&tx)?;
                 if let Some(status) = input["status"].as_str() {
@@ -286,7 +451,7 @@ impl WorkspaceStore {
                     if bytes > 180_000 && !items.is_empty() {
                         break;
                     }
-                    items.push(item);
+                    items.push(present(&item));
                 }
                 let end = offset + items.len();
                 json!({"items":items,"total":total,"next_offset":if end<total{Some(end)}else{None}})
@@ -315,6 +480,41 @@ impl WorkspaceStore {
                 }
                 let end = offset + items.len() as u64;
                 json!({"items":items,"total":total,"next_offset":if end<(total as u64){Some(end)}else{None}})
+            }
+            "snooze" => {
+                // Delay the next fire by `minutes` from now without touching the specification.
+                // A completed one-time reminder re-arms; a recurring one may not be pushed past
+                // its own next occurrence, because the claim loop would then skip that occurrence.
+                let mut s = get(&tx, id(input)?)?;
+                if input["expected_revision"].as_i64() != Some(s.revision) {
+                    return Err(invalid("revision conflict; fetch schedule and retry"));
+                }
+                let minutes = input["minutes"]
+                    .as_i64()
+                    .filter(|m| (1..=1440).contains(m))
+                    .ok_or_else(|| invalid("minutes must be 1..1440"))?;
+                if !matches!(s.status.as_str(), "active" | "completed") {
+                    return Err(invalid("only active or completed schedules can snooze"));
+                }
+                if matches!(s.spec.timing, Timing::AfterWake { .. }) {
+                    return Err(invalid("after-wake schedules cannot snooze"));
+                }
+                let until = now + minutes * 60_000;
+                if !matches!(s.spec.timing, Timing::Once { .. }) {
+                    if let Some(regular) = s.spec.next_after(now)? {
+                        if until >= regular {
+                            return Err(invalid(
+                                "snooze would pass the next scheduled occurrence; choose fewer minutes",
+                            ));
+                        }
+                    }
+                }
+                s.next_due_ms = Some(until);
+                s.status = "active".into();
+                s.revision += 1;
+                s.updated_ms = now;
+                save(&tx, &s)?;
+                present(&s)
             }
             "update" | "pause" | "resume" | "cancel" => {
                 let mut s = get(&tx, id(input)?)?;
@@ -359,7 +559,7 @@ impl WorkspaceStore {
                 s.revision += 1;
                 s.updated_ms = now;
                 save(&tx, &s)?;
-                json!(s)
+                present(&s)
             }
             _ => return Err(invalid("unknown schedule operation")),
         };
@@ -505,6 +705,7 @@ mod tests {
         );
         let r = create(&s, "resume", input.clone(), now);
         assert_eq!(r["next_due_ms"], ms("2026-10-26T08:30:00Z"));
+        assert_eq!(r["next_due_local"], "2026-10-26T14:00");
         assert_eq!(r, create(&s, "resume", input, now + 100));
         for bad in [
             spec("Mars/Base", json!({"type":"daily","time":"08:00"})),
@@ -556,6 +757,247 @@ mod tests {
             weekdays.next_after(ms("2026-10-23T09:00:00Z")).unwrap(),
             Some(ms("2026-10-26T08:00:00Z"))
         );
+    }
+    fn parsed(tz: &str, timing: Value) -> ScheduleInput {
+        serde_json::from_value(spec(tz, timing)).unwrap()
+    }
+    #[test]
+    fn monthly_clamps_short_months_and_supports_last_day() {
+        let on_31 = parsed("UTC", json!({"type":"monthly","day":31,"time":"09:00"}));
+        // Feb 2027 has 28 days; the 31st clamps rather than skipping the month.
+        assert_eq!(
+            on_31.next_after(ms("2027-02-01T00:00:00Z")).unwrap(),
+            Some(ms("2027-02-28T09:00:00Z"))
+        );
+        assert_eq!(
+            on_31.next_after(ms("2027-02-28T09:00:00Z")).unwrap(),
+            Some(ms("2027-03-31T09:00:00Z"))
+        );
+        // Leap year.
+        assert_eq!(
+            on_31.next_after(ms("2028-02-01T00:00:00Z")).unwrap(),
+            Some(ms("2028-02-29T09:00:00Z"))
+        );
+        let last = parsed("UTC", json!({"type":"monthly","day":-1,"time":"23:30"}));
+        assert_eq!(
+            last.next_after(ms("2026-04-15T00:00:00Z")).unwrap(),
+            Some(ms("2026-04-30T23:30:00Z"))
+        );
+        assert_eq!(
+            last.next_after(ms("2026-12-31T23:30:00Z")).unwrap(),
+            Some(ms("2027-01-31T23:30:00Z"))
+        );
+        let first = parsed("UTC", json!({"type":"monthly","day":1,"time":"08:00"}));
+        assert_eq!(
+            first.next_after(ms("2026-12-15T00:00:00Z")).unwrap(),
+            Some(ms("2027-01-01T08:00:00Z"))
+        );
+        for bad in [0, 32, -2] {
+            assert!(parsed("UTC", json!({"type":"monthly","day":bad,"time":"08:00"}))
+                .next_after(0)
+                .is_err());
+        }
+    }
+    #[test]
+    fn monthly_uses_local_time_across_dst() {
+        let first = parsed(
+            "America/New_York",
+            json!({"type":"monthly","day":8,"time":"09:00"}),
+        );
+        // Mar 8 2026 is the spring-forward day: 09:00 EDT is 13:00Z.
+        assert_eq!(
+            first.next_after(ms("2026-03-01T00:00:00Z")).unwrap(),
+            Some(ms("2026-03-08T13:00:00Z"))
+        );
+        // A time inside the gap skips that month instead of firing at a shifted time.
+        let gap = parsed(
+            "America/New_York",
+            json!({"type":"monthly","day":8,"time":"02:30"}),
+        );
+        assert_eq!(
+            gap.next_after(ms("2026-03-01T00:00:00Z")).unwrap(),
+            Some(ms("2026-04-08T06:30:00Z"))
+        );
+    }
+    #[test]
+    fn interval_steps_windows_and_weekdays() {
+        let plain = parsed(
+            "UTC",
+            json!({"type":"interval","every_minutes":120,"start_local":"2026-10-26T09:00"}),
+        );
+        assert_eq!(
+            plain.next_after(ms("2026-10-25T00:00:00Z")).unwrap(),
+            Some(ms("2026-10-26T09:00:00Z"))
+        );
+        assert_eq!(
+            plain.next_after(ms("2026-10-26T09:00:00Z")).unwrap(),
+            Some(ms("2026-10-26T11:00:00Z"))
+        );
+        assert_eq!(
+            plain.next_after(ms("2026-10-26T10:59:59Z")).unwrap(),
+            Some(ms("2026-10-26T11:00:00Z"))
+        );
+        let windowed = parsed(
+            "UTC",
+            json!({"type":"interval","every_minutes":120,"start_local":"2026-10-26T09:00","window_start":"09:00","window_end":"21:00"}),
+        );
+        assert_eq!(
+            windowed.next_after(ms("2026-10-26T19:00:00Z")).unwrap(),
+            Some(ms("2026-10-26T21:00:00Z"))
+        );
+        // 21:00 is the last slot; the next day's first slot is 09:00 (slots stay on the 2h grid).
+        assert_eq!(
+            windowed.next_after(ms("2026-10-26T21:00:00Z")).unwrap(),
+            Some(ms("2026-10-27T09:00:00Z"))
+        );
+        let weekdays = parsed(
+            "UTC",
+            json!({"type":"interval","every_minutes":60,"start_local":"2026-10-23T09:00","window_start":"09:00","window_end":"10:00","weekdays":[1,2,3,4,5]}),
+        );
+        // Friday 10:00 is the last slot of the week; Saturday and Sunday are skipped.
+        assert_eq!(
+            weekdays.next_after(ms("2026-10-23T10:00:00Z")).unwrap(),
+            Some(ms("2026-10-26T09:00:00Z"))
+        );
+    }
+    #[test]
+    fn interval_validation_rejects_short_cross_midnight_and_partial_windows() {
+        for bad in [
+            json!({"type":"interval","every_minutes":14,"start_local":"2026-10-26T09:00"}),
+            json!({"type":"interval","every_minutes":0,"start_local":"2026-10-26T09:00"}),
+            json!({"type":"interval","every_minutes":60,"start_local":"2026-10-26 09:00"}),
+            json!({"type":"interval","every_minutes":60,"start_local":"2026-10-26T09:00","window_start":"22:00","window_end":"06:00"}),
+            json!({"type":"interval","every_minutes":60,"start_local":"2026-10-26T09:00","window_start":"09:00"}),
+            json!({"type":"interval","every_minutes":60,"start_local":"2026-10-26T09:00","weekdays":[8]}),
+        ] {
+            assert!(parsed("UTC", bad).next_after(0).is_err());
+        }
+        assert!(parsed(
+            "UTC",
+            json!({"type":"interval","every_minutes":15,"start_local":"2026-10-26T09:00"})
+        )
+        .next_after(0)
+        .is_ok());
+    }
+    #[test]
+    fn interval_ignores_dst_in_steps_but_windows_follow_local_time() {
+        // Hourly across the New York spring-forward: slots stay 60 absolute minutes apart.
+        let hourly = parsed(
+            "America/New_York",
+            json!({"type":"interval","every_minutes":60,"start_local":"2026-03-08T00:00"}),
+        );
+        assert_eq!(
+            hourly.next_after(ms("2026-03-08T06:30:00Z")).unwrap(),
+            Some(ms("2026-03-08T07:00:00Z"))
+        );
+        assert_eq!(
+            hourly.next_after(ms("2026-03-08T07:00:00Z")).unwrap(),
+            Some(ms("2026-03-08T08:00:00Z"))
+        );
+    }
+    #[test]
+    fn interval_and_monthly_catch_up_once_after_sleep() {
+        let (_, s) = store();
+        let start = ms("2026-10-25T00:00:00Z");
+        create(
+            &s,
+            "water",
+            spec(
+                "UTC",
+                json!({"type":"interval","every_minutes":60,"start_local":"2026-10-25T01:00"}),
+            ),
+            start,
+        );
+        create(
+            &s,
+            "rent",
+            spec("UTC", json!({"type":"monthly","day":1,"time":"09:00"})),
+            start,
+        );
+        // The machine slept for 40 hours: exactly one run per schedule, then back on the grid.
+        let woke = ms("2026-10-26T16:20:00Z");
+        let runs = s.claim_schedules(woke, false).unwrap();
+        assert_eq!(runs.len(), 1);
+        assert_eq!(runs[0].schedule_id, "water");
+        assert!(s.claim_schedules(woke, false).unwrap().is_empty());
+        let water = s
+            .schedule_request("get", &json!({"schedule_id":"water"}), woke)
+            .unwrap();
+        assert_eq!(water["next_due_ms"], ms("2026-10-26T17:00:00Z"));
+        let later = ms("2026-11-01T09:00:00Z");
+        let runs = s.claim_schedules(later, false).unwrap();
+        assert!(runs.iter().any(|r| r.schedule_id == "rent"));
+        let rent = s
+            .schedule_request("get", &json!({"schedule_id":"rent"}), later)
+            .unwrap();
+        assert_eq!(rent["next_due_ms"], ms("2026-12-01T09:00:00Z"));
+    }
+    #[test]
+    fn snooze_delays_once_and_guards_recurring() {
+        let (_, s) = store();
+        let now = ms("2026-10-25T08:00:00Z");
+        create(
+            &s,
+            "once",
+            spec("UTC", json!({"type":"once","local_at":"2026-10-25T08:30"})),
+            now,
+        );
+        create(
+            &s,
+            "daily",
+            spec("UTC", json!({"type":"daily","time":"09:00"})),
+            now,
+        );
+        let at = ms("2026-10-25T08:30:00Z");
+        assert_eq!(s.claim_schedules(at, false).unwrap().len(), 1);
+        // The completed one-time reminder re-arms for the snooze.
+        let snoozed = s
+            .schedule_request(
+                "snooze",
+                &json!({"schedule_id":"once","expected_revision":2,"minutes":10}),
+                at,
+            )
+            .unwrap();
+        assert_eq!(snoozed["status"], "active");
+        assert_eq!(snoozed["next_due_ms"], at + 600_000);
+        assert!(s.claim_schedules(at + 599_000, false).unwrap().is_empty());
+        assert_eq!(s.claim_schedules(at + 600_000, false).unwrap().len(), 1);
+        // A stale revision, zero minutes and a daily push past its next occurrence all fail.
+        assert!(s
+            .schedule_request(
+                "snooze",
+                &json!({"schedule_id":"once","expected_revision":1,"minutes":5}),
+                at
+            )
+            .is_err());
+        assert!(s
+            .schedule_request(
+                "snooze",
+                &json!({"schedule_id":"daily","expected_revision":1,"minutes":0}),
+                at
+            )
+            .is_err());
+        assert!(s
+            .schedule_request(
+                "snooze",
+                &json!({"schedule_id":"daily","expected_revision":1,"minutes":45}),
+                at
+            )
+            .is_err());
+        let ok = s
+            .schedule_request(
+                "snooze",
+                &json!({"schedule_id":"daily","expected_revision":1,"minutes":15}),
+                at,
+            )
+            .unwrap();
+        assert_eq!(ok["next_due_ms"], at + 900_000);
+        // The daily schedule keeps its specification and resumes its normal cadence afterwards.
+        assert_eq!(s.claim_schedules(at + 900_000, false).unwrap().len(), 1);
+        let after = s
+            .schedule_request("get", &json!({"schedule_id":"daily"}), at + 900_000)
+            .unwrap();
+        assert_eq!(after["next_due_ms"], ms("2026-10-25T09:00:00Z"));
     }
     #[test]
     fn restart_recovers_due_and_coalesces_missed_days() {

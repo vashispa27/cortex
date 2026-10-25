@@ -10,11 +10,33 @@ test('structured schedules validate timezone, day, action, time and wake window'
     assert.equal(scheduleSchema.safeParse({ ...base, ...patch }).success, false);
   }
 });
+test('monthly and interval timings accept the documented shapes and reject bad ones', () => {
+  const wrap = (timing: unknown) => ({ title: 'T', timezone: 'UTC', timing, action: { type: 'reminder', message: 'x' } });
+  for (const good of [
+    { type: 'monthly', day: 1, time: '09:00' }, { type: 'monthly', day: 31, time: '09:00' }, { type: 'monthly', day: -1, time: '23:30' },
+    { type: 'interval', every_minutes: 15, start_local: '2026-10-26T09:00' },
+    { type: 'interval', every_minutes: 120, start_local: '2026-10-26T09:00', window_start: '09:00', window_end: '21:00', weekdays: [1, 2, 3, 4, 5] },
+  ]) assert.ok(scheduleSchema.safeParse(wrap(good)).success, JSON.stringify(good));
+  for (const bad of [
+    { type: 'monthly', day: 0, time: '09:00' }, { type: 'monthly', day: 32, time: '09:00' }, { type: 'monthly', day: -2, time: '09:00' },
+    { type: 'interval', every_minutes: 14, start_local: '2026-10-26T09:00' },
+    { type: 'interval', every_minutes: 60, start_local: '2026-10-26 09:00' },
+    { type: 'interval', every_minutes: 60, start_local: '2026-10-26T09:00', window_start: '22:00', window_end: '06:00' },
+    { type: 'interval', every_minutes: 60, start_local: '2026-10-26T09:00', window_start: '09:00' },
+    { type: 'interval', every_minutes: 60, start_local: '2026-10-26T09:00', extra: 1 },
+  ]) assert.equal(scheduleSchema.safeParse(wrap(bad)).success, false, JSON.stringify(bad));
+});
 test('all schedule tools forward validated structured input to shared API', async () => {
   const tools = new Map<string, { config: any; handler: (input: any) => Promise<unknown> }>();
   const calls: unknown[] = [];
   registerSchedules({ registerTool(name: string, config: any, handler: any) { tools.set(name, { config, handler }); } } as unknown as McpServer, async (path, body) => { calls.push({ path, body }); return { content: [] }; });
-  assert.equal(tools.size, 8);
+  assert.equal(tools.size, 9);
+  const snooze = tools.get('snooze_schedule')!;
+  assert.equal(snooze.config.inputSchema.safeParse({ schedule_id: 'one', expected_revision: 3, minutes: 0 }).success, false);
+  assert.equal(snooze.config.inputSchema.safeParse({ schedule_id: 'one', expected_revision: 3, minutes: 1441 }).success, false);
+  const snoozed = snooze.config.inputSchema.parse({ schedule_id: 'one', expected_revision: 3, minutes: 10 });
+  await snooze.handler(snoozed);
+  assert.deepEqual(calls.pop(), { path: '/v1/schedules/snooze', body: snoozed });
   for (const op of ['pause', 'resume', 'cancel']) {
     const tool = tools.get(`${op}_schedule`)!;
     assert.equal(tool.config.inputSchema.safeParse({ schedule_id: 'one' }).success, false);
