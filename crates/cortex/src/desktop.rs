@@ -77,6 +77,11 @@ fn write_settings(root: &Path, settings: &Settings) -> Result<()> {
 }
 fn load_settings(root: &Path) -> Result<Settings> {
     let path = root.join("cortex-capture.json");
+    // Settings written before the Rewind to Cortex rename.
+    let renamed = root.join("rewind-capture.json");
+    if !path.exists() && renamed.exists() {
+        fs::rename(&renamed, &path)?;
+    }
     if path.exists() {
         return Ok(serde_json::from_slice(&fs::read(path)?)?);
     }
