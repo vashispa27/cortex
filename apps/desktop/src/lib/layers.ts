@@ -8,6 +8,7 @@ export type LayerInfo = { id: LayerId; title: string; sends: string };
 export const LAYERS: readonly LayerInfo[] = [
   { id: "answer", title: "Answers", sends: "Your question, the recent chat, and excerpts from the best-matching captured pages (sensitive values masked), plus any extra searches the model makes." },
   { id: "followup", title: "Follow-up questions", sends: "Your latest question and the last exchange, to turn “what about him?” into a full search question. No captured text." },
+  { id: "decide", title: "Reminders and memories", sends: "Only when a message looks like it sets a reminder or saves a fact: that message, the last few chat turns (sensitive values masked), the current time and timezone, and the titles, times and status of your reminders plus the subject and attribute of saved facts (never their values). No captured pages or screen text." },
   { id: "context", title: "Contextual indexing", sends: "Every newly captured page and its chunks, once, when they are saved. This is the most text any step sends. It also slows capture." },
 ];
 
@@ -19,7 +20,8 @@ export function whereEachStepRuns(preferences: Preferences, contextOn = preferen
     const local = layerIsLocal(preferences, info.id);
     const choice = preferences.layers[info.id];
     const model = local ? choice.localModel.trim() || preferences.localModel.trim() : choice.cloudModel.trim() || preferences.openrouterModel.trim();
-    const off = info.id === "context" && !contextOn;
+    // A local decision model is not wired up yet, so the step is off (the regex router handles chat) whenever it would run on this Mac.
+    const off = (info.id === "context" && !contextOn) || (info.id === "decide" && (!preferences.decideEnabled || local));
     return { id: info.id, title: info.title, where: off ? "off" : local ? "local" : "cloud", model, sends: info.sends };
   });
 }

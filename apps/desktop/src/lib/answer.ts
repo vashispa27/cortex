@@ -5,7 +5,8 @@ import { loadPreferences } from "./storage";
 import type { AnswerSource, ChatMessage } from "./types";
 import { memoryService, type PersonalFact } from "./memories";
 import { scheduleService } from "./schedules";
-import { executeIntent, routeIntent, type RoutedAnswer, type RoutingContext } from "./intent";
+import { executeIntent, routeIntent, runChatAction, type ChatAction, type IntentServices, type RoutedAnswer, type RoutingContext } from "./intent";
+import { decideWrite } from "./decision-flow";
 
 export type Answer = {
   body: string;
@@ -132,14 +133,29 @@ export async function answerFromMemory(question: string, history: ChatMessage[],
   };
 }
 
+const intentServices = (): IntentServices => ({
+  memories: memoryService, schedules: scheduleService, answer: answerFromMemory,
+  newId: () => crypto.randomUUID(),
+});
+
 /** All natural-language chat entry points share routing before retrieval or provider setup. */
 export async function answerCortex(question: string, history: ChatMessage[], context?: RoutingContext): Promise<RoutedAnswer> {
   const routing = {
     now: context?.now ?? new Date(), timezone: context?.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone,
     pending: context?.pending ?? (history.at(-1)?.role === 'assistant' ? history.at(-1)?.pendingIntent : undefined),
   };
-  return executeIntent(routeIntent(question, routing), history, {
-    memories: memoryService, schedules: scheduleService, answer: answerFromMemory,
-    newId: () => crypto.randomUUID(),
+  const regex = routeIntent(question, routing);
+  // The regex router is the fallback: the model is asked only when a message may be a write, and any
+  // failure, timeout or invalid output uses the router's answer instead.
+  const preferences = loadPreferences();
+  const proposed = await decideWrite(question, history, routing, regex, {
+    preferences, target: aiTarget(preferences, "decide"), schedules: scheduleService, memories: memoryService, ready: ensureReady,
+    call: (target) => (request) => invoke("decide_intent", { model: target.model, endpoint: target.endpoint, ...request }),
   });
+  return executeIntent(proposed ?? regex, history, intentServices());
+}
+
+/** Runs a button under an assistant message (Undo, Confirm, Cancel). */
+export function runAction(action: ChatAction, history: ChatMessage[]): Promise<RoutedAnswer> {
+  return runChatAction(action, history, intentServices());
 }

@@ -3,7 +3,7 @@ export type CortexTrigger = "rightOption" | "leftOption" | "fn" | "rightShift" |
 export type AiProvider = "openrouter" | "local";
 
 /** The model-backed steps, each of which can run in the cloud or on this Mac on its own. */
-export type LayerId = "answer" | "followup" | "context";
+export type LayerId = "answer" | "followup" | "decide" | "context";
 /** `default` follows the global provider. */
 export type LayerProvider = "default" | "cloud" | "local";
 export type LayerChoice = {
@@ -13,10 +13,11 @@ export type LayerChoice = {
   /** Local-server model for this step; empty uses the default local model. */
   localModel: string;
 };
-export const LAYER_IDS: readonly LayerId[] = ["answer", "followup", "context"];
+export const LAYER_IDS: readonly LayerId[] = ["answer", "followup", "decide", "context"];
 export const defaultLayers = (): Record<LayerId, LayerChoice> => ({
   answer: { provider: "default", cloudModel: "", localModel: "" },
   followup: { provider: "default", cloudModel: "", localModel: "" },
+  decide: { provider: "default", cloudModel: "", localModel: "" },
   // Context is generated for every new capture, so it starts on this Mac and off.
   context: { provider: "local", cloudModel: "", localModel: "" },
 });
@@ -38,6 +39,8 @@ export type Preferences = {
   layers: Record<LayerId, LayerChoice>;
   /** Nothing is sent to a cloud model, whatever the steps say. */
   localOnly: boolean;
+  /** A model reads messages that may set a reminder or save a memory. Off, or in local-only mode, the regex router handles them. */
+  decideEnabled: boolean;
   /** Contextual retrieval: a model adds a short context to each new capture before it is indexed. */
   contextEnabled: boolean;
   proactive: boolean;
@@ -70,6 +73,7 @@ export const defaultPreferences: Preferences = {
   showOverFullScreen: true,
   layers: defaultLayers(),
   localOnly: false,
+  decideEnabled: true,
   contextEnabled: false,
   proactive: false,
   backgroundInference: false,

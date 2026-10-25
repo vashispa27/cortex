@@ -181,6 +181,9 @@ pub(crate) async fn run(
 }
 
 /// Fails closed: if the engine cannot redact, the text does not go to the provider.
+pub(crate) async fn redact_text(engine: &impl Engine, text: &str) -> Result<String, String> {
+    redact(engine, text).await
+}
 async fn redact(engine: &impl Engine, text: &str) -> Result<String, String> {
     let data = engine.request("/v1/assistant/redact", json!({"text": text})).await?;
     data["text"].as_str().map(str::to_owned).ok_or_else(|| "The memory engine could not redact a tool result.".into())

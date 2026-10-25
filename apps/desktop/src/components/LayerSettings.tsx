@@ -25,7 +25,8 @@ export default function LayerSettings({ preferences, hasKey, onChange }: Props) 
         const choice = preferences.layers[info.id];
         const local = layerIsLocal(preferences, info.id);
         const isContext = info.id === "context";
-        const off = isContext && !preferences.contextEnabled;
+        const isDecide = info.id === "decide";
+        const off = (isContext && !preferences.contextEnabled) || (isDecide && !preferences.decideEnabled);
         const modelField = local ? "localModel" : "cloudModel";
         const fallback = local ? preferences.localModel.trim() : preferences.openrouterModel.trim();
         const placeholder = isContext && !local ? "anthropic/claude-haiku-4.5 (default)" : fallback ? `${fallback} (default)` : local ? "Default local model" : "Default OpenRouter model";
@@ -36,8 +37,12 @@ export default function LayerSettings({ preferences, hasKey, onChange }: Props) 
               <input className="switch-input" type="checkbox" checked={preferences.contextEnabled} onChange={(event) => onChange({ contextEnabled: event.target.checked })} aria-label="Generate context for new captures" />
               <span aria-hidden="true" className={`switch ${preferences.contextEnabled ? "on" : ""}`} />
             </label>}
+            {isDecide && <label className="layer-switch">
+              <input className="switch-input" type="checkbox" checked={preferences.decideEnabled} onChange={(event) => onChange({ decideEnabled: event.target.checked })} aria-label="Use a model to understand reminders and memories" />
+              <span aria-hidden="true" className={`switch ${preferences.decideEnabled ? "on" : ""}`} />
+            </label>}
           </div>
-          <small>{info.sends}{isContext && " Off by default. Turning it on re-indexes your existing memory once."}</small>
+          <small>{info.sends}{isContext && " Off by default. Turning it on re-indexes your existing memory once."}{isDecide && " Off, or in local-only mode, simple phrasings like “remind me tomorrow at 2pm to …” still work through a built-in parser; flexible ones do not."}</small>
           <div className="layer-controls">
             <label>
               <span className="field-label">Runs</span>
