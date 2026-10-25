@@ -166,7 +166,7 @@ export default function NotchApp() {
 
   const handleBrand = () => {
     if (effectiveMode === "thinking") return;
-    if (effectiveMode === "compose") { closeDrop(); return; }
+    if (effectiveMode === "compose") { closeDrop(); void restorePreviousApp(); return; }
     startNewCortex("mouse");
   };
 
@@ -467,6 +467,24 @@ export default function NotchApp() {
   }, [preferences.autocompleteOnTap, preferences.summarizeOnTap, preferences.rewriteOnTap, preferences.assistInPrivateWindows, preferences.showOverFullScreen]);
   useEffect(() => { if (preferences.hideDrop) void setNotchVisible(false); }, [preferences.hideDrop]);
 
+  // Clicking away from the compose box dismisses it. Ignore the blur until the window has actually had focus.
+  useEffect(() => {
+    if (effectiveMode !== "compose") return;
+    let focused = document.hasFocus();
+    const onFocus = () => { focused = true; };
+    const onBlur = () => {
+      if (!focused) return;
+      focused = false;
+      actionsRef.current.closeDrop();
+    };
+    window.addEventListener("focus", onFocus);
+    window.addEventListener("blur", onBlur);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("blur", onBlur);
+    };
+  }, [effectiveMode]);
+
   useEffect(() => {
     if (effectiveMode === "compose" || (effectiveMode === "answer" && !hotkeyRef.current)) {
       const timer = window.setTimeout(() => inputRef.current?.focus(), 90);
@@ -589,7 +607,11 @@ export default function NotchApp() {
   };
 
   useEffect(() => {
-    const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") actionsRef.current.closeDrop(); };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      actionsRef.current.closeDrop();
+      void restorePreviousApp();
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);

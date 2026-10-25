@@ -91,14 +91,20 @@ fn place_notch(app: &tauri::AppHandle, window: &tauri::WebviewWindow, width: f64
     Ok(())
 }
 
-/// Makes the notch the key window so it can take typing. The notch is a non-activating panel, so this
-/// never activates Cortex or pulls the user out of a full-screen Space.
+/// Makes the notch the key window so it can take typing. The notch is a plain borderless window, which
+/// only receives keystrokes while its app is active, so remember the app in front and activate Cortex.
+/// The notch is on every Space, so activating does not switch Spaces.
 fn focus_notch(window: &tauri::WebviewWindow) {
     #[cfg(target_os = "macos")]
     {
         let handle = window.clone();
         let _ = window.run_on_main_thread(move || {
-            use objc2_app_kit::NSWindow;
+            use objc2_app_kit::{NSApplication, NSWindow};
+            cortex_hotkey::remember_previous_app();
+            if let Some(mtm) = objc2::MainThreadMarker::new() {
+                #[allow(deprecated)]
+                NSApplication::sharedApplication(mtm).activateIgnoringOtherApps(true);
+            }
             if let Ok(pointer) = handle.ns_window() {
                 let pointer = pointer as *mut NSWindow;
                 if !pointer.is_null() {
@@ -490,10 +496,11 @@ mod cortex_hotkey {
         });
     }
 
-    fn remember_previous_app() {
+    /// Notes the app in front so it can regain focus later; keeps the earlier note while Cortex itself is frontmost.
+    pub fn remember_previous_app() {
         if let Some(frontmost) = NSWorkspace::sharedWorkspace().frontmostApplication() {
             let pid = frontmost.processIdentifier();
-            PREVIOUS_APP_PID.store(if pid == std::process::id() as i32 { 0 } else { pid }, Ordering::SeqCst);
+            if pid != std::process::id() as i32 { PREVIOUS_APP_PID.store(pid, Ordering::SeqCst); }
         }
     }
 
