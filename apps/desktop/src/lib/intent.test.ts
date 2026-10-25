@@ -10,7 +10,7 @@ const schedule: Schedule = { ...spec, id: 'schedule-1', revision: 3, status: 'ac
 function services(): IntentServices {
   return {
     memories: { recall: vi.fn().mockResolvedValue({ items: [], next_offset: null, total: 0, kind: 'personal_fact' }), remember: vi.fn().mockResolvedValue(fact), update: vi.fn().mockResolvedValue(fact), search: vi.fn(), delete: vi.fn() },
-    schedules: { create: vi.fn().mockResolvedValue(schedule), get: vi.fn().mockResolvedValue(schedule), list: vi.fn().mockResolvedValue({ items: [schedule], total: 1, next_offset: null }), update: vi.fn(), pause: vi.fn().mockResolvedValue({ ...schedule, status: 'paused' }), resume: vi.fn(), cancel: vi.fn(), history: vi.fn() },
+    schedules: { create: vi.fn().mockResolvedValue(schedule), get: vi.fn().mockResolvedValue(schedule), list: vi.fn().mockResolvedValue({ items: [schedule], total: 1, next_offset: null }), update: vi.fn(), pause: vi.fn().mockResolvedValue({ ...schedule, status: 'paused' }), resume: vi.fn(), cancel: vi.fn(), snooze: vi.fn(), history: vi.fn() },
     answer: vi.fn().mockResolvedValue({ body: 'Activity answer [42]', hits: [], retrieved: [], searchQuery: '', source: 'memory', timings: { rewrite: 0, prepare: 0, model: 0 } }), newId: () => 'request-1',
   };
 }
@@ -85,8 +85,15 @@ describe('intent routing before retrieval', () => {
     await executeIntent(decision, [], svc);
     expect(svc.memories.remember).toHaveBeenCalledWith(expect.objectContaining({ subject: 'Rajesh', attribute: 'phone', value: '213132', channel: 'chat' }));
     vi.mocked(svc.memories.recall).mockResolvedValue({ kind: 'personal_fact', items: [fact], total: 1, next_offset: null });
-    await executeIntent(route('Correct Rajesh’s phone number to 999'), [], svc);
+    // Replacing a saved value waits for a yes; nothing is overwritten by the first message.
+    const ask = await executeIntent(route('Correct Rajesh’s phone number to 999'), [], svc);
+    expect(svc.memories.update).not.toHaveBeenCalled();
+    expect(ask.pendingIntent).toMatchObject({ type: 'confirm' });
+    expect(ask.actions?.map(a => a.kind)).toEqual(['confirm', 'dismiss']);
+    const yes = routeIntent('yes', { ...context, pending: ask.pendingIntent });
+    await executeIntent(yes, [], svc);
     expect(svc.memories.update).toHaveBeenCalledWith(fact, expect.objectContaining({ value: '999' }));
+    expect(routeIntent('no', { ...context, pending: ask.pendingIntent })).toMatchObject({ type: 'clarify', question: 'Okay, nothing was changed.' });
     expect(svc.answer).not.toHaveBeenCalled();
   });
 
@@ -262,7 +269,9 @@ it('uses the canonical email attribute for shorthand corrections and typoed reca
   const svc = services();
   const email = { ...fact, subject: 'self', attribute: 'email', value: 'old@example.com' };
   vi.mocked(svc.memories.recall).mockResolvedValue({ kind: 'personal_fact', items: [email], total: 1, next_offset: null });
-  await executeIntent(route('Correct my emial 27abhinav10@gmail.coim'), [], svc);
+  const intent = route('Correct my emial 27abhinav10@gmail.coim');
+  expect(intent).toMatchObject({ type: 'remember' });
+  await executeIntent({ ...intent, confirmed: true } as typeof intent, [], svc);
   expect(svc.memories.update).toHaveBeenCalledWith(email, expect.objectContaining({ attribute: 'email', value: '27abhinav10@gmail.coim' }));
   expect(route('What is my emial?')).toMatchObject({ type: 'permanent', factSubject: 'self', factAttribute: 'email' });
 });

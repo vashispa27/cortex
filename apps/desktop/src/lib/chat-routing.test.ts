@@ -58,7 +58,7 @@ it('keeps a contradictory recurring request out of the model and persists the re
   expect(invoke).not.toHaveBeenCalled();
   const result = await answerCortex('11pm', [{ role: 'assistant', body: clarification.body, pendingIntent: clarification.pendingIntent }]);
   expect(scheduleService.create).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({ timing: { type: 'daily', time: '23:00' }, action: { type: 'reminder', message: 'read nes' } }));
-  expect(result.body).toContain('Daily at 23:00');
+  expect(result.body).toContain('every day at 23:00');
   expect(prepareAssistantRequest).not.toHaveBeenCalled();
   expect(invoke).not.toHaveBeenCalled();
 });

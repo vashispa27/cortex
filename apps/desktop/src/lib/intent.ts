@@ -2,21 +2,37 @@
  * Only the current user's direct command can authorize a write; retrieved text never enters it.
  */
 import type { FactInput, MemoryService, PersonalFact } from './memories';
-import type { ScheduleService, ScheduleSpec } from './schedules';
+import type { Schedule, ScheduleService, ScheduleSpec } from './schedules';
 import type { ChatMessage } from './types';
 import type { Answer } from './answer';
 
 export type ScheduleDraft = { message: string; date?: string; time?: string; daily?: boolean; weekdays?: number[]; period?: 'morning' | 'evening' | 'night'; actionType?: 'reminder' | 'task'; timezone: string };
-export type PendingIntent = { type: 'schedule'; draft: ScheduleDraft };
+/** What the next user reply can resume: a regex-routed schedule draft, a write waiting for a yes, or a
+ * question the decision model asked (its partial fields go back to it with the reply). */
+export type PendingIntent =
+  | { type: 'schedule'; draft: ScheduleDraft }
+  | { type: 'confirm'; intent: Intent; summary: string }
+  | { type: 'decision'; draft: Record<string, unknown> };
+/** Fields the decision model may change on an existing schedule. Anything absent is kept. */
+export type ScheduleChange = { title?: string; message?: string; prompt?: string; timezone?: string; timing?: ScheduleSpec['timing'] };
 export type Intent =
   | { type: 'clarify'; question: string; pending?: PendingIntent }
   | { type: 'schedule_create'; spec: ScheduleSpec }
-  | { type: 'schedule_reschedule'; selector: string; timing: ScheduleSpec['timing']; timezone: string }
-  | { type: 'schedule_manage'; operation: 'list' | 'pause' | 'resume' | 'cancel'; selector: string }
-  | { type: 'remember'; fact: FactInput }
+  | { type: 'schedule_reschedule'; selector: string; timing: ScheduleSpec['timing']; timezone: string; confirmed?: boolean }
+  | { type: 'schedule_update'; selector: string; change: ScheduleChange; confirmed?: boolean }
+  | { type: 'schedule_manage'; operation: 'list' | 'pause' | 'resume' | 'cancel'; selector: string; confirmed?: boolean }
+  | { type: 'schedule_snooze'; selector: string; minutes: number }
+  /** `confirmed` lets a changed value overwrite a saved fact; without it the user is asked first. */
+  | { type: 'remember'; fact: FactInput; confirmed?: boolean }
   | { type: 'permanent' | 'activity' | 'general' | 'mixed'; query: string; factSubject?: string; factAttribute?: string };
 export type RoutingContext = { now: Date; timezone: string; pending?: PendingIntent };
-export type RoutedAnswer = Answer & { intent: Intent['type']; pendingIntent?: PendingIntent };
+/** A button under an assistant message. Plain data, so it survives being saved with the chat. */
+export type ChatAction =
+  | { kind: 'undo_schedule'; label: string; scheduleId: string }
+  | { kind: 'undo_fact'; label: string; factId: string; revision: number }
+  | { kind: 'confirm'; label: string; intent: Intent }
+  | { kind: 'dismiss'; label: string };
+export type RoutedAnswer = Answer & { intent: Intent['type']; pendingIntent?: PendingIntent; actions?: ChatAction[] };
 export interface IntentServices {
   memories: MemoryService;
   schedules: ScheduleService;
@@ -27,8 +43,8 @@ export interface IntentServices {
 
 const attributes = /\b(name|employer|occupation|timezone|phone(?: number)?|(?:email|emial|e-mail)(?: address)?|address|birthday|favorite\s+\w+|favourite\s+\w+|preference|allerg(?:y|ies)|pronouns|saved facts?|permanent memor(?:y|ies))\b/i;
 const activity = /\b(read|reading|saw|seen|viewed|visited|browsed|worked|working|opened|watched|said|reply|replied|messages?|screen|activity|captured|yesterday|last week)\b/i;
-const normalize = (value: string) => value.trim().toLocaleLowerCase().replace(/\s+/g, ' ');
-const attributeName = (value: string) => normalize(value).replace(/^phone number$/, 'phone').replace(/^(?:email|emial|e-mail)(?: address)?$/, 'email').replace(/^favourite /, 'favorite ');
+export const normalize = (value: string) => value.trim().toLocaleLowerCase().replace(/\s+/g, ' ');
+export const attributeName = (value: string) => normalize(value).replace(/^phone number$/, 'phone').replace(/^(?:email|emial|e-mail)(?: address)?$/, 'email').replace(/^favourite /, 'favorite ');
 const clarify = (question: string): Intent => ({ type: 'clarify', question });
 
 function localDate(now: Date, timezone: string, days = 0): string {
@@ -69,6 +85,12 @@ export function routeIntent(input: string, context: RoutingContext): Intent {
   const text = original.replace(/^(?:(?:(?:can|could|would) you|I want you to|I(?:'|’)d like you to)\s+)?(?:please\s+)?/i, '').replace(/^I (?:want|would like) to be reminded to\s+/i, 'remind me to ').replace(/[.!?]+$/, '').trim();
   // Command recognition is anchored. Quotes/code, examples, conditionals and reported speech cannot write.
   const discussion = /^["“'‘`>]/.test(text) || /\b(hypothetical(?:ly)?|for example|as an example|suppose|pretend|if|don[’']t|do not|do not actually|without (?:saving|creating))\b/i.test(text);
+  if (context.pending?.type === 'confirm') {
+    if (/^(?:yes|yep|yeah|y|ok|okay|sure|confirm|confirmed|do it|go ahead)$/i.test(text)) return { ...context.pending.intent, confirmed: true } as Intent;
+    if (/^(?:no|nope|n|cancel|never mind|nevermind|stop|leave it)$/i.test(text)) return clarify('Okay, nothing was changed.');
+    // Anything else abandons the question and is routed as a new message.
+  }
+  if (context.pending?.type === 'decision' && /^(?:never mind|nevermind|forget it|cancel(?: that| it)?|no)$/i.test(text)) return clarify('Okay, nothing was saved.');
   if (!discussion && context.pending?.type === 'schedule') {
     // Only the immediately preceding user-authorized draft can resume a write.
     const draft = { ...context.pending.draft };
@@ -203,6 +225,44 @@ export function formatFacts(facts: PersonalFact[]): string {
   const literal = (text: string) => text.replace(/[\\`*_[\]<>]/g, '\\$&').replace(/\n/g, ' ');
   return facts.map(f => `${literal(f.subject === 'self' ? 'Your' : f.subject + '’s')} ${literal(f.attribute)}: ${literal(f.value)}. (Saved fact; ${new Date(f.updated_ms).toISOString().slice(0, 10)})`).join('\n\n');
 }
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const FULL_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const ordinal = (n: number) => `${n}${[11, 12, 13].includes(n % 100) ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' } as Record<number, string>)[n % 10] ?? 'th'}`;
+const everyN = (minutes: number) => minutes % 1440 === 0 ? `${minutes / 1440} day${minutes === 1440 ? '' : 's'}` : minutes % 60 === 0 ? `${minutes / 60} hour${minutes === 60 ? '' : 's'}` : `${minutes} minutes`;
+/** Plain-language timing for confirmation text, for example “every Sunday at 10:00” or “every 2 hours (09:00–21:00)”. */
+export function describeTiming(timing: ScheduleSpec['timing']): string {
+  const days = (weekdays?: number[]) => !weekdays?.length || weekdays.length === 7 ? '' : weekdays.length === 5 && [1, 2, 3, 4, 5].every(d => weekdays.includes(d)) ? 'weekday' : weekdays.length === 1 ? FULL_DAYS[weekdays[0] - 1] : [...weekdays].sort().map(d => DAYS[d - 1]).join(', ');
+  switch (timing.type) {
+    case 'once': return timing.local_at.replace('T', ' at ');
+    case 'daily': { const d = days(timing.weekdays); return d === 'weekday' ? `every weekday at ${timing.time}` : d ? `every ${d} at ${timing.time}` : `every day at ${timing.time}`; }
+    case 'after_wake': return `after waking, ${timing.time}–${timing.window_end}${days(timing.weekdays) ? ` (${days(timing.weekdays)})` : ''}`;
+    case 'monthly': return `${timing.day === -1 ? 'the last day' : `the ${ordinal(timing.day)}`} of every month at ${timing.time}`;
+    case 'interval': { const d = days(timing.weekdays); const filter = d === 'weekday' ? 'weekdays' : d; return `every ${everyN(timing.every_minutes)}${timing.window_start && timing.window_end ? ` (${timing.window_start}–${timing.window_end}${filter ? `, ${filter}` : ''})` : filter ? ` (${filter})` : ''}`; }
+  }
+}
+function nextText(schedule: Schedule): string {
+  return schedule.next_due_ms === null ? '' : ` Next: ${schedule.next_due_local?.replace('T', ' ') ?? new Intl.DateTimeFormat('en-CA', { timeZone: schedule.timezone, dateStyle: 'medium', timeStyle: 'short', hourCycle: 'h23' }).format(schedule.next_due_ms)}.`;
+}
+const confirmCard = (summary: string, intent: Intent): RoutedAnswer => ({
+  ...response(`${summary} Reply “yes” to confirm.`, 'clarify'),
+  pendingIntent: { type: 'confirm', intent, summary },
+  actions: [{ kind: 'confirm', label: 'Confirm', intent }, { kind: 'dismiss', label: 'Cancel' }],
+});
+async function findSchedule(services: IntentServices, selector: string): Promise<Schedule | undefined> {
+  const page = await services.schedules.list();
+  const matches = page.items.filter(s => s.id === selector || normalize(s.title) === normalize(selector));
+  if (matches.length !== 1 || page.next_offset !== null) return undefined;
+  // Get the current revision before mutation; conflicts/failures propagate without a success message.
+  return services.schedules.get(matches[0].id);
+}
+const WHICH = 'Which schedule should I change? Please repeat the command with its exact title or ID.';
+function applyChange(current: Schedule, change: ScheduleChange): ScheduleSpec {
+  const text = change.message ?? change.prompt;
+  const action: ScheduleSpec['action'] = current.action.type === 'task'
+    ? { ...current.action, ...(text ? { prompt: text } : {}) }
+    : { ...current.action, ...(text ? { message: text } : {}) };
+  return { title: change.title ?? current.title, timezone: change.timezone ?? current.timezone, timing: change.timing ?? current.timing, action };
+}
 export async function executeIntent(intent: Intent, history: ChatMessage[], services: IntentServices): Promise<RoutedAnswer> {
   if (intent.type === 'clarify') return { ...response(intent.question, intent.type), pendingIntent: intent.pending };
   if (intent.type === 'remember') {
@@ -210,27 +270,37 @@ export async function executeIntent(intent: Intent, history: ChatMessage[], serv
     if (page.next_offset !== null) throw new Error('Too many matching facts. Please specify the person and attribute more precisely.');
     const matches = page.items.filter(f => normalize(f.subject) === normalize(intent.fact.subject) && attributeName(f.attribute) === intent.fact.attribute);
     if (matches.length > 1) return response('More than one saved fact matches. Please specify the exact person and attribute.', 'clarify');
-    const saved = matches[0] && matches[0].value !== intent.fact.value
-      ? await services.memories.update(matches[0], intent.fact) : await services.memories.remember(intent.fact);
-    return response(`Saved: ${formatFacts([saved])}`, intent.type, 'memory');
+    const changes = matches[0] && matches[0].value !== intent.fact.value;
+    // Replacing a saved value loses the old one, so the user confirms it first.
+    if (changes && !intent.confirmed) return confirmCard(`${formatFacts([matches[0]])} Replace it with “${intent.fact.value}”?`, intent);
+    const saved = changes ? await services.memories.update(matches[0], intent.fact) : await services.memories.remember(intent.fact);
+    return { ...response(`Saved: ${formatFacts([saved])}`, intent.type, 'memory'), ...(!matches[0] ? { actions: [{ kind: 'undo_fact' as const, label: 'Undo', factId: saved.id, revision: saved.revision }] } : {}) };
   }
   if (intent.type === 'schedule_create') {
     const saved = await services.schedules.create(services.newId(), intent.spec);
-    const when = saved.timing.type === 'once' ? saved.timing.local_at.replace('T', ' at ') : `${saved.timing.type === 'daily' ? saved.timing.weekdays?.length ? saved.timing.weekdays.map(day => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][day - 1]).join(', ') : 'Daily' : 'After wake'} at ${saved.timing.time}`;
-    return response(`${saved.action.type === 'task' ? 'Task' : 'Reminder'} saved: ${saved.title} — ${when} (${saved.timezone}).`, intent.type);
+    return { ...response(`${saved.action.type === 'task' ? 'Task' : 'Reminder'} saved: ${saved.title} — ${describeTiming(saved.timing)} (${saved.timezone}).${nextText(saved)}`, intent.type), actions: [{ kind: 'undo_schedule', label: 'Undo', scheduleId: saved.id }] };
   }
-  if (intent.type === 'schedule_manage' || intent.type === 'schedule_reschedule') {
-    const page = await services.schedules.list();
-    if (intent.type === 'schedule_manage' && intent.operation === 'list') return response(page.items.length ? page.items.map(s => `${s.title} (${s.status}; ID: ${s.id})`).join('\n\n') + (page.next_offset !== null ? '\n\nMore schedules are available in Scheduled Tasks.' : '') : 'You have no schedules.', intent.type);
-    const matches = page.items.filter(s => s.id === intent.selector || normalize(s.title) === normalize(intent.selector));
-    if (matches.length !== 1 || page.next_offset !== null) return response('Which schedule should I change? Please repeat the command with its exact title or ID.', 'clarify');
-    // Get the current revision before mutation; conflicts/failures propagate without a success message.
-    const current = await services.schedules.get(matches[0].id);
-    if (intent.type === 'schedule_reschedule') {
-      const saved = await services.schedules.update(current, { title: current.title, action: current.action, timezone: intent.timezone, timing: intent.timing });
-      return response(`Schedule rescheduled: ${saved.title}.`, intent.type);
+  if (intent.type === 'schedule_manage' || intent.type === 'schedule_reschedule' || intent.type === 'schedule_update' || intent.type === 'schedule_snooze') {
+    if (intent.type === 'schedule_manage' && intent.operation === 'list') {
+      const page = await services.schedules.list();
+      return response(page.items.length ? page.items.map(s => `${s.title} (${s.status}; ID: ${s.id})`).join('\n\n') + (page.next_offset !== null ? '\n\nMore schedules are available in Scheduled Tasks.' : '') : 'You have no schedules.', intent.type);
+    }
+    const current = await findSchedule(services, intent.selector);
+    if (!current) return response(WHICH, 'clarify');
+    if (intent.type === 'schedule_snooze') {
+      const saved = await services.schedules.snooze(current, intent.minutes);
+      return response(`Snoozed: ${saved.title}.${nextText(saved)}`, intent.type);
+    }
+    if (intent.type === 'schedule_reschedule' || intent.type === 'schedule_update') {
+      const change: ScheduleChange = intent.type === 'schedule_reschedule' ? { timing: intent.timing, timezone: intent.timezone } : intent.change;
+      const next = applyChange(current, change);
+      // Rewriting a recurring schedule's timing changes every future reminder, so ask first.
+      if (change.timing && current.timing.type !== 'once' && !intent.confirmed) return confirmCard(`Change “${current.title}” from ${describeTiming(current.timing)} to ${describeTiming(next.timing)}?`, intent);
+      const saved = await services.schedules.update(current, next);
+      return response(`Schedule ${intent.type === 'schedule_reschedule' ? 'rescheduled' : 'updated'}: ${saved.title} — ${describeTiming(saved.timing)} (${saved.timezone}).${nextText(saved)}`, intent.type);
     }
     if (intent.operation === 'list') throw new Error('Unexpected schedule operation');
+    if (intent.operation === 'cancel' && !intent.confirmed) return confirmCard(`Cancel “${current.title}” (${describeTiming(current.timing)})? Its future reminders stop.`, intent);
     const saved = await services.schedules[intent.operation](current);
     return response(`Schedule ${saved.status}: ${saved.title}.`, intent.type);
   }
@@ -243,4 +313,18 @@ export async function executeIntent(intent: Intent, history: ChatMessage[], serv
     return { ...answer, intent: intent.type };
   }
   return { ...await services.answer(intent.query, history), intent: intent.type };
+}
+
+/** Runs a button under an assistant message. Each re-reads current state, so a stale button cannot
+ * overwrite a newer change: a revision conflict surfaces as an error instead. */
+export async function runChatAction(action: ChatAction, history: ChatMessage[], services: IntentServices): Promise<RoutedAnswer> {
+  if (action.kind === 'dismiss') return response('Okay, nothing was changed.', 'clarify');
+  if (action.kind === 'confirm') return executeIntent({ ...action.intent, confirmed: true } as Intent, history, services);
+  if (action.kind === 'undo_schedule') {
+    const current = await services.schedules.get(action.scheduleId);
+    const saved = await services.schedules.cancel(current);
+    return response(`Undone: cancelled “${saved.title}”.`, 'schedule_manage');
+  }
+  await services.memories.delete({ id: action.factId, revision: action.revision } as PersonalFact);
+  return response('Undone: that saved fact was deleted.', 'remember');
 }

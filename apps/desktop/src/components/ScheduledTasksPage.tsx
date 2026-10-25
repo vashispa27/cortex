@@ -12,9 +12,14 @@ const initial = (): ScheduleSpec => ({ title: '', timezone: zone(), timing: { ty
 const body = (spec: ScheduleSpec) => spec.action.type === 'reminder' ? spec.action.message : spec.action.prompt;
 /** A short title from the message, so the create form only needs the message itself. */
 const titleFrom = (text: string) => { const line = text.trim().split('\n')[0]; return line.length > 80 ? `${line.slice(0, 77)}…` : line; };
+const ordinal = (n: number) => `${n}${[11, 12, 13].includes(n % 100) ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' } as Record<number, string>)[n % 10] ?? 'th'}`;
+const everyN = (minutes: number) => minutes % 60 === 0 ? `${minutes / 60} hour${minutes === 60 ? '' : 's'}` : `${minutes} minutes`;
+const localInput = (date: Date) => new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 export const cadence = (timing: ScheduleTiming) => {
   if (timing.type === 'once') return 'One time';
+  if (timing.type === 'monthly') return `${timing.day === -1 ? 'Last day' : `The ${ordinal(timing.day)}`} of each month at ${timing.time}`;
   const on = timing.weekdays?.length ? timing.weekdays.slice().sort().map(d => days[d - 1]).join(', ') : 'Every day';
+  if (timing.type === 'interval') return `Every ${everyN(timing.every_minutes)}${timing.window_start && timing.window_end ? `, ${timing.window_start}–${timing.window_end}` : ''} · ${on}`;
   return timing.type === 'after_wake' ? `After waking, ${timing.time}–${timing.window_end} · ${on}` : `${on} at ${timing.time}`;
 };
 
@@ -143,23 +148,28 @@ function ScheduleEditor({ value: spec, editing, busy, error, onChange, onSubmit,
   onChange: (spec: ScheduleSpec) => void; onSubmit: (event: FormEvent) => void; onClose: () => void;
 }) {
   const setTiming = (timing: ScheduleTiming) => onChange({ ...spec, timing });
-  const repeat = (type: ScheduleTiming['type']) => setTiming(type === 'once' ? { type: 'once', local_at: '' } : type === 'daily' ? { type: 'daily', time: spec.timing.type === 'once' ? '08:00' : spec.timing.time, weekdays: [] } : { type: 'after_wake', time: '06:00', window_end: '12:00', weekdays: [] });
+  const time = 'time' in spec.timing ? spec.timing.time : '08:00';
+  const repeat = (type: ScheduleTiming['type']) => setTiming(type === 'once' ? { type: 'once', local_at: '' }
+    : type === 'daily' ? { type: 'daily', time, weekdays: [] }
+    : type === 'monthly' ? { type: 'monthly', day: 1, time }
+    : type === 'interval' ? { type: 'interval', every_minutes: 120, start_local: localInput(new Date()), weekdays: [] }
+    : { type: 'after_wake', time: '06:00', window_end: '12:00', weekdays: [] });
   const task = spec.action.type === 'task';
   return <Modal title={editing ? 'Edit reminder' : 'New reminder'} onClose={onClose} locked={busy}>
     <form className="cx-form" onSubmit={onSubmit}>
       <label className="cx-field">{task ? 'Ask Cortex to' : 'Remind me to'}<textarea required maxLength={12000} rows={2} placeholder={task ? 'Summarise what changed in my repos today' : 'Call Rajesh about the invoice'} value={body(spec)} onChange={e => onChange({ ...spec, action: task ? { ...spec.action, prompt: e.target.value } as ScheduleSpec['action'] : { type: 'reminder', message: e.target.value } })}/></label>
       <div className="cx-field"><span>Repeat</span><div className="cx-segmented" role="group" aria-label="Repeat">
-        {([['once', 'Once'], ['daily', 'Recurring'], ['after_wake', 'After I wake']] as const).map(([type, label]) => <button key={type} type="button" aria-pressed={spec.timing.type === type} onClick={() => spec.timing.type !== type && repeat(type)}>{label}</button>)}
+        {([['once', 'Once'], ['daily', 'Recurring'], ['monthly', 'Monthly'], ['interval', 'Every few hours'], ['after_wake', 'After I wake']] as const).map(([type, label]) => <button key={type} type="button" aria-pressed={spec.timing.type === type} onClick={() => spec.timing.type !== type && repeat(type)}>{label}</button>)}
       </div></div>
-      {spec.timing.type === 'once' ? <label className="cx-field">When<input required type="datetime-local" value={spec.timing.local_at} onChange={e => setTiming({ type: 'once', local_at: e.target.value })}/></label> : <>
+      {spec.timing.type === 'once' ? <label className="cx-field">When<input required type="datetime-local" value={spec.timing.local_at} onChange={e => setTiming({ type: 'once', local_at: e.target.value })}/></label>
+      : spec.timing.type === 'monthly' ? <MonthlyFields timing={spec.timing} onChange={setTiming}/>
+      : spec.timing.type === 'interval' ? <IntervalFields timing={spec.timing} onChange={setTiming}/>
+      : <>
         <div className="cx-row">
-          <label className="cx-field">{spec.timing.type === 'after_wake' ? 'Earliest' : 'Time'}<input required type="time" value={spec.timing.time} onChange={e => spec.timing.type !== 'once' && setTiming({ ...spec.timing, time: e.target.value })}/></label>
+          <label className="cx-field">{spec.timing.type === 'after_wake' ? 'Earliest' : 'Time'}<input required type="time" value={spec.timing.time} onChange={e => (spec.timing.type === 'daily' || spec.timing.type === 'after_wake') && setTiming({ ...spec.timing, time: e.target.value })}/></label>
           {spec.timing.type === 'after_wake' && <label className="cx-field">Latest<input required type="time" value={spec.timing.window_end} onChange={e => spec.timing.type === 'after_wake' && setTiming({ ...spec.timing, window_end: e.target.value })}/></label>}
         </div>
-        <div className="cx-field"><span>Days <small className="cx-hint">· none means every day</small></span><div className="cx-days" role="group" aria-label="Days">{days.map((day, i) => {
-          const on = spec.timing.type !== 'once' && (spec.timing.weekdays || []).includes(i + 1);
-          return <button key={day} type="button" aria-pressed={on} onClick={() => { if (spec.timing.type === 'once') return; const list = spec.timing.weekdays || []; setTiming({ ...spec.timing, weekdays: on ? list.filter(d => d !== i + 1) : [...list, i + 1] }); }}>{day}</button>;
-        })}</div></div>
+        <DayPicker timing={spec.timing} onChange={setTiming}/>
       </>}
       <details className="cx-more" open={task || undefined}>
         <summary><ChevronDown size={14}/> More options</summary>
@@ -179,6 +189,41 @@ function ScheduleEditor({ value: spec, editing, busy, error, onChange, onSubmit,
       <div className="cx-modal-actions"><button type="button" className="button button-quiet" disabled={busy} onClick={onClose}>Cancel</button><button type="submit" className="button button-primary" disabled={busy || !body(spec).trim()}>{busy ? 'Saving…' : editing ? 'Save' : 'Create'}</button></div>
     </form>
   </Modal>;
+}
+
+type Weekly = Extract<ScheduleTiming, { weekdays?: number[] }>;
+function DayPicker({ timing, onChange }: { timing: Weekly; onChange: (timing: ScheduleTiming) => void }) {
+  const list = timing.weekdays || [];
+  return <div className="cx-field"><span>Days <small className="cx-hint">· none means every day</small></span><div className="cx-days" role="group" aria-label="Days">{days.map((day, i) => {
+    const on = list.includes(i + 1);
+    return <button key={day} type="button" aria-pressed={on} onClick={() => onChange({ ...timing, weekdays: on ? list.filter(d => d !== i + 1) : [...list, i + 1] })}>{day}</button>;
+  })}</div></div>;
+}
+function MonthlyFields({ timing, onChange }: { timing: Extract<ScheduleTiming, { type: 'monthly' }>; onChange: (timing: ScheduleTiming) => void }) {
+  const last = timing.day === -1;
+  return <div className="cx-row">
+    <label className="cx-field">Day of month<input type="number" min={1} max={31} required={!last} disabled={last} value={last ? '' : timing.day} onChange={e => onChange({ ...timing, day: Number(e.target.value) })}/></label>
+    <label className="cx-field">Time<input required type="time" value={timing.time} onChange={e => onChange({ ...timing, time: e.target.value })}/></label>
+    <label className="cx-field cx-check"><input type="checkbox" checked={last} onChange={e => onChange({ ...timing, day: e.target.checked ? -1 : 1 })}/> Last day of the month</label>
+    <small className="cx-hint">A day a short month lacks (the 31st in February) runs on that month’s last day.</small>
+  </div>;
+}
+function IntervalFields({ timing, onChange }: { timing: Extract<ScheduleTiming, { type: 'interval' }>; onChange: (timing: ScheduleTiming) => void }) {
+  const hours = timing.every_minutes % 60 === 0;
+  const windowed = timing.window_start !== undefined && timing.window_end !== undefined;
+  return <>
+    <div className="cx-row">
+      <label className="cx-field">Every<input type="number" min={1} required value={hours ? timing.every_minutes / 60 : timing.every_minutes} onChange={e => onChange({ ...timing, every_minutes: Number(e.target.value) * (hours ? 60 : 1) })}/></label>
+      <label className="cx-field">Unit<select value={hours ? 'hours' : 'minutes'} onChange={e => onChange({ ...timing, every_minutes: (hours ? timing.every_minutes / 60 : timing.every_minutes) * (e.target.value === 'hours' ? 60 : 1) })}><option value="minutes">minutes (15 minimum)</option><option value="hours">hours</option></select></label>
+      <label className="cx-field">Starting<input required type="datetime-local" value={timing.start_local} onChange={e => onChange({ ...timing, start_local: e.target.value })}/></label>
+    </div>
+    <div className="cx-row">
+      <label className="cx-field cx-check"><input type="checkbox" checked={windowed} onChange={e => onChange(e.target.checked ? { ...timing, window_start: '09:00', window_end: '21:00' } : { ...timing, window_start: undefined, window_end: undefined })}/> Only between</label>
+      {windowed && <><label className="cx-field">From<input required type="time" value={timing.window_start} onChange={e => onChange({ ...timing, window_start: e.target.value })}/></label>
+        <label className="cx-field">Until<input required type="time" value={timing.window_end} onChange={e => onChange({ ...timing, window_end: e.target.value })}/></label></>}
+    </div>
+    <DayPicker timing={timing} onChange={onChange}/>
+  </>;
 }
 
 export default ScheduledTasksPage;
