@@ -1,4 +1,4 @@
-import type { PendingIntent } from "./intent";
+import type { ChatAction, PendingIntent } from "./intent";
 import type { MemoryHit } from "./api";
 
 export type Page = "today" | "timeline" | "ask" | "memories" | "scheduled" | "agents" | "settings";
@@ -29,6 +29,8 @@ export type ChatMessage = {
   origin?: string;
   /** A clarification may resume only this explicitly requested schedule. */
   pendingIntent?: PendingIntent;
+  /** Buttons under this message (Undo, Confirm, Cancel); removed once one has been used. */
+  actions?: ChatAction[];
   /** A visible note about the excerpt, for example that it was cut. */
   note?: string;
 };

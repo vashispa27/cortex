@@ -63,6 +63,12 @@ export function appendMessage(session: CortexSession, message: ChatMessage, now 
   return { ...session, updatedAt: now, messages: [...session.messages, message] };
 }
 
+/** A button was used: drop the buttons from the message it sat under, so it cannot run twice, and add the result. */
+export function finishAction(session: CortexSession, index: number, result: ChatMessage, now = Date.now()): CortexSession {
+  const messages = session.messages.map((message, i) => i === index ? { ...message, actions: undefined, pendingIntent: undefined } : message);
+  return { ...session, updatedAt: now, messages: [...messages, result] };
+}
+
 export function upsertSession(sessions: CortexSession[], session: CortexSession): CortexSession[] {
   return [session, ...sessions.filter((item) => item.id !== session.id)]
     .sort((left, right) => right.updatedAt - left.updatedAt)

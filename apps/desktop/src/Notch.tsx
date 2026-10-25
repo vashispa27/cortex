@@ -4,11 +4,13 @@ import { CornerDownLeft, Maximize2, Pause, Play, Plus, Settings2, X } from "luci
 import { listen } from "@tauri-apps/api/event";
 import { desktopRuntime, getServiceSettings, setEvalCapture } from "./lib/api";
 import { demoSearch } from "./lib/demo";
-import { answerCortex } from "./lib/answer";
+import { answerCortex, runAction } from "./lib/answer";
+import type { ChatAction } from "./lib/intent";
+import ChatActions from "./components/ChatActions";
 import { loadPreferences } from "./lib/storage";
 import { configureNotchDisplay, configureCortexTrigger, configureTestMode, focusNotch, openMain, restorePreviousApp, setNotchMode, setNotchVisible, writeActiveSession, type NotchMode } from "./lib/notch";
 import {
-  appendMessage, commitSession, composeAnswer, loadSessions, newSession, sessionsStorageKey, sessionTime, triggerSymbol,
+  appendMessage, commitSession, composeAnswer, finishAction, loadSessions, newSession, sessionsStorageKey, sessionTime, triggerSymbol,
   type CortexSession,
 } from "./lib/cortex";
 import type { ChatMessage } from "./lib/types";
@@ -33,13 +35,13 @@ function SelectionQuote({ message }: { message: ChatMessage }) {
   </div>;
 }
 
-function CortexThread({ session, busy }: { session: CortexSession; busy: boolean }) {
+function CortexThread({ session, busy, onAction }: { session: CortexSession; busy: boolean; onAction: (index: number, action: ChatAction) => void }) {
   return <>
     {session.messages.map((message, index) => message.role === "user"
       ? <div className="cortex-message user" key={`${session.id}-${index}`}>{message.kind === "summarize" ? <SelectionQuote message={message} /> : <div className="cortex-user-bubble">{message.body}</div>}</div>
       : <div className="cortex-message assistant" key={`${session.id}-${index}`}>
         <span className="cortex-message-mark"><CortexMark /></span>
-        <div className="cortex-assistant-body"><AnswerSourceLabel source={message.source} /><AnswerContent text={message.body} /></div>
+        <div className="cortex-assistant-body"><AnswerSourceLabel source={message.source} /><AnswerContent text={message.body} />{message.actions?.length ? <ChatActions actions={message.actions} disabled={busy} onRun={(action) => onAction(index, action)} /> : null}</div>
       </div>)}
     {busy && <div className="cortex-message assistant"><span className="cortex-message-mark"><CortexMark processing /></span><div className="cortex-assistant-body cortex-typing"><span /><span /><span /></div></div>}
   </>;
@@ -175,6 +177,7 @@ export default function NotchApp() {
         hits: answer.hits,
         source: answer.source,
         ...("pendingIntent" in answer ? { pendingIntent: answer.pendingIntent } : {}),
+        ...("actions" in answer && answer.actions ? { actions: answer.actions } : {}),
       };
       commit(appendMessage(session, assistant));
       if (target === "bar") {
@@ -190,6 +193,25 @@ export default function NotchApp() {
       };
       commit(appendMessage(session, assistant));
       if (target === "bar") setMode((current) => current === "thinking" ? "answer" : current);
+    } finally {
+      setBusy(false);
+      busyRef.current = false;
+      setBusySessionId(null);
+    }
+  };
+
+  // Undo / Confirm / Cancel under a message: run it, drop the buttons, and show what happened.
+  const runMessageAction = async (index: number, action: ChatAction) => {
+    const session = activeSession;
+    if (!session || busyRef.current) return;
+    busyRef.current = true;
+    setBusy(true);
+    setBusySessionId(session.id);
+    try {
+      const result = await runAction(action, session.messages.slice(0, index + 1));
+      commit(finishAction(session, index, { role: "assistant", body: result.body, source: result.source, ...(result.pendingIntent ? { pendingIntent: result.pendingIntent } : {}), ...(result.actions ? { actions: result.actions } : {}) }));
+    } catch (reason) {
+      commit(finishAction(session, index, { role: "assistant", body: `Cortex could not do that: ${reason instanceof Error ? reason.message : String(reason)}` }));
     } finally {
       setBusy(false);
       busyRef.current = false;
@@ -424,7 +446,7 @@ export default function NotchApp() {
         </div>
       </header>
       <div className="cortex-thread-scroll" ref={answerScrollRef}>
-        <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} />
+        <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} onAction={runMessageAction} />
       </div>
       <footer className="cortex-panel-foot">
         <span>{sample ? "Sample workspace" : testMode ? "Test mode · eval archive" : "Your memory"}</span>
@@ -453,7 +475,7 @@ export default function NotchApp() {
             <span className="cortex-pill">{sessionTime(activeSession.updatedAt)}</span>
           </header>
           <div className="cortex-thread-scroll" ref={historyScrollRef}>
-            <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} />
+            <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} onAction={runMessageAction} />
           </div>
           <form className="cortex-history-form" onSubmit={submitHistory}>
             <input ref={historyInputRef} value={historyInput} onChange={(event) => setHistoryInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label="Ask a follow-up" placeholder="Ask a follow-up…" />

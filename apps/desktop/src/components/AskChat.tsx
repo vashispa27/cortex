@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Orbit, Plus, UserRound } from "lucide-react";
 import { AnswerContent, AnswerSourceLabel } from "./AnswerContent";
-import { answerCortex } from "../lib/answer";
+import ChatActions from "./ChatActions";
+import { answerCortex, runAction } from "../lib/answer";
+import type { ChatAction } from "../lib/intent";
 import { demoSearch } from "../lib/demo";
 import { takeActiveSession } from "../lib/notch";
 import {
-  appendMessage, commitSession, composeAnswer, loadSessions, newSession, sessionsStorageKey, sessionTime,
+  appendMessage, commitSession, composeAnswer, finishAction, loadSessions, newSession, sessionsStorageKey, sessionTime,
   type CortexSession,
 } from "../lib/cortex";
 import type { ChatMessage } from "../lib/types";
@@ -69,7 +71,7 @@ export default function AskChat({ sample, active, onSessionCount }: Props) {
       const answer = sample
         ? (() => { const found = demoSearch(question); return { body: composeAnswer(question, found.results, true), hits: found.results.slice(0, 3), source: "memory" as const }; })()
         : await answerCortex(question, session?.messages ?? []);
-      commit(appendMessage(next, { role: "assistant", body: answer.body, hits: answer.hits, source: answer.source, ...("pendingIntent" in answer ? { pendingIntent: answer.pendingIntent } : {}) }));
+      commit(appendMessage(next, { role: "assistant", body: answer.body, hits: answer.hits, source: answer.source, ...("pendingIntent" in answer ? { pendingIntent: answer.pendingIntent } : {}), ...("actions" in answer && answer.actions ? { actions: answer.actions } : {}) }));
     } catch (error) {
       commit(appendMessage(next, { role: "assistant", body: `Cortex could not answer: ${error instanceof Error ? error.message : String(error)}` }));
     } finally {
@@ -78,9 +80,25 @@ export default function AskChat({ sample, active, onSessionCount }: Props) {
     }
   };
 
+  // Undo / Confirm / Cancel under a message: run it, drop the buttons, and show what happened.
+  const runMessageAction = async (index: number, action: ChatAction) => {
+    if (!session || busyRef.current) return;
+    busyRef.current = true;
+    setBusyId(session.id);
+    try {
+      const result = await runAction(action, session.messages.slice(0, index + 1));
+      commit(finishAction(session, index, { role: "assistant", body: result.body, source: result.source, ...(result.pendingIntent ? { pendingIntent: result.pendingIntent } : {}), ...(result.actions ? { actions: result.actions } : {}) }));
+    } catch (error) {
+      commit(finishAction(session, index, { role: "assistant", body: `Cortex could not do that: ${error instanceof Error ? error.message : String(error)}` }));
+    } finally {
+      busyRef.current = false;
+      setBusyId(null);
+    }
+  };
+
   const message = (item: ChatMessage, index: number) => <div key={index} className={`message ${item.role}`}>
     <div className="message-avatar">{item.role === "assistant" ? <Orbit size={17} /> : <UserRound size={17} />}</div>
-    <div className="message-content">{item.role === "assistant" ? <><AnswerSourceLabel source={item.source} /><AnswerContent text={item.body} /></> : <p>{item.body}</p>}</div>
+    <div className="message-content">{item.role === "assistant" ? <><AnswerSourceLabel source={item.source} /><AnswerContent text={item.body} />{item.actions?.length ? <ChatActions actions={item.actions} disabled={busyId !== null} onRun={(action) => void runMessageAction(index, action)} /> : null}</> : <p>{item.body}</p>}</div>
   </div>;
 
   return <div className="chat-page ask-chat">
