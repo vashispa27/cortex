@@ -201,12 +201,14 @@ function DayPicker({ timing, onChange }: { timing: Weekly; onChange: (timing: Sc
 }
 function MonthlyFields({ timing, onChange }: { timing: Extract<ScheduleTiming, { type: 'monthly' }>; onChange: (timing: ScheduleTiming) => void }) {
   const last = timing.day === -1;
-  return <div className="cx-row">
-    <label className="cx-field">Day of month<input type="number" min={1} max={31} required={!last} disabled={last} value={last ? '' : timing.day} onChange={e => onChange({ ...timing, day: Number(e.target.value) })}/></label>
-    <label className="cx-field">Time<input required type="time" value={timing.time} onChange={e => onChange({ ...timing, time: e.target.value })}/></label>
+  return <>
+    <div className="cx-row">
+      <label className="cx-field">Day of month<input type="number" min={1} max={31} required={!last} disabled={last} value={last ? '' : timing.day} onChange={e => onChange({ ...timing, day: Number(e.target.value) })}/></label>
+      <label className="cx-field">Time<input required type="time" value={timing.time} onChange={e => onChange({ ...timing, time: e.target.value })}/></label>
+    </div>
     <label className="cx-field cx-check"><input type="checkbox" checked={last} onChange={e => onChange({ ...timing, day: e.target.checked ? -1 : 1 })}/> Last day of the month</label>
     <small className="cx-hint">A day a short month lacks (the 31st in February) runs on that month’s last day.</small>
-  </div>;
+  </>;
 }
 function IntervalFields({ timing, onChange }: { timing: Extract<ScheduleTiming, { type: 'interval' }>; onChange: (timing: ScheduleTiming) => void }) {
   const hours = timing.every_minutes % 60 === 0;
@@ -217,11 +219,11 @@ function IntervalFields({ timing, onChange }: { timing: Extract<ScheduleTiming, 
       <label className="cx-field">Unit<select value={hours ? 'hours' : 'minutes'} onChange={e => onChange({ ...timing, every_minutes: (hours ? timing.every_minutes / 60 : timing.every_minutes) * (e.target.value === 'hours' ? 60 : 1) })}><option value="minutes">minutes (15 minimum)</option><option value="hours">hours</option></select></label>
       <label className="cx-field">Starting<input required type="datetime-local" value={timing.start_local} onChange={e => onChange({ ...timing, start_local: e.target.value })}/></label>
     </div>
-    <div className="cx-row">
-      <label className="cx-field cx-check"><input type="checkbox" checked={windowed} onChange={e => onChange(e.target.checked ? { ...timing, window_start: '09:00', window_end: '21:00' } : { ...timing, window_start: undefined, window_end: undefined })}/> Only between</label>
-      {windowed && <><label className="cx-field">From<input required type="time" value={timing.window_start} onChange={e => onChange({ ...timing, window_start: e.target.value })}/></label>
-        <label className="cx-field">Until<input required type="time" value={timing.window_end} onChange={e => onChange({ ...timing, window_end: e.target.value })}/></label></>}
-    </div>
+    <label className="cx-field cx-check"><input type="checkbox" checked={windowed} onChange={e => onChange(e.target.checked ? { ...timing, window_start: '09:00', window_end: '21:00' } : { ...timing, window_start: undefined, window_end: undefined })}/> Only between certain hours</label>
+    {windowed && <div className="cx-row">
+      <label className="cx-field">From<input required type="time" value={timing.window_start} onChange={e => onChange({ ...timing, window_start: e.target.value })}/></label>
+      <label className="cx-field">Until<input required type="time" value={timing.window_end} onChange={e => onChange({ ...timing, window_end: e.target.value })}/></label>
+    </div>}
     <DayPicker timing={timing} onChange={onChange}/>
   </>;
 }
