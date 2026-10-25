@@ -42,3 +42,20 @@ the judge disagree; read those by hand before trusting the judge.
 The judge input contains the question, reference facts (which can include emails and phone numbers) and the
 reply. With Jev or any OpenRouter judge that text leaves this Mac; use `EVAL_JUDGE_KIND=chat
 EVAL_JUDGE_PROVIDER=local` to keep it local.
+
+## Decision-model eval (reminders and memories)
+
+Opt-in, never in CI: runs the real model that classifies chat messages into reminders, schedule changes and
+saved facts (`src/lib/decide.ts`) over about 45 labeled phrasings in `evals/decision/cases.ts` and reports
+accuracy per action, timing correctness, target ids, and the number of **false writes** (a phrasing that must
+not write but proposed a write; the run fails if it is above zero).
+
+```bash
+# from apps/desktop; the key comes from the environment, never from the app's saved key
+OPENROUTER_API_KEY=... EVAL_MODEL=<openrouter model> npm run eval:decision
+```
+
+It uses the app's own system prompt, tool, context builder, pre-gate, veto and validation, with a fixed clock
+(Sunday 2026-10-25 12:30, Asia/Kolkata) and synthetic schedules and facts, so it reads and writes no real
+data. Results go to `evals/decision/out/<EVAL_RUN>.json`. The grading logic is unit tested without a model
+(`evals/decision/grade.test.ts`, part of `npm test`).

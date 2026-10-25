@@ -20,3 +20,6 @@ evals/answers/out/
 # Judge runs include exact evidence and model answers.
 evals/llm_judge/out/
 evals/llm_judge/__pycache__/
+
+# Decision-model eval results.
+apps/desktop/evals/decision/out/
