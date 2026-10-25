@@ -30,8 +30,12 @@ All inputs are structured. Natural-language parsing and Cortex chat intent routi
 - `timezone`: explicit IANA timezone, e.g. `Asia/Kolkata`, `America/New_York`, `UTC`. The machine timezone is never inferred by the backend. The page initially selects the browser's IANA timezone and lets the user change it. A timezone edit replaces the schedule and recomputes its next occurrence.
 - `once`: `local_at` is exactly `YYYY-MM-DDTHH:MM`, interpreted in the named timezone. Creation/edit requires a future minute. Impossible dates, DST gaps and ambiguous DST folds are rejected; choose an unambiguous minute.
 - `daily`: `time` is exactly `HH:MM`. `weekdays` optionally selects ISO weekdays (Monday=1 through Sunday=7); omitted/empty means every day. Recurrence uses local calendar days, not 24-hour UTC intervals. DST gaps skip the day; folds use the earlier instant and fire only once.
+- Weekly is `daily` with `weekdays`: every Sunday at 10:00 is `{"type":"daily","time":"10:00","weekdays":[7]}`. There is no separate weekly type; the UI, chat and MCP all use this form.
+- `monthly`: `day` is 1–31, or `-1` for the last day, with `time` as above. A day a short month lacks (31 in February, 30 in a non-leap February) clamps to that month's last day, so the reminder is never skipped. A local time inside a DST gap skips that month, like `daily`.
+- `interval`: fires every `every_minutes` (15 to 525,600) counted from `start_local` (`YYYY-MM-DDTHH:MM` in the schedule's timezone). The grid is in absolute minutes, so a DST change does not shift slots relative to each other. Optional `window_start` and `window_end` (both or neither, `HH:MM`, end later than start) limit the slots to a same-day local window, inclusive of both ends; **a window cannot cross midnight** and is rejected rather than reinterpreted. Optional `weekdays` filter by local weekday. Slots outside the window or weekdays are skipped, never queued. `start_local` may be in the past (the grid still anchors there); the first fire is the next slot after now. With no window, chat sets `start_local` to one interval from now; with a window, to the window start today.
 - `after_wake`: the first activity event in the local-day window `[time,window_end)` fires one occurrence. `window_end` must be later than `time` on the same day. Optional weekdays behave as above. Example morning window: `06:00`–`12:00`. Activity before the window does not arm a future run; activity after the window does not catch up. A wake during the window can run immediately even when the schedule was created after that day's start. Startup during the window counts as activity. A normal timer tick never fires these schedules without an activity event. Repeated wake/session events, restarts and multiple runners deduplicate on that day's window-start instant. `next_due_ms` is a preview of the next window start, not a promise that activity will occur; the current window can still run on activity.
-- Missed one-time reminders run once on recovery. Multiple missed daily occurrences coalesce into one catch-up run identified by the previously persisted due time, then advance to the next future local occurrence. The history `due_ms` shows that original time, `started_ms` the actual execution time (reservation time while still queued). There is no backlog replay for every missed day.
+- Missed one-time reminders run once on recovery. Multiple missed daily, monthly or interval occurrences coalesce into one catch-up run identified by the previously persisted due time, then advance to the next future occurrence (for an interval, the next slot on its grid after now). The history `due_ms` shows that original time, `started_ms` the actual execution time (reservation time while still queued). There is no backlog replay for every missed day or slot: a laptop that slept for a day delivers a 15-minute reminder once, not ninety-six times.
+- **Snooze** (`snooze`, MCP `snooze_schedule`) sets the next fire to now + `minutes` (1–1440) without changing the specification, and bumps the revision. A completed one-time reminder re-arms for the snooze and completes again after it fires. A recurring schedule cannot be snoozed past its own next occurrence (that would skip it), so the request fails with an explanation. After-wake schedules, paused and cancelled schedules cannot snooze. The OS notification has no button; snooze is a chat message ("snooze the water reminder 10 minutes"), an MCP call, or the API.
 - Pause suppresses new claims. Resume skips paused daily occurrences and selects the next future recurrence; an elapsed paused one-time reminder catches up on resume. After-wake schedules wait for a new qualifying activity event, which may be in the current window; activity while paused is never replayed. Cancel is terminal and retains history; create a new ID to replace a cancelled schedule. Edit requires a complete replacement spec. Editing a completed schedule to a future occurrence reactivates it; editing a paused schedule keeps it paused.
 - `revision` guards user mutations. Every claim increments it; fetch the latest record after conflicts. Scheduler-only preview maintenance can change `next_due_ms` without changing the user specification.
 
@@ -52,7 +56,9 @@ type ScheduleSpec = {
   timing:
     | { type: 'once'; local_at: string }
     | { type: 'daily'; time: string; weekdays?: number[] }
-    | { type: 'after_wake'; time: string; window_end: string; weekdays?: number[] };
+    | { type: 'after_wake'; time: string; window_end: string; weekdays?: number[] }
+    | { type: 'monthly'; day: number; time: string } // day 1..31, or -1 = last day
+    | { type: 'interval'; every_minutes: number; start_local: string; window_start?: string; window_end?: string; weekdays?: number[] };
   action:
     | { type: 'reminder'; message: string }
     | { type: 'task'; prompt: string; requires_live_sources?: boolean };
@@ -68,11 +74,12 @@ type ScheduleSpec = {
 | `pause` | `pause_schedule` | `{schedule_id, expected_revision}` | Schedule |
 | `resume` | `resume_schedule` | `{schedule_id, expected_revision}` | Schedule |
 | `cancel` | `cancel_schedule` | `{schedule_id, expected_revision}` | Schedule |
+| `snooze` | `snooze_schedule` | `{schedule_id, expected_revision, minutes}` | Schedule |
 | `history` | `get_schedule_history` | `{schedule_id?, offset?, limit?}` | Page of runs |
 
 IDs are 1..100 bytes. Caller-supplied stable IDs make creation retry-safe: the same ID and current specification return the existing schedule, while a differing specification conflicts. Mutations require the current positive integer revision. MCP uses strict Zod objects, enum discriminants, bounds and timezone validation; backend validation is authoritative, including date/DST rules. Pages return `{items, total, next_offset}`; limits default to 50 and max at 100. Pages are also bounded to approximately 180KB to stay within the existing bridge limits; a page may contain fewer than `limit` items. Continue while `next_offset !== null`.
 
-A Schedule includes its specification plus `id`, `revision`, `status` (`active | paused | completed | cancelled`), `next_due_ms: number | null`, `created_ms`, `updated_ms`. Timestamps are UTC epoch milliseconds. Paused schedules retain their last due preview; cancelled/completed schedules have no future due time.
+A Schedule includes its specification plus `id`, `revision`, `status` (`active | paused | completed | cancelled`), `next_due_ms: number | null`, `next_due_local: string | null`, `created_ms`, `updated_ms`. `next_due_local` is `YYYY-MM-DDTHH:MM` in the schedule's own timezone, computed when the response is built and never stored, so a caller (a harness confirming back to the user, the chat card) needs no timezone arithmetic. Timestamps are UTC epoch milliseconds. Paused schedules retain their last due preview; cancelled/completed schedules have no future due time.
 
 A Run includes `id`, `schedule_id`, `due_ms`, `started_ms`, `finished_ms: number | null`, `status` (`queued | running | succeeded | failed | interrupted | cancelled`), `output`, `error: string | null`, `delivery_status` (`pending | attempted | submitted | failed`), and `schedule` (immutable specification/metadata snapshot at claim time). Output includes clickable Markdown source URLs for live answers. History sorts newest first. Records are retained until the workspace database is removed; no automatic retention pruning is currently provided.
 
@@ -88,6 +95,15 @@ Daily answer:
 
 ```json
 {"id":"market-morning","schedule":{"title":"Stock market briefing","timezone":"Asia/Kolkata","timing":{"type":"daily","time":"08:00"},"action":{"type":"task","prompt":"Give me a current stock market briefing with source timestamps and links.","requires_live_sources":true}}}
+```
+
+Weekly, monthly and interval examples (only `timing` shown):
+
+```json
+{"type":"daily","time":"10:00","weekdays":[7]}
+{"type":"monthly","day":1,"time":"09:00"}
+{"type":"monthly","day":-1,"time":"18:00"}
+{"type":"interval","every_minutes":120,"start_local":"2026-10-26T09:00","window_start":"09:00","window_end":"21:00","weekdays":[1,2,3,4,5]}
 ```
 
 Activity-triggered answer: use the same specification with `"timing":{"type":"after_wake","time":"06:00","window_end":"12:00"}` and a distinct ID.
@@ -113,7 +129,7 @@ Use the **same root state directory as the desktop/daemon**; the bridge looks fo
 
 ## Desktop integration
 
-`apps/desktop/src/components/ScheduledTasksPage.tsx` exports `ScheduledTasksPage`, its default export and `ScheduledTasksPageProps`. `App.tsx` mounts `<ScheduledTasksPage />` at **Scheduled tasks / Reminders**, the first workspace destination. See [workspace integration](workspace.md). The component supports creation, complete-spec edits, pause/resume/cancel, paginated schedules/history, periodic refresh, timezone display, status/error handling and full result details with source links.
+`apps/desktop/src/components/ScheduledTasksPage.tsx` exports `ScheduledTasksPage`, its default export and `ScheduledTasksPageProps`. `App.tsx` mounts `<ScheduledTasksPage />` at **Scheduled tasks / Reminders**, the first workspace destination. See [workspace integration](workspace.md). The editor offers Once, Recurring (with day picker), Monthly (day or last day), Every few hours (interval with optional window and days) and After I wake. The component supports creation, complete-spec edits, pause/resume/cancel, paginated schedules/history, periodic refresh, timezone display, status/error handling and full result details with source links.
 
 `apps/desktop/src/lib/schedules.ts` exports `ScheduleService`, `ScheduleSpec`, `ScheduleTiming`, `ScheduleAction`, `Schedule`, `ScheduleRun`, `SchedulePage`, `ScheduleTransport`, `createScheduleService`, `scheduleService` and `formatScheduleTime`. Hosts/tests may inject a service using `<ScheduledTasksPage service={...} />`. The default transport uses existing `localRequest` and native route validation. It stores no schedules in browser storage.
 
@@ -127,7 +143,9 @@ cargo check --manifest-path apps/desktop/src-tauri/Cargo.toml
 (cd crates/mcp && npm test)
 ```
 
-Backend tests cover timezone conversion, DST gaps/folds, calendar recurrence, weekdays, restart catch-up, stale-run recovery, concurrent connections, wake windows and duplicates, pause/edit/cancel/revision conflicts, dependency failure reporting, and reminder delivery bypassing the model. MCP tests verify strict structured arguments and bridge routing. Desktop tests verify shared service contracts and explicit timezone rendering. Run the existing daemon/desktop integration suites with `CORTEX_DAEMON_BIN` / `CORTEX_DESKTOP_BIN` and `CORTEX_MODEL_DIR` as described in the MCP README.
+`cargo run -p cortex-memory --example reminder_smoke` fires two real OS notifications (a one-time reminder and a 15-minute interval whose next slot is about 90 seconds away) from a throwaway store and prints their run history; it never touches the real workspace.
+
+Backend tests cover timezone conversion, DST gaps/folds, calendar recurrence, monthly clamping (31st in February, leap years, last day, year rollover, DST gap), interval grids with windows and weekdays, rejection of short intervals and windows that cross midnight, one catch-up run after sleep for interval and monthly schedules, snooze rules, weekdays, restart catch-up, stale-run recovery, concurrent connections, wake windows and duplicates, pause/edit/cancel/revision conflicts, dependency failure reporting, and reminder delivery bypassing the model. MCP tests verify strict structured arguments and bridge routing. Desktop tests verify shared service contracts and explicit timezone rendering. Run the existing daemon/desktop integration suites with `CORTEX_DAEMON_BIN` / `CORTEX_DESKTOP_BIN` and `CORTEX_MODEL_DIR` as described in the MCP README.
 
 A funded live provider call and visible OS notification require deployment credentials, account access, a graphical session and OS permissions; mocked provider/notification tests cannot establish those conditions.
 

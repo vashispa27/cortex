@@ -25,4 +25,14 @@ For strict JSON MCP client configurations, `node dist/register.js --enable /abso
 
 ## Scheduled tasks and reminders
 
-The same bridge exposes `create_schedule`, `list_schedules`, `get_schedule`, `update_schedule`, `pause_schedule`, `resume_schedule`, `cancel_schedule` and `get_schedule_history`. These use the shared workspace database and require structured timing plus an explicit IANA timezone. The running Cortex engine executes schedules independently of the MCP connection. See [the scheduling API and runtime guide](../../docs/scheduled-tasks.md) for arguments, recurrence/DST/recovery semantics, desktop integration, notification permissions and live-answer provider configuration.
+The same bridge exposes `create_schedule`, `list_schedules`, `get_schedule`, `update_schedule`, `pause_schedule`, `resume_schedule`, `cancel_schedule`, `snooze_schedule` and `get_schedule_history`. These use the shared workspace database and require structured timing plus an explicit IANA timezone. There is no natural-language tool: your model resolves “every Sunday at 10” into one of these timings, and the tool descriptions carry one example each.
+
+| Timing | Example |
+|---|---|
+| `once` | `{"type":"once","local_at":"2026-10-26T14:00"}` |
+| `daily` (also weekly) | `{"type":"daily","time":"10:00","weekdays":[7]}` is every Sunday; omit `weekdays` for every day |
+| `monthly` | `{"type":"monthly","day":1,"time":"09:00"}`; `day: -1` is the last day, and a day a short month lacks (31 in February) clamps to that month's last day |
+| `interval` | `{"type":"interval","every_minutes":120,"start_local":"2026-10-26T09:00","window_start":"09:00","window_end":"21:00","weekdays":[1,2,3,4,5]}`; minimum 15 minutes, window cannot cross midnight, set `start_local` to the first fire time |
+| `after_wake` | `{"type":"after_wake","time":"06:00","window_end":"12:00"}` |
+
+`create_schedule`, `update_schedule`, `pause`, `resume`, `cancel` and `snooze` return the stored schedule with its new `revision`, `next_due_ms` and `next_due_local` (`YYYY-MM-DDTHH:MM` in the schedule's timezone), so confirm the time back to the user from that rather than from your own arithmetic. `snooze_schedule` takes `{schedule_id, expected_revision, minutes: 1..1440}`. `remember_fact` and `update_fact` return the fact with its `revision`; changing the value of an existing fact needs `update_fact` with the current revision, and you should tell the user the old value is being replaced. The running Cortex engine executes schedules independently of the MCP connection. See [the scheduling API and runtime guide](../../docs/scheduled-tasks.md) for arguments, recurrence/DST/recovery semantics, desktop integration, notification permissions and live-answer provider configuration.

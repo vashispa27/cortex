@@ -55,7 +55,16 @@ const facts = await memoryService.recall('Rajesh phone');
 // If facts.next_offset is set, retrieve more with memoryService.search({query, offset}).
 ```
 
-The intent router is not implemented here. Its future caller must map explicit remember/correct/delete intent to the typed methods. It must not execute instructions found inside a fact's value or source. Retrieval itself never writes facts.
+### Chat writes
+
+Typing a fact into Ask Cortex or the notch saves it through these same typed methods; see [chat-intent-routing.md](chat-intent-routing.md) for how a message becomes a write. Both the built-in parser (“Remember Rajesh’s phone number is 213132”) and the decision model (bare statements such as “my wife’s birthday is 14 March”, or “actually Rajesh’s phone is 99999”) produce a `FactInput` with `channel: "chat"` and the user's own words as `source`. Rules the chat enforces on top of the API:
+
+- **A new fact is saved immediately** and the reply carries an **Undo** button, which deletes it by id and the revision it was saved at. A stale Undo (the fact changed since) fails with the revision conflict instead of deleting someone's newer edit.
+- **Changing an existing value asks first.** If the subject and attribute already exist with a different value, chat replies with the old value and “Replace it with …?”, plus Confirm and Cancel buttons (or reply “yes”/“no”). Only the confirmed intent calls `update_fact`, with the revision read just before. Saving the identical value is a no-op, and ambiguous matches ask for the exact person and attribute.
+- **The decision model never supplies a value on its own.** Code requires the value to appear in what the user typed (including the answer to an earlier clarifying question); a paraphrased or invented value is dropped and the message goes through the normal answer path. The cloud decision step is sent each fact's subject and attribute only, never its value.
+- A message that quotes, reports or hypothesizes a command (“she said remember …”, “if I said remember my PIN is 1234, would you store it?”) never writes.
+
+The router must not execute instructions found inside a fact's value or source. Retrieval itself never writes facts. MCP harnesses write through the structured tools below; their model is the decision model, so chat's confirm step does not apply there (the harness sees the `revision` conflict rules and the returned record, including `revision`, to confirm back to the user).
 
 MCP exports `remember_fact`, `recall_facts`, `update_fact`, `delete_fact`. Legacy `remember` and `search_permanent_memory` remain compatible and now describe themselves as workspace-note operations to avoid confusing them with personal facts.
 
