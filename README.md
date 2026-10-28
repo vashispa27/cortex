@@ -313,7 +313,7 @@ Tool results are untrusted data like evidence: capped at 12,000 characters, and 
 | `apps/desktop` | Tauri/React onboarding, privacy controls, Scheduled tasks / Reminders, Ask Cortex, Memories, and Agent Space |
 | `crates/mcp` | Shared task/memory MCP bridge and explicit client-config helper; [workflow and setup](docs/shared-workspace.md) |
 | `services/control`, `services/gateway`, `packages/prompts` | Account metadata/quota, authenticated inference gateway, prompt contracts, and a deterministic development provider |
-| `apps/website` | Responsive public preview with disabled downloads until artifacts are configured |
+| `apps/website` | Vite one-page public site with an illustrative demo; deploys independently to Vercel |
 | `infra` | Signed release metadata and verification tooling; requires real signed installers and keys |
 
 Each component has local setup notes. The website and services run independently; the desktop shell does not yet implement production OIDC sign-in or live cloud inference. The specification is the design baseline, not a claim that every feature has shipped.
