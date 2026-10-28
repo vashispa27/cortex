@@ -1,0 +1,1289 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  890.9kB
+Step 1/12 : FROM python:3.12-slim
+ ---> a0f57064cbdc
+Step 2/12 : ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+ ---> Using cache
+ ---> b1017353877a
+Step 3/12 : WORKDIR /app
+ ---> Using cache
+ ---> f28214fd23ce
+Step 4/12 : RUN groupadd --gid 10001 agent && useradd --uid 10001 --gid 10001 --create-home agent
+ ---> Using cache
+ ---> 01351d3a6828
+Step 5/12 : RUN pip install --no-cache-dir uv
+ ---> Using cache
+ ---> d5c1f1d5a8fe
+Step 6/12 : COPY pyproject.toml uv.lock README.md ./
+ ---> Using cache
+ ---> a84b26ef7b76
+Step 7/12 : COPY src ./src
+ ---> 78bda979b71d
+Step 8/12 : RUN uv sync --frozen --no-dev
+ ---> Running in ec66be53ea5c
+[91mUsing CPython 3.12.15 interpreter at: /usr/local/bin/python3
+Creating virtual environment at: .venv
+[0m[91m   Building rewind-agent-api @ file:///app
+[0m[91mDownloading uvloop (4.2MiB)
+[0m[91mDownloading pydantic-core (2.0MiB)
+[0m[91mDownloading tiktoken (1.1MiB)
+[0m[91mDownloading[0m[91m asyncpg (3.5MiB)
+[0m[91mDownloading openai (2.2MiB)
+[0m[91mDownloading psycopg-binary (6.5MiB)
+[0m[91mDownloading zstandard (4.8MiB)
+[0m[91m Downloaded tiktoken
+[0m[91m Downloaded pydantic-core
+[0m[91m Downloaded openai
+[0m[91m Downloaded asyncpg
+[0m[91m Downloaded uvloop
+[0m[91m Downloaded zstandard
+[0m[91m Downloaded psycopg-binary
+[0m[91m      Built rewind-agent-api @ file:///app
+[0m[91mPrepared 62 packages in 4.15s
+[0m[91mInstalled 62 packages in 37ms
+[0m[91m + annotated-doc==0.0.5
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + asyncpg==0.32.0
+ + certifi==2026.10.19
+ + charset-normalizer==3.5.2
+ + click==8.5.0
+ + distro==1.9.0
+ + fastapi==0.[0m[91m159.1
+ + h11==0.16.0
+ + httpcore==1.0.9[0m[91m
+ + [0m[91mhttpcore2==2.16[0m[91m.0
+ + httptools[0m[91m==0.9[0m[91m.0
+ [0m[91m+ httpx[0m[91m==0.[0m[91m28.1
+ +[0m[91m httpx2==2[0m[91m.16.0[0m[91m
+ +[0m[91m idna[0m[91m==3.20[0m[91m
+ + jiter==0.17.0
+ [0m[91m+ jsonpatch==[0m[91m1.36
+ + [0m[91mjsonpointer==3[0m[91m.4
+ + [0m[91mlangchain==1.[0m[91m4.7
+[0m[91m + [0m[91mlangchain-core==1[0m[91m.6.13[0m[91m
+ + langchain-openai==1.7.2
+ + [0m[91mlangchain-protocol==0.[0m[91m0.20
+ [0m[91m+ langgraph[0m[91m==1.[0m[91m2.16
+[0m[91m + langgraph-checkpoint==4.3.0
+ + langgraph-checkpoint-postgres==3.2.0
+ + langgraph-prebuilt==1.1.1
+ + langgraph-sdk==0.4.8
+ + langsmith==0.14.12
+ + openai==3.36.1
+ +[0m[91m opentelemetry-api==1.[0m[91m45.1
+ + orjson[0m[91m==3[0m[91m.13.0
+ [0m[91m+ ormsgpack==1.13.0
+ + packaging==26.3
+ + psycopg==3.3.6
+ + psycopg-binary==3.3.6
+ + psycopg-pool[0m[91m==3.3.[0m[91m3
+ + pydantic==2.14.1
+ + pydantic-core==2.50.1
+ + pydantic-settings==2.16.1
+ + python-dotenv==1.2.4
+ + python-multipart==0.0[0m[91m.32
+ + pyyaml==6.0.3
+ + regex==2026.9.29
+ + requests==2.34.2
+ + requests-toolbelt[0m[91m==1.0.0
+ + rewind-agent-api==0.1.0 (from file:///app)
+ + sniffio==1.3.1
+ + starlette==1.9.0
+ + tenacity==9.2.1[0m[91m
+ + tiktoken==0.14.0
+ + truststore==0.10.5
+ + typing-extensions==4.16.0
+ + typing-inspection[0m[91m==[0m[91m0.4.4
+ + urllib3==2.8.0
+ + uuid-utils[0m[91m==0.18[0m[91m.0
+ + uvicorn==0.54.0
+ + uvloop==0.23.0
+ + watchfiles==1.3.0
+ + [0m[91mwebsockets==16.1.1
+ + xxhash==4.0.2
+ + zstandard==0.25.0
+[0m ---> Removed intermediate container ec66be53ea5c
+ ---> d433d352b107
+Step 9/12 : USER agent
+ ---> Running in 3e0e88fd0bdd
+ ---> Removed intermediate container 3e0e88fd0bdd
+ ---> ed3506b0b4f0
+Step 10/12 : ENV PATH="/app/.venv/bin:$PATH"
+ ---> Running in e9dd93123cb3
+ ---> Removed intermediate container e9dd93123cb3
+ ---> 99362a6f2be0
+Step 11/12 : ENTRYPOINT ["rewind-agent-worker"]
+ ---> Running in 2354439eb4eb
+ ---> Removed intermediate container 2354439eb4eb
+ ---> 3731e755aeb3
+Step 12/12 : LABEL rewind.agent.sourcehash=db9b6b60112c622cd8f6e275e3517dad6e1b8e7c9b98ab06e9efb00054ba492e
+ ---> Running in 56053c5278f5
+ ---> Removed intermediate container 56053c5278f5
+ ---> 347f071a667f
+Successfully built 347f071a667f
+Successfully tagged rewind-agent-worker:local
+INFO:     Started server process [18995]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8791 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59734 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "POST /v1/tasks HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:59734 - "GET /v1/tasks/8e93a252-fa72-4b4f-841e-69b27c32c84e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "GET /v1/tasks/8e93a252-fa72-4b4f-841e-69b27c32c84e/events?after_id=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "GET /v1/tasks/8e93a252-fa72-4b4f-841e-69b27c32c84e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "GET /v1/tasks/8e93a252-fa72-4b4f-841e-69b27c32c84e/events?after_id=74&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "GET /v1/tasks/8e93a252-fa72-4b4f-841e-69b27c32c84e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "GET /v1/tasks/8e93a252-fa72-4b4f-841e-69b27c32c84e/events?after_id=75&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "GET /v1/tasks/8e93a252-fa72-4b4f-841e-69b27c32c84e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "GET /v1/tasks/8e93a252-fa72-4b4f-841e-69b27c32c84e/events?after_id=75&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "GET /v1/tasks/8e93a252-fa72-4b4f-841e-69b27c32c84e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "GET /v1/tasks/8e93a252-fa72-4b4f-841e-69b27c32c84e/events?after_id=75&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "GET /v1/tasks/8e93a252-fa72-4b4f-841e-69b27c32c84e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59734 - "GET /v1/tasks/8e93a252-fa72-4b4f-841e-69b27c32c84e/events?after_id=75&limit=100 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [18995]
+INFO:     Started server process [20257]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8791 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59879 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "POST /v1/tasks HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=77&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59879 - "GET /v1/tasks/0b9903cd-9b95-4898-a4b4-4fb008415539/events?after_id=78&limit=100 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [20257]
+INFO:     Started server process [22936]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8791 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60517 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "POST /v1/tasks HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=101&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=102&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=102&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=102&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=102&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=102&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=102&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=102&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=102&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=102&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=102&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=102&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60517 - "GET /v1/tasks/032753a9-d0b8-4568-a24f-5764957d4abe/events?after_id=102&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "POST /v1/tasks HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=105&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60534 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=106&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "POST /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/interactions/b7a958eb-eecc-4b56-86a6-9f861255cd90%3Aanswer_question%3A1%3A1%3Adfc96fc69d9f/responses HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=108&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=109&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60605 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=110&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "POST /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/interactions/b7a958eb-eecc-4b56-86a6-9f861255cd90%3Aapprove_plan%3A1%3A2%3Ac95fa319bdb3/responses HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=112&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60645 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=114&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "POST /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/interactions/b7a958eb-eecc-4b56-86a6-9f861255cd90%3Aapprove_plan%3A1%3A3%3Afc79951c4e59/responses HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=116&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=117&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61109 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=118&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "POST /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/retry HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=123&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=123&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=124&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=124&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=124&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=125&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=126&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=128&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=128&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=128&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=128&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=129&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=131&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=131&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=132&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=134&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=135&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61373 - "GET /v1/tasks/b7a958eb-eecc-4b56-86a6-9f861255cd90/events?after_id=137&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "POST /v1/tasks HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=140&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55869 - "GET /v1/tasks/e4d8371a-5bda-4ca5-981f-dc9df61e416d/events?after_id=141&limit=100 HTTP/1.1" 200 OK

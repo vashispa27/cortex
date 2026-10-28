@@ -1,0 +1,9 @@
+.chat-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chat-actions button {
+  font: inherit; font-size: 12px; line-height: 1; padding: 6px 11px; border-radius: 999px; cursor: pointer;
+  color: inherit; background: color-mix(in srgb, currentColor 8%, transparent); border: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+}
+.chat-actions button:hover:not(:disabled) { background: color-mix(in srgb, currentColor 16%, transparent); }
+.chat-actions button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.chat-actions button:disabled { opacity: 0.5; cursor: default; }
+.chat-actions button[data-kind="confirm"] { border-color: color-mix(in srgb, currentColor 55%, transparent); font-weight: 600; }

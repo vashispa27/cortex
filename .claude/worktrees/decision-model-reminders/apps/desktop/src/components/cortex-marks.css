@@ -1,0 +1,27 @@
+.cortex-mark { --glow: 0; --sig: 0; display: inline-flex; flex: none; width: 30px; height: 23px; }
+.cortex-mark svg {
+  width: 100%; height: 100%; overflow: visible;
+  filter: drop-shadow(0 0 calc(1px + var(--glow) * 3px) rgba(46, 146, 255, calc(.55 + var(--glow) * .45)))
+          drop-shadow(0 0 calc(2px + var(--glow) * 9px) rgba(24, 110, 255, calc(.35 + var(--glow) * .55)));
+}
+.cortex-halo { opacity: calc(.14 + var(--glow) * .8); }
+.cortex-body { opacity: calc(.55 + var(--glow) * .45); }
+.cortex-shell { stroke-width: calc(2.6 + var(--glow) * .7); opacity: calc(.78 + var(--glow) * .22); }
+.cortex-traces { stroke-width: 1.7; opacity: calc(.5 + var(--glow) * .5); }
+.cortex-signals { stroke-width: calc(1.9 + var(--glow) * .7); opacity: var(--sig); }
+.cortex-signal { stroke-dashoffset: 0; }
+.cortex-node { opacity: calc(.55 + var(--glow) * .45); }
+.cortex-brand:hover .cortex-mark, button:hover > .cortex-mark { --glow: .45; }
+.cortex-mark.is-processing .cortex-node { animation: cortex-node-pulse .5s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+@keyframes cortex-node-pulse { from { transform: scale(.8); } to { transform: scale(1.4); } }
+
+.cortex-chat-mark { width: 17px; height: 17px; overflow: visible; color: #6fbaff; filter: drop-shadow(0 0 3px rgba(30, 130, 255, .8)); }
+.chat-signal { opacity: .55; }
+.cortex-icon:hover .cortex-chat-mark, .cortex-icon:focus-visible .cortex-chat-mark { filter: drop-shadow(0 0 2px #a9d8ff) drop-shadow(0 0 7px #1f7bff); animation: chat-lift .55s ease-out; }
+.cortex-icon:hover .chat-signal circle, .cortex-icon:focus-visible .chat-signal circle { animation: chat-signal .85s ease-in-out infinite; }
+.cortex-icon:hover .chat-signal circle:nth-child(2) { animation-delay: .1s; }
+.cortex-icon:hover .chat-signal circle:nth-child(3) { animation-delay: .2s; }
+@keyframes chat-lift { 35% { transform: translateY(-2px) rotate(-8deg); } 70% { transform: translateY(0) rotate(3deg); } }
+@keyframes chat-signal { 0%,100% { opacity: .35; transform: translateY(0); } 45% { opacity: 1; transform: translateY(-1.5px); } }
+@media (prefers-reduced-motion: reduce) { .cortex-mark *, .cortex-chat-mark, .cortex-chat-mark * { animation: none !important; } }
+html[data-reduce-motion="true"] .cortex-mark *, [data-reduce-motion="true"] .cortex-mark *, [data-reduce-motion="true"] .cortex-chat-mark, [data-reduce-motion="true"] .cortex-chat-mark * { animation: none !important; }

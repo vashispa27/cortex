@@ -1,0 +1,28 @@
+{
+  "name": "cortex-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "cortex-mcp": "./dist/index.js",
+    "cortex-mcp-register": "./dist/register.js"
+  },
+  "scripts": {
+    "bundle": "node scripts/bundle.mjs",
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && npm run bundle && node --test dist/*.test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "^2.0.0",
+    "@types/node": "^24.0.0",
+    "esbuild": "0.25.12",
+    "typescript": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

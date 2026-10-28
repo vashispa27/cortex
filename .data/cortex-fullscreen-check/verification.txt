@@ -1,0 +1,6 @@
+Built-in full-screen test: full-screen=true active-space=false app-active=false key=false frame=(0.0, 0.0, 1470.0, 923.0)
+Sidecar full-screen test: full-screen=true active-space=true app-active=true key=true frame=(-1135.0, 167.0, 1135.0, 789.0)
+
+Native panel state:
+settled notch-display-9 panel=true visible=true active-space=true occlusion=NSWindowOcclusionState(8194) level=1000 behavior=NSWindowCollectionBehavior(266577) frame=CGRect { origin: CGPoint { x: -685.0, y: 924.0 }, size: CGSize { width: 235.0, height: 32.0 } }
+settled notch panel=true visible=true active-space=true occlusion=NSWindowOcclusionState(8194) level=1000 behavior=NSWindowCollectionBehavior(266577) frame=CGRect { origin: CGPoint { x: 617.0, y: 924.0 }, size: CGSize { width: 235.0, height: 32.0 } }

@@ -1,7 +1,16 @@
 {
   "name": "@cortex/website",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "scripts": { "start": "node server.mjs", "test": "node --test" }
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 8790",
+    "start": "npm run dev",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 8790",
+    "test": "npm run build && node --test"
+  },
+  "devDependencies": {
+    "vite": "^8.3.5"
+  }
 }

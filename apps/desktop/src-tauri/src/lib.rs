@@ -457,6 +457,20 @@ fn quit_cortex(app: tauri::AppHandle) {
 }
 
 #[tauri::command]
+fn notch_context_menu(window: tauri::WebviewWindow, x: f64, y: f64) -> Result<(), String> {
+    if !is_notch(window.label()) {
+        return Err("This menu is only available in the notch".into());
+    }
+    let quit = tauri::menu::MenuItem::with_id(
+        &window, "notch-quit", "Quit Cortex", true, None::<&str>,
+    ).map_err(|error| error.to_string())?;
+    let menu = tauri::menu::Menu::with_items(&window, &[&quit])
+        .map_err(|error| error.to_string())?;
+    window.popup_menu_at(&menu, tauri::LogicalPosition::new(x, y))
+        .map_err(|error| error.to_string())
+}
+
+#[tauri::command]
 fn restore_previous_app(app: tauri::AppHandle) -> Result<(), String> {
     #[cfg(target_os = "macos")]
     {
@@ -1337,6 +1351,11 @@ pub fn run() {
     #[cfg(target_os = "macos")]
     let daemon_on_start = daemon.clone();
     let app = tauri::Builder::default()
+        .on_menu_event(|app, event| {
+            if event.id().as_ref() == "notch-quit" {
+                quit_cortex(app.clone());
+            }
+        })
         .setup(move |app| {
             #[cfg(target_os = "macos")]
             {
@@ -1395,7 +1414,7 @@ pub fn run() {
                 }
             }
         })
-        .invoke_handler(tauri::generate_handler![mcp_connection_info, daemon_request, notch_set_mode, notch_set_visible, notch_preview, open_main, set_cortex_trigger, set_notch_display, set_test_mode, notch_focus, ai_test, restore_previous_app, quit_cortex, openrouter_save_key, openrouter_has_key, openrouter_delete_key, openrouter_chat, openrouter_search_query, decide_intent, open_external_link, reveal_cortex_app, open_accessibility_settings])
+        .invoke_handler(tauri::generate_handler![mcp_connection_info, daemon_request, notch_set_mode, notch_set_visible, notch_preview, open_main, set_cortex_trigger, set_notch_display, set_test_mode, notch_focus, ai_test, restore_previous_app, quit_cortex, notch_context_menu, openrouter_save_key, openrouter_has_key, openrouter_delete_key, openrouter_chat, openrouter_search_query, decide_intent, open_external_link, reveal_cortex_app, open_accessibility_settings])
         .build(tauri::generate_context!())
         .expect("failed to run desktop shell");
     app.run(move |handle, event| match event {

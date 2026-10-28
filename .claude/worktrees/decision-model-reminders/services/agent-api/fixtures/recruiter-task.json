@@ -1,0 +1,8 @@
+{
+  "conversation": "Recruiter: We are hiring a Data Engineer at Northstar Data. Candidate: Thank you, I will send my resume tomorrow.",
+  "task": "Research Northstar Data and the Data Engineer role, tailor my resume truthfully, draft a recruiter note, and prepare a reminder.",
+  "master_resume": "# Asha Patel\n\n## Experience\nData Analyst, Example Analytics (2023-present)\n- Built SQL reporting pipelines for product metrics.\n- Partnered with analysts to define reliable datasets.",
+  "job_description": "Data Engineer: build reliable data pipelines and partner with analytics.",
+  "timezone": "Asia/Kolkata",
+  "limits": {"max_model_calls": 8, "max_tool_calls": 12, "max_active_seconds": 120, "max_fetched_bytes": 1000000, "max_artifact_bytes": 1000000}
+}

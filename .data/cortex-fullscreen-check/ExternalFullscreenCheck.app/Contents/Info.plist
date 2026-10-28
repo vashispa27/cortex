@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleExecutable</key>
+	<string>FullscreenCheck</string>
+	<key>CFBundleIdentifier</key>
+	<string>app.cortex.external-fullscreen-check</string>
+	<key>CFBundleName</key>
+	<string>Cortex external full-screen verification</string>
+	<key>CortexExternalTest</key>
+	<true/>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+</dict>
+</plist>

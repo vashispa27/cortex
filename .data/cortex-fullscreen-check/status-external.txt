@@ -1,0 +1,1 @@
+full-screen=true active-space=true app-active=true key=true frame=(-1135.0, 167.0, 1135.0, 789.0)

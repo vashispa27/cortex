@@ -1,36 +1,28 @@
-import { test } from 'node:test';
-import assert from 'node:assert/strict';
-import { createWebsite } from '../server.mjs';
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { preview } from "vite";
+import { fileURLToPath } from "node:url";
 
-async function site(t, config = { siteUrl: 'http://localhost:8790', pricing: null, downloads: {} }) {
-  const server = createWebsite(config);
-  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
-  t.after(() => server.close());
-  return `http://127.0.0.1:${server.address().port}`;
-}
-
-test('all content routes and assets render', async (t) => {
-  const base = await site(t);
-  for (const path of ['/', '/faq', '/docs', '/blog', '/blog/why-sources-matter', '/privacy', '/tos', '/dpa', '/styles.css', '/site.js', '/sitemap.xml']) {
-    const response = await fetch(base + path);
-    assert.equal(response.status, 200, path);
-    assert.ok((await response.text()).length > 100, path);
+test("production page serves with working local assets and section links", async (t) => {
+  const server = await preview({
+    root: fileURLToPath(new URL("..", import.meta.url)),
+    preview: { host: "127.0.0.1", port: 0 },
+  });
+  t.after(() => new Promise((resolve) => server.httpServer.close(resolve)));
+  const base = server.resolvedUrls.local[0];
+  const response = await fetch(base);
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  for (const match of html.matchAll(/(?:src|href)="(\/[^"#]+)"/g)) {
+    const asset = await fetch(new URL(match[1], base));
+    assert.equal(asset.status, 200, match[1]);
+    assert.ok(
+      !(await asset.text()).startsWith("<!doctype"),
+      `Asset resolves to its own content: ${match[1]}`,
+    );
   }
-});
-
-test('no unconfigured download redirect or fabricated price', async (t) => {
-  const base = await site(t);
-  const home = await (await fetch(base)).text();
-  assert.match(home, /installer coming soon/);
-  assert.match(home, /Pricing will be announced/);
-  assert.equal((await fetch(base + '/download/macos', { redirect: 'manual' })).status, 404);
-});
-
-test('configured HTTPS artifact redirects and pricing is displayed', async (t) => {
-  const base = await site(t, { siteUrl: 'https://example.invalid', pricing: 'Private beta is free.', downloads: { macos: 'https://example.invalid/cortex.pkg' } });
-  const home = await (await fetch(base)).text();
-  assert.match(home, /Private beta is free/);
-  const download = await fetch(base + '/download/macos', { redirect: 'manual' });
-  assert.equal(download.status, 302);
-  assert.equal(download.headers.get('location'), 'https://example.invalid/cortex.pkg');
+  for (const match of html.matchAll(/href="#([^"]+)"/g))
+    assert.ok(html.includes(`id="${match[1]}"`), `Section ${match[1]} exists`);
+  assert.match(html, /ILLUSTRATIVE DEMO/);
+  assert.match(html, /public installer isn't available yet/);
 });

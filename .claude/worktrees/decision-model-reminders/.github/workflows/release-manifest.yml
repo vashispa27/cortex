@@ -1,0 +1,117 @@
+name: Prepare signed release manifest
+
+on:
+  workflow_dispatch:
+    inputs:
+      signed_artifact_run_id:
+        description: Workflow run containing a signed-installers artifact
+        required: true
+        type: string
+      version:
+        description: Release version, such as 1.2.3
+        required: true
+        type: string
+      channel:
+        description: Release channel
+        required: true
+        type: choice
+        options: [internal, canary, stable]
+      base_url:
+        description: HTTPS directory URL where these exact files are already published
+        required: true
+        type: string
+      site_url:
+        description: HTTPS public website origin
+        required: true
+        type: string
+      macos_filename:
+        description: Pre-signed, notarized macOS universal .pkg basename
+        required: true
+        type: string
+      minimum_version:
+        description: Oldest supported installed version
+        required: true
+        default: 0.0.0
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  verify-macos:
+    if: github.ref_name == github.event.repository.default_branch
+    runs-on: macos-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: signed-installers
+          path: signed-installers
+          run-id: ${{ inputs.signed_artifact_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify macOS installer is signed by the expected team
+        shell: bash
+        env:
+          MACOS_FILENAME: ${{ inputs.macos_filename }}
+          MACOS_TEAM_ID: ${{ vars.CORTEX_MACOS_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          [[ "$MACOS_FILENAME" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*\.pkg$ ]]
+          [[ "$MACOS_TEAM_ID" =~ ^[A-Z0-9]{10}$ ]]
+          test -s "signed-installers/$MACOS_FILENAME"
+          spctl --assess --type install --verbose "signed-installers/$MACOS_FILENAME"
+          xcrun stapler validate "signed-installers/$MACOS_FILENAME"
+          pkgutil --check-signature "signed-installers/$MACOS_FILENAME" > signature.txt
+          grep -F -- "($MACOS_TEAM_ID)" signature.txt
+
+  prepare:
+    if: github.ref_name == github.event.repository.default_branch
+    needs: [verify-macos]
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '26'
+          package-manager-cache: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: signed-installers
+          path: signed-installers
+          run-id: ${{ inputs.signed_artifact_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sign artifact manifest and verify all local bytes
+        shell: bash
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+          RELEASE_CHANNEL: ${{ inputs.channel }}
+          RELEASE_BASE_URL: ${{ inputs.base_url }}
+          RELEASE_SITE_URL: ${{ inputs.site_url }}
+          DOWNLOAD_ORIGIN: ${{ vars.CORTEX_DOWNLOAD_ORIGIN }}
+          MACOS_FILENAME: ${{ inputs.macos_filename }}
+          MINIMUM_VERSION: ${{ inputs.minimum_version }}
+          RELEASE_KEY_ID: ${{ vars.CORTEX_RELEASE_KEY_ID }}
+          CORTEX_RELEASE_SIGNING_KEY_PEM: ${{ secrets.CORTEX_RELEASE_SIGNING_KEY_PEM }}
+          CORTEX_RELEASE_VERIFY_KEY_PEM: ${{ vars.CORTEX_RELEASE_VERIFY_KEY_PEM }}
+        run: |
+          set -euo pipefail
+          test -n "$RELEASE_KEY_ID"
+          test -n "$CORTEX_RELEASE_SIGNING_KEY_PEM"
+          test -n "$CORTEX_RELEASE_VERIFY_KEY_PEM"
+          test -n "$DOWNLOAD_ORIGIN"
+          node infra/release.mjs sign --dir signed-installers --version "$RELEASE_VERSION" --channel "$RELEASE_CHANNEL" --base-url "$RELEASE_BASE_URL" --download-origin "$DOWNLOAD_ORIGIN" --minimum-version "$MINIMUM_VERSION" --artifact "macos-universal=$MACOS_FILENAME" --key-id "$RELEASE_KEY_ID" --private-key-env CORTEX_RELEASE_SIGNING_KEY_PEM --out release-output/release-manifest.json
+          node infra/release.mjs verify --dir signed-installers --manifest release-output/release-manifest.json --channel "$RELEASE_CHANNEL" --key-id "$RELEASE_KEY_ID" --public-key-env CORTEX_RELEASE_VERIFY_KEY_PEM
+          node infra/release.mjs export-config --dir signed-installers --manifest release-output/release-manifest.json --channel "$RELEASE_CHANNEL" --download-origin "$DOWNLOAD_ORIGIN" --key-id "$RELEASE_KEY_ID" --public-key-env CORTEX_RELEASE_VERIFY_KEY_PEM --site-url "$RELEASE_SITE_URL" --site-out release-output/site-config.json --control-out release-output/control-releases.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: verified-release-metadata
+          path: release-output/*
+          if-no-files-found: error
+          retention-days: 30

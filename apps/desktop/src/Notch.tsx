@@ -8,7 +8,7 @@ import { answerCortex, runAction } from "./lib/answer";
 import type { ChatAction } from "./lib/intent";
 import ChatActions from "./components/ChatActions";
 import { loadPreferences } from "./lib/storage";
-import { configureNotchDisplay, configureCortexTrigger, configureTestMode, focusNotch, openMain, restorePreviousApp, setNotchMode, setNotchVisible, writeActiveSession, type NotchMode } from "./lib/notch";
+import { configureNotchDisplay, configureCortexTrigger, configureTestMode, focusNotch, openMain, restorePreviousApp, setNotchMode, setNotchVisible, showNotchContextMenu, writeActiveSession, type NotchMode } from "./lib/notch";
 import {
   appendMessage, commitSession, composeAnswer, finishAction, loadSessions, newSession, sessionsStorageKey, sessionTime, triggerSymbol,
   type CortexSession,
@@ -395,7 +395,12 @@ export default function NotchApp() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const shell = <div className="cortex-window" data-reduce-motion={preferences.reduceMotion} data-busy={busy} data-mode={effectiveMode} data-tap={tapCount > 0 ? "true" : "false"}>
+  const shell = <div className="cortex-window" data-reduce-motion={preferences.reduceMotion} data-busy={busy} data-mode={effectiveMode} data-tap={tapCount > 0 ? "true" : "false"}
+    onContextMenu={(event) => {
+      if (!desktopRuntime() || isPreview) return;
+      event.preventDefault();
+      void showNotchContextMenu(event.clientX, event.clientY);
+    }}>
     <div className="cortex-bar">
       <button type="button" className="cortex-brand" onClick={handleBrand} aria-label={effectiveMode === "compose" ? "Close Cortex" : "Start a new chat"}>
         <CortexMark processing={busy} />

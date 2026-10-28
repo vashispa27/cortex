@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Cortex mark">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0a1a3d"/><stop offset="1" stop-color="#02050d"/></linearGradient>
+    <radialGradient id="halo" cx=".5" cy=".5" r=".5"><stop stop-color="#5cb8ff" stop-opacity=".9"/><stop offset=".55" stop-color="#1f7bff" stop-opacity=".35"/><stop offset="1" stop-color="#0a3d9c" stop-opacity="0"/></radialGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9ae8ff"/><stop offset=".55" stop-color="#2e92ff"/><stop offset="1" stop-color="#1b5fe0"/></linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="128" height="128" rx="29" fill="url(#bg)"/>
+  <ellipse cx="62" cy="62" rx="58" ry="50" fill="url(#halo)" opacity=".55"/>
+  <g transform="translate(10.2 22) scale(1.1)">
+    <path d="M10 46C4 36 8 22 20 15C28 9 40 7 50 9C58 4 72 5 79 13C90 17 95 29 90 40C88 46 82 48 76 48C72 52 64 52 60 49C54 54 44 55 38 51C34 49 30 51 24 51C16 52 12 50 10 46Z" fill="rgba(14,70,190,.42)"/>
+    <g fill="none" stroke="url(#line)" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+      <g stroke-width="2.8"><path d="M10 46C4 36 8 22 20 15C28 9 40 7 50 9C58 4 72 5 79 13C90 17 95 29 90 40C88 46 82 48 76 48C72 52 64 52 60 49C54 54 44 55 38 51C34 49 30 51 24 51C16 52 12 50 10 46Z"/><path d="M62 50C65 59 76 63 84 59C90 55 90 48 87 44M70 55 82 53M68 59 80 58"/><path d="M52 51C54 58 56 64 56 71L64 71C63 64 63 57 62 51"/></g>
+      <g stroke-width="1.8"><path d="M16 38H26L32 32H44L50 26H62"/><path d="M18 28 24 22H34L40 16H54"/><path d="M28 45H40L46 39H58L64 33H80"/><path d="M58 14 66 22H78L84 28"/><path d="M30 24V30M44 22V28M68 30V38"/><path d="M50 44 54 40H66L72 44H80"/><path d="M22 44 26 40"/></g>
+    </g>
+    <g fill="#d6f6ff" filter="url(#glow)"><circle cx="62" cy="26" r="2.3"/><circle cx="54" cy="16" r="2.3"/><circle cx="80" cy="33" r="2.3"/><circle cx="84" cy="28" r="2.3"/><circle cx="68" cy="38" r="2.3"/><circle cx="80" cy="44" r="2.3"/><circle cx="22" cy="44" r="2.3"/></g>
+  </g>
+</svg>

@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101216" />
+    <meta
+      name="description"
+      content="A shared, local-first memory for you and your agents. Cortex builds context from your screen and keeps tasks and handoffs connected."
+    />
+    <meta
+      property="og:title"
+      content="Cortex — A super brain in your Mac notch."
+    />
+    <meta
+      property="og:description"
+      content="Shared local memory and tasks for you and your agents, right in your Mac notch."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/cortex-mark.svg" type="image/svg+xml" />
+    <title>Cortex — A super brain in your Mac notch.</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div class="screen-rim" aria-hidden="true"></div>
+    <a
+      class="page-notch"
+      href="#explore"
+      aria-label="Cortex lives in your Mac notch"
+      ><span class="notch-camera"></span
+      ><img src="/cortex-mark.svg" width="33" height="33" alt="" /><span
+        class="notch-light"
+      ></span
+    ></a>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header wrap">
+      <a class="brand" href="#" aria-label="Cortex home"
+        ><img src="/cortex-mark.svg" alt="" width="32" height="32" />cortex<span
+          class="brand-period"
+          >.</span
+        ></a
+      >
+      <nav aria-label="Main navigation">
+        <a href="#how-it-works">How it works</a><a href="#privacy">Privacy</a
+        ><a href="#faq">FAQ</a>
+      </nav>
+      <a class="nav-cta" href="https://github.com/vashispa27/cortex"
+        >GitHub <span aria-hidden="true">↗</span></a
+      >
+    </header>
+    <main id="main">
+      <section class="hero wrap">
+        <div class="hero-heading">
+          <p class="eyebrow">
+            <span class="status-dot"></span> A SHARED, LOCAL-FIRST MEMORY
+          </p>
+          <h1>A super brain<br /><em>in your Mac notch.</em></h1>
+        </div>
+        <div class="hero-bottom">
+          <p>
+            A shared, local-first memory for you and your agents. Cortex watches
+            your screen and builds context, so you and your agents can pick up
+            where you left off.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#explore"
+              >See it in action <span aria-hidden="true">↘</span></a
+            ><span class="availability">Built for macOS · In development</span>
+          </div>
+        </div>
+        <div class="hero-providers">
+          <span>ONE MEMORY. ACROSS YOUR TOOLS.</span>
+          <div>
+            <span class="provider-chip"
+              ><span class="provider-logo claude"
+                ><img
+                  src="/logos/claude-color.svg"
+                  width="20"
+                  height="20"
+                  alt="" /></span
+              >Claude</span
+            ><span class="provider-chip"
+              ><span class="provider-logo codex"
+                ><img
+                  src="/logos/codex-color.svg"
+                  width="20"
+                  height="20"
+                  alt="" /></span
+              >Codex</span
+            ><span class="provider-chip"
+              ><span class="provider-logo opencode"
+                ><img
+                  src="/logos/opencode.svg"
+                  width="20"
+                  height="20"
+                  alt="" /></span
+              >OpenCode</span
+            >
+          </div>
+        </div>
+        <div
+          class="desktop-scene animated-stage"
+          id="explore"
+          data-animation="demo"
+          aria-label="Animated Cortex examples with fictional data"
+        >
+          <div class="desktop-menubar">
+            <span
+              >◈ &nbsp; Cortex
+              <span class="menu-extra"
+                >&nbsp; File &nbsp; Edit &nbsp; View</span
+              ></span
+            ><span>Wed 10:42</span>
+          </div>
+          <div class="mac-notch">
+            <img src="/cortex-mark.svg" alt="" width="25" height="25" />
+          </div>
+          <div class="scene-label">YOUR DAY. A LITTLE MORE CONNECTED.</div>
+          <div class="floating-window window-left" aria-hidden="true">
+            <div class="window-bar">
+              <span class="traffic"><i></i><i></i><i></i></span
+              ><span id="context-app">LinkedIn · Messages</span>
+            </div>
+            <div class="context-content">
+              <span class="app-tile" id="context-icon">in</span
+              ><span class="tiny-label" id="context-meta"
+                >ABHINAV · YESTERDAY</span
+              >
+              <h3 id="context-title">Let's catch up.</h3>
+              <p id="context-body">
+                Are you free Thursday at 2 PM to talk about the project? A quick
+                30-minute call.
+              </p>
+              <span class="context-chip" id="context-chip"
+                >Meeting details, remembered</span
+              >
+            </div>
+          </div>
+          <div class="floating-window window-right" aria-hidden="true">
+            <div class="window-bar">
+              <span class="traffic"><i></i><i></i><i></i></span
+              ><span>Your workspace</span>
+            </div>
+            <div class="side-lines">
+              <span>RECENT CONTEXT</span>
+              <p>↗ &nbsp; A conversation worth keeping</p>
+              <p>◷ &nbsp; Plans for the day ahead</p>
+              <p>✓ &nbsp; One less thing to remember</p>
+            </div>
+          </div>
+          <div class="cortex-demo" data-phase="typing">
+            <div class="demo-top">
+              <span class="demo-brand"
+                ><img src="/cortex-mark.svg" alt="" width="28" height="28" />
+                Ask Cortex</span
+              ><span class="local-status"
+                ><span class="status-dot"></span> On your Mac</span
+              >
+            </div>
+            <div class="question-label">YOU ASK</div>
+            <p class="demo-question" id="demo-question">
+              What time did Abhinav suggest for our call on LinkedIn?
+            </p>
+            <div class="processing" aria-hidden="true">
+              <img src="/cortex-mark.svg" alt="" width="32" height="32" /><span
+                id="processing-label"
+                >Finding the conversation</span
+              ><span class="thinking-dots"><i></i><i></i><i></i></span>
+            </div>
+            <div
+              class="demo-answer"
+              id="demo-answer"
+              role="tabpanel"
+              aria-labelledby="example-linkedin"
+              tabindex="0"
+            >
+              <div class="answer-label">CORTEX</div>
+              <p id="answer-text">
+                Thursday at 2 PM, for 30 minutes. Abhinav suggested a quick call
+                about the project.
+              </p>
+              <button
+                class="source-link"
+                id="source-toggle"
+                aria-expanded="false"
+                aria-controls="source-detail"
+              >
+                ↗ LinkedIn · Message from Abhinav
+              </button>
+              <div class="source-detail" id="source-detail" hidden>
+                <strong id="source-who">Abhinav · Yesterday</strong>
+                <p id="source-quote">
+                  “Are you free Thursday at 2 PM to talk about the project? A
+                  quick 30-minute call.”
+                </p>
+                <span>Fictional example · no personal data</span>
+              </div>
+            </div>
+            <div class="demo-input" aria-hidden="true">
+              <span>Ask a follow-up…</span><span>↵</span>
+            </div>
+          </div>
+          <div class="scene-footer">
+            <span id="demo-status">01 / 04 · Recall a conversation</span
+            ><span>ILLUSTRATIVE DEMO</span>
+          </div>
+          <div class="playback-track"><span></span></div>
+        </div>
+        <div class="demo-controls">
+          <div
+            class="example-tabs"
+            role="tablist"
+            aria-label="Explore example questions"
+          >
+            <button
+              id="example-linkedin"
+              role="tab"
+              aria-selected="true"
+              aria-controls="demo-answer"
+              data-example="0"
+            >
+              01 <span>Recall a conversation</span></button
+            ><button
+              id="example-meetings"
+              role="tab"
+              aria-selected="false"
+              aria-controls="demo-answer"
+              tabindex="-1"
+              data-example="1"
+            >
+              02 <span>Plan your day</span></button
+            ><button
+              id="example-reminder"
+              role="tab"
+              aria-selected="false"
+              aria-controls="demo-answer"
+              tabindex="-1"
+              data-example="2"
+            >
+              03 <span>Set a reminder</span>
+            </button>
+            <button
+              id="example-permanent"
+              role="tab"
+              aria-selected="false"
+              aria-controls="demo-answer"
+              tabindex="-1"
+              data-example="3"
+            >
+              04 <span>Permanent memory</span>
+            </button>
+          </div>
+          <button class="motion-toggle" data-pause="demo" aria-pressed="false">
+            Pause animation
+          </button>
+        </div>
+      </section>
+      <section class="intro wrap" id="how-it-works">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">01 / YOUR LOCAL MEMORY</p>
+            <h2>
+              Your screen becomes context.<br /><em
+                >Your AI gets the picture.</em
+              >
+            </h2>
+          </div>
+          <p>
+            Chats, documents, and the pages you read. Cortex connects available
+            screen text into a memory on your Mac, ready for you and your
+            connected AI tools.
+          </p>
+        </div>
+        <div
+          class="memory-flow memory-v2 animated-stage"
+          data-animation="memory"
+          data-step="0"
+          aria-label="Illustrative screen capture, recall and task suggestion workflow"
+        >
+          <svg
+            class="memory-wires"
+            viewBox="0 0 1000 420"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path d="M300 210 H500 M500 210 H700" />
+          </svg>
+          <div class="capture-laptop">
+            <div class="capture-screen">
+              <div class="capture-bar">
+                <span class="traffic"><i></i><i></i><i></i></span
+                ><span id="capture-app">Messages</span
+                ><span class="capture-indicator"><i></i> Text capture</span>
+              </div>
+              <div class="capture-desktop">
+                <aside>
+                  <span>▣</span><span>☏</span><span>✉</span><span>◷</span>
+                </aside>
+                <div class="captured-app">
+                  <span class="tiny-label" id="capture-person">ABHINAV</span>
+                  <div class="capture-bubble" id="capture-message">
+                    Can you send me the project notes tomorrow morning?
+                  </div>
+                  <div class="capture-reply" id="capture-reply">
+                    Of course. I'll send them over.
+                  </div>
+                  <span class="capture-selection"></span>
+                </div>
+                <div class="scan-line"></div>
+              </div>
+              <div class="capture-bottom">
+                <span id="capture-count">SCREEN 01 / 04</span> &nbsp; · &nbsp;
+                Available text → local memory
+              </div>
+            </div>
+            <div class="laptop-base"></div>
+            <p class="diagram-label">YOUR DAY, AS IT HAPPENS</p>
+          </div>
+          <div class="brain-hub">
+            <div class="brain-rings"></div>
+            <img src="/cortex-mark.svg" alt="" width="86" height="86" /><strong
+              >Cortex</strong
+            ><span>LOCAL MEMORY</span><small>Stored on your Mac</small>
+          </div>
+          <div class="recall-stack">
+            <div class="flipping-query" id="flipping-query">
+              <span class="tiny-label">YOU ASK</span>
+              <h3 id="memory-question">What did Abhinav ask me to send?</h3>
+              <div class="query-answer" id="memory-answer">
+                The project notes, tomorrow morning.
+              </div>
+              <span class="query-source" id="memory-source"
+                >↗ Messages · Abhinav</span
+              >
+            </div>
+            <div class="suggested-task">
+              <span class="suggestion-label">✧ CONTEXT → NEXT STEP</span>
+              <h4 id="suggested-title">Send Abhinav the project notes</h4>
+              <div>
+                <span id="suggested-time">Tomorrow · 9:00 AM</span
+                ><span class="suggestion-status" id="suggestion-status"
+                  >Suggested task</span
+                >
+              </div>
+            </div>
+            <span class="preview-label"
+              >Task suggestions · concept preview</span
+            >
+          </div>
+          <div class="flow-caption" id="flow-caption">
+            01 · A conversation becomes useful context.
+          </div>
+        </div>
+        <div
+          class="memory-example-controls"
+          role="group"
+          aria-label="Choose a captured screen example"
+        >
+          <button data-memory-example="0" aria-pressed="true">Messages</button
+          ><button data-memory-example="1" aria-pressed="false">Meetings</button
+          ><button data-memory-example="2" aria-pressed="false">Email</button
+          ><button data-memory-example="3" aria-pressed="false">
+            Project docs</button
+          ><span>Screen → recall → follow-up</span>
+        </div>
+        <div class="animation-foot">
+          <p>
+            Text capture via macOS Accessibility. Coverage varies by app. Cloud
+            models receive selected context when used.
+          </p>
+          <button
+            class="motion-toggle"
+            data-pause="memory"
+            aria-pressed="false"
+          >
+            Pause animation
+          </button>
+        </div>
+      </section>
+      <section class="agents-section wrap" id="agents">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">02 / SHARED MEMORY FOR YOUR HARNESSES</p>
+            <h2>Switch harnesses.<br /><em>Keep your context.</em></h2>
+          </div>
+          <p>
+            Out of credits in Codex? Pick up in Claude. Cortex keeps tasks,
+            decisions, and handoff notes together, so switching harnesses
+            doesn't mean explaining everything again.
+          </p>
+        </div>
+        <p class="agent-purpose">
+          A common memory and task manager for your harnesses. Share work,
+          update progress, schedule follow-ups, and hand off the next step
+          across your agents.
+        </p>
+        <div
+          class="agent-network animated-stage"
+          data-animation="agents"
+          data-step="0"
+          aria-label="Claude, Codex and OpenCode exchange task commands through shared Cortex memory"
+        >
+          <div class="mini-task-manager">
+            <div class="mini-board-header">
+              <span>▤ &nbsp; Shared task memory</span
+              ><span id="mini-board-count">1 open task</span>
+            </div>
+            <div class="mini-board-columns">
+              <span>Ready</span><span>In progress</span><span>Done</span>
+            </div>
+            <div class="mini-board-track">
+              <article class="mini-task">
+                <span>CX–024</span><strong>Build the landing page</strong
+                ><small id="task-owner">⌘ Codex · in progress</small>
+              </article>
+            </div>
+            <div class="mini-handoff">
+              <span>LAST SAVED CONTEXT</span>
+              <p id="handoff-text">
+                Hero finished. Next: connect the demo and check mobile.
+              </p>
+            </div>
+          </div>
+          <svg
+            class="agent-wires"
+            viewBox="0 0 1000 650"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path class="board-wire" d="M500 220 V325" />
+            <path
+              class="harness-wire"
+              d="M170 510 C170 355 500 510 500 355 M500 510 V355 M830 510 C830 355 500 510 500 355"
+            />
+          </svg>
+          <div class="network-brain">
+            <img src="/cortex-mark.svg" alt="" width="75" height="75" /><strong
+              >Cortex</strong
+            ><span>ONE SHARED MEMORY</span>
+          </div>
+          <div class="harness-row">
+            <div class="harness-node" data-harness="codex">
+              <div class="command-bubble" id="command-codex">
+                Save my progress. I'm out of credits.
+              </div>
+              <div class="harness-name">
+                <span class="provider-logo codex"
+                  ><img
+                    src="/logos/codex-color.svg"
+                    width="23"
+                    height="23"
+                    alt="" /></span
+                ><strong>Codex</strong>
+              </div>
+              <span id="status-codex">Saving the handoff</span>
+            </div>
+            <div class="harness-node" data-harness="claude">
+              <div class="command-bubble" id="command-claude">
+                What tasks can I pick up?
+              </div>
+              <div class="harness-name">
+                <span class="provider-logo claude"
+                  ><img
+                    src="/logos/claude-color.svg"
+                    width="23"
+                    height="23"
+                    alt="" /></span
+                ><strong>Claude</strong>
+              </div>
+              <span id="status-claude">Connected to Cortex</span>
+            </div>
+            <div class="harness-node" data-harness="opencode">
+              <div class="command-bubble" id="command-opencode">
+                What changed on the landing page?
+              </div>
+              <div class="harness-name">
+                <span class="provider-logo opencode"
+                  ><img
+                    src="/logos/opencode.svg"
+                    width="23"
+                    height="23"
+                    alt="" /></span
+                ><strong>OpenCode</strong>
+              </div>
+              <span id="status-opencode">Connected to Cortex</span>
+            </div>
+          </div>
+          <div class="board-event">
+            <span class="status-dot"></span
+            ><span id="board-event"
+              >Codex saves the work, decisions, and next steps to Cortex.</span
+            >
+          </div>
+        </div>
+        <div class="animation-foot">
+          <p>
+            Illustrative workflow. Agents use the shared MCP bridge in sessions
+            you open; Cortex doesn't launch agents automatically.
+          </p>
+          <button
+            class="motion-toggle"
+            data-pause="agents"
+            aria-pressed="false"
+          >
+            Pause animation
+          </button>
+        </div>
+        <div class="steps">
+          <article>
+            <span class="step-number">01 / SHARE</span>
+            <h3>Hit a limit? Save your place.</h3>
+            <p>
+              The task, decisions, and next steps stay in Cortex when you leave
+              a harness.
+            </p>
+          </article>
+          <article>
+            <span class="step-number">02 / HAND OFF</span>
+            <h3>Open another harness.</h3>
+            <p>
+              Ask Claude, Codex, or OpenCode what is unfinished. The same
+              context is waiting.
+            </p>
+          </article>
+          <article>
+            <span class="step-number">03 / CONTINUE</span>
+            <h3>Continue without the recap.</h3>
+            <p>
+              The next agent reads the handoff, claims the task, and continues
+              with context.
+            </p>
+          </article>
+        </div>
+      </section>
+      <section class="privacy-section" id="privacy">
+        <div class="wrap privacy-grid">
+          <div class="privacy-art" aria-hidden="true">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <span class="orbit-node node-one"></span
+            ><span class="orbit-node node-two"></span>
+            <div class="memory-home">
+              <svg viewBox="0 0 100 80" fill="none">
+                <rect
+                  x="15"
+                  y="12"
+                  width="70"
+                  height="48"
+                  rx="5"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M38 71h24M50 60v11"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <path
+                  d="M43 34v-5a7 7 0 0 1 14 0v5"
+                  stroke="currentColor"
+                  stroke-width="2"
+                />
+                <rect
+                  x="38"
+                  y="34"
+                  width="24"
+                  height="18"
+                  rx="3"
+                  fill="currentColor"
+                />
+                <circle cx="50" cy="41" r="2" fill="#e3ebd9" /></svg
+              ><span>AT HOME. ON YOUR MAC.</span>
+            </div>
+            <span class="art-caption">Your memory has a home.</span>
+          </div>
+          <div class="privacy-copy">
+            <p class="eyebrow">PERSONAL MEANS PERSONAL</p>
+            <h2>Your memory.<br /><em>Your space.</em></h2>
+            <p>
+              Cortex starts with a simple idea: your activity archive belongs on
+              your device.
+            </p>
+            <dl>
+              <div>
+                <dt>Stored on your Mac</dt>
+                <dd>Your captured text and search index stay local.</dd>
+              </div>
+              <div>
+                <dt>Capture on your terms</dt>
+                <dd>Start, pause, or stop capture, and exclude apps.</dd>
+              </div>
+              <div>
+                <dt>Cloud use, explained</dt>
+                <dd>
+                  When you use a cloud model, your question and selected context
+                  go to that provider. Common secrets are redacted; redaction
+                  isn't perfect.
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </section>
+      <section class="faq-section wrap" id="faq">
+        <div>
+          <p class="eyebrow">A FEW THINGS TO KNOW</p>
+          <h2>Good questions.</h2>
+          <p class="faq-intro">A little more context about Cortex.</p>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>What is Cortex?<span aria-hidden="true">+</span></summary>
+            <p>
+              Cortex is a macOS memory assistant in development. It helps you
+              search text from your computer activity, recall details, and
+              answer questions with links back to the evidence.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Does it record my screen?<span aria-hidden="true">+</span>
+            </summary>
+            <p>
+              Cortex reads text exposed by the foreground app through macOS
+              Accessibility. It doesn't create a video recording of your screen.
+              Some apps and content don't expose readable text, so coverage
+              varies.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Does everything stay on my device?<span aria-hidden="true"
+                >+</span
+              >
+            </summary>
+            <p>
+              Your activity archive and search index stay on your Mac. If you
+              configure a cloud model, your question and relevant context are
+              sent to that provider to generate an answer. Provider privacy and
+              retention terms apply.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Can I choose what Cortex remembers?<span aria-hidden="true"
+                >+</span
+              >
+            </summary>
+            <p>
+              Capture starts only when you enable it. The desktop app includes
+              start, pause, stop, and app exclusions. Private or unknown browser
+              contexts and protected fields are skipped by the desktop capture
+              pipeline.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Can I use it with my AI tools?<span aria-hidden="true">+</span>
+            </summary>
+            <p>
+              Cortex includes an MCP bridge for compatible AI clients to access
+              its shared memory and task workspace. Setup is documented in the
+              repository.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Can I download it yet?<span aria-hidden="true">+</span>
+            </summary>
+            <p>
+              A public installer isn't available yet. If you'd like to explore
+              the project now, the source and macOS build instructions are
+              available on GitHub.
+            </p>
+          </details>
+        </div>
+      </section>
+      <section class="closing wrap">
+        <span class="closing-star" aria-hidden="true">✳</span>
+        <p class="eyebrow">FOR EVERYTHING YOU DON'T WANT TO LOSE</p>
+        <h2>Keep the thread.</h2>
+        <p>A little less searching. A little more headspace.</p>
+        <a class="button primary" href="https://github.com/vashispa27/cortex"
+          >Explore Cortex on GitHub <span aria-hidden="true">↗</span></a
+        ><span class="availability">Completely open source · macOS · In development</span>
+      </section>
+    </main>
+    <footer class="site-footer wrap">
+      <a class="brand" href="#" aria-label="Cortex home"
+        ><img src="/cortex-mark.svg" alt="" width="28" height="28" />cortex<span
+          class="brand-period"
+          >.</span
+        ></a
+      ><span>Completely open source.</span>
+      <div>
+        <a href="#privacy">Privacy</a
+        ><a href="https://github.com/vashispa27/cortex">GitHub ↗</a
+        ><span>© 2026 Cortex</span>
+      </div>
+    </footer>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

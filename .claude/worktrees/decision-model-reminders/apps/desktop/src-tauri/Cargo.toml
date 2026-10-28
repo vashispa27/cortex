@@ -1,0 +1,29 @@
+[package]
+name = "cortex"
+version = "0.1.0"
+description = "Local-first desktop memory shell"
+authors = ["Cortex contributors"]
+edition = "2021"
+
+[lib]
+name = "cortex_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+libc = "0.2"
+tauri = { version = "2", features = ["macos-private-api"] }
+serde_json = "1"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+dirs = "6"
+url = "2"
+tokio = { version = "1", features = ["time"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+block2 = "0.6"
+objc2 = "0.6"
+objc2-app-kit = { version = "0.3", features = ["block2"] }
+objc2-foundation = "0.3"
+objc2-quartz-core = { version = "0.3", default-features = false, features = ["CALayer"] }

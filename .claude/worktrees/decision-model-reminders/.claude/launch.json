@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "cortex-desktop-web", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "apps/desktop", "run", "dev"], "port": 1420 }
+  ]
+}

@@ -1,0 +1,27 @@
+[package]
+name = "cortex"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+anyhow = "1"
+chrono = "0.4"
+hex = "0.4"
+libc = "0.2"
+model2vec-rs = "=0.3.0"
+qdrant-edge = "=0.8.0"
+regex = "1"
+cortex-capture = { path = "../capture" }
+cortex-contracts = { path = "../contracts" }
+cortex-memory = { path = "../memory" }
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "json", "rustls-tls"] }
+rusqlite = { version = "0.32", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+url = "2"
+
+[[bin]]
+name = "cortex"
+path = "src/main.rs"

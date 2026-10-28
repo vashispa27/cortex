@@ -79,6 +79,16 @@ export async function quitApp(): Promise<void> {
   }
 }
 
+/** Native menus can extend outside the small, collapsed notch window. */
+export async function showNotchContextMenu(x: number, y: number): Promise<void> {
+  if (!isTauri()) return;
+  try {
+    await invoke("notch_context_menu", { x, y });
+  } catch (error) {
+    console.error("Could not open the Cortex menu", error);
+  }
+}
+
 export async function restorePreviousApp(): Promise<void> {
   if (!isTauri()) return;
   try {

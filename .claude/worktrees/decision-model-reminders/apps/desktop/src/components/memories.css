@@ -1,0 +1,7 @@
+.memories-callout { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; }
+.fact-main { min-width: 0; }
+.fact-key { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.fact-subject { font-size: .74rem; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: rgba(52,136,255,.14); color: var(--cx-cyan, #8cc5ff); overflow-wrap: anywhere; }
+.fact-attribute { font-size: .72rem; color: var(--cx-dim, #858d9c); text-transform: lowercase; overflow-wrap: anywhere; }
+.memories-page .fact-value { margin: 7px 0 0; font-size: .9rem; color: var(--cx-text, #f3f5f8); white-space: pre-wrap; }
+.memories-page [role=tabpanel] .search-bar { margin-top: 0; }

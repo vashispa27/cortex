@@ -1,0 +1,313 @@
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  882.7kB
+Step 1/12 : FROM python:3.12-slim
+ ---> a0f57064cbdc
+Step 2/12 : ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+ ---> Using cache
+ ---> b1017353877a
+Step 3/12 : WORKDIR /app
+ ---> Using cache
+ ---> f28214fd23ce
+Step 4/12 : RUN groupadd --gid 10001 agent && useradd --uid 10001 --gid 10001 --create-home agent
+ ---> Using cache
+ ---> 01351d3a6828
+Step 5/12 : RUN pip install --no-cache-dir uv
+ ---> Using cache
+ ---> d5c1f1d5a8fe
+Step 6/12 : COPY pyproject.toml uv.lock README.md ./
+ ---> Using cache
+ ---> a84b26ef7b76
+Step 7/12 : COPY src ./src
+ ---> f406b1a1fea8
+Step 8/12 : RUN uv sync --frozen --no-dev
+ ---> Running in c6aa9763e33d
+[91mUsing CPython 3.12.15 interpreter at: /usr/local/bin/python3
+Creating virtual environment at: .venv
+[0m[91m   [0m[91mBuilding rewind-agent-api @ file:///app
+[0m[91mDownloading psycopg-binary (6.5MiB)
+[0m[91mDownloading zstandard (4.8MiB)
+[0m[91mDownloading pydantic-core (2.0MiB)
+[0m[91mDownloading tiktoken (1.1MiB)
+[0m[91mDownloading openai (2.2MiB)
+[0m[91mDownloading asyncpg (3.5MiB)
+[0m[91mDownloading uvloop (4.2MiB)
+[0m[91m Downloaded tiktoken
+[0m[91m Downloaded pydantic-core
+[0m[91m Downloaded openai
+[0m[91m Downloaded asyncpg
+[0m[91m Downloaded uvloop
+[0m[91m Downloaded zstandard
+[0m[91m      Built rewind-agent-api @ file:///app
+[0m[91m Downloaded psycopg-binary
+[0m[91mPrepared 62 packages in 3.72s
+[0m[91mInstalled 62 packages in 41ms
+ + annotated-doc==0.0.5
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + asyncpg==0.32.0
+ + certifi==2026.10.19
+ + [0m[91mcharset-normalizer==3.5.2
+ + click==8.5.0
+ + distro==1.9.0
+ + fastapi[0m[91m==0.159.[0m[91m1
+ + [0m[91mh11==0.[0m[91m16.0
+[0m[91m + [0m[91mhttpcore==1[0m[91m.0.9[0m[91m
+ + httpcore2==2.16.0
+ + httptools==0.9.0
+ + httpx==0.28.1
+ + httpx2==2.16.0
+ + idna==3.20
+ + jiter==0.17.0
+ + jsonpatch==1.36
+ + jsonpointer==3.4
+ + langchain==1.4.7
+ + langchain-core==1.6.13
+ +[0m[91m langchain-openai==1.7.2
+ + langchain-protocol==0.0.20
+ + langgraph==1.2.16
+ + langgraph-checkpoint==4.3.0
+ + langgraph-checkpoint-postgres==3.2.0
+[0m[91m + langgraph-prebuilt==1.1.1
+ + langgraph-sdk==0.4.8
+ + langsmith==0.14.12
+ + openai==3.36.1
+ + opentelemetry-api==1.45.1
+ + orjson==3.13.0
+ + ormsgpack==1.13.0
+ + packaging==26.3
+ + psycopg==3.3.6
+ + psycopg-binary[0m[91m==3.3.6
+ + psycopg-pool==3.3.3
+ + pydantic==2.14.1
+ + pydantic-core[0m[91m==2.50.1
+ +[0m[91m pydantic-settings==2.16.1
+ + python-dotenv==1.2.4
+ [0m[91m+ python-multipart==0.0.32
+ + pyyaml==6.0.3
+ + regex==2026.9.29
+ +[0m[91m requests==2.34.[0m[91m2
+ [0m[91m+ requests-toolbelt[0m[91m==1.[0m[91m0.0
+ + rewind-agent-api==0.1.0 (from file:///app)
+ + sniffio==1[0m[91m.3.1
+ + starlette[0m[91m==1.9.0
+ +[0m[91m tenacity==[0m[91m9.2.[0m[91m1
+ [0m[91m+[0m[91m tiktoken==[0m[91m0.14.[0m[91m0[0m[91m
+ + truststore==0.10.5
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.4
+ +[0m[91m urllib3==2.8.[0m[91m0
+ + uuid-utils==[0m[91m0.18.0
+ + uvicorn==0.54.0
+ + uvloop==0.23.0
+ + watchfiles[0m[91m==1.3.[0m[91m0
+ +[0m[91m websockets==16.1.1
+ + xxhash==4.0.2
+ + zstandard==0.25.0
+[0m ---> Removed intermediate container c6aa9763e33d
+ ---> 351c398a1937
+Step 9/12 : USER agent
+ ---> Running in be54cd7322a3
+ ---> Removed intermediate container be54cd7322a3
+ ---> ff6bf1017ea9
+Step 10/12 : ENV PATH="/app/.venv/bin:$PATH"
+ ---> Running in 65f9ec257c51
+ ---> Removed intermediate container 65f9ec257c51
+ ---> cd7f66621550
+Step 11/12 : ENTRYPOINT ["rewind-agent-worker"]
+ ---> Running in 50f2652c933f
+ ---> Removed intermediate container 50f2652c933f
+ ---> 82e0e55ff734
+Step 12/12 : LABEL rewind.agent.sourcehash=1a7ca09f0d33cb84666464b62d1ddca6d01bfe6bf47174c35c9f9bc95ffa5ec9
+ ---> Running in c79a35eaec39
+ ---> Removed intermediate container c79a35eaec39
+ ---> bfcb748cbaf4
+Successfully built bfcb748cbaf4
+Successfully tagged rewind-agent-worker:local
+INFO:     Started server process [10958]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8791 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59119 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "POST /v1/tasks HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69/events?after_id=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69/events?after_id=68&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69/events?after_id=68&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69/events?after_id=69&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69/events?after_id=69&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69/events?after_id=69&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69/events?after_id=69&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69/events?after_id=69&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59119 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69/events?after_id=69&limit=100 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [10958]
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  887.8kB
+Step 1/12 : FROM python:3.12-slim
+ ---> a0f57064cbdc
+Step 2/12 : ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+ ---> Using cache
+ ---> b1017353877a
+Step 3/12 : WORKDIR /app
+ ---> Using cache
+ ---> f28214fd23ce
+Step 4/12 : RUN groupadd --gid 10001 agent && useradd --uid 10001 --gid 10001 --create-home agent
+ ---> Using cache
+ ---> 01351d3a6828
+Step 5/12 : RUN pip install --no-cache-dir uv
+ ---> Using cache
+ ---> d5c1f1d5a8fe
+Step 6/12 : COPY pyproject.toml uv.lock README.md ./
+ ---> Using cache
+ ---> a84b26ef7b76
+Step 7/12 : COPY src ./src
+ ---> 8ea15aeee886
+Step 8/12 : RUN uv sync --frozen --no-dev
+ ---> Running in 43491efed2cf
+[91mUsing CPython 3.12.15 interpreter at: /usr/local/bin/python3
+Creating virtual environment at: .venv
+[0m[91m   Building rewind-agent-api @ file:///app
+[0m[91mDownloading uvloop (4.2MiB)
+[0m[91mDownloading zstandard (4.8MiB)
+[0m[91mDownloading asyncpg (3.5MiB)
+[0m[91mDownloading pydantic-core (2.0MiB)
+[0m[91mDownloading tiktoken (1.1MiB)
+[0m[91mDownloading openai (2.2MiB)
+Downloading psycopg-binary (6.5MiB)
+[0m[91m Downloaded tiktoken
+[0m[91m Downloaded pydantic-core
+[0m[91m Downloaded openai
+[0m[91m Downloaded asyncpg
+[0m[91m Downloaded uvloop
+[0m[91m Downloaded zstandard
+[0m[91m Downloaded psycopg-binary
+[0m[91m      Built rewind-agent-api @ file:///app
+[0m[91mPrepared 62 packages in 3.87s
+[0m[91mInstalled 62 packages in 63ms
+ + annotated-doc==0.0.5
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + asyncpg==0.32.0
+ + certifi==2026.10.19
+[0m[91m + charset-normalizer==3.5.2
+ + click==8.5.0
+ + distro==1.9[0m[91m.0
+ + fastapi==0.159[0m[91m.1
+ + h11==0.16.0
+ + httpcore==1.0.9[0m[91m
+ + [0m[91mhttpcore2==2[0m[91m.16.0
+ + httptools==0.9.0[0m[91m
+ + [0m[91mhttpx==[0m[91m0.28.[0m[91m1
+[0m[91m + [0m[91mhttpx2==2.[0m[91m16.0
+[0m[91m +[0m[91m idna==3.[0m[91m20
+ [0m[91m+ jiter[0m[91m==0.17[0m[91m.0
+ + jsonpatch==1.36
+ + jsonpointer==3.4
+ +[0m[91m langchain==1[0m[91m.4.7[0m[91m
+ +[0m[91m langchain-core==[0m[91m1.6.[0m[91m13
+ +[0m[91m langchain-openai==[0m[91m1.7[0m[91m.2
+ [0m[91m+ [0m[91mlangchain-protocol==0[0m[91m.0.20[0m[91m
+ +[0m[91m langgraph==1.2.16
+ +[0m[91m langgraph-checkpoint==4.3.0
+ + langgraph-checkpoint-postgres==3.2.0
+ + langgraph-prebuilt==1.1.1
+ + langgraph-sdk==0.4.8
+ + langsmith==0.14.12
+ + openai==3.36.1
+ + opentelemetry-api==1.45.1
+ + orjson==3.13.0
+ + ormsgpack==1.13.0
+ + packaging==26.3
+ + psycopg==3.3.6
+ + psycopg-binary==3.3.6
+ + psycopg-pool==3.3.3
+ + pydantic==2.14.1
+ + pydantic-core==2.50.1
+ + pydantic-settings==2.16.1
+ + python-dotenv==1.2.4
+ + python-multipart==0.0.32
+ + pyyaml==6.0.3
+ + regex==2026.9.29
+ + requests==2.34.2
+ + requests-toolbelt==1.0.0
+ + rewind-agent-api==0.1.0 (from file://[0m[91m/app)
+ + sniffio==1.3.1
+ + starlette==1.9.0[0m[91m
+ + tenacity==9.2.1
+ + tiktoken==0.14.0
+ + truststore==0.10.5
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.4
+ + urllib3==2.8.0
+ + uuid-utils==0.18.0
+ + uvicorn==0.54.0
+ + uvloop==0.23.0
+ + watchfiles==1.3.0
+ + websockets==16.1.1
+ + xxhash==4.0.2
+ + zstandard==0.25.0
+[0m ---> Removed intermediate container 43491efed2cf
+ ---> b2f68c3ca871
+Step 9/12 : USER agent
+ ---> Running in e88314e0e3e2
+ ---> Removed intermediate container e88314e0e3e2
+ ---> a1d36b9f672b
+Step 10/12 : ENV PATH="/app/.venv/bin:$PATH"
+ ---> Running in 370bd0a3789b
+ ---> Removed intermediate container 370bd0a3789b
+ ---> 6455b76cad63
+Step 11/12 : ENTRYPOINT ["rewind-agent-worker"]
+ ---> Running in 5c33b8544ecf
+ ---> Removed intermediate container 5c33b8544ecf
+ ---> 26c0ee7e5e70
+Step 12/12 : LABEL rewind.agent.sourcehash=a01bf5b54f6b8fccc04850f8f8ca32e585bef94d9aeee17656fba9d23529b4fa
+ ---> Running in e273180cb4fd
+ ---> Removed intermediate container e273180cb4fd
+ ---> a920ebe8ad66
+Successfully built a920ebe8ad66
+Successfully tagged rewind-agent-worker:local
+INFO:     Started server process [15406]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8791 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59428 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59428 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59428 - "GET /v1/tasks/792406a6-78bc-4f00-b81a-c1b00b9cda69/events?after_id=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "POST /v1/tasks HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b/events?after_id=0&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b/events?after_id=71&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b/events?after_id=72&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b/events?after_id=72&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b/events?after_id=72&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b/events?after_id=72&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b/events?after_id=72&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59530 - "GET /v1/tasks/3d14dba3-4b82-4764-ac8e-860c0736597b/events?after_id=72&limit=100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59661 - "GET /health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [15406]
