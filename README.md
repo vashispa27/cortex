@@ -157,61 +157,49 @@ Scheduled tasks / Reminders → Ask Cortex → Memories (Permanent memory / Rece
 
 ## Evals
 
-Two things are measured: did retrieval bring back the right page, and was the final answer right. Both run on a separate eval archive, never on your real memory.
+### How we got the evals
 
-### How the eval set was made
+We recorded 35 real pages from X and LinkedIn into a separate archive (about 150 chunks). A coding agent read those chunks and wrote about 300 questions the way people actually type them: short, lowercase, half-remembered. A quarter of them have a messy twin with typos or Hinglish. See [the prompt](docs/cortex-eval-writer-agent-prompt.md).
 
-1. Turn on **Test mode** in Settings and record real pages with the notch play button. They go into their own eval archive ([how test mode works](evals/TEST_MODE.md)).
-2. A coding agent read the recorded text and wrote about 300 questions in the way people actually type them: short, lowercase, half-remembered. See [the prompt](docs/cortex-eval-writer-agent-prompt.md).
-3. The questions cover 14 kinds of lookup: who wrote a post, what someone said in a chat, scheduling, answers spread across several chunks, exact numbers and links, contact details, follow-ups, and questions that should be answered from general knowledge or not at all. A quarter of them also have a messy twin with typos and Hinglish.
-4. Every question stores the expected behavior, the reference answer, the facts a correct reply must contain, the page that holds the answer, and wrong answers to watch for. Questions are split into dev (for tuning) and test.
+The questions cover 14 kinds of lookup: who wrote a post, what someone said in a chat, scheduling, answers spread across chunks, exact numbers and links, contact details, follow-ups, and questions that should be answered from general knowledge or not at all. Each one stores the expected behavior, the reference answer, the facts a correct reply must contain, the page that holds the answer, and wrong answers to watch for. The set has real messages, so it is git-ignored.
 
-The set contains real messages, so it stays on your machine and is git-ignored.
+### Retrieval quality
 
-### Measure retrieval
-
-No model and no cost. Each question goes through search, and the script checks where the right page ranks.
+**Algorithm:** hybrid search. A meaning search (Model2Vec dense vectors) and a keyword search (BM25) each return their best chunks, and Reciprocal Rank Fusion merges the two lists into one ranking. We also tried dense only, BM25 only, extra keyword weighting and a dense re-rank. None beat plain hybrid, so they are off.
 
 ```sh
 cargo build --release -p cortex
 python3 evals/tools/run_gold.py --split dev --out evals/private/retrieval_run.json
 ```
 
-`hit@k` is how often the right page is in the top k results.
+No model and no cost. Each question goes through search, and the script checks where the right page ranks. `hit@k` is how often it is in the top k. Results on the 266 questions whose answer is in memory:
 
-| | hit@1 | hit@3 | hit@8 |
-|---|---|---|---|
-| Today (default) | 0.81 | 0.91 | 0.95 |
-| With contextual prefix | 0.84 | 0.91 | 0.95 |
-| With structure-aware chunks (LinkedIn, X) | 0.77 | 0.91 | 0.96 |
+| | hit@1 | hit@3 | hit@8 | MRR |
+|---|---|---|---|---|
+| Without contextual prefix | 0.81 | 0.91 | 0.95 | 0.86 |
+| With contextual prefix | 0.84 | 0.91 | 0.95 | 0.88 |
+| With structure-aware chunks (LinkedIn, X) | 0.77 | 0.91 | 0.96 | 0.85 |
 
-266 questions whose answer is in memory. Structure-aware chunks lose a little at rank 1 but find more answers overall, and keeping promoted posts raises hit@8 to 0.98. The weakest areas today are scheduling (hit@1 0.44) and chat lookup (0.65).
+The contextual prefix mostly helps chat lookups (hit@1 0.65 to 0.78) and attribution. Scheduling is the weakest area (hit@1 0.44).
 
-### Measure answers, with an LLM as judge
-
-This runs the real app flow for every question, then grades the reply. It calls a cloud model, so it costs money.
+### Final answers, judged by Jev
 
 ```sh
 EVAL_CLOUD_MODEL=anthropic/claude-haiku-5.5 evals/run.sh
 python3 evals/tools/compare_runs.py old.judged.jsonl new.judged.jsonl
 ```
 
-The judge is **Jev**, a classifier from TypeSafe. It isn't a chat model. For each answer it gets the question, the reference answer and the required facts, and it returns:
+This runs the real app flow for every question, then grades each reply with **Jev**, a classifier from TypeSafe (not a chat model). Jev gets the question, the reference answer and the required facts, and returns a verdict (correct, partial or incorrect), a few yes/no checks, and a confidence score. Simple string checks run next to it, and the report lists every case where the two disagree, plus every verdict under 0.7 confidence, to read by hand.
 
-* a verdict: correct, partial or incorrect;
-* yes/no checks: right kind of reply, states a known wrong answer, covers every required fact;
-* a confidence score for each, instead of an explanation.
-
-Because it returns probabilities, the same answer gets the same grade every time. Simple string checks run next to it (are the required facts in the text, was a real source cited). The report lists every case where the two disagree, and every verdict under 0.7 confidence, to be read by hand.
-
-Latest run (21 Oct 2026): Claude Haiku 5.5 answering, 300 questions judged.
+**Main numbers (Claude Haiku 5.5 answering, 21 Oct 2026, 300 questions judged):**
 
 | | correct | partial | incorrect |
 |---|---|---|---|
-| All questions | 73% | 8% | 19% |
+| Without contextual prefix | 73% | 8% | 19% |
 | With structure-aware chunks | 80% | 6% | 14% |
+| With contextual prefix | | | |
 
-By kind of question (default setup):
+By kind of question (without contextual prefix):
 
 | | correct |
 |---|---|
@@ -223,59 +211,12 @@ By kind of question (default setup):
 | Aggregation ("who asked about co-founding") | 20% |
 | Ambiguous questions | 14% |
 
-Treat small differences with care. Jev moves about 5 points on groups under 30 questions, and 51 of the 300 verdicts had confidence under 0.7. The structure-aware run judged 284 answers, not 300.
+**Other answering models** (correct %, same questions and judge):
 
-## Assistant answers (memory, general knowledge, date)
+| Model | Without contextual prefix | With contextual prefix |
+|---|---|---|
+| Qwen3.5 4B, local | 54% | |
+| Qwen3.5 2B, local | 35% | |
+| Gemini 2.5 Flash Lite, cloud | 51% | 56% |
 
-Cortex answers from your captured activity when a question is about your own life, and from the model's general knowledge when it is not. Every question goes to the model with the current local date, weekday, time and timezone, plus whatever evidence retrieval found. Weak or empty retrieval is flagged to the model, which decides; there is no canned "no match" reply.
-
-- One prompt (`answer_pipeline.rs`, `PROMPT_VERSION` `answer-v8`) serves the desktop app (through the local `POST /v1/assistant/prepare` route, which returns the finished messages) and the CLI `ask`. Evidence stays redacted exactly as before; the app only forwards the messages to OpenRouter (`openrouter_chat`).
-- **Source label.** The model's first line is `SOURCE: memory | general | mixed | none`. The app strips it and shows a small label for `general` ("General knowledge") and `mixed`, and keeps evidence only for `memory` and `mixed`. `none` means a personal question nothing answered. If the tag is missing it is inferred: cited snapshot IDs mean `memory`, and no evidence shown means `general`.
-- **Checks.** `memory` and `mixed` answers must cite snapshot IDs that were shown; `general` and `none` answers need no citation. Invented IDs fail under any label.
-- Follow-up questions are rewritten into a standalone search query (a second cloud call) only when the question is short or uses pronouns; self-contained questions skip it.
-- The CLI uses the model whenever `CORTEX_LLM_URL` is set; without one it still prints ranked evidence.
-
-### Read-only tools
-
-The model may call tools before answering (OpenAI-style `tools` / `tool_calls`, which OpenRouter passes through). The loop lives in the desktop shell (`apps/desktop/src-tauri/src/tools.rs`): at most 3 tool rounds and 45 seconds overall, then the model must answer without tools. Tools:
-
-- `search_memory(query, from?, to?, app?)`: another targeted search of the captured evidence, for example after resolving "yesterday" to a date or when the first evidence misses a person. `from`/`to` are `YYYY-MM-DD` or `YYYY-MM-DDTHH:MM` in local time (a bare `to` date includes that day). The engine runs it (`POST /v1/assistant/search`) with the same retrieval, evidence preparation and redaction as the first search. Hits it finds are added to the answer's evidence when the answer cites memory.
-- `list_calendar_events(from, to)`: defined behind a `Calendar` interface and offered only when a calendar is connected. None is connected yet (real access is Phase 3); tests use a fake.
-
-Tool results are untrusted data like evidence: capped at 12,000 characters, and anything not already redacted by the engine goes through the engine's cloud redaction (`POST /v1/assistant/redact`) before it reaches the provider; if redaction fails, nothing is sent. The model tool loop has no write tools. The chat intent router separately handles explicit fact and schedule commands before invoking this answer loop.
-
-**Models.** Tool calling needs a model that supports it; on OpenRouter, filter the model list by the `tools` supported parameter. If the provider rejects the request with tools (HTTP 400, 404 or 422), Cortex retries once without tools and answers from the evidence it already has, so an unsupported model still works. No model has been tested live yet; do not read this section as a recommendation of one.
-
-## Components
-
-| Path | Current purpose |
-|---|---|
-| `crates/capture`, `crates/memory`, `crates/daemon` | Consent-gated sanitization, SQLite/FTS, macOS capture worker, authenticated local API, settings, and deletion |
-| `crates/platform-mac` | Bounded read-only foreground Accessibility helper; the desktop daemon reads normal browser windows and skips private/unknown browser contexts; protected controls are omitted |
-| `crates/platform-win` | Earlier feasibility probe only; Windows implementation is out of scope |
-| `apps/desktop` | Tauri/React onboarding, privacy controls, Scheduled tasks / Reminders, Ask Cortex, Memories, and Agent Space |
-| `crates/mcp` | Shared task/memory MCP bridge and explicit client-config helper; [workflow and setup](docs/shared-workspace.md) |
-| `services/control`, `services/gateway`, `packages/prompts` | Account metadata/quota, authenticated inference gateway, prompt contracts, and a deterministic development provider |
-| `apps/website` | Vite one-page public site with an illustrative demo; deploys independently to Vercel |
-| `infra` | Signed release metadata and verification tooling; requires real signed installers and keys |
-
-Each component has local setup notes. The website and services run independently; the desktop shell does not yet implement production OIDC sign-in or live cloud inference. The specification is the design baseline, not a claim that every feature has shipped.
-
-## Verify
-
-```sh
-cargo test --workspace
-npm --prefix apps/desktop ci
-npm --prefix apps/desktop run build
-npm --prefix apps/desktop test
-cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml
-npm --prefix crates/mcp ci
-CORTEX_DAEMON_BIN="$PWD/target/debug/cortex-daemon" npm --prefix crates/mcp test
-npm --prefix services/control test
-npm --prefix services/gateway test
-npm --prefix packages/prompts test
-npm --prefix apps/website test
-node --test infra/test/release.test.mjs
-```
-
-The MCP integration test uses a temporary archive with invented data. No verification command requests macOS Accessibility permission or enables live capture.
+Jev moves about 5 points on groups under 30 questions, and 51 of the 300 Haiku verdicts had confidence under 0.7, so treat small differences with care. The Haiku structure-aware run judged 284 answers, not 300.
