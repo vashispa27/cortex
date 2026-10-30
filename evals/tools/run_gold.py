@@ -17,7 +17,7 @@ from concurrent.futures import ThreadPoolExecutor
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ap = argparse.ArgumentParser()
 ap.add_argument("--gold", default=os.path.join(ROOT, "evals/private/gold.jsonl"))
-ap.add_argument("--archive", default=os.path.expanduser("~/Library/Application Support/Cortex/eval-memory"))
+ap.add_argument("--archive", default=os.path.expanduser("~/Library/Application Support/Cortex/eval-memory-segments"))
 ap.add_argument("--bin", default=os.path.join(ROOT, "target/release/cortex"))
 ap.add_argument("--split", choices=["dev", "test"])
 ap.add_argument("--out", default=os.path.join(ROOT, "evals/private/retrieval_run.json"))

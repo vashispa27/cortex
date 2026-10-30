@@ -23,21 +23,21 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllGlobals());
 
-it('cloud on: a flexible phrasing goes to the decision model and is written through the schedule service', async () => {
-  stored();
-  vi.mocked(invoke).mockImplementation(async (command: string) => command === 'openrouter_has_key' ? true : { action: 'create_reminder', message: 'Call mom', timing: { type: 'once', local_at: '2026-11-01T10:00' } });
+it('a flexible phrasing goes to the local routing model and is written through the schedule service', async () => {
+  stored({ localModel: 'gemma-local', routingAdapter: '/adapters/routing' });
+  vi.mocked(invoke).mockImplementation(async () => ({ action: 'create_reminder', message: 'Call mom', timing: { type: 'once', local_at: '2026-11-01T10:00' } }));
   const answer = await answerCortex(message, [], context);
   expect(answer.body).toContain('Reminder saved: Call mom');
   expect(scheduleService.create).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({ timezone: 'Asia/Kolkata', timing: { type: 'once', local_at: '2026-11-01T10:00' } }));
-  const [, args] = decisionCalls()[0] as [string, { model: string; endpoint: string | null; context: string; message: string; tool: { function: { name: string } } }];
-  expect(args).toMatchObject({ model: 'a/haiku', endpoint: null, message, tool: { function: { name: 'decide' } } });
-  // The cloud sees fact keys only, never the saved value.
+  const [, args] = decisionCalls()[0] as [string, { model: string; endpoint: string | null; adapter: string | null; context: string; message: string; tool: { function: { name: string } } }];
+  expect(args).toMatchObject({ model: 'gemma-local', endpoint: 'http://127.0.0.1:8080/v1', adapter: '/adapters/routing', message, tool: { function: { name: 'decide' } } });
+  // The model sees fact keys only, never the saved value.
   expect(args.context).toContain('"attribute":"phone"');
   expect(args.context).not.toContain('213132');
   expect(answer.actions).toEqual([{ kind: 'undo_schedule', label: 'Undo', scheduleId: expect.any(String) }]);
 });
 
-it('local-only mode never contacts the cloud and uses the regex router', async () => {
+it('with no local model set up, nothing is called and the regex router answers', async () => {
   stored({ localOnly: true });
   const answer = await answerCortex(message, [], context);
   expect(invoke).not.toHaveBeenCalled();

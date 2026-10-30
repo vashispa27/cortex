@@ -6,7 +6,7 @@ vi.mock("@tauri-apps/api/core", () => ({ invoke: vi.fn() }));
 vi.mock("./api", () => ({ prepareAssistantRequest: vi.fn() }));
 const prefs = vi.hoisted(() => {
   const step = { provider: "default", cloudModel: "", localModel: "" };
-  const base = { openrouterModel: "example/model", aiProvider: "openrouter", localOnly: false, layers: { answer: { ...step }, followup: { ...step }, context: { ...step } } } as Record<string, any>;
+  const base = { openrouterModel: "example/model", aiProvider: "openrouter", localOnly: false, localEndpoint: "http://127.0.0.1:8080/v1", localModel: "local/model", routingAdapter: "", layers: { answer: { ...step }, followup: { ...step }, context: { ...step } } } as Record<string, any>;
   return { base, current: base };
 });
 vi.mock("./storage", () => ({ loadPreferences: () => prefs.current }));
@@ -193,12 +193,12 @@ describe("pronouns in a longer chat", () => {
 
 describe("per-step providers", () => {
   beforeEach(() => { vi.resetAllMocks(); });
-  it("answers in the cloud while rewriting the follow-up on this Mac", async () => {
-    prefs.current = { ...prefs.base, localEndpoint: "http://127.0.0.1:8080/v1", localModel: "qwen-main", layers: { ...prefs.base.layers, followup: { provider: "local", cloudModel: "", localModel: "qwen-small" } } };
+  it("answers in the cloud while rewriting the follow-up on this Mac, even if that step asks for the cloud", async () => {
+    prefs.current = { ...prefs.base, localEndpoint: "http://127.0.0.1:8080/v1", localModel: "qwen-main", layers: { ...prefs.base.layers, followup: { provider: "cloud", cloudModel: "a/cloud", localModel: "qwen-small" } } };
     script("SOURCE: memory\nFriday. [42]", "When did Mira reply in Example?");
     vi.mocked(prepareAssistantRequest).mockResolvedValue(prepared());
     await answerFromMemory("What date?", [{ role: "user" as const, body: "What did Mira say in Example?" }]);
-    expect(invoke).toHaveBeenCalledWith("openrouter_search_query", expect.objectContaining({ model: "qwen-small", endpoint: "http://127.0.0.1:8080/v1" }));
+    expect(invoke).toHaveBeenCalledWith("openrouter_search_query", expect.objectContaining({ model: "qwen-main", endpoint: "http://127.0.0.1:8080/v1" }));
     expect(invoke).toHaveBeenCalledWith("openrouter_chat", expect.objectContaining({ model: "example/model", endpoint: null }));
     prefs.current = prefs.base;
   });

@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "rea
 import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import {
-  ArrowRight, Bell, Check, ChevronRight,
+  ArrowRight, Bell, Bot, Check, ChevronRight,
   Clock3, Database, Orbit, House,
   LockKeyhole, MessageCircle, Moon, Pause, Play, Settings2,
   ShieldCheck, Trash2, X,
@@ -25,6 +25,7 @@ import { WorkspaceBoundary } from "./components/WorkspaceBoundary";
 import AskChat from "./components/AskChat";
 const ScheduledTasksPage = lazy(() => import("./components/ScheduledTasksPage"));
 const MemoriesPage = lazy(() => import("./components/MemoriesPage").then(module => ({ default: module.MemoriesPage })));
+const AgentsPage = lazy(() => import("./components/AgentsPage"));
 const AgentSpacePage = lazy(() => import("./components/AgentSpacePage"));
 import { resolvePage, savePage } from "./lib/navigation";
 import { scheduleService, type Schedule } from "./lib/schedules";
@@ -39,6 +40,7 @@ const navGroups: { label: string; items: { id: Page; label: string; icon: typeof
     { id: "scheduled", label: "Reminders", icon: Bell },
     { id: "ask", label: "Ask Cortex", icon: MessageCircle },
     { id: "memories", label: "Memories", icon: Database },
+    { id: "jobs", label: "Agents", icon: Bot },
     { id: "agents", label: "Agent Space", icon: Check },
   ] },
   { label: "System", items: [
@@ -200,6 +202,7 @@ export default function App() {
     void listen<string>("navigate", (event) => {
       const target = event.payload;
       if (target === "ask") window.dispatchEvent(new Event("cortex:handoff"));
+      if (target === "jobs") window.dispatchEvent(new Event("cortex:agent-draft"));
       if (target === "settings") setSettingsPage("notch");
       setPage(resolvePage(target));
     }).then((off) => {
@@ -365,6 +368,7 @@ export default function App() {
       <WorkspaceBoundary key={page}><Suspense fallback={<div className="loading-state" role="status">Opening workspace…</div>}>
         {page === "scheduled" && <ScheduledTasksPage />}
         {page === "memories" && <MemoriesPage />}
+        {page === "jobs" && <AgentsPage />}
         {page === "agents" && <AgentSpacePage onConnect={() => openSettingsPage("connected")} />}
       </Suspense></WorkspaceBoundary>
       <div hidden={page !== "ask"} className="chat-host"><AskChat sample={sample} active={page === "ask"} onSessionCount={setChatCount} /></div>
@@ -372,28 +376,22 @@ export default function App() {
         {settingsPage === "account" && <div className="settings-stack"><div className="surface-card"><h3>Workspace</h3><p>This independent build runs locally and has no account sign-in yet.</p><div className="connection-card"><span className={`status-light ${status ? "good" : ""}`} /><div><strong>{status ? "Local service connected" : "Local service offline"}</strong><small>{desktopRuntime() ? "Desktop app" : "Browser preview"}</small></div><Button kind="secondary" onClick={() => void refreshStatus()}>Retry</Button></div>{statusError && <small className="muted-text">{statusError}</small>}</div><div className="surface-card"><h3>Sample workspace</h3><Toggle checked={sample} onChange={(value) => updateSetting({ sampleMode: value })} label="Use invented sample data" description="Clearly marked examples for exploring the interface." /><Button kind="quiet" onClick={() => updateSetting({ onboardingComplete: false, captureSetupComplete: false })}>Replay onboarding</Button></div></div>}
         {settingsPage === "ai" && <div className="settings-stack">
           <div className="surface-card"><h3>Privacy</h3>
-            <Toggle checked={preferences.localOnly} onChange={(value) => { updateSetting({ localOnly: value }); setLocalTestResult(""); }} label="Local only: never use the cloud" description="Every step below runs on the local model on this Mac, whatever it is set to, and nothing you capture or ask is sent to OpenRouter. Answers may be rougher than a cloud model's." />
-            <label className="field-label" htmlFor="ai-provider">Default provider</label>
-            <select id="ai-provider" value={preferences.aiProvider} onChange={(event) => { updateSetting({ aiProvider: event.target.value as Preferences["aiProvider"] }); setLocalTestResult(""); }}>
-              <option value="openrouter">OpenRouter (cloud)</option>
-              <option value="local">Local model on this Mac</option>
-            </select>
-            <p className="fine-print">Steps set to "Default" below follow this.</p>
+            <Toggle checked={preferences.localOnly} onChange={(value) => { updateSetting({ localOnly: value }); setLocalTestResult(""); }} label="Local only: never use the cloud" description="Answers also run on the local model on this Mac, so nothing you capture or ask is sent to OpenRouter. Answers may be rougher than a cloud model's." />
           </div>
           <LayerSettings preferences={preferences} hasKey={hasOpenrouterKey} onChange={updateSetting} />
           <div className="surface-card"><h3>Local model</h3>
-              <p>Any server on this Mac that speaks the OpenAI chat API: <code>mlx_lm.server</code>, Ollama or LM Studio. Used by every step that runs on this Mac.</p>
+              <p>Any server on this Mac that speaks the OpenAI chat API: <code>mlx_lm.server</code>, Ollama or LM Studio. Used by follow-up questions, reminders and contextual indexing, and by answers when they run on this Mac.</p>
               <label className="field-label" htmlFor="local-endpoint">Server address</label>
               <input id="local-endpoint" value={preferences.localEndpoint} onChange={(event) => { updateSetting({ localEndpoint: event.target.value }); setLocalTestResult(""); }} placeholder="http://127.0.0.1:8080/v1" autoComplete="off" />
               <p className="fine-print">mlx_lm.server: http://127.0.0.1:8080/v1 · Ollama: http://localhost:11434/v1 · LM Studio: http://localhost:1234/v1. Only addresses on this Mac are accepted.</p>
-              <label className="field-label" htmlFor="local-model">Default model name</label>
+              <label className="field-label" htmlFor="local-model">Model name</label>
               <input id="local-model" value={preferences.localModel} onChange={(event) => { updateSetting({ localModel: event.target.value.trim() }); setLocalTestResult(""); }} placeholder="mlx-community/Qwen3.5-2B-4bit" autoComplete="off" />
               <p className="fine-print">Use the name the server lists: the --model value for mlx_lm.server, or the tag from <code>ollama list</code>, such as qwen3:4b.</p>
               <div className="manage-actions"><Button disabled={!desktopRuntime() || localTesting} onClick={() => void runLocalTest()}>{localTesting ? "Testing…" : "Test connection"}</Button></div>
               {localTestResult && <p className="fine-print" role="status">{localTestResult}</p>}
             </div>
-          <div className="surface-card"><h3>OpenRouter</h3><p>The default OpenRouter model, used by every step that runs in the cloud and has no model of its own. Your API key is stored in a private local file on this Mac, without Keychain. It is not encrypted.</p><label className="field-label" htmlFor="openrouter-model">Model ID</label><input id="openrouter-model" value={modelDraft} onChange={(event) => setModelDraft(event.target.value)} placeholder="provider/model-name" autoComplete="off" /><label className="field-label" htmlFor="openrouter-key">OpenRouter API key</label><input id="openrouter-key" type="password" value={openrouterKey} onChange={(event) => setOpenrouterKey(event.target.value)} placeholder={hasOpenrouterKey ? "Key saved — enter a new key to replace it" : "Paste your OpenRouter API key"} autoComplete="off" /><p className="fine-print">{hasOpenrouterKey ? "A key is saved." : "No key saved yet."}</p><div className="manage-actions"><Button disabled={!desktopRuntime()} onClick={() => void saveModel()}>Save model settings</Button>{hasOpenrouterKey && <Button kind="secondary" onClick={() => void invoke("openrouter_delete_key").then(() => { setHasOpenrouterKey(false); setSettingsNotice("Local OpenRouter key removed."); }).catch(() => setSettingsNotice("Could not remove the local key."))}>Remove key</Button>}</div></div>
-          <div className="callout neutral"><ShieldCheck size={18} /> A step set to the cloud sends the text listed under "What leaves this Mac" to OpenRouter and the model provider you chose. Review their privacy and data policies before using it. Steps on this Mac, including memory search and tool use, never leave it.</div>
+          <div className="surface-card"><h3>OpenRouter</h3><p>The OpenRouter model for answers when they run in the cloud. Your API key is stored in a private local file on this Mac, without Keychain. It is not encrypted.</p><label className="field-label" htmlFor="openrouter-model">Model ID</label><input id="openrouter-model" value={modelDraft} onChange={(event) => setModelDraft(event.target.value)} placeholder="provider/model-name" autoComplete="off" /><label className="field-label" htmlFor="openrouter-key">OpenRouter API key</label><input id="openrouter-key" type="password" value={openrouterKey} onChange={(event) => setOpenrouterKey(event.target.value)} placeholder={hasOpenrouterKey ? "Key saved — enter a new key to replace it" : "Paste your OpenRouter API key"} autoComplete="off" /><p className="fine-print">{hasOpenrouterKey ? "A key is saved." : "No key saved yet."}</p><div className="manage-actions"><Button disabled={!desktopRuntime()} onClick={() => void saveModel()}>Save model settings</Button>{hasOpenrouterKey && <Button kind="secondary" onClick={() => void invoke("openrouter_delete_key").then(() => { setHasOpenrouterKey(false); setSettingsNotice("Local OpenRouter key removed."); }).catch(() => setSettingsNotice("Could not remove the local key."))}>Remove key</Button>}</div></div>
+          <div className="callout neutral"><ShieldCheck size={18} /> Answers in the cloud send the text listed under Answers to OpenRouter and the model provider you chose. Review their privacy and data policies before using it. Everything else, including memory search and tool use, stays on this Mac.</div>
         </div>}
         {settingsPage === "capture" && <div className="settings-stack">
           <div className="callout neutral"><ShieldCheck size={18} /> macOS capture starts only after your choice and Accessibility permission. Normal browser windows can be read; private/incognito windows, credential apps, and protected fields are skipped.</div>

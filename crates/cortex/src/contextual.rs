@@ -384,9 +384,14 @@ pub fn prepare(args: &[String]) -> Result<()> {
     }
     let state = PathBuf::from(&args[0]).canonicalize()?;
     let root = PathBuf::from(env::var("HOME")?).join("Library/Application Support/Cortex");
-    // Only this explicitly named eval copy may be mutated. Resolve the parent, never inspect real memory.
-    if state != root.canonicalize()?.join("eval-memory-context-haiku") {
-        bail!("only eval-memory-context-haiku may be prepared");
+    // Only a contextual eval copy directly under the Cortex folder may be mutated
+    // (eval-memory-context-haiku, eval-memory-segments-context-<model>, ...). Never real memory.
+    let name = state.file_name().and_then(|n| n.to_str()).unwrap_or_default();
+    if state.parent() != Some(root.canonicalize()?.as_path())
+        || !name.starts_with("eval-memory-")
+        || !name.contains("context")
+    {
+        bail!("only an eval-memory-*context* copy may be prepared");
     }
     if !state.join(".cortex-context-eval-copy").is_file()
         || state.join(".cortex-context-eval-ready").exists()
@@ -397,11 +402,16 @@ pub fn prepare(args: &[String]) -> Result<()> {
         bail!("CORTEX_CONTEXT_ENABLED=1 is required");
     }
     let config = Config::load()?;
-    if config.provider != "openrouter" || config.model != HAIKU {
-        bail!("Haiku eval preparation requires OpenRouter and anthropic/claude-haiku-4.5");
+    // Cloud preparation stays pinned to Haiku; a local model is loopback-only (enforced by Config::load).
+    if config.provider == "openrouter" {
+        if config.model != HAIKU {
+            bail!("cloud eval preparation requires anthropic/claude-haiku-4.5");
+        }
+        // Check credentials before reading any capture or starting model requests.
+        let _ = openrouter_key()?;
+    } else if config.provider != "local" {
+        bail!("eval preparation requires the local or openrouter provider");
     }
-    // Check credentials before reading any capture or starting model requests.
-    let _ = openrouter_key()?;
     let mut counts = Counts::default();
     let mut db = open_db(&state)?;
     db.execute("CREATE TABLE IF NOT EXISTS context_eval_config (key TEXT PRIMARY KEY, value TEXT NOT NULL)", [])?;

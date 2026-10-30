@@ -140,3 +140,41 @@ html[data-window="notch"] .cortex-history-form input:focus-visible { outline: no
 .cortex-eval[data-error="true"] { color: #ff9a9a; }
 @keyframes cortex-eval-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
 @media (prefers-reduced-motion: reduce) { .cortex-eval[data-recording="true"] { animation: none; } }
+
+.cortex-agent-btn { flex: none; display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border: 1px solid rgba(0,174,255,.35); border-radius: 99px; background: rgba(0,174,255,.08); color: #9beeff; font: inherit; font-size: 10px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background .18s, border-color .18s; }
+.cortex-agent-btn:hover { background: rgba(0,174,255,.18); border-color: rgba(0,174,255,.6); }
+.cortex-agent-btn:focus-visible { outline: 2px solid #9beeff; outline-offset: 2px; }
+.cortex-agent-btn[data-on="true"] { background: rgba(255,176,64,.2); border-color: rgba(255,176,64,.7); color: #ffd28a; }
+/* Agent mode keeps the blue notch; orange is only an accent: current through the brain, a live edge line, the send button. */
+.cortex-window[data-agent="true"]:not([data-mode="collapsed"])::after {
+  content: ""; position: absolute; left: 14px; right: 14px; top: 0; height: 2px; border-radius: 2px; pointer-events: none; z-index: 2;
+  background: linear-gradient(90deg, transparent, #ff9a2e 30%, #ffd28a 50%, #ff9a2e 70%, transparent); background-size: 200% 100%;
+  animation: cortex-agent-edge 2.4s linear infinite; filter: drop-shadow(0 0 4px rgba(255,140,20,.8));
+}
+@keyframes cortex-agent-edge { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.cortex-window[data-agent="true"] .cortex-compose input { caret-color: #ff9a2e; }
+.cortex-window[data-agent="true"] .cortex-agent-btn { color: #c8660a; }
+.cortex-agent-card { margin-top: 8px; padding: 9px 10px; border: 1px solid rgba(255,176,64,.35); border-radius: 10px; background: rgba(255,176,64,.06); display: grid; gap: 6px; font-size: 11px; }
+.cortex-agent-card-head { display: flex; align-items: center; gap: 8px; }
+.cortex-agent-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #ffd28a; }
+.cortex-agent-state { font-size: 10px; opacity: .85; }
+.cortex-agent-card[data-status="waiting_input"] .cortex-agent-state, .cortex-agent-card[data-status="waiting_approval"] .cortex-agent-state { color: #ffd28a; font-weight: 600; }
+.cortex-agent-card[data-status="failed"] .cortex-agent-state { color: #f0a595; }
+.cortex-agent-open { margin-left: auto; display: grid; place-items: center; width: 20px; height: 20px; border: 0; border-radius: 6px; background: transparent; color: inherit; opacity: .7; cursor: pointer; }
+.cortex-agent-open:hover { opacity: 1; background: rgba(255,255,255,.08); }
+.cortex-agent-title { font-size: 11px; font-weight: 600; overflow-wrap: anywhere; }
+.cortex-agent-error { color: #f0a595; }
+.cortex-agent-ask { display: grid; gap: 6px; }
+.cortex-agent-ask input { width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 7px; border: 1px solid rgba(255,255,255,.18); background: rgba(0,0,0,.15); color: inherit; font: inherit; font-size: 11px; }
+.cortex-agent-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+.cortex-agent-buttons button { padding: 4px 10px; border-radius: 99px; border: 1px solid rgba(255,255,255,.2); background: transparent; color: inherit; font: inherit; font-size: 10px; cursor: pointer; }
+.cortex-agent-buttons button:disabled { opacity: .45; cursor: default; }
+.cortex-agent-buttons .cortex-agent-go { background: rgba(255,176,64,.22); border-color: rgba(255,176,64,.6); color: #ffd28a; font-weight: 600; }
+.cortex-window[data-agent="true"] .cortex-enter { background: #e8710a; border-color: #ffb866; box-shadow: inset 0 0 9px rgba(255,160,40,.2), 0 0 9px rgba(255,140,20,.25); }
+.cortex-window[data-agent="true"] .cortex-enter:hover:not(:disabled) { background: #c85f00; box-shadow: 0 0 16px rgba(255,140,20,.45); }
+.cortex-window[data-agent="true"] .cortex-user-bubble { border-right: 3px solid #ff9a2e; }
+.cortex-attach { position: relative; }
+.cortex-attach b { position: absolute; top: -3px; right: -3px; min-width: 13px; height: 13px; padding: 0 3px; box-sizing: border-box; border-radius: 99px; background: #ff9a2e; color: #3a1d00; font-size: 8px; line-height: 13px; text-align: center; }
+.cortex-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.cortex-chip { display: inline-flex; align-items: center; gap: 5px; max-width: 100%; padding: 2px 4px 2px 8px; border: 1px solid rgba(255,154,46,.5); border-radius: 99px; background: rgba(255,154,46,.1); font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cortex-chip button { border: 0; background: transparent; color: inherit; cursor: pointer; font-size: 12px; line-height: 1; padding: 0 3px; }

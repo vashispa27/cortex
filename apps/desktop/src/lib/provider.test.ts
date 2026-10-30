@@ -10,16 +10,24 @@ describe("ai provider", () => {
     expect(aiTarget(prefs({ aiProvider: "local" }), "followup")).toEqual({ model: "qwen-main", endpoint: "http://127.0.0.1:8080/v1", local: true });
   });
 
-  it("lets each step run somewhere else, with its own model for that provider", () => {
+  it("lets answers use the cloud, but keeps every step below them on this Mac", () => {
     const p = prefs();
     p.layers.answer = { provider: "cloud", cloudModel: "a/big", localModel: "qwen-big" };
-    p.layers.followup = { provider: "local", cloudModel: "a/fast", localModel: "qwen-small" };
+    p.layers.followup = { provider: "cloud", cloudModel: "a/fast", localModel: "qwen-small" };
     p.layers.context = { provider: "default", cloudModel: "", localModel: "" };
     expect(aiTarget(p, "answer")).toEqual({ model: "a/big", endpoint: null, local: false });
-    expect(aiTarget(p, "followup")).toEqual({ model: "qwen-small", endpoint: "http://127.0.0.1:8080/v1", local: true });
-    // Untouched steps still use the defaults.
-    expect(aiTarget(p, "context")).toEqual({ model: "a/main", endpoint: null, local: false });
+    // Steps below answers share the one local model; a model saved for the step earlier is ignored.
+    expect(aiTarget(p, "followup")).toEqual({ model: "qwen-main", endpoint: "http://127.0.0.1:8080/v1", local: true });
+    expect(aiTarget(p, "context")).toEqual({ model: "qwen-main", endpoint: "http://127.0.0.1:8080/v1", local: true });
+  });
 
+  it("sends the routing adapter with routing and follow-up rewrites only", () => {
+    const p = { ...prefs(), routingAdapter: " /adapters/routing " };
+    expect(aiTarget(p, "decide")).toMatchObject({ local: true, adapter: "/adapters/routing" });
+    expect(aiTarget(p, "followup")).toMatchObject({ local: true, adapter: "/adapters/routing" });
+    expect(aiTarget(p, "context")).not.toHaveProperty("adapter");
+    expect(aiTarget({ ...p, layers: { ...p.layers, answer: { provider: "local", cloudModel: "", localModel: "" } } }, "answer")).not.toHaveProperty("adapter");
+    expect(aiTarget({ ...p, routingAdapter: "" }, "decide")).not.toHaveProperty("adapter");
   });
 
   it("falls back to the default local model when the step names none", () => {

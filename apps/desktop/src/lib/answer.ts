@@ -90,7 +90,7 @@ export async function answerFromMemory(question: string, history: ChatMessage[],
     // Rewriting a follow-up is its own step: it may run somewhere other than the answer.
     const rewriteTarget = aiTarget(preferences, "followup");
     const rewritten = await ensureReady(rewriteTarget)
-      .then(() => invoke<string>("openrouter_search_query", { model: rewriteTarget.model, question, history: prior.slice(-2), endpoint: rewriteTarget.endpoint }))
+      .then(() => invoke<string>("openrouter_search_query", { model: rewriteTarget.model, question, history: prior.slice(-2), endpoint: rewriteTarget.endpoint, adapter: rewriteTarget.adapter ?? null }))
       .catch(() => "");
     if (acceptableRewrite(rewritten, question)) { query = rewritten.trim(); meaning = query; }
     else query = fallbackQuery(question, prior);
@@ -150,7 +150,7 @@ export async function answerCortex(question: string, history: ChatMessage[], con
   const preferences = loadPreferences();
   const proposed = await decideWrite(question, history, routing, regex, {
     preferences, target: aiTarget(preferences, "decide"), schedules: scheduleService, memories: memoryService, ready: ensureReady,
-    call: (target) => (request) => invoke("decide_intent", { model: target.model, endpoint: target.endpoint, ...request }),
+    call: (target) => (request) => invoke("decide_intent", { model: target.model, endpoint: target.endpoint, adapter: target.adapter ?? null, ...request }),
   });
   return executeIntent(proposed ?? regex, history, intentServices());
 }

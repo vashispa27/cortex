@@ -8,16 +8,17 @@ chunker are used. Contextual points never share vectors across snapshots. The in
 `prefix-contextual-v1`; changing index formats requires a rebuild. Queries recognize this persisted
 format and use the ordinary query embedding, with no context-model calls.
 
-The current eval uses **Claude Haiku 4.5 on OpenRouter**, explicitly selected after local
-summarization caused memory pressure. It sends eval capture text to OpenRouter; normal capture
-remains unchanged and the feature stays off by default. No MLX server is needed for preparation.
+The eval compares labels written by a local model (default Gemma 4 E4B on `mlx_lm.server`) with
+labels written by **Claude Haiku 4.5 on OpenRouter** and with no labels, all on the structure-aware
+archive. The cloud arm sends eval capture text to OpenRouter; normal capture remains unchanged and
+the feature stays off by default.
 
 Off by default. Configuration:
 
 | Variable | Default / meaning |
 |---|---|
 | `CORTEX_CONTEXT_ENABLED` | `1` enables context generation and contextual indexing |
-| `CORTEX_CONTEXT_PROVIDER` | `local` by default; the eval helper explicitly sets `openrouter` |
+| `CORTEX_CONTEXT_PROVIDER` | `local` by default; the cloud eval arm sets `openrouter` |
 | `CORTEX_CONTEXT_URL` | Provider default: loopback HTTP for local; `https://openrouter.ai/api/v1/chat/completions` for OpenRouter. Other cloud hosts, proxies and redirects are refused |
 | `CORTEX_CONTEXT_MODEL` | Local default `mlx-community/Qwen3.5-4B-MLX-4bit`; OpenRouter default `anthropic/claude-haiku-4.5` |
 | `CORTEX_CONTEXT_API_KEY` / `OPENROUTER_API_KEY` | OpenRouter credentials; falls back to the private `Cortex/openrouter.key` saved by Settings |
@@ -35,9 +36,10 @@ Legacy category columns may remain unused in existing databases; no destructive 
 ## Prepare and benchmark
 
 Read [TEST_MODE.md](../evals/TEST_MODE.md). Never access real memory, except pinned embedding model
-files via `CORTEX_MODEL_DIR`. The helper backs up `eval-memory` using SQLite's backup API and copies
-`captures.jsonl` into `eval-memory-context-haiku`; the baseline and category archive are preserved.
-Only a marked unfinished copy may resume. A completed archive cannot be overwritten.
+files via `CORTEX_MODEL_DIR`. `evals/run-arm.sh` backs up `eval-memory-segments` using SQLite's backup
+API and copies `captures.jsonl` into `eval-memory-segments-context-<model>`; the source is never
+written. `cortex prepare-context-eval` only accepts an `eval-memory-*context*` folder directly under
+the Cortex folder. Only a marked unfinished copy may resume. A completed archive cannot be overwritten.
 Progress commits per snapshot, keeping requests for one capture consecutive. A generation
 configuration fingerprint prevents resuming with a different model, provider, token limit or system prompt.
 Only the pinned 32M embedding model runs locally during indexing, with two worker threads.
@@ -45,31 +47,23 @@ Generation logs stay under gitignored `evals/private/`.
 
 ```bash
 cargo build --release -p cortex
-python3 evals/tools/prepare_context_archive.py
-# Uses your saved OpenRouter key, or OPENROUTER_API_KEY / CORTEX_CONTEXT_API_KEY.
-# Helper invokes: cortex prepare-context-eval <output-dir>
-# Completion marker: .cortex-context-eval-ready
-
-# User runs this separately; answering stays 4B and the judge stays Jev:
-# This answer benchmark still requires the baseline local answer server; preparation does not.
-evals/run-context.sh
-# EVAL_RUN, EVAL_GOLD and EVAL_ARCHIVE overrides are honored.
-
-CORTEX_MODEL_DIR="$HOME/Library/Application Support/Cortex/local-memory/models/1e5a03f8eeb2c98b928fbbd846f22f816360919f" \
-RAYON_NUM_THREADS=2 OMP_NUM_THREADS=2 python3 evals/tools/run_gold.py \
-  --archive "$HOME/Library/Application Support/Cortex/eval-memory-context-haiku" \
-  --gold evals/private/gold-v1.jsonl --out evals/private/retrieval_context.json
-python3 evals/tools/compare_runs.py baseline.judged.jsonl candidate.judged.jsonl \
-  > evals/private/context-comparison.md
+evals/run-arm.sh local     # labels + routing by the local model (needs mlx_lm.server)
+evals/run-arm.sh cloud     # labels by Haiku 4.5, routing by Haiku 5.5 (saved OpenRouter key)
+evals/run-arm.sh control   # no labels, rules-only routing
+# Each arm: labels (reused once finished), retrieval eval, routing eval, then Haiku answering + Jev.
+python3 evals/tools/compare_runs.py evals/private/answers/arm-control_<stamp>.judged.jsonl \
+  evals/private/answers/arm-local-<model>_<stamp>.judged.jsonl
 ```
 
-The wrapper excludes context from answer evidence for this first experiment. The optional second
-experiment exposing context in evidence is not implemented. Context generation never runs at query time.
+Context is excluded from answer evidence. The optional experiment exposing context in evidence is
+not implemented. Context generation never runs at query time. The answer eval calls the answer step
+directly, so routing is measured only by the routing eval (`eval:decision`, labeled phrasings).
 
-Plain baseline: 309 gold questions, 4B answering, Jev judge. Among 266 supported questions,
-hit@1 **0.81**, hit@3 **0.91**, hit@8 **0.95**, MRR **0.86**. Answers: memory **57%** correct,
-facts all present **59%**, attribution **51%**, abstain **39%**. Pay particular attention to
-attribution, chat_lookup and scheduling. Jev has about 5 points of noise for groups under 30 questions.
+Structure-aware baseline (no labels): among 244 supported questions, hit@1 **0.78**, hit@3 **0.92**,
+hit@8 **0.98**, MRR **0.86**; Haiku 5.5 answering **80%** correct. Local Gemma 4 E4B labels:
+65 of 66 chunks labelled, hit@1 **0.78**, hit@3 **0.92**, hit@8 **0.97**, MRR **0.85**.
+Pay particular attention to chat_lookup, contact_details and scheduling. Jev has about 5 points of
+noise for groups under 30 questions.
 
 ## Prompt
 

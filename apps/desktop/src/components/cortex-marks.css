@@ -25,3 +25,12 @@
 @keyframes chat-signal { 0%,100% { opacity: .35; transform: translateY(0); } 45% { opacity: 1; transform: translateY(-1.5px); } }
 @media (prefers-reduced-motion: reduce) { .cortex-mark *, .cortex-chat-mark, .cortex-chat-mark * { animation: none !important; } }
 html[data-reduce-motion="true"] .cortex-mark *, [data-reduce-motion="true"] .cortex-mark *, [data-reduce-motion="true"] .cortex-chat-mark, [data-reduce-motion="true"] .cortex-chat-mark * { animation: none !important; }
+
+/* Agent mode: orange current racing along the traces of the blue brain. */
+.cortex-mark.is-electric svg {
+  filter: drop-shadow(0 0 calc(1px + var(--glow) * 2px) rgba(255, 150, 40, calc(.5 + var(--glow) * .5))) drop-shadow(0 0 3px rgba(46, 146, 255, .6));
+}
+.cortex-mark.is-electric .cortex-signals { stroke: #ffb347; stroke-width: 2.6; }
+.cortex-mark.is-electric .cortex-signal { stroke-dasharray: .2 .8; }
+.cortex-mark.is-electric .cortex-node { fill: #ffc266; animation: cortex-spark 1.1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes cortex-spark { 0%, 100% { transform: scale(.8); opacity: .5; } 50% { transform: scale(1.5); opacity: 1; } }

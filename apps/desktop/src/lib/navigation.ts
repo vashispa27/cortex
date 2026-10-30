@@ -1,5 +1,5 @@
 import type { Page } from "./types";
-const pages: readonly Page[] = ["today", "timeline", "scheduled", "ask", "memories", "agents", "settings"];
+const pages: readonly Page[] = ["today", "timeline", "scheduled", "ask", "memories", "agents", "jobs", "settings"];
 /** Resolve deep links and saved locations from earlier workspace versions. */
 export function resolvePage(value: string | null): Page {
   if (value === "reminders") return "scheduled";

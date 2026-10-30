@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
-import { ambiguousHour, buildContext, DECIDE_SYSTEM_PROMPT, DECIDE_TOOL, decide, isDiscussion, mayWrite, resolveDecision, resolveTimezone, type DecideCall, type DecisionContext } from './decide';
+import { ambiguousHour, buildContext, DECIDE_LOCAL_TIMEOUT_MS, DECIDE_SYSTEM_PROMPT, DECIDE_TIMEOUT_MS, DECIDE_TOOL, decide, isDiscussion, mayWrite, resolveDecision, resolveTimezone, type DecideCall, type DecisionContext } from './decide';
 import { decideWrite, type DecisionDeps } from './decision-flow';
+import { ROUTER_SHORT_PROMPT } from './decide';
 import { executeIntent, routeIntent, type Intent, type IntentServices, type RoutingContext } from './intent';
 import type { PersonalFact } from './memories';
 import type { Schedule } from './schedules';
@@ -17,10 +18,10 @@ const rajesh: PersonalFact = { id: 'f-1', kind: 'personal_fact', key: '["rajesh"
 const ctx = (extra: Partial<DecisionContext> = {}): DecisionContext => ({ now, timezone, schedules: [rent, water, standup], facts: [{ subject: 'Rajesh', attribute: 'phone' }], recent: [], ...extra });
 
 const preferences = (changes: Partial<Preferences> = {}): Preferences => ({ ...defaultPreferences, layers: defaultLayers(), openrouterModel: 'a/haiku', ...changes });
-function deps(call: DecideCall, changes: Partial<Preferences> = {}, local = false): DecisionDeps & { listed: ReturnType<typeof vi.fn> } {
+function deps(call: DecideCall, changes: Partial<Preferences> = {}, local = false, adapter?: string): DecisionDeps & { listed: ReturnType<typeof vi.fn> } {
   const listed = vi.fn().mockResolvedValue({ items: [rent, water, standup], total: 3, next_offset: null });
   return {
-    preferences: preferences(changes), target: { model: 'a/haiku', endpoint: null, local },
+    preferences: preferences(changes), target: { model: 'a/haiku', endpoint: local ? 'http://127.0.0.1:8080/v1' : null, local, ...(adapter ? { adapter } : {}) },
     schedules: { list: listed } as never, memories: { search: vi.fn().mockResolvedValue({ items: [rajesh], total: 1, next_offset: null, kind: 'personal_fact' }) } as never,
     ready: vi.fn().mockResolvedValue(undefined), call: () => call, listed,
   };
@@ -314,15 +315,26 @@ describe('fallback to the regex router', () => {
     expect(await run(message, call)).toMatchObject({ type: 'schedule_create' });
     expect(call).toHaveBeenCalledOnce();
   });
-  it('never calls the cloud in local-only mode, with the layer off, on a local target or in sample mode', async () => {
-    for (const [changes, local] of [[{ localOnly: true }, true], [{ decideEnabled: false }, false], [{}, true], [{ sampleMode: true }, false]] as const) {
+  it('never calls the model with the layer off or in sample mode', async () => {
+    for (const changes of [{ decideEnabled: false }, { sampleMode: true }]) {
       const call = fake({ [message]: good });
-      const d = deps(call, changes, local);
+      const d = deps(call, changes, true);
       expect(await decideWrite(message, [], routing, routeIntent(message, routing), d)).toBeNull();
       expect(call).not.toHaveBeenCalled();
       expect(d.ready).not.toHaveBeenCalled();
       expect(d.listed).not.toHaveBeenCalled();
     }
+  });
+  it('runs on the local model, also in local-only mode, with more time to load', async () => {
+    const call = fake({ [message]: good });
+    expect(await decideWrite(message, [], routing, routeIntent(message, routing), deps(call, { localOnly: true }, true))).toMatchObject({ type: 'schedule_create' });
+    expect(call).toHaveBeenCalledWith(expect.objectContaining({ system: DECIDE_SYSTEM_PROMPT, timeoutMs: DECIDE_LOCAL_TIMEOUT_MS }));
+    expect(DECIDE_LOCAL_TIMEOUT_MS).toBeGreaterThan(DECIDE_TIMEOUT_MS);
+  });
+  it('gives the fine-tuned routing adapter the one-line prompt it was trained with', async () => {
+    const call = fake({ [message]: good });
+    await decideWrite(message, [], routing, routeIntent(message, routing), deps(call, {}, true, '/adapters/routing'));
+    expect(call).toHaveBeenCalledWith(expect.objectContaining({ system: ROUTER_SHORT_PROMPT }));
   });
   it('falls back when the call fails, returns prose, or returns invalid JSON', async () => {
     for (const result of [() => Promise.reject(new Error('HTTP 500')), () => Promise.resolve('Sure, reminder set!'), () => Promise.resolve('{not json'), () => Promise.resolve({ action: 'delete_everything' }), () => Promise.resolve(null)]) {

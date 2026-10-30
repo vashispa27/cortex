@@ -1,7 +1,7 @@
 import type { ChatAction, PendingIntent } from "./intent";
 import type { MemoryHit } from "./api";
 
-export type Page = "today" | "timeline" | "ask" | "memories" | "scheduled" | "agents" | "settings";
+export type Page = "today" | "timeline" | "ask" | "memories" | "scheduled" | "agents" | "jobs" | "settings";
 
 export type SettingsPage =
   | "account"
@@ -31,6 +31,8 @@ export type ChatMessage = {
   pendingIntent?: PendingIntent;
   /** Buttons under this message (Undo, Confirm, Cancel); removed once one has been used. */
   actions?: ChatAction[];
+  /** The long-running agent this message started; the chat shows its live state. */
+  agentJobId?: string;
   /** A visible note about the excerpt, for example that it was cut. */
   note?: string;
 };

@@ -1,10 +1,10 @@
 #!/bin/bash
-# Run the gold set on the contextual archive with several OpenRouter models, one after another,
+# Run the gold set on the structure-aware archive with several OpenRouter models, one after another,
 # judged by Jev each time. Edit MODELS to change the lineup. A failed model does not stop the rest.
 #   evals/run-models.sh           # all questions for every model
 #   evals/run-models.sh 20        # first 20 questions each (smoke test)
 cd "$(dirname "$0")/.."
-export EVAL_ARCHIVE="${EVAL_ARCHIVE:-$HOME/Library/Application Support/Cortex/eval-memory-context-haiku}"
+export EVAL_ARCHIVE="${EVAL_ARCHIVE:-$HOME/Library/Application Support/Cortex/eval-memory-segments}"
 MODELS=(
   anthropic/claude-haiku-5.5            # closed, cheap Anthropic
   openai/gpt-4.1-nano                   # closed, cheap OpenAI

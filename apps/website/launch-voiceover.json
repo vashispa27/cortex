@@ -1,0 +1,38 @@
+[
+  {
+    "scene": "notch",
+    "start": 0,
+    "end": 5,
+    "text": "Meet Cortex. A super brain that lives in your Mac notch."
+  },
+  {
+    "scene": "recall",
+    "start": 5,
+    "end": 13,
+    "text": "Ask Cortex what someone said, find a forgotten detail, and get back to the original conversation."
+  },
+  {
+    "scene": "remember",
+    "start": 13,
+    "end": 19,
+    "text": "Tell it what matters, and save a permanent memory for later."
+  },
+  {
+    "scene": "local",
+    "start": 19,
+    "end": 26,
+    "text": "Cortex captures available text across your screen, building local context for you and your agents."
+  },
+  {
+    "scene": "handoff",
+    "start": 26,
+    "end": 37,
+    "text": "It's also a shared task manager. Hit your limit in Codex? Open Claude. Your tasks, progress, and handoff notes are ready to continue."
+  },
+  {
+    "scene": "end",
+    "start": 37,
+    "end": 42,
+    "text": "One local-first memory. For you and your agents. Completely open source."
+  }
+]

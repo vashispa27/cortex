@@ -175,3 +175,10 @@ The deterministic suite has no Docker or provider dependency. Docker/Postgres in
 ## Limits and current scope
 
 The first vertical slice is deliberately conservative: Markdown artifacts, deterministic fake fixtures, one recruiter/resume workflow, and API-event reminder delivery. It does not yet render PDF, ingest arbitrary binary uploads, perform full HTML extraction in the graph, send notifications, or provide a hardened arbitrary-code sandbox. The supplied master resume remains authoritative—v1 adds a labelled alignment note instead of rewriting claims. These limitations are explicit rather than being hidden behind a generic “agent.”
+
+## Cortex desktop app
+
+The desktop **Agents** page (and the notch's **Spawn agent** button) talk to this service through the app shell at
+`http://127.0.0.1:8790` (override with `CORTEX_AGENT_API_URL`). The shell reads the bearer token from `CORTEX_AGENT_API_TOKEN`,
+else from `agent-api.token` in Cortex's app-support folder, else the development default. Start the service with
+`uv run cortex-agent-api` first; the page shows "agent service is not running" otherwise.

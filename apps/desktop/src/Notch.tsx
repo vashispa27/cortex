@@ -1,12 +1,15 @@
 import { AnswerContent, AnswerSourceLabel } from "./components/AnswerContent";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { CornerDownLeft, Maximize2, Pause, Play, Plus, Settings2, X } from "lucide-react";
+import { Bot, CornerDownLeft, Paperclip, Maximize2, Pause, Play, Plus, Settings2, X } from "lucide-react";
 import { listen } from "@tauri-apps/api/event";
 import { desktopRuntime, getServiceSettings, setEvalCapture } from "./lib/api";
 import { demoSearch } from "./lib/demo";
 import { answerCortex, runAction } from "./lib/answer";
 import type { ChatAction } from "./lib/intent";
 import ChatActions from "./components/ChatActions";
+import { agentService, documentFrom, type AgentDocument } from "./lib/agents";
+import { loadNotchDraft, saveNotchDraft } from "./lib/notch-draft";
+import AgentChatCard from "./components/AgentChatCard";
 import { loadPreferences } from "./lib/storage";
 import { configureNotchDisplay, configureCortexTrigger, configureTestMode, focusNotch, openMain, restorePreviousApp, setNotchMode, setNotchVisible, showNotchContextMenu, writeActiveSession, type NotchMode } from "./lib/notch";
 import {
@@ -35,13 +38,13 @@ function SelectionQuote({ message }: { message: ChatMessage }) {
   </div>;
 }
 
-function CortexThread({ session, busy, onAction }: { session: CortexSession; busy: boolean; onAction: (index: number, action: ChatAction) => void }) {
+function CortexThread({ session, busy, onAction, onOpenAgent }: { session: CortexSession; busy: boolean; onAction: (index: number, action: ChatAction) => void; onOpenAgent: () => void }) {
   return <>
     {session.messages.map((message, index) => message.role === "user"
       ? <div className="cortex-message user" key={`${session.id}-${index}`}>{message.kind === "summarize" ? <SelectionQuote message={message} /> : <div className="cortex-user-bubble">{message.body}</div>}</div>
       : <div className="cortex-message assistant" key={`${session.id}-${index}`}>
         <span className="cortex-message-mark"><CortexMark /></span>
-        <div className="cortex-assistant-body"><AnswerSourceLabel source={message.source} /><AnswerContent text={message.body} />{message.actions?.length ? <ChatActions actions={message.actions} disabled={busy} onRun={(action) => onAction(index, action)} /> : null}</div>
+        <div className="cortex-assistant-body"><AnswerSourceLabel source={message.source} /><AnswerContent text={message.body} />{message.agentJobId && <AgentChatCard jobId={message.agentJobId} onOpen={onOpenAgent} />}{message.actions?.length ? <ChatActions actions={message.actions} disabled={busy} onRun={(action) => onAction(index, action)} /> : null}</div>
       </div>)}
     {busy && <div className="cortex-message assistant"><span className="cortex-message-mark"><CortexMark processing /></span><div className="cortex-assistant-body cortex-typing"><span /><span /><span /></div></div>}
   </>;
@@ -54,11 +57,19 @@ export default function NotchApp() {
   const [mode, setMode] = useState<NotchMode>(initialMode);
   const [sessions, setSessions] = useState<CortexSession[]>(loadSessions);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
-  const [input, setInput] = useState("");
-  const [historyInput, setHistoryInput] = useState("");
+  const [initialDraft] = useState(loadNotchDraft);
+  const [input, setInput] = useState(initialDraft.input);
+  const [historyInput, setHistoryInput] = useState(initialDraft.historyInput);
+  const [files, setFiles] = useState<AgentDocument[]>(initialDraft.files);
+  const [attachError, setAttachError] = useState("");
+  const [newHistoryChat, setNewHistoryChat] = useState(false);
+  const pickerRef = useRef(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [busySessionId, setBusySessionId] = useState<string | null>(null);
   const [tapCount, setTapCount] = useState(0);
+  // Agent mode: the next message starts a long-running agent instead of asking memory.
+  const [agentMode, setAgentMode] = useState(initialDraft.agent);
   // Test mode (Settings): searches use the separate eval archive and this button records into it.
   const [testMode, setTestMode] = useState(false);
   const [evalRecording, setEvalRecording] = useState(false);
@@ -79,6 +90,9 @@ export default function NotchApp() {
   const activeSession = sessions.find((session) => session.id === activeSessionId) ?? null;
   const effectiveMode: NotchMode = (mode === "answer" || mode === "thinking") && !activeSession ? "compose" : mode;
   const trigger = triggerSymbol(preferences.cortexTrigger);
+  // The bigger chat view is for conversation; agent mode (and its attachments) lives in the bar and answer panel.
+  const agent = agentMode && effectiveMode !== "history";
+  useEffect(() => { saveNotchDraft({ input, historyInput, agent: agentMode, files }); }, [input, historyInput, agentMode, files]);
 
   const commit = (session: CortexSession) => {
     setSessions(commitSession(session));
@@ -88,8 +102,7 @@ export default function NotchApp() {
     hotkeyRef.current = false;
     setMode("collapsed");
     setActiveSessionId(null);
-    setInput("");
-    setHistoryInput("");
+    setNewHistoryChat(false);
     setTapCount(0);
   };
 
@@ -103,14 +116,13 @@ export default function NotchApp() {
     hotkeyRef.current = source === "hotkey";
     setTapCount(0);
     setActiveSessionId(null);
-    setInput("");
-    setHistoryInput("");
     setMode("compose");
   };
 
   const openHistory = () => {
     if (busyRef.current) return;
     hotkeyRef.current = false;
+    setNewHistoryChat(false);
     setMode("history");
     setActiveSessionId((current) => {
       const list = sessionsRef.current;
@@ -130,6 +142,8 @@ export default function NotchApp() {
     void openMain("ask");
   };
 
+  const openAgents = () => { collapseOnly(); void openMain("jobs"); };
+
   const toggleChat = () => {
     if (effectiveMode === "history") closeDrop();
     else openHistory();
@@ -144,10 +158,12 @@ export default function NotchApp() {
   const submitQuestion = async (raw: string, target: "bar" | "history") => {
     const question = raw.trim();
     if (!question || busyRef.current) return;
+    if (agent) { await spawnInChat(question, target); return; }
     const useExisting = target === "history" || (target === "bar" && effectiveMode === "answer");
     const base = useExisting ? activeSession : null;
     const session = base ? appendMessage(base, { role: "user", body: question }) : newSession(question);
     if (!base) setActiveSessionId(session.id);
+    setNewHistoryChat(false);
     commit(session);
     setBusy(true);
     busyRef.current = true;
@@ -198,6 +214,40 @@ export default function NotchApp() {
       busyRef.current = false;
       setBusySessionId(null);
     }
+  };
+
+  const pickFiles = () => { pickerRef.current = true; fileInputRef.current?.click(); };
+  const attachFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const picked = [...(event.target.files ?? [])];
+    event.target.value = "";
+    window.setTimeout(() => { pickerRef.current = false; }, 400);
+    try {
+      const added = await Promise.all(picked.map(async (file) => documentFrom(file.name, await file.text(), file.type)));
+      setFiles((old) => [...old, ...added].slice(0, 20)); setAttachError("");
+    } catch (reason) { setAttachError(reason instanceof Error ? reason.message : String(reason)); }
+    void focusNotch();
+  };
+  const startHistoryChat = () => { setNewHistoryChat(true); setActiveSessionId(null); };
+
+  /** Starts a long-running agent from the chat; its card then tracks it in place. */
+  const spawnInChat = async (question: string, target: "bar" | "history") => {
+    const useExisting = target === "history" || (target === "bar" && effectiveMode === "answer");
+    const base = useExisting ? activeSession : null;
+    const session = base ? appendMessage(base, { role: "user", body: question }) : newSession(question);
+    if (!base) setActiveSessionId(session.id);
+    commit(session);
+    const documents = files;
+    setInput(""); setHistoryInput(""); setFiles([]);
+    if (target === "bar") setMode((current) => current === "compose" ? "answer" : current);
+    busyRef.current = true; setBusy(true); setBusySessionId(session.id);
+    try {
+      const job = await agentService.spawn({ task: question, documents });
+      commit(appendMessage(session, { role: "assistant", body: "Agent started. It will plan first and wait for your approval before using tools.", agentJobId: job.task_id }));
+    } catch (reason) {
+      commit(appendMessage(session, { role: "assistant", body: `Could not start an agent: ${reason instanceof Error ? reason.message : String(reason)}` }));
+      // Nothing was sent, so give the text and files back.
+      setInput((current) => current || question); setFiles((current) => current.length ? current : documents);
+    } finally { busyRef.current = false; setBusy(false); setBusySessionId(null); }
   };
 
   // Undo / Confirm / Cancel under a message: run it, drop the buttons, and show what happened.
@@ -265,9 +315,10 @@ export default function NotchApp() {
   useEffect(() => {
     if (effectiveMode !== "compose" && effectiveMode !== "answer" && effectiveMode !== "history") return;
     let focused = document.hasFocus();
-    const onFocus = () => { focused = true; };
+    const onFocus = () => { focused = true; window.setTimeout(() => { pickerRef.current = false; }, 400); };
     const onBlur = () => {
-      if (!focused) return;
+      // The file picker takes focus from the notch; that is not clicking away.
+      if (!focused || pickerRef.current) return;
       focused = false;
       actionsRef.current.closeDrop();
     };
@@ -284,16 +335,16 @@ export default function NotchApp() {
       const timer = window.setTimeout(() => inputRef.current?.focus(), 90);
       return () => window.clearTimeout(timer);
     }
-    if (effectiveMode === "history" && activeSessionId) {
+    if (effectiveMode === "history" && (activeSessionId || newHistoryChat)) {
       const timer = window.setTimeout(() => historyInputRef.current?.focus(), 90);
       return () => window.clearTimeout(timer);
     }
-  }, [effectiveMode, activeSessionId]);
+  }, [effectiveMode, activeSessionId, newHistoryChat]);
 
   useEffect(() => {
-    if (effectiveMode !== "history") return;
+    if (effectiveMode !== "history" || newHistoryChat) return;
     setActiveSessionId((current) => current && sessions.some((session) => session.id === current) ? current : sessions[0]?.id ?? null);
-  }, [effectiveMode, sessions]);
+  }, [effectiveMode, sessions, newHistoryChat]);
 
   useEffect(() => {
     const element = answerScrollRef.current;
@@ -395,20 +446,23 @@ export default function NotchApp() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const shell = <div className="cortex-window" data-reduce-motion={preferences.reduceMotion} data-busy={busy} data-mode={effectiveMode} data-tap={tapCount > 0 ? "true" : "false"}
+  const shell = <div className="cortex-window" data-reduce-motion={preferences.reduceMotion} data-busy={busy} data-mode={effectiveMode} data-agent={agent} data-tap={tapCount > 0 ? "true" : "false"}
     onContextMenu={(event) => {
       if (!desktopRuntime() || isPreview) return;
       event.preventDefault();
       void showNotchContextMenu(event.clientX, event.clientY);
     }}>
+    <input ref={fileInputRef} type="file" multiple hidden accept=".txt,.md,.csv,.json,.log,text/*" onChange={(event) => void attachFiles(event)} />
     <div className="cortex-bar">
       <button type="button" className="cortex-brand" onClick={handleBrand} aria-label={effectiveMode === "compose" ? "Close Cortex" : "Start a new chat"}>
-        <CortexMark processing={busy} />
+        <CortexMark processing={busy} electric={agent} />
         {tapCount > 0 && <span className="cortex-tap-badge">{trigger} × {tapCount}</span>}
       </button>
 
       {effectiveMode === "compose" && <form className="cortex-compose" onSubmit={submitBar}>
-        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} aria-label="Ask Cortex" placeholder={sample ? "Ask Cortex in sample memory…" : "Ask Cortex…"} />
+        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} aria-label="Ask Cortex" placeholder={agent ? "Describe a job for an agent…" : sample ? "Ask Cortex in sample memory…" : "Ask Cortex…"} />
+        <button type="button" className="cortex-agent-btn" data-on={agentMode} aria-pressed={agentMode} aria-label="Agent mode" title="Agent mode: start a long-running agent" onClick={() => setAgentMode((on) => !on)}><Bot size={12} /></button>
+        {agent && <button type="button" className="cortex-icon cortex-attach" aria-label="Attach files" title={files.length ? `Attached: ${files.map((f) => f.name).join(", ")}` : "Attach text files for the agent"} onClick={pickFiles}><Paperclip size={13} />{files.length > 0 && <b>{files.length}</b>}</button>}
         <button type="submit" className="cortex-enter" aria-label="Send to Cortex" title="Enter" disabled={!input.trim() || busy}><CornerDownLeft size={13} /></button>
       </form>}
 
@@ -446,52 +500,49 @@ export default function NotchApp() {
       <header className="cortex-panel-head">
         <div><span className="cortex-eyebrow">Cortex answer</span><h2>{activeSession.title}</h2></div>
         <div className="cortex-actions">
+          <button type="button" className="cortex-agent-btn" data-on={agentMode} aria-pressed={agentMode} aria-label="Agent mode" title={agentMode ? "Agent mode on: your next message starts a long-running agent" : "Turn on agent mode to start a long-running agent"} onClick={() => setAgentMode((on) => !on)}><Bot size={12} /> Agent</button>
           <button type="button" className="cortex-icon" aria-label="Expand chat" title="Open in full window" onClick={undock}><Maximize2 size={13} /></button>
           <button type="button" className="cortex-icon" aria-label="Close Cortex" title="Close" onClick={closeDrop}><X size={13} /></button>
         </div>
       </header>
       <div className="cortex-thread-scroll" ref={answerScrollRef}>
-        <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} onAction={runMessageAction} />
+        <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} onAction={runMessageAction} onOpenAgent={openAgents} />
       </div>
       <footer className="cortex-panel-foot">
         <span>{sample ? "Sample workspace" : testMode ? "Test mode · eval archive" : "Your memory"}</span>
         <button type="button" onClick={openHistory}><CortexChatMark /> All chats</button>
       </footer>
+      {agent && (files.length > 0 || attachError) && <div className="cortex-chips">{files.map((file) => <span key={file.name} className="cortex-chip">{file.name}<button type="button" aria-label={`Remove ${file.name}`} onClick={() => setFiles((old) => old.filter((f) => f !== file))}>×</button></span>)}{attachError && <small className="cortex-agent-error">{attachError}</small>}</div>}
       <form className="cortex-history-form cortex-answer-form" onSubmit={submitBar}>
-        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label="Ask a follow-up" placeholder="Ask a follow-up…" />
+        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label="Ask a follow-up" placeholder={agent ? "Describe a job for an agent…" : "Ask a follow-up…"} />
+        {agent && <button type="button" className="cortex-icon cortex-attach" aria-label="Attach files" title={files.length ? `Attached: ${files.map((f) => f.name).join(", ")}` : "Attach text files for the agent"} onClick={pickFiles}><Paperclip size={13} />{files.length > 0 && <b>{files.length}</b>}</button>}
         <button type="submit" className="cortex-enter" aria-label="Send follow-up" title="Enter" disabled={!input.trim() || busy}><CornerDownLeft size={13} /></button>
       </form>
     </section>}
 
     {effectiveMode === "history" && <section className="cortex-history-panel">
       <aside className="cortex-session-list">
-        <div className="cortex-session-head"><span className="cortex-eyebrow">Chats</span><button type="button" className="cortex-icon" aria-label="New chat" title="New chat" onClick={() => startNewCortex("mouse")}><Plus size={13} /></button></div>
+        <div className="cortex-session-head"><span className="cortex-eyebrow">Chats</span><button type="button" className="cortex-icon" aria-label="New chat" title="New chat" onClick={startHistoryChat}><Plus size={13} /></button></div>
         <div className="cortex-session-scroll">
-          {sessions.length ? sessions.map((session) => <button type="button" className={`cortex-session ${session.id === activeSessionId ? "active" : ""}`} key={session.id} onClick={() => setActiveSessionId(session.id)}>
+          {sessions.length ? sessions.map((session) => <button type="button" className={`cortex-session ${session.id === activeSessionId ? "active" : ""}`} key={session.id} onClick={() => { setNewHistoryChat(false); setActiveSessionId(session.id); }}>
             <strong>{session.title}</strong>
             <small>{sessionTime(session.updatedAt)} · {session.messages.length} {session.messages.length === 1 ? "message" : "messages"}</small>
           </button>) : <p className="cortex-empty-small">No chats yet.</p>}
         </div>
       </aside>
       <div className="cortex-history-thread">
-        {activeSession ? <>
-          <header className="cortex-thread-head">
-            <div><span className="cortex-eyebrow">Chat</span><h2>{activeSession.title}</h2></div>
-            <span className="cortex-pill">{sessionTime(activeSession.updatedAt)}</span>
-          </header>
-          <div className="cortex-thread-scroll" ref={historyScrollRef}>
-            <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} onAction={runMessageAction} />
-          </div>
-          <form className="cortex-history-form" onSubmit={submitHistory}>
-            <input ref={historyInputRef} value={historyInput} onChange={(event) => setHistoryInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label="Ask a follow-up" placeholder="Ask a follow-up…" />
-            <button type="submit" className="cortex-enter" aria-label="Send follow-up" title="Enter" disabled={!historyInput.trim() || busy}><CornerDownLeft size={13} /></button>
-          </form>
-        </> : <div className="cortex-history-empty">
-          <CortexMark />
-          <h2>No chat selected</h2>
-          <p>Start a new chat or pick a chat on the left.</p>
-          <button type="button" className="cortex-primary" onClick={() => startNewCortex("mouse")}>Start a chat</button>
-        </div>}
+        <header className="cortex-thread-head">
+          <div><span className="cortex-eyebrow">Chat</span><h2>{activeSession ? activeSession.title : "New chat"}</h2></div>
+          {activeSession && <span className="cortex-pill">{sessionTime(activeSession.updatedAt)}</span>}
+        </header>
+        <div className="cortex-thread-scroll" ref={historyScrollRef}>
+          {activeSession ? <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} onAction={runMessageAction} onOpenAgent={openAgents} />
+            : <div className="cortex-history-empty"><CortexMark /><h2>New chat</h2><p>Ask about what you have seen, or pick a chat on the left.</p></div>}
+        </div>
+        <form className="cortex-history-form" onSubmit={submitHistory}>
+          <input ref={historyInputRef} value={historyInput} onChange={(event) => setHistoryInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label={activeSession ? "Ask a follow-up" : "Ask Cortex"} placeholder={activeSession ? "Ask a follow-up…" : "Ask Cortex…"} />
+          <button type="submit" className="cortex-enter" aria-label="Send" title="Enter" disabled={!historyInput.trim() || busy}><CornerDownLeft size={13} /></button>
+        </form>
       </div>
     </section>}
   </div>;

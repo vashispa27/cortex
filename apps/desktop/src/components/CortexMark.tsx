@@ -23,7 +23,7 @@ export const BRAIN_TRACES: { d: string; node: [number, number] }[] = [
  * brain lights up and bright signals race along the traces, faster the longer
  * the work runs.
  */
-export default function CortexMark({ className = "", processing = false }: { className?: string; processing?: boolean }) {
+export default function CortexMark({ className = "", processing = false, electric = false }: { className?: string; processing?: boolean; electric?: boolean }) {
   const id = `cortex-${useId().replaceAll(":", "")}`;
   const root = useRef<HTMLSpanElement>(null);
   const intensity = useRef(0);
@@ -41,30 +41,32 @@ export default function CortexMark({ className = "", processing = false }: { cla
         path.style.strokeDashoffset = offset.toFixed(4);
       });
     };
+    // Electric: an orange current keeps flowing at a steady pace (agent mode), without the processing ramp.
+    const target = processing ? 1 : electric ? 0.7 : 0;
     if (reduced) {
-      paint(processing ? 1 : 0, 0.2);
+      paint(target, 0.2);
       return;
     }
     let frame = 0;
     let last = performance.now();
     let phase = 0;
-    if (processing) intensity.current = Math.max(intensity.current, 0.25);
+    if (target > 0) intensity.current = Math.max(intensity.current, processing ? 0.25 : target);
     const step = (now: number) => {
       const dt = Math.min(0.25, (now - last) / 1000);
       last = now;
       // Ramp up slowly while working so the signals visibly accelerate; relax quickly afterwards.
-      intensity.current += ((processing ? 1 : 0) - intensity.current) * (1 - Math.exp(-dt / (processing ? 1.1 : 0.35)));
+      intensity.current += (target - intensity.current) * (1 - Math.exp(-dt / (processing ? 1.1 : 0.35)));
       const level = intensity.current;
       phase += dt * (0.25 + 5.5 * level * level);
       paint(level, phase);
-      if (processing || level > 0.01) frame = requestAnimationFrame(step);
+      if (target > 0 || level > 0.01) frame = requestAnimationFrame(step);
       else paint(0, 0);
     };
     frame = requestAnimationFrame(step);
     return () => cancelAnimationFrame(frame);
-  }, [processing]);
+  }, [processing, electric]);
 
-  return <span ref={root} className={`cortex-mark ${processing ? "is-processing" : ""} ${className}`.trim()} aria-hidden="true">
+  return <span ref={root} className={`cortex-mark ${processing ? "is-processing" : ""} ${electric ? "is-electric" : ""} ${className}`.trim()} aria-hidden="true">
     <svg viewBox="0 0 100 76" focusable="false">
       <defs>
         <radialGradient id={`${id}-halo`} cx=".48" cy=".4" r=".62">

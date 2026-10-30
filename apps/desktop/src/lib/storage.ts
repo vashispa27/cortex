@@ -2,7 +2,7 @@ export type CortexTrigger = "rightOption" | "leftOption" | "fn" | "rightShift" |
 
 export type AiProvider = "openrouter" | "local";
 
-/** The model-backed steps, each of which can run in the cloud or on this Mac on its own. */
+/** The model-backed steps. Only answers may use the cloud; the steps below them run on this Mac (provider.ts). */
 export type LayerId = "answer" | "followup" | "decide" | "context";
 /** `default` follows the global provider. */
 export type LayerProvider = "default" | "cloud" | "local";
@@ -56,6 +56,9 @@ export type Preferences = {
   aiProvider: AiProvider;
   localEndpoint: string;
   localModel: string;
+  /** Folder of the LoRA adapter fine-tuned for routing (evals/routing/adapters/...), used for routing and
+   * follow-up rewrites; empty uses the plain local model. */
+  routingAdapter: string;
 };
 
 export const defaultPreferences: Preferences = {
@@ -87,6 +90,7 @@ export const defaultPreferences: Preferences = {
   aiProvider: "openrouter",
   localEndpoint: "http://127.0.0.1:8080/v1",
   localModel: "",
+  routingAdapter: "",
 };
 
 const key = "cortex.desktop.preferences.v1";

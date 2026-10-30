@@ -1,4 +1,3 @@
-import { layerIsLocal } from "./provider";
 import type { LayerId, Preferences } from "./storage";
 import type { ServiceSettings } from "./api";
 
@@ -12,31 +11,17 @@ export const LAYERS: readonly LayerInfo[] = [
   { id: "context", title: "Contextual indexing", sends: "Every newly captured page and its chunks, once, when they are saved. This is the most text any step sends. It also slows capture." },
 ];
 
-export type Where = { id: LayerId; title: string; where: "cloud" | "local" | "off"; model: string; sends: string };
-
-/** Where each step runs right now, for the "what leaves this Mac" summary. */
-export function whereEachStepRuns(preferences: Preferences, contextOn = preferences.contextEnabled): Where[] {
-  return LAYERS.map((info) => {
-    const local = layerIsLocal(preferences, info.id);
-    const choice = preferences.layers[info.id];
-    const model = local ? choice.localModel.trim() || preferences.localModel.trim() : choice.cloudModel.trim() || preferences.openrouterModel.trim();
-    // A local decision model is not wired up yet, so the step is off (the regex router handles chat) whenever it would run on this Mac.
-    const off = (info.id === "context" && !contextOn) || (info.id === "decide" && (!preferences.decideEnabled || local));
-    return { id: info.id, title: info.title, where: off ? "off" : local ? "local" : "cloud", model, sends: info.sends };
-  });
-}
-
 /** The engine runs contextual indexing itself, so it needs this slice of the settings. */
 export function engineSettingsFor(preferences: Preferences): Pick<ServiceSettings, "local_only" | "context_enabled" | "context_provider" | "context_cloud_model" | "context_local_model" | "local_endpoint"> {
   const context = preferences.layers.context;
-  const choice = context.provider === "default" ? preferences.aiProvider : context.provider;
   return {
     local_only: preferences.localOnly,
     context_enabled: preferences.contextEnabled,
-    context_provider: choice === "local" ? "local" : "cloud",
+    // Contextual indexing always runs on this Mac.
+    context_provider: "local",
     context_cloud_model: context.cloudModel.trim(),
-    // The local server is usually running one model, so a step with none of its own uses the default local model.
-    context_local_model: context.localModel.trim() || preferences.localModel.trim(),
+    // Every step below answers uses the one local model.
+    context_local_model: preferences.localModel.trim(),
     local_endpoint: preferences.localEndpoint.trim(),
   };
 }

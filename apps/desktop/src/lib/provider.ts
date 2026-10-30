@@ -1,12 +1,17 @@
 import { invoke } from "@tauri-apps/api/core";
 import type { LayerId, Preferences } from "./storage";
 
-/** Which model a request goes to. `endpoint` is null for OpenRouter and the server's base URL for a local model. */
-export type AiTarget = { model: string; endpoint: string | null; local: boolean };
+/** The steps below answers. They always run on the local model, whatever the settings say. */
+export const LOCAL_ONLY_LAYERS: readonly LayerId[] = ["followup", "decide", "context"];
 
-/** Where one step runs: its own choice, else the global provider; "local only" overrides everything. */
+/** Which model a request goes to. `endpoint` is null for OpenRouter and the server's base URL for a local
+ * model. `adapter` is a LoRA folder the local server applies to this request only. */
+export type AiTarget = { model: string; endpoint: string | null; local: boolean; adapter?: string };
+
+/** Where one step runs: the steps below answers always run on this Mac; answers follow their own choice,
+ * else the global provider; "local only" overrides everything. */
 export function layerIsLocal(preferences: Preferences, layer: LayerId): boolean {
-  if (preferences.localOnly) return true;
+  if (preferences.localOnly || LOCAL_ONLY_LAYERS.includes(layer)) return true;
   const choice = preferences.layers[layer].provider;
   return (choice === "default" ? preferences.aiProvider : choice === "local" ? "local" : "openrouter") === "local";
 }
@@ -15,7 +20,11 @@ export function layerIsLocal(preferences: Preferences, layer: LayerId): boolean 
 export function aiTarget(preferences: Preferences, layer: LayerId = "answer"): AiTarget {
   const choice = preferences.layers[layer];
   if (layerIsLocal(preferences, layer)) {
-    return { model: choice.localModel.trim() || preferences.localModel.trim(), endpoint: preferences.localEndpoint.trim() || null, local: true };
+    // The routing adapter also rewrites follow-ups, so both run on one loaded model with no reload between them.
+    const adapter = layer === "decide" || layer === "followup" ? preferences.routingAdapter.trim() : "";
+    // The steps below answers share the one local model, so the server never has to load a second one.
+    const model = LOCAL_ONLY_LAYERS.includes(layer) ? preferences.localModel.trim() : choice.localModel.trim() || preferences.localModel.trim();
+    return { model, endpoint: preferences.localEndpoint.trim() || null, local: true, ...(adapter ? { adapter } : {}) };
   }
   return { model: choice.cloudModel.trim() || preferences.openrouterModel.trim(), endpoint: null, local: false };
 }

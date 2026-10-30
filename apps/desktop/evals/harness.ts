@@ -35,7 +35,8 @@ export const PRIVATE = join(REPO, "evals/private");
 export const GOLD = process.env.EVAL_GOLD ?? join(PRIVATE, "gold.jsonl");
 
 const REAL_ROOT = join(homedir(), "Library/Application Support/Cortex");
-const ARCHIVE = process.env.EVAL_ARCHIVE ?? join(REAL_ROOT, "eval-memory");
+// Structure-aware chunks are the eval baseline; eval-memory stays only as the raw source they are built from.
+const ARCHIVE = process.env.EVAL_ARCHIVE ?? join(REAL_ROOT, "eval-memory-segments");
 const ENGINE_BIN = process.env.EVAL_ENGINE_BIN ?? join(REPO, "target/release/cortex");
 const BRIDGE_BIN = process.env.EVAL_BRIDGE_BIN ?? join(REPO, "apps/desktop/src-tauri/target/release/examples/eval_bridge");
 

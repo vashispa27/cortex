@@ -324,17 +324,23 @@ export interface DecideRequest { system: string; context: string; message: strin
 /** Returns the `decide` call's arguments. The desktop binds this to the `decide_intent` command; tests pass a fake. */
 export type DecideCall = (request: DecideRequest) => Promise<unknown>;
 export const DECIDE_TIMEOUT_MS = 6_000;
+/** A local model may first have to load (or swap in its routing adapter), which takes a few seconds. */
+export const DECIDE_LOCAL_TIMEOUT_MS = 15_000;
+
+/** The system prompt for the local model fine-tuned on evals/routing/train.jsonl. It learned the rules from
+ * examples, so it gets one line instead of DECIDE_SYSTEM_PROMPT; the tool and context stay the same. */
+export const ROUTER_SHORT_PROMPT = "You route messages for Cortex, a personal memory app. Call the decide tool exactly once with the action for the user's latest message, using the context.";
 
 /**
  * One decision. `null` means “use the regex router”: the message is vetoed as discussion, the call failed or
  * timed out, or the output did not validate. Nothing is written from an output that did not validate.
  */
-export async function decide(message: string, ctx: DecisionContext, call: DecideCall, timeoutMs = DECIDE_TIMEOUT_MS): Promise<Intent | 'answer' | null> {
+export async function decide(message: string, ctx: DecisionContext, call: DecideCall, timeoutMs = DECIDE_TIMEOUT_MS, system = DECIDE_SYSTEM_PROMPT): Promise<Intent | 'answer' | null> {
   if (isDiscussion(message)) return null;
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     const result = await Promise.race([
-      call({ system: DECIDE_SYSTEM_PROMPT, context: buildContext(ctx), message, tool: DECIDE_TOOL, timeoutMs }),
+      call({ system, context: buildContext(ctx), message, tool: DECIDE_TOOL, timeoutMs }),
       new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error('decision timed out')), timeoutMs + 1_000); }),
     ]);
     return resolveDecision(result, ctx, message);

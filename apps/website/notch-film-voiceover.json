@@ -1,0 +1,38 @@
+[
+  {
+    "scene": "open",
+    "start": 0,
+    "end": 7,
+    "text": "Meet Cortex. It lives in your Mac's notch. Click it, and ask anything."
+  },
+  {
+    "scene": "capture",
+    "start": 7,
+    "end": 16,
+    "text": "All day, Cortex reads the text on your screen, and keeps it in a private memory, right on your Mac."
+  },
+  {
+    "scene": "ask",
+    "start": 16,
+    "end": 25,
+    "text": "So it answers from what you actually saw, and shows you exactly where it came from."
+  },
+  {
+    "scene": "flags",
+    "start": 25,
+    "end": 33,
+    "text": "It also catches what you'd miss. When someone asks you for something, Cortex flags it as a to-do."
+  },
+  {
+    "scene": "agents",
+    "start": 33,
+    "end": 43,
+    "text": "And it's a shared task manager for your agents. Codex starts the work, then Claude picks it up, with the full handoff."
+  },
+  {
+    "scene": "end",
+    "start": 43,
+    "end": 50,
+    "text": "Cortex. Local-first and open source. Get it at cortex dot vashipa dot link."
+  }
+]
