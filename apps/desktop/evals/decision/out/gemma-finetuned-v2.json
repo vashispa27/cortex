@@ -1,0 +1,6772 @@
+{
+  "model": "mlx-community/gemma-4-e4b-it-4bit",
+  "adapter": "/Users/abhinavvashisht/workspace/cortex/evals/routing/adapters/gemma-4-e4b-it-4bit-v2",
+  "dataset": "/Users/abhinavvashisht/workspace/cortex/evals/routing/test.jsonl",
+  "results": [
+    {
+      "id": "r-0127",
+      "kind": "new_reminder_once",
+      "message": "Before I forget: set a reminder to download the boarding pass 70 minutes from now.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Download the boarding pass",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-11-03T11:27"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Download the boarding pass",
+        "question": "Is that 70 minutes from now?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1560
+    },
+    {
+      "id": "r-0128",
+      "kind": "new_reminder_once",
+      "message": "Airport pickup reminder please, tomorrow 04:45.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Airport pickup",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-12-01T04:45"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Airport pickup",
+        "question": "Is that 4:45am or 4:45pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1599
+    },
+    {
+      "id": "r-0129",
+      "kind": "new_reminder_once",
+      "message": "I leave on Saturday. Remind me at 6:15am that day to pack the charger.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Pack the charger",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-01-02T06:15"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Pack the charger",
+        "timing": {
+          "local_at": "2027-01-02T06:15",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2108
+    },
+    {
+      "id": "r-0130",
+      "kind": "new_reminder_once",
+      "message": "Could a reminder pop up on the 15th at 1pm for my seat selection?",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Select my seat",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-01-15T13:00"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Select a year for the reminder.",
+        "question": "What should the reminder say?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1548
+    },
+    {
+      "id": "r-0131",
+      "kind": "new_reminder_once",
+      "message": "tomorrow evening 7:40 would be good for a reminder to weigh the bag",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Weigh the bag",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-03-01T19:40"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Weigh the bag",
+        "question": "Is that 7:40am or 7:40pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1774
+    },
+    {
+      "id": "r-0132",
+      "kind": "new_reminder_once",
+      "message": "Add a reminder: collect the rail tickets, Wednesday 12:30pm.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Collect the rail tickets",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-03-31T12:30"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Collect the rail tickets",
+        "question": "Is that 12:30pmam or 12:30pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1914
+    },
+    {
+      "id": "r-0133",
+      "kind": "new_reminder_once",
+      "message": "Please nudge me about printing the hotel voucher after 85 minutes.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Print the hotel voucher",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-04-30T08:07"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Print the hotel voucher",
+        "question": "Is that 85 minutes from now?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1481
+    },
+    {
+      "id": "r-0134",
+      "kind": "new_reminder_once",
+      "message": "Tonight's 8:10pm reminder should say pack earplugs.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Pack earplugs",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-05-17T20:10"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Pack earplugs",
+        "question": "Is that 8:10pm tonight?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1684
+    },
+    {
+      "id": "r-0135",
+      "kind": "new_reminder_once",
+      "message": "For taxi confirmation, create a nudge scheduled for the 26th, 3:30pm.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Confirm the taxi",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-06-26T15:30"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Confirm taxi",
+        "timing": {
+          "local_at": "2027-06-26T15:30",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2102
+    },
+    {
+      "id": "r-0136",
+      "kind": "new_reminder_once",
+      "message": "remind me 4 hours from now about reserving the luggage locker",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Reserve the luggage locker",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-07-24T20:08"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Reserve the luggage locker",
+        "timing": {
+          "local_at": "2027-07-24T20:08",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1916
+    },
+    {
+      "id": "r-0137",
+      "kind": "new_reminder_once",
+      "message": "Make a reminder for Monday morning at 5:20 to fill the travel flask.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Fill the travel flask",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-08-23T05:20"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Fill the travel flask",
+        "question": "Is that 5:20am or 5:20pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1700
+    },
+    {
+      "id": "r-0138",
+      "kind": "new_reminder_once",
+      "message": "Tomorrow at 12:05pm I need a reminder saying exchange the torn suitcase tag.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Exchange the torn suitcase tag",
+        "timing": {
+          "type": "once",
+          "local_at": "2028-03-01T12:05"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Exchange the torn suitcase tag",
+        "timing": {
+          "local_at": "2028-03-01T12:05",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2063
+    },
+    {
+      "id": "r-0139",
+      "kind": "new_reminder_once",
+      "message": "Please put check the train platform on my reminders for Friday 7:50am.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the train platform",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-10-30T07:50"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Check the train platform",
+        "timing": {
+          "local_at": "2026-10-30T07:50",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2095
+    },
+    {
+      "id": "r-0140",
+      "kind": "new_reminder_once",
+      "message": "Give me a nudge about activating the travel SIM in 125 minutes.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Activate the travel SIM",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-09-12T08:47"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Activate the travel SIM",
+        "question": "Is that 125 minutes from now?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1565
+    },
+    {
+      "id": "r-0141",
+      "kind": "new_reminder_once",
+      "message": "early check-in needs confirming, can i have a nudge for the 4th, 6:10pm",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Confirm early check-in",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-11-04T18:10"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should I remind you to check in?",
+        "timing": {
+          "local_at": "2026-11-04T18:10",
+          "type": "once"
+        }
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2150
+    },
+    {
+      "id": "r-0142",
+      "kind": "new_reminder_once",
+      "message": "Have a reminder ready for 9:05pm tonight to freeze the ice packs.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Freeze the ice packs",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-11-30T21:05"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Freeze the ice packs",
+        "timing": {
+          "local_at": "2026-11-30T21:05",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2095
+    },
+    {
+      "id": "r-0143",
+      "kind": "new_reminder_once",
+      "message": "Could you put collect the scan films in my reminders, Thursday at 4:20pm?",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Collect the scan films",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-01-07T16:20"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Collect the scan films",
+        "timing": {
+          "local_at": "2026-12-31T16:20",
+          "type": "once"
+        }
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2205
+    },
+    {
+      "id": "r-0144",
+      "kind": "new_reminder_once",
+      "message": "Need to be reminded about the fasting instructions tomorrow 6:15am.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Read the fasting instructions",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-01-02T06:15"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Fasting instructions",
+        "question": "Is that 6:15am or 6:15pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1784
+    },
+    {
+      "id": "r-0145",
+      "kind": "new_reminder_once",
+      "message": "In 32 minutes I'd like a reminder to phone the diagnostic centre.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Phone the diagnostic centre",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-02-28T00:45"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Phone the diagnostic centre",
+        "timing": {
+          "local_at": "2027-02-28T00:45",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1999
+    },
+    {
+      "id": "r-0146",
+      "kind": "new_reminder_once",
+      "message": "Book a reminder for 11:45am on the 13th: check the appointment slip.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the appointment slip",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-04-13T11:45"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Check the appointment slip",
+        "question": "Is that 13th of April or 13th of May?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1642
+    },
+    {
+      "id": "r-0147",
+      "kind": "new_reminder_once",
+      "message": "tomorrow @ 5:35pm reminder to bring the previous x-rays pls",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Bring the previous x-rays",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-05-01T17:35"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Bring the previous x-rays",
+        "question": "Is that 5:35pmam or 5:35pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1698
+    },
+    {
+      "id": "r-0148",
+      "kind": "new_reminder_once",
+      "message": "I must ask the clinic for a receipt. Please remind me in 105 minutes.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Ask the clinic for a receipt",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-05-17T15:41"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Ask the clinic for a receipt",
+        "question": "What date and time will you be in contact with the clinic?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1717
+    },
+    {
+      "id": "r-0149",
+      "kind": "new_reminder_once",
+      "message": "A Sunday 9:40am reminder to pack the referral letter, please.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Pack the referral letter",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-06-13T09:40"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Pack the referral letter",
+        "timing": {
+          "local_at": "2027-06-06T09:40",
+          "type": "once"
+        }
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2027
+    },
+    {
+      "id": "r-0150",
+      "kind": "new_reminder_once",
+      "message": "Put a nudge at 7:55 tonight for uploading the test report.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Upload the test report",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-07-24T19:55"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Upload the test report",
+        "question": "Is that 7:55am or 7:55pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1845
+    },
+    {
+      "id": "r-0151",
+      "kind": "new_reminder_once",
+      "message": "At 10:10am on the 20th I want reminding to arrange a lift to the clinic.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Arrange a lift to the clinic",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-08-20T10:10"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Arrange a lift to the clinic",
+        "timing": {
+          "local_at": "2027-08-20T10:10",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2155
+    },
+    {
+      "id": "r-0152",
+      "kind": "new_reminder_once",
+      "message": "Remind me once, 2.5 hours from now, about confirming the eye test.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Confirm the eye test",
+        "timing": {
+          "type": "once",
+          "local_at": "2028-02-29T02:43"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Confirm the eye test",
+        "timing": {
+          "local_at": "2028-02-29T02:33",
+          "type": "once"
+        }
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": true,
+      "got": "schedule_create",
+      "latencyMs": 2090
+    },
+    {
+      "id": "r-0153",
+      "kind": "new_reminder_once",
+      "message": "Tuesday afternoon at 2:45, remind me that the lab closes early.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "The lab closes early",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-11-03T14:45"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Summarise the lab closing early",
+        "question": "Is that 2:45am or 2:45pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1872
+    },
+    {
+      "id": "r-0154",
+      "kind": "new_reminder_once",
+      "message": "can you remind me about booking physio tomorrow 8:50am",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Book physio",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-09-13T08:50"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Book physio",
+        "question": "Is that 8:50am or 8:50am?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1571
+    },
+    {
+      "id": "r-0155",
+      "kind": "new_reminder_once",
+      "message": "Please set aside a reminder for the 29th at 9:25am to check my referral status.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check my referral status",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-11-29T09:25"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Check my referral status",
+        "question": "Is that 9:25am"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1444
+    },
+    {
+      "id": "r-0156",
+      "kind": "new_reminder_once",
+      "message": "Need a ping after 14 minutes so I remember to pick up the lab envelope.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Pick up the lab envelope",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-11-30T19:37"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Pick up the lab envelope",
+        "question": "What date and time will that be?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1472
+    },
+    {
+      "id": "r-0157",
+      "kind": "new_reminder_once",
+      "message": "For tonight, add a 10:35pm reminder to lay out the hospital documents.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Lay out the hospital documents",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-12-31T22:35"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Lay out the hospital documents",
+        "timing": {
+          "local_at": "2026-12-31T22:35",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2011
+    },
+    {
+      "id": "r-0158",
+      "kind": "new_reminder_once",
+      "message": "Make Thursday 6:05am a reminder to take the appointment card.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Take the appointment card",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-01-07T06:05"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Take the appointment card",
+        "timing": {
+          "local_at": "2027-01-07T06:05",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2073
+    },
+    {
+      "id": "r-0159",
+      "kind": "new_reminder_once",
+      "message": "Add a Saturday 10:20am reminder about collecting the donation boxes.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Collect the donation boxes",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-03-06T10:20"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Collect the donation boxes",
+        "timing": {
+          "time": "10:20",
+          "type": "daily",
+          "weekdays": [
+            6
+          ]
+        }
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": true,
+      "got": "schedule_create",
+      "latencyMs": 1837
+    },
+    {
+      "id": "r-0160",
+      "kind": "new_reminder_once",
+      "message": "Please remind me that I need to send the volunteer roster in 52 minutes.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Send the volunteer roster",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-03-31T11:09"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Send the volunteer roster",
+        "question": "Is that 52 minutes from now?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1543
+    },
+    {
+      "id": "r-0161",
+      "kind": "new_reminder_once",
+      "message": "Tomorrow 3:25pm is when I want the reminder to call the shelter.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Call the shelter",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-05-01T15:25"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Call the shelter",
+        "question": "Is that 3:25pmam or 3:25pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1807
+    },
+    {
+      "id": "r-0162",
+      "kind": "new_reminder_once",
+      "message": "A reminder on the 10th at 8:45am would help me bring the event banner.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Bring the event banner",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-06-10T08:45"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Bring the event banner",
+        "question": "Is that 8:45am on the 10th day of a month?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1899
+    },
+    {
+      "id": "r-0163",
+      "kind": "new_reminder_once",
+      "message": "nudge for delivering the food packets at 6:35 tonight please",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Deliver the food packets",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-06-06T18:35"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Deliver the food packets",
+        "question": "Is that 6:35am or 6:35pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1612
+    },
+    {
+      "id": "r-0164",
+      "kind": "new_reminder_once",
+      "message": "I have to test the hall microphone. Set a reminder 170 minutes from now.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Test the hall microphone",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-07-25T02:38"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should I remind you to test the hall microphone?",
+        "timing": {
+          "local_at": "2027-07-25T01:08",
+          "type": "once"
+        }
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2222
+    },
+    {
+      "id": "r-0165",
+      "kind": "new_reminder_once",
+      "message": "The raffle books need counting; add that as a Monday 11:15am reminder.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Count the raffle books",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-08-23T11:15"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Count the raffle books",
+        "timing": {
+          "time": "11:15",
+          "type": "daily",
+          "weekdays": [
+            1
+          ]
+        }
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": true,
+      "got": "schedule_create",
+      "latencyMs": 1835
+    },
+    {
+      "id": "r-0166",
+      "kind": "new_reminder_once",
+      "message": "Can you add pick up the litter grabbers as a reminder for tomorrow 7:35am?",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Pick up the litter grabbers",
+        "timing": {
+          "type": "once",
+          "local_at": "2028-03-01T07:35"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Pick up the litter grabbers",
+        "timing": {
+          "local_at": "2028-03-01T07:35",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2209
+    },
+    {
+      "id": "r-0167",
+      "kind": "new_reminder_once",
+      "message": "Give me a reminder on the 28th at 5:15pm about confirming the hall booking.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Confirm the hall booking",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-11-28T17:15"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Confirm the booking hall",
+        "question": "Is that 5:15pm"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1520
+    },
+    {
+      "id": "r-0168",
+      "kind": "new_reminder_once",
+      "message": "In 26 mins I should be reminded to send the cleanup location.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Send the cleanup location",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-09-12T14:22"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Send the cleanup location",
+        "timing": {
+          "local_at": "2027-09-12T14:22",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2121
+    },
+    {
+      "id": "r-0169",
+      "kind": "new_reminder_once",
+      "message": "Donated book sorting needs its own reminder: Sunday, 4:55pm.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Sort the donated books",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-11-08T16:55"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Sort the donated book",
+        "timing": {
+          "local_at": "2026-11-08T16:55",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2160
+    },
+    {
+      "id": "r-0170",
+      "kind": "new_reminder_once",
+      "message": "Tomorrow morning at 9:05 please remind me the volunteer badges need printing.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Print the volunteer badges",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-12-01T09:05"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Print the volunteer badges",
+        "timing": {
+          "local_at": "2026-12-01T09:05",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2107
+    },
+    {
+      "id": "r-0171",
+      "kind": "new_reminder_once",
+      "message": "I need a ping tonight at 9:15 for charging the portable speaker.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Charge the portable speaker",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-12-31T21:15"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Charge the portable speaker",
+        "timing": {
+          "local_at": "2026-12-31T21:15",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2126
+    },
+    {
+      "id": "r-0172",
+      "kind": "new_reminder_once",
+      "message": "Please make the 23rd at 12:40pm a reminder to check the permit.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the permit",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-01-23T12:40"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Check the permit",
+        "question": "Is that 23rd in January or 2027?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1617
+    },
+    {
+      "id": "r-0173",
+      "kind": "new_reminder_once",
+      "message": "Can I have the reminder for packing gloves in 185 minutes?",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Pack gloves",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-02-28T13:22"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Pack gloves",
+        "question": "Is that 185 minutes from now?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1391
+    },
+    {
+      "id": "r-0174",
+      "kind": "new_reminder_once",
+      "message": "Set my reminder to send the attendance sheet for Wednesday at 8:25pm.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Send the attendance sheet",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-03-31T20:25"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Send the attendance sheet",
+        "question": "Is that 8:25pmam or 8:25pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1702
+    },
+    {
+      "id": "r-0175",
+      "kind": "new_reminder_once",
+      "message": "Can you remind me to buy those in 50 minutes?",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Buy replacement shoelaces",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-04-30T16:58"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should I remind you to buy?",
+        "timing": {
+          "local_at": "2027-04-30T16:58",
+          "type": "once"
+        }
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2084
+    },
+    {
+      "id": "r-0176",
+      "kind": "new_reminder_once",
+      "message": "Tomorrow at 4pm, give me a reminder to return it.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Return the cracked plant pot",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-05-18T16:00"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Return what?",
+        "question": "What should I remind you to return?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1455
+    },
+    {
+      "id": "r-0177",
+      "kind": "new_reminder_once",
+      "message": "Put a reminder about that purchase on Saturday at 11am.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Order the bike bell",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-06-12T11:00"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should the reminder be about?",
+        "timing": {
+          "local_at": "2027-06-12T11:00",
+          "type": "once"
+        }
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2212
+    },
+    {
+      "id": "r-0178",
+      "kind": "new_reminder_once",
+      "message": "For tonight at 7:30, add a reminder to measure that.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Measure the bookshelf gap",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-07-24T19:30"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Measure the bookshelf gap before buying the cabinet",
+        "timing": {
+          "local_at": "2027-07-24T19:30",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2273
+    },
+    {
+      "id": "r-0179",
+      "kind": "new_reminder_once",
+      "message": "I'd like a nudge to collect them tomorrow at noon.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Collect the repaired boots",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-08-20T12:00"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Collect my repaired boots",
+        "timing": {
+          "local_at": "2027-08-20T12:00",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2110
+    },
+    {
+      "id": "r-0180",
+      "kind": "new_reminder_once",
+      "message": "In 15 mins prompt me to compare the two.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Compare the two desk lamps",
+        "timing": {
+          "type": "once",
+          "local_at": "2028-02-29T10:32"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Compare the two desk lamps",
+        "timing": {
+          "local_at": "2028-02-29T10:32",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2303
+    },
+    {
+      "id": "r-0251",
+      "kind": "new_reminder_repeating",
+      "message": "Add a repeating 6:35am nudge for taking the puppy outside.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Take the puppy outside",
+        "timing": {
+          "type": "daily",
+          "time": "06:35"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Take the puppy outside",
+        "timing": {
+          "time": "06:35",
+          "type": "daily"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1734
+    },
+    {
+      "id": "r-0252",
+      "kind": "new_reminder_repeating",
+      "message": "My aquarium light needs switching off nightly. Put in a 9:25pm reminder.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Switch off the aquarium light",
+        "timing": {
+          "type": "daily",
+          "time": "21:25"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Switch off the aquarium light",
+        "timing": {
+          "time": "21:25",
+          "type": "daily"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1795
+    },
+    {
+      "id": "r-0253",
+      "kind": "new_reminder_repeating",
+      "message": "Cat brushing needs a weekly nudge, Wednesdays 7:15pm please.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Brush the cat",
+        "timing": {
+          "type": "daily",
+          "time": "19:15",
+          "weekdays": [
+            3
+          ]
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Brush the cat",
+        "timing": {
+          "time": "19:15",
+          "type": "daily",
+          "weekdays": [
+            3
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1741
+    },
+    {
+      "id": "r-0254",
+      "kind": "new_reminder_repeating",
+      "message": "Checking the rabbit's hay needs a reminder each morning at 8am.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the rabbit's hay",
+        "timing": {
+          "type": "daily",
+          "time": "08:00"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Check the rabbit's hay",
+        "timing": {
+          "time": "08:00",
+          "type": "daily"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1608
+    },
+    {
+      "id": "r-0255",
+      "kind": "new_reminder_repeating",
+      "message": "pet food stock check reminder for each month's 6th at 11am please",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check pet food stock",
+        "timing": {
+          "type": "monthly",
+          "day": 6,
+          "time": "11:00"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Check pet food stock",
+        "timing": {
+          "day": 6,
+          "time": "11:00",
+          "type": "monthly"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1739
+    },
+    {
+      "id": "r-0256",
+      "kind": "new_reminder_repeating",
+      "message": "I'd like the final evening of every month at 6:40pm to remind me to weigh the dog.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Weigh the dog",
+        "timing": {
+          "type": "monthly",
+          "day": -1,
+          "time": "18:40"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Weigh the dog",
+        "timing": {
+          "day": -1,
+          "time": "18:40",
+          "type": "monthly"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1723
+    },
+    {
+      "id": "r-0257",
+      "kind": "new_reminder_repeating",
+      "message": "Have Cortex remind me to refresh the water bowl at two-hour intervals.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Refresh the water bowl",
+        "timing": {
+          "type": "interval",
+          "every_minutes": 120,
+          "start_local": "2027-02-28T08:42"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Refresh the water bowl",
+        "timing": {
+          "every_minutes": 120,
+          "start_local": "2027-02-28T08:42",
+          "type": "interval"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2388
+    },
+    {
+      "id": "r-0258",
+      "kind": "new_reminder_repeating",
+      "message": "A reminder to check the foster kitten every 40 minutes, only 8am through 10pm.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the foster kitten",
+        "timing": {
+          "type": "interval",
+          "every_minutes": 40,
+          "start_local": "2027-03-31T08:00",
+          "window_start": "08:00",
+          "window_end": "22:00"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Check the foster kitten",
+        "timing": {
+          "every_minutes": 40,
+          "start_local": "2027-03-31T08:00",
+          "type": "interval"
+        }
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": true,
+      "got": "schedule_create",
+      "latencyMs": 2385
+    },
+    {
+      "id": "r-0259",
+      "kind": "new_reminder_repeating",
+      "message": "Could I get a Saturday-and-Sunday 10:05am reminder to clean the bird tray?",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Clean the bird tray",
+        "timing": {
+          "type": "daily",
+          "time": "10:05",
+          "weekdays": [
+            6,
+            7
+          ]
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Clean the bird tray",
+        "timing": {
+          "time": "10:05",
+          "type": "daily",
+          "weekdays": [
+            6,
+            7
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1922
+    },
+    {
+      "id": "r-0260",
+      "kind": "new_reminder_repeating",
+      "message": "Repeat the filter-rinse reminder every Friday morning at 8:20.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Rinse the aquarium filter",
+        "timing": {
+          "type": "daily",
+          "time": "08:20",
+          "weekdays": [
+            5
+          ]
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "Which reminder should I repeat?",
+        "timing": {
+          "time": "08:20",
+          "type": "daily",
+          "weekdays": [
+            5
+          ]
+        }
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1885
+    },
+    {
+      "id": "r-0261",
+      "kind": "new_reminder_repeating",
+      "message": "Put checking the rain gauge on a daily reminder at 7:05am.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the rain gauge",
+        "timing": {
+          "type": "daily",
+          "time": "07:05"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Check the rain gauge",
+        "timing": {
+          "time": "07:05",
+          "type": "daily"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1826
+    },
+    {
+      "id": "r-0262",
+      "kind": "new_reminder_repeating",
+      "message": "For each Monday and Saturday at 5:30pm, add a reminder to turn the pots.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Turn the pots",
+        "timing": {
+          "type": "daily",
+          "time": "17:30",
+          "weekdays": [
+            1,
+            6
+          ]
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Turn the pots",
+        "timing": {
+          "time": "17:30",
+          "type": "daily",
+          "weekdays": [
+            1,
+            6
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1698
+    },
+    {
+      "id": "r-0263",
+      "kind": "new_reminder_repeating",
+      "message": "I'd like the 13th of each month at 9am reserved for a reminder to inspect the drip lines.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Inspect the drip lines",
+        "timing": {
+          "type": "monthly",
+          "day": 13,
+          "time": "09:00"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Inspect the drip lines",
+        "timing": {
+          "day": 13,
+          "time": "09:00",
+          "type": "monthly"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1786
+    },
+    {
+      "id": "r-0264",
+      "kind": "new_reminder_repeating",
+      "message": "At month end every month, give me a 4:10pm nudge to photograph the garden.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Photograph the garden",
+        "timing": {
+          "type": "monthly",
+          "day": -1,
+          "time": "16:10"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Photograph the garden",
+        "timing": {
+          "day": -1,
+          "time": "16:10",
+          "type": "monthly"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1688
+    },
+    {
+      "id": "r-0265",
+      "kind": "new_reminder_repeating",
+      "message": "Repeat checking the propagator at intervals of 50 minutes.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the propagator",
+        "timing": {
+          "type": "interval",
+          "every_minutes": 50,
+          "start_local": "2026-10-30T11:07"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Check the propagator",
+        "timing": {
+          "every_minutes": 50,
+          "start_local": "2026-10-30T10:67",
+          "type": "interval"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2157
+    },
+    {
+      "id": "r-0266",
+      "kind": "new_reminder_repeating",
+      "message": "Between 6am and noon every 90 minutes, I want reminding to mist the cuttings.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Mist the cuttings",
+        "timing": {
+          "type": "interval",
+          "every_minutes": 90,
+          "start_local": "2027-09-12T06:00",
+          "window_start": "06:00",
+          "window_end": "12:00"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Mist the cuttings",
+        "timing": {
+          "every_minutes": 90,
+          "start_local": "2027-09-12T06:00",
+          "type": "interval"
+        }
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": true,
+      "got": "schedule_create",
+      "latencyMs": 2235
+    },
+    {
+      "id": "r-0267",
+      "kind": "new_reminder_repeating",
+      "message": "A daily evening nudge at 6:55 to bring in the seedlings, please.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Bring in the seedlings",
+        "timing": {
+          "type": "daily",
+          "time": "18:55"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Bring in the seedlings",
+        "timing": {
+          "time": "18:55",
+          "type": "daily"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1691
+    },
+    {
+      "id": "r-0268",
+      "kind": "new_reminder_repeating",
+      "message": "weekdays 8:25am add a reminder for opening the greenhouse vent",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Open the greenhouse vent",
+        "timing": {
+          "type": "daily",
+          "time": "08:25",
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Open the greenhouse vent",
+        "timing": {
+          "time": "08:25",
+          "type": "daily",
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2361
+    },
+    {
+      "id": "r-0269",
+      "kind": "new_reminder_repeating",
+      "message": "Arrange a Sunday 3:50pm reminder every week to clean the pruning shears.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Clean the pruning shears",
+        "timing": {
+          "type": "daily",
+          "time": "15:50",
+          "weekdays": [
+            7
+          ]
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Clean the pruning shears",
+        "timing": {
+          "time": "15:50",
+          "type": "daily",
+          "weekdays": [
+            7
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2026
+    },
+    {
+      "id": "r-0270",
+      "kind": "new_reminder_repeating",
+      "message": "Have a reminder come up every four hours to check the hydroponic pump.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the hydroponic pump",
+        "timing": {
+          "type": "interval",
+          "every_minutes": 240,
+          "start_local": "2027-01-01T10:42"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Check the hydroponic pump",
+        "timing": {
+          "every_minutes": 240,
+          "start_local": "2027-01-01T06:42",
+          "type": "interval"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2564
+    },
+    {
+      "id": "r-0271",
+      "kind": "new_reminder_repeating",
+      "message": "Set recurring notifications for checking the first-aid box on the 16th monthly at 10:15am.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the first-aid box",
+        "timing": {
+          "type": "monthly",
+          "day": 16,
+          "time": "10:15"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Check the first-aid box",
+        "timing": {
+          "day": 16,
+          "time": "10:15",
+          "type": "monthly"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1803
+    },
+    {
+      "id": "r-0272",
+      "kind": "new_reminder_repeating",
+      "message": "I'd like reminders about washing the lunchbox each weekday at 8:50pm.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Wash the lunchbox",
+        "timing": {
+          "type": "daily",
+          "time": "20:50",
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Wash the lunchbox",
+        "timing": {
+          "time": "20:50",
+          "type": "daily",
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1959
+    },
+    {
+      "id": "r-0273",
+      "kind": "new_reminder_repeating",
+      "message": "Put charging the torch on a repeating Sunday reminder, 5:05pm.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Charge the torch",
+        "timing": {
+          "type": "daily",
+          "time": "17:05",
+          "weekdays": [
+            7
+          ]
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Charge the torch",
+        "timing": {
+          "time": "17:05",
+          "type": "daily",
+          "weekdays": [
+            7
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1806
+    },
+    {
+      "id": "r-0274",
+      "kind": "new_reminder_repeating",
+      "message": "Each month's closing day at noon, prompt me to check the pantry dates.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the pantry dates",
+        "timing": {
+          "type": "monthly",
+          "day": -1,
+          "time": "12:00"
+        }
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Check the pantry dates",
+        "requires_live_sources": false,
+        "timing": {
+          "day": -1,
+          "time": "12:00",
+          "type": "monthly"
+        }
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": true,
+      "got": "schedule_create",
+      "latencyMs": 2000
+    },
+    {
+      "id": "r-0275",
+      "kind": "new_reminder_repeating",
+      "message": "A nudge to swap the drying towels every 3 hours between 9am and 9pm.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Swap the drying towels",
+        "timing": {
+          "type": "interval",
+          "every_minutes": 180,
+          "start_local": "2027-06-06T09:00",
+          "window_start": "09:00",
+          "window_end": "21:00"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Swap the drying towels",
+        "timing": {
+          "every_minutes": 180,
+          "start_local": "2027-06-06T09:00",
+          "window_end": "21:00",
+          "type": "interval"
+        }
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2833
+    },
+    {
+      "id": "r-0276",
+      "kind": "new_reminder_repeating",
+      "message": "Set up a repeating reminder for emptying the dehumidifier at 150-minute intervals.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Empty the dehumidifier",
+        "timing": {
+          "type": "interval",
+          "every_minutes": 150,
+          "start_local": "2027-07-24T02:43"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Empty the dehumidifier",
+        "timing": {
+          "every_minutes": 150,
+          "start_local": "2027-07-24T01:43",
+          "type": "interval"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2427
+    },
+    {
+      "id": "r-0277",
+      "kind": "new_reminder_repeating",
+      "message": "tuesdays and thursdays 7:40am add reminders about taking recycling downstairs",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Take recycling downstairs",
+        "timing": {
+          "type": "daily",
+          "time": "07:40",
+          "weekdays": [
+            2,
+            4
+          ]
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Take recycling downstairs",
+        "timing": {
+          "time": "07:40",
+          "type": "daily",
+          "weekdays": [
+            2,
+            4
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1953
+    },
+    {
+      "id": "r-0278",
+      "kind": "new_reminder_repeating",
+      "message": "For every 25 minutes from 10am until 2pm, have a reminder to check the defrost tray.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the defrost tray",
+        "timing": {
+          "type": "interval",
+          "every_minutes": 25,
+          "start_local": "2028-02-29T10:00",
+          "window_start": "10:00",
+          "window_end": "14:00"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Check the defrost tray",
+        "timing": {
+          "every_minutes": 25,
+          "start_local": "2028-02-29T10:00",
+          "window_end": "14:00"
+        }
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2670
+    },
+    {
+      "id": "r-0279",
+      "kind": "new_reminder_repeating",
+      "message": "Could you schedule checking the spare bulbs every month on the 9th at 6:15pm?",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the spare bulbs",
+        "timing": {
+          "type": "monthly",
+          "day": 9,
+          "time": "18:15"
+        }
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Check the spare bulbs",
+        "requires_live_sources": false,
+        "timing": {
+          "day": 9,
+          "time": "18:15",
+          "type": "monthly"
+        }
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": true,
+      "got": "schedule_create",
+      "latencyMs": 2336
+    },
+    {
+      "id": "r-0280",
+      "kind": "new_reminder_repeating",
+      "message": "Remind me to put the milk bottles outside nightly at 10:20pm.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Put the milk bottles outside",
+        "timing": {
+          "type": "daily",
+          "time": "22:20"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Put the milk bottles outside",
+        "timing": {
+          "time": "22:20",
+          "type": "daily"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 1614
+    },
+    {
+      "id": "r-0309",
+      "kind": "new_task",
+      "message": "Have a digest of upcoming Bengaluru art exhibitions written for me each Thursday at noon.",
+      "expected": {
+        "action": "create_task",
+        "prompt": "Write a digest of upcoming Bengaluru art exhibitions",
+        "timing": {
+          "type": "daily",
+          "time": "12:00",
+          "weekdays": [
+            4
+          ]
+        },
+        "requires_live_sources": true
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Summarise upcoming Bengaluru art exhibitions",
+        "requires_live_sources": true,
+        "timing": {
+          "time": "12:00",
+          "type": "daily",
+          "weekdays": [
+            4
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2122
+    },
+    {
+      "id": "r-0310",
+      "kind": "new_task",
+      "message": "Saturday 9am every week: generate a guide to this weekend's local theatre listings.",
+      "expected": {
+        "action": "create_task",
+        "prompt": "Generate a guide to this weekend's local theatre listings",
+        "timing": {
+          "type": "daily",
+          "time": "09:00",
+          "weekdays": [
+            6
+          ]
+        },
+        "requires_live_sources": true
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Generate a guide to this weekend's local theatre listings",
+        "requires_live_sources": true,
+        "timing": {
+          "time": "09:00",
+          "type": "daily",
+          "weekdays": [
+            6
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2329
+    },
+    {
+      "id": "r-0311",
+      "kind": "new_task",
+      "message": "I'd like you to compile current community cycling events on Mondays at 7pm.",
+      "expected": {
+        "action": "create_task",
+        "prompt": "Compile current community cycling events",
+        "timing": {
+          "type": "daily",
+          "time": "19:00",
+          "weekdays": [
+            1
+          ]
+        },
+        "requires_live_sources": true
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Compile current community cycling events",
+        "requires_live_sources": true,
+        "timing": {
+          "time": "19:00",
+          "type": "daily",
+          "weekdays": [
+            1
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2288
+    },
+    {
+      "id": "r-0312",
+      "kind": "new_task",
+      "message": "Write me tomorrow's Pune weather outlook every night at 8:30pm.",
+      "expected": {
+        "action": "create_task",
+        "prompt": "Write tomorrow's Pune weather outlook",
+        "timing": {
+          "type": "daily",
+          "time": "20:30"
+        },
+        "requires_live_sources": true
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Summarise Pune weather outlook",
+        "requires_live_sources": true,
+        "timing": {
+          "time": "20:30",
+          "type": "daily"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2167
+    },
+    {
+      "id": "r-0313",
+      "kind": "new_task",
+      "message": "Each month's 2nd at 11am, prepare a roundup of new museum exhibitions in Mumbai.",
+      "expected": {
+        "action": "create_task",
+        "prompt": "Prepare a roundup of new museum exhibitions in Mumbai",
+        "timing": {
+          "type": "monthly",
+          "day": 2,
+          "time": "11:00"
+        },
+        "requires_live_sources": true
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Summarise new museum exhibitions in Mumbai",
+        "requires_live_sources": true,
+        "timing": {
+          "day": 2,
+          "time": "11:00",
+          "type": "monthly"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2270
+    },
+    {
+      "id": "r-0314",
+      "kind": "new_task",
+      "message": "Could a fresh digest of nearby science talks be generated on Wednesdays at 6:15pm?",
+      "expected": {
+        "action": "create_task",
+        "prompt": "Generate a fresh digest of nearby science talks",
+        "timing": {
+          "type": "daily",
+          "time": "18:15",
+          "weekdays": [
+            3
+          ]
+        },
+        "requires_live_sources": true
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Summarise nearby science talks",
+        "requires_live_sources": true,
+        "timing": {
+          "time": "18:15",
+          "type": "daily",
+          "weekdays": [
+            3
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2373
+    },
+    {
+      "id": "r-0315",
+      "kind": "new_task",
+      "message": "Make me a written review of the fiction drafts I opened, every Sunday 5pm.",
+      "expected": {
+        "action": "create_task",
+        "prompt": "Write a review of the fiction drafts I opened that week",
+        "timing": {
+          "type": "daily",
+          "time": "17:00",
+          "weekdays": [
+            7
+          ]
+        },
+        "requires_live_sources": false
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Review the fiction drafts I opened",
+        "requires_live_sources": false,
+        "timing": {
+          "time": "17:00",
+          "type": "daily",
+          "weekdays": [
+            7
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2657
+    },
+    {
+      "id": "r-0316",
+      "kind": "new_task",
+      "message": "Arrange for a summary of my photography feedback to be written at 8pm each Friday.",
+      "expected": {
+        "action": "create_task",
+        "prompt": "Summarise my photography feedback",
+        "timing": {
+          "type": "daily",
+          "time": "20:00",
+          "weekdays": [
+            5
+          ]
+        },
+        "requires_live_sources": false
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Summarise my photography feedback",
+        "requires_live_sources": false,
+        "timing": {
+          "time": "20:00",
+          "type": "daily",
+          "weekdays": [
+            5
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2008
+    },
+    {
+      "id": "r-0317",
+      "kind": "new_task",
+      "message": "At 7:20pm daily I'd like you to generate a recap of the recipes I looked at.",
+      "expected": {
+        "action": "create_task",
+        "prompt": "Generate a recap of the recipes I looked at",
+        "timing": {
+          "type": "daily",
+          "time": "19:20"
+        },
+        "requires_live_sources": false
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Summarise recipes I looked at",
+        "requires_live_sources": false,
+        "timing": {
+          "time": "19:20",
+          "type": "daily"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2091
+    },
+    {
+      "id": "r-0318",
+      "kind": "new_task",
+      "message": "Every month's final day at 4pm, compose a digest of my woodworking notes.",
+      "expected": {
+        "action": "create_task",
+        "prompt": "Compose a digest of my woodworking notes",
+        "timing": {
+          "type": "monthly",
+          "day": -1,
+          "time": "16:00"
+        },
+        "requires_live_sources": false
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Summarise my woodworking notes",
+        "requires_live_sources": false,
+        "timing": {
+          "day": -1,
+          "time": "16:00",
+          "type": "monthly"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2159
+    },
+    {
+      "id": "r-0319",
+      "kind": "new_task",
+      "message": "Have Cortex draft a recap of my saved travel ideas on Saturdays at 2:30pm.",
+      "expected": {
+        "action": "create_task",
+        "prompt": "Draft a recap of my saved travel ideas",
+        "timing": {
+          "type": "daily",
+          "time": "14:30",
+          "weekdays": [
+            6
+          ]
+        },
+        "requires_live_sources": false
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Summarise my saved travel ideas",
+        "requires_live_sources": false,
+        "timing": {
+          "time": "14:30",
+          "type": "daily",
+          "weekdays": [
+            6
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2337
+    },
+    {
+      "id": "r-0320",
+      "kind": "new_task",
+      "message": "On Tuesdays at 9:30pm, produce a short review of my recent music practice notes.",
+      "expected": {
+        "action": "create_task",
+        "prompt": "Produce a short review of my recent music practice notes",
+        "timing": {
+          "type": "daily",
+          "time": "21:30",
+          "weekdays": [
+            2
+          ]
+        },
+        "requires_live_sources": false
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Summarise my recent music practice notes",
+        "requires_live_sources": false,
+        "timing": {
+          "time": "21:30",
+          "type": "daily",
+          "weekdays": [
+            2
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2344
+    },
+    {
+      "id": "r-0419",
+      "kind": "manage_reminder",
+      "message": "Please suspend my tyre rotation reminder by pausing it.",
+      "expected": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_c3307174"
+      },
+      "raw": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_c3307174"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "pause",
+      "latencyMs": 1514
+    },
+    {
+      "id": "r-0420",
+      "kind": "manage_reminder",
+      "message": "I want the parking renewal nudge paused for now.",
+      "expected": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_7635263f"
+      },
+      "raw": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_7635263f"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "pause",
+      "latencyMs": 1658
+    },
+    {
+      "id": "r-0421",
+      "kind": "manage_reminder",
+      "message": "Could the bus pass reminder be turned back on?",
+      "expected": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_224fd961"
+      },
+      "raw": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_224fd961"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "resume",
+      "latencyMs": 1580
+    },
+    {
+      "id": "r-0422",
+      "kind": "manage_reminder",
+      "message": "Bring the bike service reminder out of pause.",
+      "expected": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_547e8ac8"
+      },
+      "raw": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_547e8ac8"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "resume",
+      "latencyMs": 1657
+    },
+    {
+      "id": "r-0423",
+      "kind": "manage_reminder",
+      "message": "Remove my reminder about collecting the rental scooter.",
+      "expected": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_b5500e5b"
+      },
+      "raw": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_b5500e5b"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "cancel",
+      "latencyMs": 1698
+    },
+    {
+      "id": "r-0424",
+      "kind": "manage_reminder",
+      "message": "The car inspection is done; delete that reminder.",
+      "expected": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_e39115fa"
+      },
+      "raw": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_e39115fa"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "cancel",
+      "latencyMs": 1365
+    },
+    {
+      "id": "r-0425",
+      "kind": "manage_reminder",
+      "message": "Let the fuel stop reminder wait another 55 minutes.",
+      "expected": {
+        "action": "snooze_schedule",
+        "schedule_id": "sch_b8278650",
+        "minutes": 55
+      },
+      "raw": {
+        "action": "snooze_schedule",
+        "minutes": 55,
+        "schedule_id": "sch_b8278650"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_snooze",
+      "latencyMs": 1744
+    },
+    {
+      "id": "r-0426",
+      "kind": "manage_reminder",
+      "message": "Postpone the reminder to inflate the tyres by 80 minutes.",
+      "expected": {
+        "action": "snooze_schedule",
+        "schedule_id": "sch_d37e201e",
+        "minutes": 80
+      },
+      "raw": {
+        "action": "snooze_schedule",
+        "minutes": 80,
+        "schedule_id": "sch_d37e201e"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_snooze",
+      "latencyMs": 1725
+    },
+    {
+      "id": "r-0427",
+      "kind": "manage_reminder",
+      "message": "Set a 12-minute snooze on the taxi booking reminder.",
+      "expected": {
+        "action": "snooze_schedule",
+        "schedule_id": "sch_af1b2789",
+        "minutes": 12
+      },
+      "raw": {
+        "action": "snooze_schedule",
+        "minutes": 12,
+        "schedule_id": "sch_af1b2789"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_snooze",
+      "latencyMs": 1726
+    },
+    {
+      "id": "r-0428",
+      "kind": "manage_reminder",
+      "message": "Please make my daily traffic check reminder happen at 7:35am.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_7b63a84f",
+        "timing": {
+          "type": "daily",
+          "time": "07:35"
+        }
+      },
+      "raw": {
+        "action": "update_schedule",
+        "schedule_id": "sch_7b63a84f",
+        "timing": {
+          "time": "07:35",
+          "type": "daily"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_update",
+      "latencyMs": 2123
+    },
+    {
+      "id": "r-0429",
+      "kind": "manage_reminder",
+      "message": "Switch the commuter card reminder from the 5th to the 8th monthly.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_d546875e",
+        "timing": {
+          "type": "monthly",
+          "day": 8,
+          "time": "18:00"
+        }
+      },
+      "raw": {
+        "action": "update_schedule",
+        "day": 8,
+        "schedule_id": "sch_d546875e"
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1831
+    },
+    {
+      "id": "r-0430",
+      "kind": "manage_reminder",
+      "message": "The reminder labelled Helmet needs the text Bring helmet and gloves.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_ee3db7f8",
+        "message": "Bring helmet and gloves"
+      },
+      "raw": {
+        "action": "update_schedule",
+        "message": "Bring helmet and gloves",
+        "schedule_id": "sch_ee3db7f8"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_update",
+      "latencyMs": 1895
+    },
+    {
+      "id": "r-0431",
+      "kind": "manage_reminder",
+      "message": "Could the weekly chain oiling reminder move to Wednesday, still 6pm?",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_45dc8638",
+        "timing": {
+          "type": "daily",
+          "time": "18:00",
+          "weekdays": [
+            3
+          ]
+        }
+      },
+      "raw": {
+        "action": "update_schedule",
+        "schedule_id": "sch_45dc8638",
+        "timing": {
+          "time": "18:00",
+          "type": "daily",
+          "weekdays": [
+            3
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_update",
+      "latencyMs": 2426
+    },
+    {
+      "id": "r-0432",
+      "kind": "manage_reminder",
+      "message": "Replace the title Car stuff with Book annual service.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_cb22a600",
+        "title": "Book annual service"
+      },
+      "raw": {
+        "action": "update_schedule",
+        "title": "Car stuff",
+        "value": "Book annual service"
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1745
+    },
+    {
+      "id": "r-0433",
+      "kind": "manage_reminder",
+      "message": "I'd like to put the yarn inventory reminder on hold; pause it.",
+      "expected": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_6583a8e0"
+      },
+      "raw": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_6583a8e0"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "pause",
+      "latencyMs": 1300
+    },
+    {
+      "id": "r-0434",
+      "kind": "manage_reminder",
+      "message": "Keep the glaze order reminder paused starting now.",
+      "expected": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_ad3346d6"
+      },
+      "raw": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_ad3346d6"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "pause",
+      "latencyMs": 1393
+    },
+    {
+      "id": "r-0435",
+      "kind": "manage_reminder",
+      "message": "Activate my paused reminder for oiling the sewing machine.",
+      "expected": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_b3f3f5b2"
+      },
+      "raw": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_b3f3f5b2"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "resume",
+      "latencyMs": 1586
+    },
+    {
+      "id": "r-0436",
+      "kind": "manage_reminder",
+      "message": "Please restart the wood treatment reminder I had paused.",
+      "expected": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_17261cbe"
+      },
+      "raw": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_17261cbe"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "resume",
+      "latencyMs": 1467
+    },
+    {
+      "id": "r-0437",
+      "kind": "manage_reminder",
+      "message": "Can the reminder to collect the canvas be removed?",
+      "expected": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_aa69df68"
+      },
+      "raw": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_aa69df68"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "cancel",
+      "latencyMs": 1546
+    },
+    {
+      "id": "r-0438",
+      "kind": "manage_reminder",
+      "message": "I'm done framing the print, cancel the framing reminder.",
+      "expected": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_60550ecb"
+      },
+      "raw": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_60550ecb"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "cancel",
+      "latencyMs": 1541
+    },
+    {
+      "id": "r-0439",
+      "kind": "manage_reminder",
+      "message": "A 65-minute snooze for the paint mixing reminder please.",
+      "expected": {
+        "action": "snooze_schedule",
+        "schedule_id": "sch_b92a1319",
+        "minutes": 65
+      },
+      "raw": {
+        "action": "snooze_schedule",
+        "minutes": 65,
+        "schedule_id": "sch_b92a1319"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_snooze",
+      "latencyMs": 1851
+    },
+    {
+      "id": "r-0440",
+      "kind": "manage_reminder",
+      "message": "Hold the felt cutting nudge for another 18 minutes.",
+      "expected": {
+        "action": "snooze_schedule",
+        "schedule_id": "sch_98f512ff",
+        "minutes": 18
+      },
+      "raw": {
+        "action": "snooze_schedule",
+        "minutes": 18,
+        "schedule_id": "sch_98f512ff"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_snooze",
+      "latencyMs": 1809
+    },
+    {
+      "id": "r-0441",
+      "kind": "manage_reminder",
+      "message": "Put the clay wedging reminder off for an hour and a half.",
+      "expected": {
+        "action": "snooze_schedule",
+        "schedule_id": "sch_e1c9c6b2",
+        "minutes": 90
+      },
+      "raw": {
+        "action": "snooze_schedule",
+        "minutes": 90,
+        "schedule_id": "sch_e1c9c6b2"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_snooze",
+      "latencyMs": 1974
+    },
+    {
+      "id": "r-0442",
+      "kind": "manage_reminder",
+      "message": "For my daily bobbin check reminder, use 3:45pm going forward.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_0e133108",
+        "timing": {
+          "type": "daily",
+          "time": "15:45"
+        }
+      },
+      "raw": {
+        "action": "update_schedule",
+        "schedule_id": "sch_0e133108",
+        "timing": {
+          "time": "15:45",
+          "type": "daily"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_update",
+      "latencyMs": 1992
+    },
+    {
+      "id": "r-0443",
+      "kind": "manage_reminder",
+      "message": "Have the weekly easel cleaning nudge on Monday at 10am instead.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_74d29b78",
+        "timing": {
+          "type": "daily",
+          "time": "10:00",
+          "weekdays": [
+            1
+          ]
+        }
+      },
+      "raw": {
+        "action": "update_schedule",
+        "schedule_id": "sch_74d29b78",
+        "timing": {
+          "time": "10:00",
+          "type": "daily",
+          "weekdays": [
+            1
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_update",
+      "latencyMs": 2247
+    },
+    {
+      "id": "r-0444",
+      "kind": "manage_reminder",
+      "message": "I'd rather the studio rent reminder fall on the 12th every month.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_9fd14e7a",
+        "timing": {
+          "type": "monthly",
+          "day": 12,
+          "time": "09:00"
+        }
+      },
+      "raw": {
+        "action": "update_schedule",
+        "schedule_id": "sch_9fd14e7a",
+        "timing": {
+          "day": 12,
+          "time": "09:00",
+          "type": "monthly"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_update",
+      "latencyMs": 2261
+    },
+    {
+      "id": "r-0445",
+      "kind": "manage_reminder",
+      "message": "Use Count screws before assembly as the workbench reminder's message.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_b328a4fe",
+        "message": "Count screws before assembly"
+      },
+      "raw": {
+        "action": "update_schedule",
+        "message": "Use Count screws before assembly",
+        "schedule_id": "sch_b328a4fe"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_update",
+      "latencyMs": 1821
+    },
+    {
+      "id": "r-0446",
+      "kind": "manage_reminder",
+      "message": "The reminder called Ceramic pickup should now be titled Collect the blue mugs.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_1c7368f1",
+        "title": "Collect the blue mugs"
+      },
+      "raw": {
+        "action": "update_schedule",
+        "title": "Collect the blue mugs",
+        "schedule_id": "sch_1c7368f1"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_update",
+      "latencyMs": 1896
+    },
+    {
+      "id": "r-0447",
+      "kind": "manage_reminder",
+      "message": "Put the chess club roster reminder into a paused state.",
+      "expected": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_dd9f60b5"
+      },
+      "raw": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_dd9f60b5"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "pause",
+      "latencyMs": 1607
+    },
+    {
+      "id": "r-0448",
+      "kind": "manage_reminder",
+      "message": "I need the club dues reminder paused please.",
+      "expected": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_e32b11e5"
+      },
+      "raw": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_e32b11e5"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "pause",
+      "latencyMs": 1609
+    },
+    {
+      "id": "r-0449",
+      "kind": "manage_reminder",
+      "message": "Enable the book club invite reminder again.",
+      "expected": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_39693615"
+      },
+      "raw": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_39693615"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "resume",
+      "latencyMs": 1712
+    },
+    {
+      "id": "r-0450",
+      "kind": "manage_reminder",
+      "message": "Undo the pause on my walking group reminder.",
+      "expected": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_0bc54604"
+      },
+      "raw": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_0bc54604"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "resume",
+      "latencyMs": 1637
+    },
+    {
+      "id": "r-0451",
+      "kind": "manage_reminder",
+      "message": "Delete the reminder for submitting the choir registration.",
+      "expected": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_71aa7336"
+      },
+      "raw": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_71aa7336"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "cancel",
+      "latencyMs": 1329
+    },
+    {
+      "id": "r-0452",
+      "kind": "manage_reminder",
+      "message": "Please remove the nudge about ordering debate trophies.",
+      "expected": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_879c84d7"
+      },
+      "raw": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_879c84d7"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "cancel",
+      "latencyMs": 1552
+    },
+    {
+      "id": "r-0453",
+      "kind": "manage_reminder",
+      "message": "The rehearsal room reminder can wait 22 minutes; snooze it.",
+      "expected": {
+        "action": "snooze_schedule",
+        "schedule_id": "sch_8e040532",
+        "minutes": 22
+      },
+      "raw": {
+        "action": "snooze_schedule",
+        "minutes": 22,
+        "schedule_id": "sch_8e040532"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_snooze",
+      "latencyMs": 1695
+    },
+    {
+      "id": "r-0454",
+      "kind": "manage_reminder",
+      "message": "I'd like an extra 70 minutes before the tournament form reminder.",
+      "expected": {
+        "action": "snooze_schedule",
+        "schedule_id": "sch_daec2722",
+        "minutes": 70
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "Which one: Submit tournament form?",
+        "timing": {
+          "local_at": "2027-03-31T11:30",
+          "type": "once"
+        }
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2410
+    },
+    {
+      "id": "r-0455",
+      "kind": "manage_reminder",
+      "message": "Snooze the club newsletter nudge by 100 minutes.",
+      "expected": {
+        "action": "snooze_schedule",
+        "schedule_id": "sch_c7419a21",
+        "minutes": 100
+      },
+      "raw": {
+        "action": "snooze_schedule",
+        "minutes": 100,
+        "schedule_id": "sch_c7419a21"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_snooze",
+      "latencyMs": 1862
+    },
+    {
+      "id": "r-0456",
+      "kind": "manage_reminder",
+      "message": "Move my daily membership email check to 11:25am.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_6c574616",
+        "timing": {
+          "type": "daily",
+          "time": "11:25"
+        }
+      },
+      "raw": {
+        "action": "update_schedule",
+        "schedule_id": "sch_6c574616",
+        "timing": {
+          "time": "11:25",
+          "type": "daily"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_update",
+      "latencyMs": 2219
+    },
+    {
+      "id": "r-0457",
+      "kind": "manage_reminder",
+      "message": "Change collecting the hall key to Thursdays at 5:10pm each week.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_3ef8358f",
+        "timing": {
+          "type": "daily",
+          "time": "17:10",
+          "weekdays": [
+            4
+          ]
+        }
+      },
+      "raw": {
+        "action": "update_schedule",
+        "schedule_id": "sch_3ef8358f",
+        "timing": {
+          "time": "17:10",
+          "type": "daily",
+          "weekdays": [
+            4
+          ]
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_update",
+      "latencyMs": 2504
+    },
+    {
+      "id": "r-0458",
+      "kind": "manage_reminder",
+      "message": "Have the monthly club ledger reminder on the month's last day at 7pm.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_7fd5b823",
+        "timing": {
+          "type": "monthly",
+          "day": -1,
+          "time": "19:00"
+        }
+      },
+      "raw": {
+        "action": "update_schedule",
+        "timing": {
+          "day": -1,
+          "time": "19:00",
+          "type": "monthly"
+        }
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1927
+    },
+    {
+      "id": "r-0459",
+      "kind": "manage_reminder",
+      "message": "Edit the event reminder so it says Bring sign-in sheets and pens.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_47da30ba",
+        "message": "Bring sign-in sheets and pens"
+      },
+      "raw": {
+        "action": "update_schedule",
+        "message": "Bring sign-in sheets and pens",
+        "schedule_id": "sch_47da30ba"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_update",
+      "latencyMs": 2168
+    },
+    {
+      "id": "r-0460",
+      "kind": "manage_reminder",
+      "message": "I'd like Club refreshments renamed Order tea for the reading circle.",
+      "expected": {
+        "action": "update_schedule",
+        "schedule_id": "sch_7858f701",
+        "title": "Order tea for the reading circle"
+      },
+      "raw": {
+        "action": "update_schedule",
+        "schedule_id": "sch_7858f701",
+        "title": "Order tea for the reading circle"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_update",
+      "latencyMs": 1716
+    },
+    {
+      "id": "r-0482",
+      "kind": "list_reminders",
+      "message": "Open my list of upcoming reminder alerts.",
+      "expected": {
+        "action": "list_schedules"
+      },
+      "raw": {
+        "action": "list_schedules"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "list",
+      "latencyMs": 1074
+    },
+    {
+      "id": "r-0483",
+      "kind": "list_reminders",
+      "message": "Could I browse the reminders scheduled for next Tuesday?",
+      "expected": {
+        "action": "list_schedules"
+      },
+      "raw": {
+        "action": "list_schedules"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "list",
+      "latencyMs": 1058
+    },
+    {
+      "id": "r-0484",
+      "kind": "list_reminders",
+      "message": "I'd like all the weekly reminders laid out.",
+      "expected": {
+        "action": "list_schedules"
+      },
+      "raw": {
+        "action": "list_schedules"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "list",
+      "latencyMs": 1118
+    },
+    {
+      "id": "r-0485",
+      "kind": "list_reminders",
+      "message": "Please bring up reminders falling in the next seven days.",
+      "expected": {
+        "action": "list_schedules"
+      },
+      "raw": {
+        "action": "list_schedules"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "list",
+      "latencyMs": 1152
+    },
+    {
+      "id": "r-0486",
+      "kind": "list_reminders",
+      "message": "Give me an overview listing my scheduled reminders.",
+      "expected": {
+        "action": "list_schedules"
+      },
+      "raw": {
+        "action": "list_schedules"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "list",
+      "latencyMs": 1183
+    },
+    {
+      "id": "r-0487",
+      "kind": "list_reminders",
+      "message": "where's my list of reminder entries, show it please",
+      "expected": {
+        "action": "list_schedules"
+      },
+      "raw": {
+        "action": "list_schedules"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "list",
+      "latencyMs": 794
+    },
+    {
+      "id": "r-0488",
+      "kind": "list_reminders",
+      "message": "Can you display just the paused entries from my reminders?",
+      "expected": {
+        "action": "list_schedules"
+      },
+      "raw": {
+        "action": "list_schedules"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "list",
+      "latencyMs": 906
+    },
+    {
+      "id": "r-0489",
+      "kind": "list_reminders",
+      "message": "Let me look through the reminders planned for Sunday.",
+      "expected": {
+        "action": "list_schedules"
+      },
+      "raw": {
+        "action": "list_schedules"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "list",
+      "latencyMs": 910
+    },
+    {
+      "id": "r-0490",
+      "kind": "list_reminders",
+      "message": "Fetch my reminder schedule as a list.",
+      "expected": {
+        "action": "list_schedules"
+      },
+      "raw": {
+        "action": "list_schedules"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "list",
+      "latencyMs": 942
+    },
+    {
+      "id": "r-0561",
+      "kind": "save_fact",
+      "message": "For the address book, keep Vera at 31 Birch Crescent, Lucknow.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Vera",
+        "attribute": "address",
+        "value": "31 Birch Crescent, Lucknow"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "address",
+        "subject": "Vera",
+        "value": "31 Birch Crescent, Lucknow"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1665
+    },
+    {
+      "id": "r-0562",
+      "kind": "save_fact",
+      "message": "Could you store Malcolm's contact number, +44 7700 900789?",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Malcolm",
+        "attribute": "phone",
+        "value": "+44 7700 900789"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "phone",
+        "subject": "Malcolm",
+        "value": "+44 7700 900789"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 2081
+    },
+    {
+      "id": "r-0563",
+      "kind": "save_fact",
+      "message": "The email to remember for Isha is isha.neighbour@example.com.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Isha",
+        "attribute": "email",
+        "value": "isha.neighbour@example.com"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "email",
+        "subject": "Isha",
+        "value": "isha.neighbour@example.com"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1882
+    },
+    {
+      "id": "r-0564",
+      "kind": "save_fact",
+      "message": "Put Elliot's birthday down as 21 May.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Elliot",
+        "attribute": "birthday",
+        "value": "21 May"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "birthday",
+        "subject": "Elliot",
+        "value": "21 May"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1731
+    },
+    {
+      "id": "r-0565",
+      "kind": "save_fact",
+      "message": "I have a new address for Priam: 16 Coral Lane, Surat. Replace the saved one.",
+      "expected": {
+        "action": "update_fact",
+        "subject": "Priam",
+        "attribute": "address",
+        "value": "16 Coral Lane, Surat"
+      },
+      "raw": {
+        "action": "update_fact",
+        "attribute": "address",
+        "subject": "Priam",
+        "value": "16 Coral Lane, Surat"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1904
+    },
+    {
+      "id": "r-0566",
+      "kind": "save_fact",
+      "message": "For future reference, Rosa's anniversary is 3 August.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Rosa",
+        "attribute": "anniversary",
+        "value": "3 August"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "anniversary",
+        "subject": "Rosa",
+        "value": "3 August"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1743
+    },
+    {
+      "id": "r-0567",
+      "kind": "save_fact",
+      "message": "It turns out Hugo's number changed. Use +33 6 00 00 12 34 in memory.",
+      "expected": {
+        "action": "update_fact",
+        "subject": "Hugo",
+        "attribute": "phone",
+        "value": "+33 6 00 00 12 34"
+      },
+      "raw": {
+        "action": "update_fact",
+        "attribute": "phone",
+        "subject": "Hugo",
+        "value": "+33 6 00 00 12 34"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 2358
+    },
+    {
+      "id": "r-0568",
+      "kind": "save_fact",
+      "message": "Store Laila's employer as Glass Finch Design.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Laila",
+        "attribute": "company",
+        "value": "Glass Finch Design"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "employer",
+        "subject": "Laila",
+        "value": "Glass Finch Design"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1609
+    },
+    {
+      "id": "r-0569",
+      "kind": "save_fact",
+      "message": "Our neighbour Celine's role is Librarian; save that.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Celine",
+        "attribute": "role",
+        "value": "Librarian"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "role",
+        "subject": "Celine",
+        "value": "Librarian"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1589
+    },
+    {
+      "id": "r-0570",
+      "kind": "save_fact",
+      "message": "The corrected email for Yusuf is yusuf.new@example.net, please keep that instead.",
+      "expected": {
+        "action": "update_fact",
+        "subject": "Yusuf",
+        "attribute": "email",
+        "value": "yusuf.new@example.net"
+      },
+      "raw": {
+        "action": "update_fact",
+        "attribute": "email",
+        "subject": "Yusuf",
+        "value": "yusuf.new@example.net"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1800
+    },
+    {
+      "id": "r-0571",
+      "kind": "save_fact",
+      "message": "Add a fact for Esther: her role is Volunteer Coordinator.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Esther",
+        "attribute": "role",
+        "value": "Volunteer Coordinator"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "role",
+        "subject": "Esther",
+        "value": "Volunteer Coordinator"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1617
+    },
+    {
+      "id": "r-0572",
+      "kind": "save_fact",
+      "message": "I want you to keep Karim's email, karim.volunteer@example.org.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Karim",
+        "attribute": "email",
+        "value": "karim.volunteer@example.org"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "email",
+        "subject": "Karim",
+        "value": "karim.volunteer@example.org"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1891
+    },
+    {
+      "id": "r-0573",
+      "kind": "save_fact",
+      "message": "For reference, Faye works at Willow Foundation.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Faye",
+        "attribute": "company",
+        "value": "Willow Foundation"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "company",
+        "subject": "Faye",
+        "value": "Willow Foundation"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1732
+    },
+    {
+      "id": "r-0574",
+      "kind": "save_fact",
+      "message": "Record Anton's birthday as 26 December.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Anton",
+        "attribute": "birthday",
+        "value": "26 December"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "birthday",
+        "subject": "Anton",
+        "value": "26 December"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1804
+    },
+    {
+      "id": "r-0575",
+      "kind": "save_fact",
+      "message": "Replace Gita's contact number in memory with +91 90000 78901.",
+      "expected": {
+        "action": "update_fact",
+        "subject": "Gita",
+        "attribute": "phone",
+        "value": "+91 90000 78901"
+      },
+      "raw": {
+        "action": "update_fact",
+        "attribute": "phone",
+        "subject": "Gita",
+        "value": "+91 90000 78901"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 2333
+    },
+    {
+      "id": "r-0576",
+      "kind": "save_fact",
+      "message": "I've confirmed Oona's address: 28 Rose Terrace, Madurai. Please save it.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Oona",
+        "attribute": "address",
+        "value": "28 Rose Terrace, Madurai"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "address",
+        "subject": "Oona",
+        "value": "28 Rose Terrace, Madurai"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 2019
+    },
+    {
+      "id": "r-0577",
+      "kind": "save_fact",
+      "message": "Could you retain the fact that Bruno's anniversary is 11 February?",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "Bruno",
+        "attribute": "anniversary",
+        "value": "11 February"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "anniversary",
+        "subject": "Bruno",
+        "value": "11 February"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1522
+    },
+    {
+      "id": "r-0578",
+      "kind": "save_fact",
+      "message": "The company stored for Nessa needs replacing with Harbour Collective.",
+      "expected": {
+        "action": "update_fact",
+        "subject": "Nessa",
+        "attribute": "company",
+        "value": "Harbour Collective"
+      },
+      "raw": {
+        "action": "update_fact",
+        "attribute": "company",
+        "subject": "Nessa",
+        "value": "Harbour Collective"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1515
+    },
+    {
+      "id": "r-0579",
+      "kind": "save_fact",
+      "message": "Keep Pavel's updated title, Programme Director.",
+      "expected": {
+        "action": "update_fact",
+        "subject": "Pavel",
+        "attribute": "role",
+        "value": "Programme Director"
+      },
+      "raw": {
+        "action": "update_fact",
+        "attribute": "role",
+        "subject": "Pavel",
+        "value": "Programme Director"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1720
+    },
+    {
+      "id": "r-0580",
+      "kind": "save_fact",
+      "message": "Correct the birthday you saved for Wren; it is 24 July.",
+      "expected": {
+        "action": "update_fact",
+        "subject": "Wren",
+        "attribute": "birthday",
+        "value": "24 July"
+      },
+      "raw": {
+        "action": "update_fact",
+        "attribute": "birthday",
+        "subject": "Wren",
+        "value": "24 July"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1626
+    },
+    {
+      "id": "r-0581",
+      "kind": "save_fact",
+      "message": "Store 20 October as my birthday.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "self",
+        "attribute": "birthday",
+        "value": "20 October"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "birthday",
+        "subject": "self",
+        "value": "20 October"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1686
+    },
+    {
+      "id": "r-0582",
+      "kind": "save_fact",
+      "message": "My personal email for your records: ellis.home@example.com.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "self",
+        "attribute": "email",
+        "value": "ellis.home@example.com"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "email",
+        "subject": "self",
+        "value": "ellis.home@example.com"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1835
+    },
+    {
+      "id": "r-0583",
+      "kind": "save_fact",
+      "message": "I've moved house. Replace my stored address with 14 Cedar Walk, Ahmedabad.",
+      "expected": {
+        "action": "update_fact",
+        "subject": "self",
+        "attribute": "address",
+        "value": "14 Cedar Walk, Ahmedabad"
+      },
+      "raw": {
+        "action": "update_fact",
+        "attribute": "address",
+        "subject": "self",
+        "value": "14 Cedar Walk, Ahmedabad"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1799
+    },
+    {
+      "id": "r-0584",
+      "kind": "save_fact",
+      "message": "Keep my job title as Learning Designer.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "self",
+        "attribute": "role",
+        "value": "Learning Designer"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "role",
+        "subject": "self",
+        "value": "Learning Designer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1768
+    },
+    {
+      "id": "r-0585",
+      "kind": "save_fact",
+      "message": "The company field for me needs to say Silver Fern Health now.",
+      "expected": {
+        "action": "update_fact",
+        "subject": "self",
+        "attribute": "company",
+        "value": "Silver Fern Health"
+      },
+      "raw": {
+        "action": "update_fact",
+        "attribute": "company",
+        "subject": "self",
+        "value": "Silver Fern Health"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1917
+    },
+    {
+      "id": "r-0586",
+      "kind": "save_fact",
+      "message": "For future use my contact number is +91 90000 89012.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "self",
+        "attribute": "phone",
+        "value": "+91 90000 89012"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "phone",
+        "subject": "self",
+        "value": "+91 90000 89012"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1987
+    },
+    {
+      "id": "r-0587",
+      "kind": "save_fact",
+      "message": "Could you record 5 June as my wedding anniversary?",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "self",
+        "attribute": "anniversary",
+        "value": "5 June"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "anniversary",
+        "subject": "self",
+        "value": "5 June"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1663
+    },
+    {
+      "id": "r-0588",
+      "kind": "save_fact",
+      "message": "I'd like my saved email replaced by devon.primary@example.org.",
+      "expected": {
+        "action": "update_fact",
+        "subject": "self",
+        "attribute": "email",
+        "value": "devon.primary@example.org"
+      },
+      "raw": {
+        "action": "update_fact",
+        "attribute": "email",
+        "subject": "self",
+        "value": "devon.primary@example.org"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1712
+    },
+    {
+      "id": "r-0589",
+      "kind": "save_fact",
+      "message": "Make a permanent note of my home address, 7 Orchard Rise, Bhopal.",
+      "expected": {
+        "action": "remember_fact",
+        "subject": "self",
+        "attribute": "address",
+        "value": "7 Orchard Rise, Bhopal"
+      },
+      "raw": {
+        "action": "remember_fact",
+        "attribute": "home address",
+        "value": "7 Orchard Rise, Bhopal"
+      },
+      "ok": false,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1556
+    },
+    {
+      "id": "r-0590",
+      "kind": "save_fact",
+      "message": "My birthday entry needs a correction: 13 January.",
+      "expected": {
+        "action": "update_fact",
+        "subject": "self",
+        "attribute": "birthday",
+        "value": "13 January"
+      },
+      "raw": {
+        "action": "update_fact",
+        "attribute": "birthday",
+        "subject": "self",
+        "value": "13 January"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "remember",
+      "latencyMs": 1651
+    },
+    {
+      "id": "r-0703",
+      "kind": "follow_up",
+      "message": "Add buy a new raincoat to my reminders.",
+      "expected": {
+        "action": "clarify",
+        "question": "When should I remind you?",
+        "message": "Buy a new raincoat"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Buy a new raincoat",
+        "question": "When should I remind you?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1530
+    },
+    {
+      "id": "r-0704",
+      "kind": "follow_up",
+      "message": "I'd like reminding about comparing mattress sizes.",
+      "expected": {
+        "action": "clarify",
+        "question": "When would you like the reminder?",
+        "message": "Compare mattress sizes"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Compare mattress sizes",
+        "question": "When would you like that reminder?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1458
+    },
+    {
+      "id": "r-0705",
+      "kind": "follow_up",
+      "message": "Could a reminder help me remember to return the headphones? Set one.",
+      "expected": {
+        "action": "clarify",
+        "question": "When should I remind you?",
+        "message": "Return the headphones"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Return the headphones",
+        "question": "When should I remind you?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1575
+    },
+    {
+      "id": "r-0706",
+      "kind": "follow_up",
+      "message": "remember to nudge me about the printer cartridge order",
+      "expected": {
+        "action": "clarify",
+        "question": "When should I nudge you?",
+        "message": "Order the printer cartridge"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Order the printer cartridge",
+        "question": "What date and time should I use?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1666
+    },
+    {
+      "id": "r-0707",
+      "kind": "follow_up",
+      "message": "Put a recurring daily reminder in for carrying my shopping bags.",
+      "expected": {
+        "action": "clarify",
+        "question": "What time each day?",
+        "message": "Carry my shopping bags",
+        "timing": {
+          "type": "daily"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Carry my shopping bags",
+        "question": "What time each day?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1668
+    },
+    {
+      "id": "r-0708",
+      "kind": "follow_up",
+      "message": "Make an ongoing weekday nudge for checking the grocery list.",
+      "expected": {
+        "action": "clarify",
+        "question": "What time on weekdays should I remind you?",
+        "message": "Check the grocery list",
+        "timing": {
+          "type": "daily",
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Check the grocery list",
+        "timing": {
+          "time": "09:00",
+          "type": "daily",
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": true,
+      "got": "schedule_create",
+      "latencyMs": 2372
+    },
+    {
+      "id": "r-0709",
+      "kind": "follow_up",
+      "message": "I ought to collect the replacement spectacles; create a reminder for it.",
+      "expected": {
+        "action": "clarify",
+        "question": "When should I remind you?",
+        "message": "Collect the replacement spectacles"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Collect the replacement spectacles",
+        "question": "When should I remind you?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1764
+    },
+    {
+      "id": "r-0710",
+      "kind": "follow_up",
+      "message": "Have a reminder ready for buying the new kettle.",
+      "expected": {
+        "action": "clarify",
+        "question": "When would you like that reminder?",
+        "message": "Buy the new kettle"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Buy the new kettle",
+        "question": "When should I remind you?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1843
+    },
+    {
+      "id": "r-0711",
+      "kind": "follow_up",
+      "message": "A reminder for packing my passport tomorrow at 6, please.",
+      "expected": {
+        "action": "clarify",
+        "question": "Is that 6am or 6pm?",
+        "message": "Pack my passport"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Pack my passport",
+        "question": "Is that 6am or 6pm?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1888
+    },
+    {
+      "id": "r-0712",
+      "kind": "follow_up",
+      "message": "At 4:10 on Saturday I want reminding to check in.",
+      "expected": {
+        "action": "clarify",
+        "question": "Is that 4:10am or 4:10pm?",
+        "message": "Check in"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Check in",
+        "question": "Is that 4:10am or 4:10pm?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1746
+    },
+    {
+      "id": "r-0713",
+      "kind": "follow_up",
+      "message": "Can you put booking the ferry in my reminders for 8?",
+      "expected": {
+        "action": "clarify",
+        "question": "Is that 8am or 8pm?",
+        "message": "Book the ferry"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Book the ferry",
+        "question": "Is that 8am or 8pm?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1636
+    },
+    {
+      "id": "r-0714",
+      "kind": "follow_up",
+      "message": "The reminder for downloading offline maps should be at 9:15 tomorrow.",
+      "expected": {
+        "action": "clarify",
+        "question": "Is that 9:15am or 9:15pm?",
+        "message": "Download offline maps"
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Download offline maps",
+        "timing": {
+          "local_at": "2027-09-13T09:15",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2229
+    },
+    {
+      "id": "r-0715",
+      "kind": "follow_up",
+      "message": "Give me a nudge to confirm the airport transfer on Friday at 3.",
+      "expected": {
+        "action": "clarify",
+        "question": "Is that 3am or 3pm?",
+        "message": "Confirm the airport transfer"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Confirm the airport transfer",
+        "question": "Is that 3am or 3pm?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1720
+    },
+    {
+      "id": "r-0716",
+      "kind": "follow_up",
+      "message": "make a reminder about getting travel adapters at 11 on monday",
+      "expected": {
+        "action": "clarify",
+        "question": "Is that 11am or 11pm?",
+        "message": "Get travel adapters"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Get travel adapters",
+        "question": "Is that 11am or 11pm?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1834
+    },
+    {
+      "id": "r-0717",
+      "kind": "follow_up",
+      "message": "I'd like 7:45 to be the reminder for collecting the travel bag.",
+      "expected": {
+        "action": "clarify",
+        "question": "Is that 7:45am or 7:45pm?",
+        "message": "Collect the travel bag"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Collect the travel bag",
+        "question": "Is that 7:45am or 7:45pm?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2031
+    },
+    {
+      "id": "r-0718",
+      "kind": "follow_up",
+      "message": "For asking about baggage allowance, can I get a nudge at 2:20?",
+      "expected": {
+        "action": "clarify",
+        "question": "Is that 2:20am or 2:20pm?",
+        "message": "Ask about baggage allowance"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "What should I remind you about?",
+        "question": "What should I remind you about?",
+        "timing": {
+          "local_at": "2027-01-01T14:20",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 3013
+    },
+    {
+      "id": "r-0719",
+      "kind": "follow_up",
+      "message": "A 7:35am reminder tomorrow, please.",
+      "expected": {
+        "action": "clarify",
+        "question": "What should the reminder say?",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-03-01T07:35"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should the reminder be about?",
+        "timing": {
+          "local_at": "2027-03-01T07:35",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2651
+    },
+    {
+      "id": "r-0720",
+      "kind": "follow_up",
+      "message": "Can I have a nudge 55 minutes from now?",
+      "expected": {
+        "action": "clarify",
+        "question": "What should I remind you about?",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-03-31T01:08"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should I remind you about?",
+        "timing": {
+          "local_at": "2027-03-31T01:48",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2780
+    },
+    {
+      "id": "r-0721",
+      "kind": "follow_up",
+      "message": "For each Monday 8:45pm, add a reminder.",
+      "expected": {
+        "action": "clarify",
+        "question": "What should the weekly reminder say?",
+        "timing": {
+          "type": "daily",
+          "time": "20:45",
+          "weekdays": [
+            1
+          ]
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Add a reminder",
+        "timing": {
+          "time": "20:45",
+          "type": "daily",
+          "weekdays": [
+            1
+          ]
+        }
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": true,
+      "got": "schedule_create",
+      "latencyMs": 2259
+    },
+    {
+      "id": "r-0722",
+      "kind": "follow_up",
+      "message": "Make the 26th at 12:20pm a reminder for me.",
+      "expected": {
+        "action": "clarify",
+        "question": "What should I remind you about?",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-05-26T12:20"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should the reminder be for?",
+        "timing": {
+          "local_at": "2027-06-26T12:20",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 3455
+    },
+    {
+      "id": "r-0723",
+      "kind": "follow_up",
+      "message": "Would you put in a nightly 10:45pm reminder?",
+      "expected": {
+        "action": "clarify",
+        "question": "What should I remind you about each night?",
+        "timing": {
+          "type": "daily",
+          "time": "22:45"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should the reminder be about each night?",
+        "timing": {
+          "time": "22:45",
+          "type": "daily"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1983
+    },
+    {
+      "id": "r-0724",
+      "kind": "follow_up",
+      "message": "I'd like something in my reminders for Thursday at 3:10pm.",
+      "expected": {
+        "action": "clarify",
+        "question": "What should I remind you about?",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-07-29T15:10"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should the reminder say?",
+        "timing": {
+          "local_at": "2027-07-29T15:10",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2768
+    },
+    {
+      "id": "r-0725",
+      "kind": "follow_up",
+      "message": "Schedule me a reminder at 25-minute intervals.",
+      "expected": {
+        "action": "clarify",
+        "question": "What should the repeating reminder say?",
+        "timing": {
+          "type": "interval",
+          "every_minutes": 25,
+          "start_local": "2027-08-19T19:48"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should I remind you about?",
+        "timing": {
+          "every_minutes": 25,
+          "start_local": "2027-08-19T19:48",
+          "type": "interval"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 3223
+    },
+    {
+      "id": "r-0726",
+      "kind": "follow_up",
+      "message": "need a notification reminder tonight 6:55pm",
+      "expected": {
+        "action": "clarify",
+        "question": "What should I remind you about?",
+        "timing": {
+          "type": "once",
+          "local_at": "2028-02-29T18:55"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should the reminder be about?",
+        "timing": {
+          "local_at": "2028-02-29T18:55",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 3704
+    },
+    {
+      "id": "r-0727",
+      "kind": "follow_up",
+      "message": "Could you disable the club payment reminder by pausing it?",
+      "expected": {
+        "action": "clarify",
+        "question": "Which one: Pay chess club fee or Pay sailing club fee?"
+      },
+      "raw": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_a936b307"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": true,
+      "got": "pause",
+      "latencyMs": 2329
+    },
+    {
+      "id": "r-0728",
+      "kind": "follow_up",
+      "message": "I want the session booking reminder deleted.",
+      "expected": {
+        "action": "clarify",
+        "question": "Which one: Book practice session or Book coaching session?"
+      },
+      "raw": {
+        "action": "cancel_schedule",
+        "schedule_id": "sch_e64cda03"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": true,
+      "got": "cancel",
+      "latencyMs": 1760
+    },
+    {
+      "id": "r-0729",
+      "kind": "follow_up",
+      "message": "Let my team reminder wait 30 minutes.",
+      "expected": {
+        "action": "clarify",
+        "question": "Which one: Confirm junior team or Confirm senior team?",
+        "minutes": 30
+      },
+      "raw": {
+        "action": "clarify",
+        "minutes": 30,
+        "question": "Which one: Confirm senior team or Confirm junior team?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1901
+    },
+    {
+      "id": "r-0730",
+      "kind": "follow_up",
+      "message": "The rehearsal reminder needs moving to Friday 7pm.",
+      "expected": {
+        "action": "clarify",
+        "question": "Which one: Choir rehearsal or Theatre rehearsal?",
+        "timing": {
+          "type": "daily",
+          "time": "19:00",
+          "weekdays": [
+            5
+          ]
+        }
+      },
+      "raw": {
+        "action": "update_schedule",
+        "schedule_id": "sch_bc8e6082",
+        "timing": {
+          "time": "19:00",
+          "type": "daily"
+        }
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": true,
+      "got": "schedule_update",
+      "latencyMs": 2017
+    },
+    {
+      "id": "r-0731",
+      "kind": "follow_up",
+      "message": "Turn the event ticket reminder back on.",
+      "expected": {
+        "action": "clarify",
+        "question": "Which one: Buy concert tickets or Buy match tickets?"
+      },
+      "raw": {
+        "action": "resume_schedule",
+        "schedule_id": "sch_770e7c8a"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": true,
+      "got": "resume",
+      "latencyMs": 1689
+    },
+    {
+      "id": "r-0732",
+      "kind": "follow_up",
+      "message": "Could my lesson reminder happen at 10am instead?",
+      "expected": {
+        "action": "clarify",
+        "question": "Which one: Dance lesson or Drawing lesson?",
+        "timing": {
+          "type": "daily",
+          "time": "10:00"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "Which one: Dance lesson or Drawing lesson?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1433
+    },
+    {
+      "id": "r-0733",
+      "kind": "follow_up",
+      "message": "get the tournament reminder out of my list",
+      "expected": {
+        "action": "clarify",
+        "question": "Which one: Chess tournament or Tennis tournament?"
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "Which one: Chess tournament or Tennis tournament?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1524
+    },
+    {
+      "id": "r-0734",
+      "kind": "follow_up",
+      "message": "Put the newsletter reminder on hold, pause it.",
+      "expected": {
+        "action": "clarify",
+        "question": "Which one: Write club newsletter or Send club newsletter?"
+      },
+      "raw": {
+        "action": "pause_schedule",
+        "schedule_id": "sch_33ee3e20"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": true,
+      "got": "pause",
+      "latencyMs": 1579
+    },
+    {
+      "id": "r-0735",
+      "kind": "follow_up",
+      "message": "Remove the reminder for the boiler inspection from my list.",
+      "expected": {
+        "action": "clarify",
+        "question": "Which existing reminder should I remove?"
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "Which one: Order coffee beans or Review library loans?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1532
+    },
+    {
+      "id": "r-0736",
+      "kind": "follow_up",
+      "message": "Could the upholstery cleaning reminder be paused?",
+      "expected": {
+        "action": "clarify",
+        "question": "Which existing reminder did you mean?"
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "Which one: Review library loans or Clean desk fan?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1578
+    },
+    {
+      "id": "r-0737",
+      "kind": "follow_up",
+      "message": "I need a 40-minute snooze for the chimney sweep reminder.",
+      "expected": {
+        "action": "clarify",
+        "question": "Which existing reminder should I snooze?",
+        "minutes": 40
+      },
+      "raw": {
+        "action": "clarify",
+        "minutes": 40,
+        "question": "Which one: Clean desk fan or Check balcony seedlings?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1827
+    },
+    {
+      "id": "r-0738",
+      "kind": "follow_up",
+      "message": "Change the reminder for collecting the repaired vacuum to Thursday noon.",
+      "expected": {
+        "action": "clarify",
+        "question": "Which existing reminder should I change?",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-07-29T12:00"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Collect the repaired vacuum",
+        "question": "Is that 12:00pm?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2050
+    },
+    {
+      "id": "r-0739",
+      "kind": "follow_up",
+      "message": "Bring back my paused reminder about testing the intercom.",
+      "expected": {
+        "action": "clarify",
+        "question": "Which existing reminder did you mean?"
+      },
+      "raw": {
+        "action": "resume_schedule"
+      },
+      "ok": true,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 763
+    },
+    {
+      "id": "r-0740",
+      "kind": "follow_up",
+      "message": "Cancel whichever reminder I set for the roof survey.",
+      "expected": {
+        "action": "clarify",
+        "question": "Which existing reminder should I cancel?"
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "Which one: Check balcony seedlings or Roof survey?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1363
+    },
+    {
+      "id": "r-0741",
+      "kind": "follow_up",
+      "message": "I'd like the washing machine installation reminder to say Bring the receipt.",
+      "expected": {
+        "action": "clarify",
+        "question": "Which existing reminder did you mean?",
+        "message": "Bring the receipt"
+      },
+      "raw": {
+        "action": "update_schedule",
+        "message": "Bring the receipt",
+        "schedule_id": "sch_f60d6601"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": true,
+      "got": "schedule_update",
+      "latencyMs": 1755
+    },
+    {
+      "id": "r-0742",
+      "kind": "follow_up",
+      "message": "Please shift my water tank cleaning reminder to tomorrow at 11am.",
+      "expected": {
+        "action": "clarify",
+        "question": "Which existing reminder should I change?",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-09-13T11:00"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "Which one: Clean desk fan or Check balcony seedlings?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1512
+    },
+    {
+      "id": "r-0743",
+      "kind": "follow_up",
+      "message": "Tomorrow at 11:15am, prompt me to bring the other one.",
+      "expected": {
+        "action": "clarify",
+        "question": "What should I remind you to bring?",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-11-04T11:15"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Bring the other one",
+        "question": "What should I remind you to bring?",
+        "timing": {
+          "local_at": "2026-11-04T11:15",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2794
+    },
+    {
+      "id": "r-0744",
+      "kind": "follow_up",
+      "message": "Make a reminder to forward this on Saturday 3pm.",
+      "expected": {
+        "action": "clarify",
+        "question": "What should I remind you to forward?",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-12-05T15:00"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should I remind you to forward?",
+        "timing": {
+          "local_at": "2026-12-05T15:00",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2648
+    },
+    {
+      "id": "r-0745",
+      "kind": "follow_up",
+      "message": "I'd like a nudge about sorting those out in 75 minutes.",
+      "expected": {
+        "action": "clarify",
+        "question": "What should I remind you to sort out?",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-01-01T01:03"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should I remind you to sort out?",
+        "timing": {
+          "local_at": "2026-12-31T01:03",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2640
+    },
+    {
+      "id": "r-0746",
+      "kind": "follow_up",
+      "message": "Add get it replaced as a reminder for tonight at 8:25.",
+      "expected": {
+        "action": "clarify",
+        "question": "What should I remind you to replace?",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-01-01T20:25"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Get it replaced",
+        "question": "Is that 8:25am or 8:25pm?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2226
+    },
+    {
+      "id": "r-0747",
+      "kind": "follow_up",
+      "message": "can i have a reminder to sign that on the 19th at 9am",
+      "expected": {
+        "action": "clarify",
+        "question": "What should I remind you to sign?",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-03-19T09:00"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should I remind you to sign?",
+        "timing": {
+          "local_at": "2027-03-19T09:00",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2648
+    },
+    {
+      "id": "r-0748",
+      "kind": "follow_up",
+      "message": "Give me a Sunday 6:30pm reminder to ask her about it.",
+      "expected": {
+        "action": "clarify",
+        "question": "Who and what should the reminder refer to?",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-04-04T18:30"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Who should I remind you to ask?",
+        "question": "What should I remind you to ask her about?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1719
+    },
+    {
+      "id": "r-0749",
+      "kind": "follow_up",
+      "message": "Set a reminder to take these back tomorrow at 4:20pm.",
+      "expected": {
+        "action": "clarify",
+        "question": "What should I remind you to take back?",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-05-01T16:20"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should I remind you to take back?",
+        "timing": {
+          "local_at": "2027-05-01T16:20",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2468
+    },
+    {
+      "id": "r-0750",
+      "kind": "follow_up",
+      "message": "In 42 minutes I'd like to be reminded to try that again.",
+      "expected": {
+        "action": "clarify",
+        "question": "What should I remind you to try?",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-05-17T16:50"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should I remind you to try again?",
+        "timing": {
+          "local_at": "2027-05-17T16:50",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2507
+    },
+    {
+      "id": "r-0800",
+      "kind": "answer_follow_up",
+      "message": "Could we use Thursday at 12:10pm?",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Contact the donation centre",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-12-03T12:10"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Contact the donation centre",
+        "question": "Is that 12:10pmam or 12:10pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2317
+    },
+    {
+      "id": "r-0801",
+      "kind": "answer_follow_up",
+      "message": "Give it another 50 minutes from now.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Send the cleanup map",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-12-31T14:46"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "question": "What should I remind you to send?",
+        "timing": {
+          "local_at": "2026-12-31T14:46",
+          "type": "once"
+        }
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2771
+    },
+    {
+      "id": "r-0802",
+      "kind": "answer_follow_up",
+      "message": "Tomorrow, 9:35 in the morning sounds right.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Count the spare gloves",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-01-02T09:35"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Count the spare gloves",
+        "timing": {
+          "local_at": "2027-01-02T09:35",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2217
+    },
+    {
+      "id": "r-0803",
+      "kind": "answer_follow_up",
+      "message": "The 21st at 4:25pm works.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Confirm the first-aid volunteer",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-03-21T16:25"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Confirm the first-aid volunteer",
+        "question": "Is that 4:25pmam or 4:25pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2128
+    },
+    {
+      "id": "r-0804",
+      "kind": "answer_follow_up",
+      "message": "Sunday afternoon at 2:20, please.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Collect the event aprons",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-04-04T14:20"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Collect the event aprons",
+        "question": "Is that 2:20am or 2:20pm?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2047
+    },
+    {
+      "id": "r-0805",
+      "kind": "answer_follow_up",
+      "message": "90 minutes after now please.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Sort the donation receipts",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-04-30T01:43"
+        }
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Sort the donation receipts",
+        "question": "What time 90 minutes after now?"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1776
+    },
+    {
+      "id": "r-0806",
+      "kind": "answer_follow_up",
+      "message": "The 7 at night.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Collect the lab report",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-05-18T19:00"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Collect the lab report",
+        "timing": {
+          "local_at": "2027-05-18T19:00",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2523
+    },
+    {
+      "id": "r-0807",
+      "kind": "answer_follow_up",
+      "message": "Use 10:30 in the morning.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Confirm the scan",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-06-11T10:30"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Confirm the scan",
+        "timing": {
+          "local_at": "2027-06-11T10:30",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2615
+    },
+    {
+      "id": "r-0808",
+      "kind": "answer_follow_up",
+      "message": "Afternoon please, 2:15.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Print the referral",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-07-25T14:15"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Print the referral",
+        "timing": {
+          "local_at": "2027-07-25T14:15",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2580
+    },
+    {
+      "id": "r-0809",
+      "kind": "answer_follow_up",
+      "message": "Early one, 5am.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Pack the clinic bag",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-08-21T05:00"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Pack the clinic bag",
+        "timing": {
+          "local_at": "2027-08-21T05:00",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2702
+    },
+    {
+      "id": "r-0810",
+      "kind": "answer_follow_up",
+      "message": "I meant 11:40am for that.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Phone the receptionist",
+        "timing": {
+          "type": "once",
+          "local_at": "2028-03-01T11:40"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Phone the receptionist",
+        "timing": {
+          "local_at": "2028-03-01T11:40",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2741
+    },
+    {
+      "id": "r-0811",
+      "kind": "answer_follow_up",
+      "message": "Make it the evening 6:50.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the appointment email",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-11-04T18:50"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Check the appointment email",
+        "timing": {
+          "local_at": "2026-11-04T18:50",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2280
+    },
+    {
+      "id": "r-0812",
+      "kind": "answer_follow_up",
+      "message": "It's for downloading the city map.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Download the city map",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-09-13T18:40"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Download the city map",
+        "timing": {
+          "local_at": "2027-09-13T18:40",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2447
+    },
+    {
+      "id": "r-0813",
+      "kind": "answer_follow_up",
+      "message": "Packing the spare socks.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Pack the spare socks",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-11-06T08:25"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Pack the spare socks",
+        "timing": {
+          "local_at": "2026-11-06T08:25",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 2697
+    },
+    {
+      "id": "r-0814",
+      "kind": "answer_follow_up",
+      "message": "The message is confirm the return ferry.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Confirm the return ferry",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-11-30T14:51"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Confirm the return ferry",
+        "timing": {
+          "local_at": "2026-11-30T14:51",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 3271
+    },
+    {
+      "id": "r-0815",
+      "kind": "answer_follow_up",
+      "message": "I need to buy the luggage strap.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Buy the luggage strap",
+        "timing": {
+          "type": "once",
+          "local_at": "2026-12-31T19:10"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Buy the luggage strap",
+        "timing": {
+          "local_at": "2026-12-31T19:10",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 3734
+    },
+    {
+      "id": "r-0816",
+      "kind": "answer_follow_up",
+      "message": "Use Check the hotel address.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Check the hotel address",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-01-14T09:50"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Check the hotel address",
+        "timing": {
+          "local_at": "2027-01-14T09:50",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 3574
+    },
+    {
+      "id": "r-0817",
+      "kind": "answer_follow_up",
+      "message": "Refilling the travel bottle is what it's for.",
+      "expected": {
+        "action": "create_reminder",
+        "message": "Refill the travel bottle",
+        "timing": {
+          "type": "once",
+          "local_at": "2027-03-07T17:45"
+        }
+      },
+      "raw": {
+        "action": "create_reminder",
+        "message": "Refill the travel bottle",
+        "timing": {
+          "local_at": "2027-03-07T17:45",
+          "type": "once"
+        }
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "schedule_create",
+      "latencyMs": 6755
+    },
+    {
+      "id": "r-0818",
+      "kind": "answer_follow_up",
+      "message": "Sometime Saturday.",
+      "expected": {
+        "action": "clarify",
+        "question": "What time on Saturday should I remind you?",
+        "message": "Compare the vacuum sizes"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Compare the vacuum sizes",
+        "question": "What time on Saturday?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2126
+    },
+    {
+      "id": "r-0819",
+      "kind": "answer_follow_up",
+      "message": "I'd say at 9.",
+      "expected": {
+        "action": "clarify",
+        "question": "Is that 9am or 9pm?",
+        "message": "Collect the replacement kettle"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Collect the replacement kettle",
+        "question": "Is that 9am or 9pm?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 2253
+    },
+    {
+      "id": "r-0820",
+      "kind": "answer_follow_up",
+      "message": "Next month sometime.",
+      "expected": {
+        "action": "clarify",
+        "question": "What date and time next month?",
+        "message": "Order a winter coat"
+      },
+      "raw": {
+        "action": "clarify",
+        "message": "Order a winter coat",
+        "question": "What day and time next month?"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1599
+    },
+    {
+      "id": "r-0947",
+      "kind": "plain_question",
+      "message": "i'd like to revisit the feedback on my landscape photos.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Review feedback on my landscape photos"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1358
+    },
+    {
+      "id": "r-0948",
+      "kind": "plain_question",
+      "message": "can you locate the chat about the ending of my short story?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 940
+    },
+    {
+      "id": "r-0949",
+      "kind": "plain_question",
+      "message": "what did the instructor suggest for improving the bowl shape?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1003
+    },
+    {
+      "id": "r-0950",
+      "kind": "plain_question",
+      "message": "which recording had the drum fill i wanted to practise?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1245
+    },
+    {
+      "id": "r-0951",
+      "kind": "plain_question",
+      "message": "where were the notes about changing the poster colours",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1034
+    },
+    {
+      "id": "r-0952",
+      "kind": "plain_question",
+      "message": "what did the editor think of my opening paragraph?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1117
+    },
+    {
+      "id": "r-0953",
+      "kind": "plain_question",
+      "message": "locate the reference image i used for the bird sketch.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1336
+    },
+    {
+      "id": "r-0954",
+      "kind": "plain_question",
+      "message": "which part of the song did the teacher say was too fast?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1333
+    },
+    {
+      "id": "r-0955",
+      "kind": "plain_question",
+      "message": "what were the framing options i compared last weekend?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 707
+    },
+    {
+      "id": "r-0956",
+      "kind": "plain_question",
+      "message": "help me find the message about the glaze turning cloudy.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1125
+    },
+    {
+      "id": "r-0957",
+      "kind": "plain_question",
+      "message": "who suggested the wider border for the lino print?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1280
+    },
+    {
+      "id": "r-0958",
+      "kind": "plain_question",
+      "message": "i want the notes from the lighting workshop i attended.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1097
+    },
+    {
+      "id": "r-0959",
+      "kind": "plain_question",
+      "message": "what did the critique group say about the dialogue?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1244
+    },
+    {
+      "id": "r-0960",
+      "kind": "plain_question",
+      "message": "where can i find the list of lenses i researched?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1405
+    },
+    {
+      "id": "r-0961",
+      "kind": "plain_question",
+      "message": "any idea which page had that knitting chart i looked at",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1096
+    },
+    {
+      "id": "r-0962",
+      "kind": "plain_question",
+      "message": "what was the alternative chord progression i saved?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1196
+    },
+    {
+      "id": "r-0963",
+      "kind": "plain_question",
+      "message": "find the feedback thread for the festival logo.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1090
+    },
+    {
+      "id": "r-0964",
+      "kind": "plain_question",
+      "message": "which clay body did the studio recommend in that email?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 725
+    },
+    {
+      "id": "r-0965",
+      "kind": "plain_question",
+      "message": "who volunteered to bring the spare microphone to the fundraiser?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 774
+    },
+    {
+      "id": "r-0966",
+      "kind": "plain_question",
+      "message": "where's the document listing the shelter's donation needs?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 965
+    },
+    {
+      "id": "r-0967",
+      "kind": "plain_question",
+      "message": "what time did the walking group agree to meet on sunday?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 859
+    },
+    {
+      "id": "r-0968",
+      "kind": "plain_question",
+      "message": "can you locate the message about the cancelled rehearsal?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 986
+    },
+    {
+      "id": "r-0969",
+      "kind": "plain_question",
+      "message": "who had the keys for the community hall last time",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1330
+    },
+    {
+      "id": "r-0970",
+      "kind": "plain_question",
+      "message": "what were the rules for entering the local photo contest?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1330
+    },
+    {
+      "id": "r-0971",
+      "kind": "plain_question",
+      "message": "which park did the cleanup organisers choose?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1035
+    },
+    {
+      "id": "r-0972",
+      "kind": "plain_question",
+      "message": "what did the club treasurer say about membership fees?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1103
+    },
+    {
+      "id": "r-0973",
+      "kind": "plain_question",
+      "message": "find the email explaining how to collect the race bib.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 736
+    },
+    {
+      "id": "r-0974",
+      "kind": "plain_question",
+      "message": "which days was the food bank accepting deliveries?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 766
+    },
+    {
+      "id": "r-0975",
+      "kind": "plain_question",
+      "message": "was the chess tournament meant to start at 10am?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 877
+    },
+    {
+      "id": "r-0976",
+      "kind": "plain_question",
+      "message": "i need the notes from the neighbourhood planning meeting.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "create_task",
+        "prompt": "Summarise the notes from the neighbourhood planning meeting"
+      },
+      "ok": false,
+      "actionOk": false,
+      "wrongWrite": false,
+      "got": "clarify",
+      "latencyMs": 1469
+    },
+    {
+      "id": "r-0977",
+      "kind": "plain_question",
+      "message": "where is the signup link for the public garden tour?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 955
+    },
+    {
+      "id": "r-0978",
+      "kind": "plain_question",
+      "message": "what did the organiser say about bringing children?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1079
+    },
+    {
+      "id": "r-0979",
+      "kind": "plain_question",
+      "message": "who was coordinating the transport for the beach cleanup?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1062
+    },
+    {
+      "id": "r-0980",
+      "kind": "plain_question",
+      "message": "can you recover that list of books for the reading circle",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 997
+    },
+    {
+      "id": "r-0981",
+      "kind": "plain_question",
+      "message": "what was the amount mentioned for renting the hall?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1120
+    },
+    {
+      "id": "r-0982",
+      "kind": "plain_question",
+      "message": "where did the cycling club post the revised route?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 722
+    },
+    {
+      "id": "r-0983",
+      "kind": "plain_question",
+      "message": "i'm on the bus and my headphones just died.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 785
+    },
+    {
+      "id": "r-0984",
+      "kind": "plain_question",
+      "message": "the reminder about the volunteer shift was for what time?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 855
+    },
+    {
+      "id": "r-0985",
+      "kind": "plain_question",
+      "message": "my desk is covered in packaging right now.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 977
+    },
+    {
+      "id": "r-0986",
+      "kind": "plain_question",
+      "message": "was there already a nudge set for checking the tyre pump?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 869
+    },
+    {
+      "id": "r-0987",
+      "kind": "plain_question",
+      "message": "i slept badly and can't concentrate on this page.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 941
+    },
+    {
+      "id": "r-0988",
+      "kind": "plain_question",
+      "message": "how often does the reminder for cleaning the easel repeat?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1058
+    },
+    {
+      "id": "r-0989",
+      "kind": "plain_question",
+      "message": "the shop's queue is moving very slowly.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1123
+    },
+    {
+      "id": "r-0990",
+      "kind": "plain_question",
+      "message": "had i paused the reminder for the choir fees?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1001
+    },
+    {
+      "id": "r-0991",
+      "kind": "plain_question",
+      "message": "my screen keeps flickering this morning",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 678
+    },
+    {
+      "id": "r-0992",
+      "kind": "plain_question",
+      "message": "do you know whether i scheduled a reminder for collecting the clay?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 828
+    },
+    {
+      "id": "r-0993",
+      "kind": "plain_question",
+      "message": "i'm not feeling hungry yet.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1070
+    },
+    {
+      "id": "r-0994",
+      "kind": "plain_question",
+      "message": "what wording did i use in that ferry booking reminder?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 942
+    },
+    {
+      "id": "r-0995",
+      "kind": "plain_question",
+      "message": "the printer is out of paper at the moment.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 875
+    },
+    {
+      "id": "r-0996",
+      "kind": "plain_question",
+      "message": "is there already a reminder attached to the library event?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 948
+    },
+    {
+      "id": "r-0997",
+      "kind": "plain_question",
+      "message": "i left my jacket in the meeting room today.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1033
+    },
+    {
+      "id": "r-0998",
+      "kind": "plain_question",
+      "message": "when was i supposed to get the reminder about the club badges?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1153
+    },
+    {
+      "id": "r-0999",
+      "kind": "plain_question",
+      "message": "i'm trying to focus but the street outside is noisy.",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 1079
+    },
+    {
+      "id": "r-1000",
+      "kind": "plain_question",
+      "message": "did i mention a reminder for this evening during yesterday's chat?",
+      "expected": {
+        "action": "answer"
+      },
+      "raw": {
+        "action": "answer"
+      },
+      "ok": true,
+      "actionOk": true,
+      "wrongWrite": false,
+      "got": "answer",
+      "latencyMs": 678
+    }
+  ]
+}

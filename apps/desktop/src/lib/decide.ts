@@ -8,7 +8,7 @@
 import { attributeName, normalize, type Intent, type PendingIntent, type ScheduleChange } from './intent';
 import type { ScheduleSpec } from './schedules';
 
-export const DECIDE_PROMPT_VERSION = 'decide-v1';
+export const DECIDE_PROMPT_VERSION = 'decide-v2';
 
 export const DECIDE_SYSTEM_PROMPT = `You are the action classifier inside Cortex, a personal memory app. Read the user's latest message and call the decide tool exactly once. You never write anything yourself: code validates your output and then performs the action.
 
@@ -16,7 +16,7 @@ Actions: create_reminder, create_task (Cortex generates an answer on a schedule,
 
 Rules:
 - Choose answer unless the user directly asks, in the present, to set, change or remove a reminder or to save a fact. These are always answer: questions about how reminders or memory work ("how do I set a reminder?"), quoted text, code, hypotheticals ("if I said remember my PIN is 1234, would you store it?"), examples, reported speech ("she said 'remind me tomorrow'"), and ordinary questions. "What reminders do I have?" is list_schedules.
-- Context gives now (local, with offset), weekday, timezone, the user's schedules (id, title, timing) and saved facts (subject and attribute only). Resolve relative phrases (Friday, next week, in 2 hours, the 1st, end of month) yourself into concrete values. "Friday" is the next Friday after today, or today if the time is still ahead.
+- Context gives now (local, with offset), weekday, upcoming_days, timezone, the user's schedules (id, title, timing) and saved facts (subject and attribute only). For a named weekday, copy its date from upcoming_days; "Friday" is the next Friday after today, or today if the time is still ahead. Resolve other relative phrases (next week, in 2 hours, the 1st, end of month) yourself into concrete values.
 - timing is one of: {"type":"once","local_at":"YYYY-MM-DDTHH:MM"}; {"type":"daily","time":"HH:MM","weekdays":[1..7]} (weekdays Monday=1..Sunday=7, omit for every day; this is also the weekly form); {"type":"monthly","day":1..31 or -1 for the last day,"time":"HH:MM"}; {"type":"interval","every_minutes":N>=15,"start_local":"YYYY-MM-DDTHH:MM","window_start":"HH:MM","window_end":"HH:MM","weekdays":[...]} with the window only if the user gave hours. Times are 24-hour local time in timezone.
 - A bare hour with no am/pm and no morning/afternoon/evening/night ("at 5", "call at 3") is ambiguous: use clarify and ask am or pm. Never guess.
 - message is the thing to be reminded of in the user's words, without "remind me" ("Call mom"). For create_task, prompt is what Cortex should write each time.
@@ -119,6 +119,15 @@ export function localMinute(date: Date, timeZone: string): string {
   const p = parts(date, timeZone);
   return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
 }
+function upcomingDays(date: Date, timeZone: string): string[] {
+  const p = parts(date, timeZone);
+  const localDate = new Date(Date.UTC(Number(p.year), Number(p.month) - 1, Number(p.day)));
+  return Array.from({ length: 8 }, (_, index) => {
+    const day = new Date(localDate.getTime() + index * 86_400_000);
+    const label = `${new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'UTC' }).format(day)} ${day.toISOString().slice(0, 10)}`;
+    return index === 0 ? `${label} (today)` : label;
+  });
+}
 function localWithOffset(date: Date, timeZone: string): string {
   const offset = new Intl.DateTimeFormat('en-US', { timeZone, timeZoneName: 'longOffset' }).formatToParts(date).find(p => p.type === 'timeZoneName')?.value.replace('GMT', '') || '+00:00';
   return `${localMinute(date, timeZone)}${offset === '' ? 'Z' : offset}`;
@@ -129,6 +138,7 @@ export function buildContext(ctx: DecisionContext): string {
     prompt_version: DECIDE_PROMPT_VERSION,
     now: localWithOffset(ctx.now, ctx.timezone),
     weekday: new Intl.DateTimeFormat('en-US', { timeZone: ctx.timezone, weekday: 'long' }).format(ctx.now),
+    upcoming_days: upcomingDays(ctx.now, ctx.timezone),
     timezone: ctx.timezone,
     schedules: ctx.schedules.slice(0, 40).map(s => ({ id: s.id, title: s.title.slice(0, 120), status: s.status, timing: s.timing, timezone: s.timezone, next: s.next_due_local ?? null })),
     // Subject and attribute only: values never leave the Mac for this step.

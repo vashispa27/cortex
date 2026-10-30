@@ -1,0 +1,1934 @@
+{
+  "pairs_per_kind": {
+    "train": {
+      "answer_follow_up": 199,
+      "follow_up": 472,
+      "list_reminders": 21,
+      "manage_reminder": 198,
+      "new_reminder_once": 326,
+      "new_reminder_repeating": 190,
+      "new_task": 88,
+      "plain_question": 156,
+      "save_fact": 150
+    },
+    "test": {
+      "answer_follow_up": 21,
+      "follow_up": 48,
+      "list_reminders": 9,
+      "manage_reminder": 42,
+      "new_reminder_once": 54,
+      "new_reminder_repeating": 30,
+      "new_task": 12,
+      "plain_question": 54,
+      "save_fact": 30
+    }
+  },
+  "pair_counts": {
+    "train": 1800,
+    "test": 300
+  },
+  "scenario_counts": {
+    "train": 257,
+    "test": 29
+  },
+  "new_training_rows": {
+    "answer_follow_up": 150,
+    "follow_up": 360,
+    "manage_reminder": 100,
+    "new_reminder_once": 200,
+    "new_reminder_repeating": 120,
+    "new_task": 60,
+    "plain_question": 30,
+    "save_fact": 80
+  },
+  "new_follow_up_reason_counts": {
+    "time": 60,
+    "ampm": 60,
+    "subject": 60,
+    "multiple": 60,
+    "none": 60,
+    "reference": 60
+  },
+  "new_scenario_count": 189,
+  "intentional_contrast_messages": [
+    "pause my gym reminder"
+  ],
+  "scenario_overlap": [],
+  "exact_matches": [],
+  "near_copies": [],
+  "duplicates": {
+    "train": [],
+    "test": []
+  },
+  "validation_errors": [],
+  "samples": {
+    "train": [
+      {
+        "id": "r-1417",
+        "kind": "new_reminder_once",
+        "scenario": "community-fridge-one-offs",
+        "situation": {
+          "now": "2026-12-31T00:13+05:30",
+          "weekday": "Thursday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_410b0223",
+              "title": "Check pantry thermometer",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "20:45",
+                "weekdays": [
+                  7
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_0116091b",
+              "title": "Clean rain gutters",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 23,
+                "time": "16:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_cd6431f3",
+              "title": "Rotate archive backup",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "08:15",
+                "weekdays": [
+                  2,
+                  5
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Remind me at 6:40pm to label the oat milk donation.",
+        "expected": {
+          "action": "create_reminder",
+          "message": "Label the oat milk donation",
+          "timing": {
+            "type": "once",
+            "local_at": "2026-12-31T18:40"
+          }
+        }
+      },
+      {
+        "id": "r-0628",
+        "kind": "follow_up",
+        "scenario": "bare-clock-work-plans",
+        "situation": {
+          "now": "2028-02-29T23:48+05:30",
+          "weekday": "Tuesday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_d1bf22fe",
+              "title": "Review library loans",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 23,
+                "time": "16:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_cb2b8522",
+              "title": "Refill bird feeder",
+              "status": "paused",
+              "timing": {
+                "type": "daily",
+                "time": "07:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_5834fbc3",
+              "title": "Rest eyes",
+              "status": "active",
+              "timing": {
+                "type": "interval",
+                "every_minutes": 60,
+                "start_local": "2028-02-29T09:00",
+                "window_start": "09:00",
+                "window_end": "18:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_2ea33ad5",
+              "title": "Rotate backup drive",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "20:45",
+                "weekdays": [
+                  7
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_4e0aef7c",
+              "title": "Water orchid",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "08:15",
+                "weekdays": [
+                  2,
+                  5
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_f5171233",
+              "title": "Clean desk fan",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "11:00",
+                "weekdays": [
+                  6
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Dario",
+              "attribute": "role"
+            },
+            {
+              "subject": "Esme",
+              "attribute": "address"
+            },
+            {
+              "subject": "Pia",
+              "attribute": "anniversary"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "A reminder for checking the version tags at 11:15, please.",
+        "expected": {
+          "action": "clarify",
+          "question": "Is that 11:15am or 11:15pm?",
+          "message": "Check the version tags"
+        }
+      },
+      {
+        "id": "r-1448",
+        "kind": "new_reminder_once",
+        "scenario": "railway-model-club-one-offs",
+        "situation": {
+          "now": "2027-03-31T13:56+05:30",
+          "weekday": "Wednesday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_baba5d99",
+              "title": "Dust ceiling fan",
+              "status": "paused",
+              "timing": {
+                "type": "daily",
+                "time": "07:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_b70839ef",
+              "title": "Check roof drain",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 17,
+                "time": "10:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_db7011e3",
+              "title": "Rotate archive backup",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 23,
+                "time": "16:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_ef9c93c3",
+              "title": "Inspect window latches",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "11:00",
+                "weekdays": [
+                  6
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_0590bc88",
+              "title": "Clean rain gutters",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_c0f8ffa2",
+              "title": "Test hallway doorbell",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "20:45",
+                "weekdays": [
+                  7
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_c73fbc72",
+              "title": "Replace sewing machine needle",
+              "status": "active",
+              "timing": {
+                "type": "interval",
+                "every_minutes": 60,
+                "start_local": "2027-03-31T09:00",
+                "window_start": "09:00",
+                "window_end": "18:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Deven",
+              "attribute": "office location"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Please nudge me Thursday at 1:05pm to collect the printed timetable.",
+        "expected": {
+          "action": "create_reminder",
+          "message": "Collect the printed timetable",
+          "timing": {
+            "type": "once",
+            "local_at": "2027-04-01T13:05"
+          }
+        }
+      },
+      {
+        "id": "r-0930",
+        "kind": "plain_question",
+        "scenario": "lookup-saved-profile-facts",
+        "situation": {
+          "now": "2027-03-31T06:42+05:30",
+          "weekday": "Wednesday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_dc62e14a",
+              "title": "Check balcony seedlings",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_b866d279",
+              "title": "Clean desk fan",
+              "status": "paused",
+              "timing": {
+                "type": "daily",
+                "time": "11:00",
+                "weekdays": [
+                  6
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Esme",
+              "attribute": "address"
+            },
+            {
+              "subject": "Bianca",
+              "attribute": "birthday"
+            },
+            {
+              "subject": "Tariq",
+              "attribute": "email"
+            },
+            {
+              "subject": "Dario",
+              "attribute": "role"
+            },
+            {
+              "subject": "Chloe",
+              "attribute": "company"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "when is my parents' anniversary?",
+        "expected": {
+          "action": "answer"
+        }
+      },
+      {
+        "id": "r-2073",
+        "kind": "answer_follow_up",
+        "scenario": "piano-lesson-draft-completions",
+        "situation": {
+          "now": "2026-11-03T06:42+05:30",
+          "weekday": "Tuesday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_fd536020",
+              "title": "Return borrowed folding chair",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "08:15",
+                "weekdays": [
+                  2,
+                  5
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_90ac0942",
+              "title": "Submit parking permit",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "20:45",
+                "weekdays": [
+                  7
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Arjun Mehta",
+              "attribute": "work email"
+            },
+            {
+              "subject": "Nour",
+              "attribute": "preferred name"
+            }
+          ],
+          "recent_turns": [
+            {
+              "role": "user",
+              "content": "Remind me to pack the metronome batteries."
+            },
+            {
+              "role": "assistant",
+              "content": "When should I remind you?"
+            }
+          ],
+          "pending_draft": {
+            "message": "Pack the metronome batteries",
+            "user_text": "Remind me to pack the metronome batteries."
+          }
+        },
+        "message": "Before the next lesson.",
+        "expected": {
+          "action": "clarify",
+          "question": "Which day and time is the next lesson?",
+          "message": "Pack the metronome batteries"
+        }
+      },
+      {
+        "id": "r-1144",
+        "kind": "follow_up",
+        "scenario": "rail-commute-subject-clarifications",
+        "situation": {
+          "now": "2027-07-24T23:48+05:30",
+          "weekday": "Saturday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [],
+          "facts": [
+            {
+              "subject": "Omer",
+              "attribute": "shop name"
+            },
+            {
+              "subject": "Dev",
+              "attribute": "birthday"
+            },
+            {
+              "subject": "Rohit",
+              "attribute": "preferred name"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Nudge me in three hours, please.",
+        "expected": {
+          "action": "clarify",
+          "question": "What should I remind you about?",
+          "timing": {
+            "type": "once",
+            "local_at": "2027-07-25T02:48"
+          }
+        }
+      },
+      {
+        "id": "r-0077",
+        "kind": "new_reminder_once",
+        "scenario": "dated-household-admin",
+        "situation": {
+          "now": "2027-04-30T16:08+05:30",
+          "weekday": "Friday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_1552ce13",
+              "title": "Rotate backup drive",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "20:45",
+                "weekdays": [
+                  7
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_9a542c3c",
+              "title": "Check balcony seedlings",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_9591364b",
+              "title": "Review library loans",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 23,
+                "time": "16:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_62e056d3",
+              "title": "Water orchid",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "08:15",
+                "weekdays": [
+                  2,
+                  5
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Dario",
+              "attribute": "role"
+            },
+            {
+              "subject": "Pia",
+              "attribute": "anniversary"
+            },
+            {
+              "subject": "Leena",
+              "attribute": "company"
+            },
+            {
+              "subject": "Tariq",
+              "attribute": "email"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Create a reminder for the 18th at 6:50am to put the bins out.",
+        "expected": {
+          "action": "create_reminder",
+          "message": "Put the bins out",
+          "timing": {
+            "type": "once",
+            "local_at": "2027-05-18T06:50"
+          }
+        }
+      },
+      {
+        "id": "r-1803",
+        "kind": "save_fact",
+        "scenario": "orchard-cooperative-directory",
+        "situation": {
+          "now": "2027-08-19T19:23+05:30",
+          "weekday": "Thursday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_3059b886",
+              "title": "Test the spare charger",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 23,
+                "time": "16:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_49c79cb6",
+              "title": "Refill the birdbath",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Deven",
+              "attribute": "work email"
+            },
+            {
+              "subject": "Rohan",
+              "attribute": "office location"
+            },
+            {
+              "subject": "Arjun Malhotra",
+              "attribute": "emergency contact"
+            },
+            {
+              "subject": "Nila",
+              "attribute": "office location"
+            },
+            {
+              "subject": "Rina",
+              "attribute": "shop name"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Remember that Aurel's orchard row is D-7.",
+        "expected": {
+          "action": "remember_fact",
+          "subject": "Aurel",
+          "attribute": "orchard row",
+          "value": "D-7"
+        }
+      },
+      {
+        "id": "r-1925",
+        "kind": "plain_question",
+        "scenario": "passive-school-reminder-questions",
+        "situation": {
+          "now": "2027-04-30T13:56+05:30",
+          "weekday": "Friday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_194f904d",
+              "title": "Clean the bicycle bell",
+              "status": "paused",
+              "timing": {
+                "type": "daily",
+                "time": "08:15",
+                "weekdays": [
+                  2,
+                  5
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_735509e9",
+              "title": "Put away the garden twine",
+              "status": "paused",
+              "timing": {
+                "type": "monthly",
+                "day": 23,
+                "time": "16:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_2a654b9b",
+              "title": "Clean the desk lamp",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "07:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_a566dfed",
+              "title": "Refill fountain pen",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_6da6b415",
+              "title": "Read the water meter",
+              "status": "active",
+              "timing": {
+                "type": "interval",
+                "every_minutes": 60,
+                "start_local": "2027-04-30T09:00",
+                "window_start": "09:00",
+                "window_end": "18:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_8aa2581e",
+              "title": "Read the boiler gauge",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "11:00",
+                "weekdays": [
+                  6
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_262cd7fa",
+              "title": "Return the borrowed tripod",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 17,
+                "time": "10:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Ishaan",
+              "attribute": "birthday"
+            },
+            {
+              "subject": "Maya",
+              "attribute": "office location"
+            },
+            {
+              "subject": "Rohan",
+              "attribute": "phone"
+            },
+            {
+              "subject": "Aisha",
+              "attribute": "preferred name"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Was there a school trip reminder for next Wednesday already?",
+        "expected": {
+          "action": "answer"
+        }
+      },
+      {
+        "id": "r-1359",
+        "kind": "follow_up",
+        "scenario": "unclear-repair-demonstratives",
+        "situation": {
+          "now": "2026-11-03T23:48+05:30",
+          "weekday": "Tuesday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_ac6ff7ed",
+              "title": "Dust ceiling fan",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "08:15",
+                "weekdays": [
+                  2,
+                  5
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_f4b50311",
+              "title": "Rotate archive backup",
+              "status": "paused",
+              "timing": {
+                "type": "interval",
+                "every_minutes": 60,
+                "start_local": "2026-11-03T09:00",
+                "window_start": "09:00",
+                "window_end": "18:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_7aecef90",
+              "title": "Clean rain gutters",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "11:00",
+                "weekdays": [
+                  6
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_c1b4c654",
+              "title": "Replace sewing machine needle",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 23,
+                "time": "16:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_d2a124a3",
+              "title": "Clean audio interface",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_104b6c52",
+              "title": "Sharpen pruning shears",
+              "status": "paused",
+              "timing": {
+                "type": "monthly",
+                "day": 17,
+                "time": "10:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_5a08026d",
+              "title": "Sort old photo negatives",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "20:45",
+                "weekdays": [
+                  7
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_50b070e3",
+              "title": "Check roof drain",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "07:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Meera",
+              "attribute": "home address"
+            },
+            {
+              "subject": "Dev",
+              "attribute": "preferred name"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Please nudge me to photograph that on the 13th at 3:15pm.",
+        "expected": {
+          "action": "clarify",
+          "question": "What should I remind you to photograph?",
+          "timing": {
+            "type": "once",
+            "local_at": "2026-11-13T15:15"
+          }
+        }
+      }
+    ],
+    "test": [
+      {
+        "id": "r-0457",
+        "kind": "manage_reminder",
+        "scenario": "club-administration-controls",
+        "situation": {
+          "now": "2027-06-06T19:23+05:30",
+          "weekday": "Sunday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_78229142",
+              "title": "Review library loans",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 23,
+                "time": "16:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_ad1d2164",
+              "title": "Rest eyes",
+              "status": "active",
+              "timing": {
+                "type": "interval",
+                "every_minutes": 60,
+                "start_local": "2027-06-06T09:00",
+                "window_start": "09:00",
+                "window_end": "18:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_1a8f3085",
+              "title": "Refill bird feeder",
+              "status": "paused",
+              "timing": {
+                "type": "daily",
+                "time": "07:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_ab737f91",
+              "title": "Check balcony seedlings",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_3ef8358f",
+              "title": "Collect hall key",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "17:10",
+                "weekdays": [
+                  2
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_2a087e51",
+              "title": "Water orchid",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "08:15",
+                "weekdays": [
+                  2,
+                  5
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_38981fe4",
+              "title": "Order coffee beans",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 17,
+                "time": "10:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Change collecting the hall key to Thursdays at 5:10pm each week.",
+        "expected": {
+          "action": "update_schedule",
+          "schedule_id": "sch_3ef8358f",
+          "timing": {
+            "type": "daily",
+            "time": "17:10",
+            "weekdays": [
+              4
+            ]
+          }
+        }
+      },
+      {
+        "id": "r-0482",
+        "kind": "list_reminders",
+        "scenario": "reminder-list-browsing",
+        "situation": {
+          "now": "2027-03-31T16:08+05:30",
+          "weekday": "Wednesday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_c9041b55",
+              "title": "Rotate backup drive",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "20:45",
+                "weekdays": [
+                  7
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_50f1fa2b",
+              "title": "Rest eyes",
+              "status": "active",
+              "timing": {
+                "type": "interval",
+                "every_minutes": 60,
+                "start_local": "2027-03-31T09:00",
+                "window_start": "09:00",
+                "window_end": "18:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_45db405b",
+              "title": "Water orchid",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "08:15",
+                "weekdays": [
+                  2,
+                  5
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_d6a8be39",
+              "title": "Check balcony seedlings",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Dario",
+              "attribute": "role"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Open my list of upcoming reminder alerts.",
+        "expected": {
+          "action": "list_schedules"
+        }
+      },
+      {
+        "id": "r-0260",
+        "kind": "new_reminder_repeating",
+        "scenario": "pet-care-calendar",
+        "situation": {
+          "now": "2027-05-17T16:08+05:30",
+          "weekday": "Monday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_04515d93",
+              "title": "Clean desk fan",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "11:00",
+                "weekdays": [
+                  6
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_55a4c620",
+              "title": "Check balcony seedlings",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_1920b852",
+              "title": "Review library loans",
+              "status": "paused",
+              "timing": {
+                "type": "monthly",
+                "day": 23,
+                "time": "16:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_f389710c",
+              "title": "Rotate backup drive",
+              "status": "paused",
+              "timing": {
+                "type": "daily",
+                "time": "20:45",
+                "weekdays": [
+                  7
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_b30700f4",
+              "title": "Order coffee beans",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 17,
+                "time": "10:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_c520ebc6",
+              "title": "Refill bird feeder",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "07:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_6bb365ec",
+              "title": "Rest eyes",
+              "status": "active",
+              "timing": {
+                "type": "interval",
+                "every_minutes": 60,
+                "start_local": "2027-05-17T09:00",
+                "window_start": "09:00",
+                "window_end": "18:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Pia",
+              "attribute": "anniversary"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Repeat the filter-rinse reminder every Friday morning at 8:20.",
+        "expected": {
+          "action": "create_reminder",
+          "message": "Rinse the aquarium filter",
+          "timing": {
+            "type": "daily",
+            "time": "08:20",
+            "weekdays": [
+              5
+            ]
+          }
+        }
+      },
+      {
+        "id": "r-0587",
+        "kind": "save_fact",
+        "scenario": "personal-profile-records",
+        "situation": {
+          "now": "2026-10-30T16:08+05:30",
+          "weekday": "Friday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_bc3efb0e",
+              "title": "Clean desk fan",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "11:00",
+                "weekdays": [
+                  6
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Pia",
+              "attribute": "anniversary"
+            },
+            {
+              "subject": "Dario",
+              "attribute": "role"
+            },
+            {
+              "subject": "Tariq",
+              "attribute": "email"
+            },
+            {
+              "subject": "Esme",
+              "attribute": "address"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Could you record 5 June as my wedding anniversary?",
+        "expected": {
+          "action": "remember_fact",
+          "subject": "self",
+          "attribute": "anniversary",
+          "value": "5 June"
+        }
+      },
+      {
+        "id": "r-0561",
+        "kind": "save_fact",
+        "scenario": "neighbour-directory",
+        "situation": {
+          "now": "2026-11-03T19:23+05:30",
+          "weekday": "Tuesday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_5ef71c17",
+              "title": "Refill bird feeder",
+              "status": "paused",
+              "timing": {
+                "type": "daily",
+                "time": "07:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_5416befb",
+              "title": "Check balcony seedlings",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Chloe",
+              "attribute": "company"
+            },
+            {
+              "subject": "Pia",
+              "attribute": "anniversary"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "For the address book, keep Vera at 31 Birch Crescent, Lucknow.",
+        "expected": {
+          "action": "remember_fact",
+          "subject": "Vera",
+          "attribute": "address",
+          "value": "31 Birch Crescent, Lucknow"
+        }
+      },
+      {
+        "id": "r-0737",
+        "kind": "follow_up",
+        "scenario": "unknown-service-reminder",
+        "situation": {
+          "now": "2027-06-06T16:08+05:30",
+          "weekday": "Sunday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_b0d7dcf8",
+              "title": "Clean desk fan",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "11:00",
+                "weekdays": [
+                  6
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_5f18215d",
+              "title": "Review library loans",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 23,
+                "time": "16:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_f85fd3b0",
+              "title": "Rest eyes",
+              "status": "active",
+              "timing": {
+                "type": "interval",
+                "every_minutes": 60,
+                "start_local": "2027-06-06T09:00",
+                "window_start": "09:00",
+                "window_end": "18:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_a8716273",
+              "title": "Rotate backup drive",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "20:45",
+                "weekdays": [
+                  7
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_02e3c8a9",
+              "title": "Water orchid",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "08:15",
+                "weekdays": [
+                  2,
+                  5
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_b6def79a",
+              "title": "Check balcony seedlings",
+              "status": "paused",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_d785c0fb",
+              "title": "Refill bird feeder",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "07:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Pia",
+              "attribute": "anniversary"
+            },
+            {
+              "subject": "Bianca",
+              "attribute": "birthday"
+            },
+            {
+              "subject": "Tariq",
+              "attribute": "email"
+            },
+            {
+              "subject": "Chloe",
+              "attribute": "company"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "I need a 40-minute snooze for the chimney sweep reminder.",
+        "expected": {
+          "action": "clarify",
+          "question": "Which existing reminder should I snooze?",
+          "minutes": 40
+        }
+      },
+      {
+        "id": "r-0269",
+        "kind": "new_reminder_repeating",
+        "scenario": "garden-recurrence",
+        "situation": {
+          "now": "2026-12-31T00:13+05:30",
+          "weekday": "Thursday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_fe18bece",
+              "title": "Check balcony seedlings",
+              "status": "paused",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_17d38c48",
+              "title": "Refill bird feeder",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "07:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_bdd812dd",
+              "title": "Order coffee beans",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 17,
+                "time": "10:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_3177b327",
+              "title": "Water orchid",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "08:15",
+                "weekdays": [
+                  2,
+                  5
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_67d90935",
+              "title": "Review library loans",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 23,
+                "time": "16:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_fa09a0cb",
+              "title": "Rest eyes",
+              "status": "active",
+              "timing": {
+                "type": "interval",
+                "every_minutes": 60,
+                "start_local": "2026-12-31T09:00",
+                "window_start": "09:00",
+                "window_end": "18:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_96171937",
+              "title": "Rotate backup drive",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "20:45",
+                "weekdays": [
+                  7
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Esme",
+              "attribute": "address"
+            },
+            {
+              "subject": "Leena",
+              "attribute": "company"
+            },
+            {
+              "subject": "Nolan",
+              "attribute": "phone"
+            },
+            {
+              "subject": "Dario",
+              "attribute": "role"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Arrange a Sunday 3:50pm reminder every week to clean the pruning shears.",
+        "expected": {
+          "action": "create_reminder",
+          "message": "Clean the pruning shears",
+          "timing": {
+            "type": "daily",
+            "time": "15:50",
+            "weekdays": [
+              7
+            ]
+          }
+        }
+      },
+      {
+        "id": "r-0272",
+        "kind": "new_reminder_repeating",
+        "scenario": "household-inventory-cycle",
+        "situation": {
+          "now": "2027-03-31T13:56+05:30",
+          "weekday": "Wednesday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_181b92f7",
+              "title": "Rest eyes",
+              "status": "active",
+              "timing": {
+                "type": "interval",
+                "every_minutes": 60,
+                "start_local": "2027-03-31T09:00",
+                "window_start": "09:00",
+                "window_end": "18:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Chloe",
+              "attribute": "company"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "I'd like reminders about washing the lunchbox each weekday at 8:50pm.",
+        "expected": {
+          "action": "create_reminder",
+          "message": "Wash the lunchbox",
+          "timing": {
+            "type": "daily",
+            "time": "20:50",
+            "weekdays": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          }
+        }
+      },
+      {
+        "id": "r-0279",
+        "kind": "new_reminder_repeating",
+        "scenario": "household-inventory-cycle",
+        "situation": {
+          "now": "2026-10-30T13:56+05:30",
+          "weekday": "Friday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_d1603b43",
+              "title": "Water orchid",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "08:15",
+                "weekdays": [
+                  2,
+                  5
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_4a4f73a4",
+              "title": "Refill bird feeder",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "07:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_ede33f0a",
+              "title": "Order coffee beans",
+              "status": "paused",
+              "timing": {
+                "type": "monthly",
+                "day": 17,
+                "time": "10:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_2d758eff",
+              "title": "Clean desk fan",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "11:00",
+                "weekdays": [
+                  6
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_c9df5b53",
+              "title": "Review library loans",
+              "status": "active",
+              "timing": {
+                "type": "monthly",
+                "day": 23,
+                "time": "16:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_cad4a068",
+              "title": "Check balcony seedlings",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_d83003a4",
+              "title": "Rest eyes",
+              "status": "paused",
+              "timing": {
+                "type": "interval",
+                "every_minutes": 60,
+                "start_local": "2026-10-30T09:00",
+                "window_start": "09:00",
+                "window_end": "18:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_cec831da",
+              "title": "Rotate backup drive",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "20:45",
+                "weekdays": [
+                  7
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [
+            {
+              "subject": "Nolan",
+              "attribute": "phone"
+            },
+            {
+              "subject": "Tariq",
+              "attribute": "email"
+            }
+          ],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Could you schedule checking the spare bulbs every month on the 9th at 6:15pm?",
+        "expected": {
+          "action": "create_reminder",
+          "message": "Check the spare bulbs",
+          "timing": {
+            "type": "monthly",
+            "day": 9,
+            "time": "18:15"
+          }
+        }
+      },
+      {
+        "id": "r-0169",
+        "kind": "new_reminder_once",
+        "scenario": "community-volunteer-logistics",
+        "situation": {
+          "now": "2026-11-03T19:23+05:30",
+          "weekday": "Tuesday",
+          "timezone": "Asia/Kolkata",
+          "schedules": [
+            {
+              "id": "sch_68aba14a",
+              "title": "Clean desk fan",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "11:00",
+                "weekdays": [
+                  6
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_ce8ba925",
+              "title": "Rotate backup drive",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "20:45",
+                "weekdays": [
+                  7
+                ]
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_c78e3cbc",
+              "title": "Refill bird feeder",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "07:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_7f93c7d7",
+              "title": "Check balcony seedlings",
+              "status": "active",
+              "timing": {
+                "type": "daily",
+                "time": "18:15"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_e3313ebe",
+              "title": "Order coffee beans",
+              "status": "paused",
+              "timing": {
+                "type": "monthly",
+                "day": 17,
+                "time": "10:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            },
+            {
+              "id": "sch_d9a4009d",
+              "title": "Rest eyes",
+              "status": "active",
+              "timing": {
+                "type": "interval",
+                "every_minutes": 60,
+                "start_local": "2026-11-03T09:00",
+                "window_start": "09:00",
+                "window_end": "18:00"
+              },
+              "timezone": "Asia/Kolkata",
+              "next": null
+            }
+          ],
+          "facts": [],
+          "recent_turns": [],
+          "pending_draft": null
+        },
+        "message": "Donated book sorting needs its own reminder: Sunday, 4:55pm.",
+        "expected": {
+          "action": "create_reminder",
+          "message": "Sort the donated books",
+          "timing": {
+            "type": "once",
+            "local_at": "2026-11-08T16:55"
+          }
+        }
+      }
+    ]
+  },
+  "near_copy_method": {
+    "mask": "labelled subjects, values, reminder contents, schedule titles, times, weekdays, numbers",
+    "exact_masked": true,
+    "jaccard_min": 0.8,
+    "token_similarity_min": 0.9,
+    "fuzzy_min_tokens": 6
+  }
+}

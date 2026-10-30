@@ -11,7 +11,8 @@
     "tauri": "tauri",
     "eval:answers": "vitest run -c vitest.eval.config.ts evals/answers.eval.ts",
     "eval:judge": "vitest run -c vitest.eval.config.ts evals/judge.eval.ts",
-    "eval:decision": "vitest run -c vitest.eval.config.ts evals/decision/decision.eval.ts"
+    "eval:decision": "vitest run -c vitest.eval.config.ts evals/decision/decision.eval.ts",
+    "eval:routing": "vitest run -c vitest.eval.config.ts evals/decision/routing.eval.ts"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.8.0",

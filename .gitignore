@@ -23,3 +23,7 @@ evals/llm_judge/__pycache__/
 
 # Decision-model eval results.
 apps/desktop/evals/decision/out/
+
+# Routing fine-tune: derived training files and trained adapters.
+evals/routing/mlx/
+evals/routing/adapters/

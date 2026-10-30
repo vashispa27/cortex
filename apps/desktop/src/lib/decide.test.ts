@@ -141,6 +141,28 @@ describe('the request that goes to the cloud', () => {
     const pending = { type: 'decision' as const, draft: { message: 'Call Roop', user_text: 'call Roop tomorrow at 5' } };
     expect(JSON.parse(buildContext(ctx({ pending }))).pending_draft).toEqual(pending.draft);
   });
+  it('lists the next eight local calendar dates across a month end', () => {
+    const context = JSON.parse(buildContext(ctx({ now: new Date('2026-10-30T07:00:00Z') })));
+    expect(context.upcoming_days).toEqual([
+      'Fri 2026-10-30 (today)', 'Sat 2026-10-31', 'Sun 2026-11-01', 'Mon 2026-11-02',
+      'Tue 2026-11-03', 'Wed 2026-11-04', 'Thu 2026-11-05', 'Fri 2026-11-06',
+    ]);
+  });
+  it('lists the next eight local calendar dates across a year end', () => {
+    const context = JSON.parse(buildContext(ctx({ now: new Date('2026-12-31T07:00:00Z') })));
+    expect(context.upcoming_days).toEqual([
+      'Thu 2026-12-31 (today)', 'Fri 2027-01-01', 'Sat 2027-01-02', 'Sun 2027-01-03',
+      'Mon 2027-01-04', 'Tue 2027-01-05', 'Wed 2027-01-06', 'Thu 2027-01-07',
+    ]);
+  });
+  it('uses the timezone local date when it differs from UTC', () => {
+    const context = JSON.parse(buildContext(ctx({ now: new Date('2026-10-25T23:30:00Z') })));
+    expect(context.now).toBe('2026-10-26T05:00+05:30');
+    expect(context.upcoming_days).toEqual([
+      'Mon 2026-10-26 (today)', 'Tue 2026-10-27', 'Wed 2026-10-28', 'Thu 2026-10-29',
+      'Fri 2026-10-30', 'Sat 2026-10-31', 'Sun 2026-11-01', 'Mon 2026-11-02',
+    ]);
+  });
 });
 
 describe('phrasings end to end with a fake provider', () => {
