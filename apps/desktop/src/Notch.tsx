@@ -1,17 +1,18 @@
 import { AnswerContent, AnswerSourceLabel } from "./components/AnswerContent";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Bot, CornerDownLeft, Paperclip, Maximize2, Pause, Play, Plus, Settings2, X } from "lucide-react";
-import { listen } from "@tauri-apps/api/event";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { desktopRuntime, getServiceSettings, setEvalCapture } from "./lib/api";
 import { demoSearch } from "./lib/demo";
 import { answerCortex, runAction } from "./lib/answer";
 import type { ChatAction } from "./lib/intent";
 import ChatActions from "./components/ChatActions";
-import { agentService, documentFrom, type AgentDocument } from "./lib/agents";
+import { agentService, documentFrom, followUpAgent, needsYou, terminal, type AgentDocument } from "./lib/agents";
 import { loadNotchDraft, saveNotchDraft } from "./lib/notch-draft";
-import AgentChatCard from "./components/AgentChatCard";
+import AgentChatCard, { useAgentJob } from "./components/AgentChatCard";
+import { BrowserTarget, useBrowserStatus } from "./components/BrowserTabControls";
 import { loadPreferences } from "./lib/storage";
-import { configureNotchDisplay, configureCortexTrigger, configureTestMode, focusNotch, openMain, restorePreviousApp, setNotchMode, setNotchVisible, showNotchContextMenu, writeActiveSession, type NotchMode } from "./lib/notch";
+import { configureNotchDisplay, configureCortexTrigger, configureTestMode, focusNotch, notchIsPointerDisplay, openMain, restorePreviousApp, setNotchMode, setNotchVisible, showNotchContextMenu, writeActiveSession, type NotchMode } from "./lib/notch";
 import {
   appendMessage, commitSession, composeAnswer, finishAction, loadSessions, newSession, sessionsStorageKey, sessionTime, triggerSymbol,
   type CortexSession,
@@ -38,13 +39,18 @@ function SelectionQuote({ message }: { message: ChatMessage }) {
   </div>;
 }
 
-function CortexThread({ session, busy, onAction, onOpenAgent }: { session: CortexSession; busy: boolean; onAction: (index: number, action: ChatAction) => void; onOpenAgent: () => void }) {
+/** The agent this chat is talking to: the job of its latest agent message. */
+function chatAgentJob(session: CortexSession): string | undefined {
+  return [...session.messages].reverse().find((message) => message.agentJobId)?.agentJobId;
+}
+
+function CortexThread({ session, busy, onAction }: { session: CortexSession; busy: boolean; onAction: (index: number, action: ChatAction) => void }) {
   return <>
     {session.messages.map((message, index) => message.role === "user"
       ? <div className="cortex-message user" key={`${session.id}-${index}`}>{message.kind === "summarize" ? <SelectionQuote message={message} /> : <div className="cortex-user-bubble">{message.body}</div>}</div>
       : <div className="cortex-message assistant" key={`${session.id}-${index}`}>
         <span className="cortex-message-mark"><CortexMark /></span>
-        <div className="cortex-assistant-body"><AnswerSourceLabel source={message.source} /><AnswerContent text={message.body} />{message.agentJobId && <AgentChatCard jobId={message.agentJobId} onOpen={onOpenAgent} />}{message.actions?.length ? <ChatActions actions={message.actions} disabled={busy} onRun={(action) => onAction(index, action)} /> : null}</div>
+        <div className="cortex-assistant-body"><AnswerSourceLabel source={message.source} /><AnswerContent text={message.body} />{message.actions?.length ? <ChatActions actions={message.actions} disabled={busy} onRun={(action) => onAction(index, action)} /> : null}</div>
       </div>)}
     {busy && <div className="cortex-message assistant"><span className="cortex-message-mark"><CortexMark processing /></span><div className="cortex-assistant-body cortex-typing"><span /><span /><span /></div></div>}
   </>;
@@ -70,6 +76,9 @@ export default function NotchApp() {
   const [tapCount, setTapCount] = useState(0);
   // Agent mode: the next message starts a long-running agent instead of asking memory.
   const [agentMode, setAgentMode] = useState(initialDraft.agent);
+  const { status: browserStatus } = useBrowserStatus(agentService, agentMode);
+  // Whether the agent works in the Chrome tab you are on. On by default whenever Chrome has a page open.
+  const [useBrowserTab, setUseBrowserTab] = useState(true);
   // Test mode (Settings): searches use the separate eval archive and this button records into it.
   const [testMode, setTestMode] = useState(false);
   const [evalRecording, setEvalRecording] = useState(false);
@@ -90,6 +99,11 @@ export default function NotchApp() {
   const activeSession = sessions.find((session) => session.id === activeSessionId) ?? null;
   const effectiveMode: NotchMode = (mode === "answer" || mode === "thinking") && !activeSession ? "compose" : mode;
   const trigger = triggerSymbol(preferences.cortexTrigger);
+  // A chat that started an agent is that agent's conversation: its status and questions sit above the box.
+  const chatJob = activeSession ? chatAgentJob(activeSession) : undefined;
+  const agentState = useAgentJob(chatJob);
+  const agentLive = !!chatJob && !(agentState.job && terminal(agentState.job.status));
+  useEffect(() => { if (agentMode && effectiveMode === "compose") setUseBrowserTab(true); }, [agentMode, effectiveMode]);
   // The bigger chat view is for conversation; agent mode (and its attachments) lives in the bar and answer panel.
   const agent = agentMode && effectiveMode !== "history";
   useEffect(() => { saveNotchDraft({ input, historyInput, agent: agentMode, files }); }, [input, historyInput, agentMode, files]);
@@ -158,6 +172,7 @@ export default function NotchApp() {
   const submitQuestion = async (raw: string, target: "bar" | "history") => {
     const question = raw.trim();
     if (!question || busyRef.current) return;
+    if (await followUpInChat(question, target)) return;
     if (agent) { await spawnInChat(question, target); return; }
     const useExisting = target === "history" || (target === "bar" && effectiveMode === "answer");
     const base = useExisting ? activeSession : null;
@@ -223,7 +238,7 @@ export default function NotchApp() {
     window.setTimeout(() => { pickerRef.current = false; }, 400);
     try {
       const added = await Promise.all(picked.map(async (file) => documentFrom(file.name, await file.text(), file.type)));
-      setFiles((old) => [...old, ...added].slice(0, 20)); setAttachError("");
+      setFiles((old) => [...old.filter((f) => !added.some((a) => a.name === f.name)), ...added].slice(0, 20)); setAttachError("");
     } catch (reason) { setAttachError(reason instanceof Error ? reason.message : String(reason)); }
     void focusNotch();
   };
@@ -241,13 +256,35 @@ export default function NotchApp() {
     if (target === "bar") setMode((current) => current === "compose" ? "answer" : current);
     busyRef.current = true; setBusy(true); setBusySessionId(session.id);
     try {
-      const job = await agentService.spawn({ task: question, documents });
-      commit(appendMessage(session, { role: "assistant", body: "Agent started. It will plan first and wait for your approval before using tools.", agentJobId: job.task_id }));
+      const job = await agentService.spawn({ task: question, documents, useBrowserTab: useBrowserTab && !!browserStatus?.current_tab });
+      const startedInTab = useBrowserTab && !!browserStatus?.current_tab;
+      commit(appendMessage(session, { role: "assistant", body: startedInTab ? `Working in your Chrome tab: ${browserStatus?.current_tab?.title ?? ""}. Questions show up here.` : "Agent started. It will plan first and wait for your approval before using tools.", agentJobId: job.task_id }));
     } catch (reason) {
       commit(appendMessage(session, { role: "assistant", body: `Could not start an agent: ${reason instanceof Error ? reason.message : String(reason)}` }));
       // Nothing was sent, so give the text and files back.
       setInput((current) => current || question); setFiles((current) => current.length ? current : documents);
     } finally { busyRef.current = false; setBusy(false); setBusySessionId(null); }
+  };
+
+  /** In a chat with an unfinished agent, what you type goes to that agent. Returns false once the agent is done. */
+  const followUpInChat = async (question: string, target: "bar" | "history") => {
+    const session = target === "history" || (target === "bar" && effectiveMode === "answer") ? activeSession : null;
+    const jobId = session && chatAgentJob(session);
+    if (!session || !jobId) return false;
+    busyRef.current = true; setBusy(true); setBusySessionId(session.id);
+    try {
+      const { result, asked } = await followUpAgent(agentService, jobId, question);
+      if (result === "finished") return false;
+      let next = asked ? appendMessage(session, { role: "assistant", body: asked, agentJobId: jobId }) : session;
+      next = appendMessage(next, { role: "user", body: question });
+      if (result === "busy") next = appendMessage(next, { role: "assistant", body: "The agent is in the middle of a step and didn't get this. Send it again when it asks, or Stop it.", agentJobId: jobId });
+      commit(next);
+      if (target === "bar") setInput(""); else setHistoryInput("");
+      void agentState.refresh();
+    } catch (reason) {
+      commit(appendMessage(appendMessage(session, { role: "user", body: question }), { role: "assistant", body: `Could not reach the agent: ${reason instanceof Error ? reason.message : String(reason)}`, agentJobId: jobId }));
+    } finally { busyRef.current = false; setBusy(false); setBusySessionId(null); }
+    return true;
   };
 
   // Undo / Confirm / Cancel under a message: run it, drop the buttons, and show what happened.
@@ -346,6 +383,32 @@ export default function NotchApp() {
     setActiveSessionId((current) => current && sessions.some((session) => session.id === current) ? current : sessions[0]?.id ?? null);
   }, [effectiveMode, sessions, newHistoryChat]);
 
+  const modeRef = useRef(mode);
+  useEffect(() => { modeRef.current = effectiveMode; }, [effectiveMode]);
+  useEffect(() => {
+    if (!desktopRuntime()) return;
+    const shown = new Set<string>();
+    const check = async () => {
+      if (modeRef.current !== "collapsed" || !sessionsRef.current.some(chatAgentJob) || !(await notchIsPointerDisplay())) return;
+      try {
+        for (const job of await agentService.list()) {
+          // The job list carries no pending question, so a new waiting state shows as a new status/version.
+          const waiting = needsYou(job.status) || job.status === "paused" ? `${job.status}:${job.version}` : null;
+          const session = waiting && sessionsRef.current.find((item) => chatAgentJob(item) === job.task_id);
+          if (!waiting || !session || shown.has(`${job.task_id}:${waiting}`)) continue;
+          shown.add(`${job.task_id}:${waiting}`);
+          hotkeyRef.current = true; // Show it without stealing focus.
+          setActiveSessionId(session.id);
+          setMode("answer");
+          if (preferences.hideDrop) void setNotchVisible(true);
+          return;
+        }
+      } catch { /* The agent service is not running; nothing to show. */ }
+    };
+    const timer = window.setInterval(() => { void check(); }, 4000);
+    return () => window.clearInterval(timer);
+  }, [preferences.hideDrop]);
+
   useEffect(() => {
     const element = answerScrollRef.current;
     if (element) element.scrollTop = element.scrollHeight;
@@ -360,7 +423,7 @@ export default function NotchApp() {
     if (!desktopRuntime()) return;
     let disposed = false;
     let unlisten: (() => void) | undefined;
-    void listen<NotchMode>("notch-mode", (event) => {
+    void getCurrentWebviewWindow().listen<NotchMode>("notch-mode", (event) => {
       const next = event.payload;
       if (next === "compose") actionsRef.current.startNewCortex("mouse");
       else if (next === "history") actionsRef.current.openHistory();
@@ -377,7 +440,7 @@ export default function NotchApp() {
     if (!desktopRuntime()) return;
     let disposed = false;
     let unlisten: (() => void) | undefined;
-    void listen<number>("cortex-tap", (event) => {
+    void getCurrentWebviewWindow().listen<number>("cortex-tap", (event) => {
       const count = Number(event.payload) >= 2 ? 2 : 1;
       if (tapTimerRef.current !== null) window.clearTimeout(tapTimerRef.current);
       setTapCount(count);
@@ -401,7 +464,7 @@ export default function NotchApp() {
     if (!desktopRuntime()) return;
     let disposed = false;
     const offs: (() => void)[] = [];
-    void listen("cortex-compose", () => actionsRef.current.startNewCortex("hotkey")).then((off) => { if (disposed) off(); else offs.push(off); });
+    void getCurrentWebviewWindow().listen("cortex-compose", () => actionsRef.current.startNewCortex("hotkey")).then((off) => { if (disposed) off(); else offs.push(off); });
     return () => { disposed = true; offs.forEach((off) => off()); };
   }, []);
 
@@ -496,6 +559,7 @@ export default function NotchApp() {
       <small>Searching your memory</small>
     </div>}
 
+    {agent && effectiveMode === "compose" && <div className="cortex-browser-choice"><BrowserTarget status={browserStatus} selected={useBrowserTab} onChange={setUseBrowserTab}/></div>}
     {effectiveMode === "answer" && activeSession && <section className="cortex-answer-panel">
       <header className="cortex-panel-head">
         <div><span className="cortex-eyebrow">Cortex answer</span><h2>{activeSession.title}</h2></div>
@@ -506,15 +570,16 @@ export default function NotchApp() {
         </div>
       </header>
       <div className="cortex-thread-scroll" ref={answerScrollRef}>
-        <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} onAction={runMessageAction} onOpenAgent={openAgents} />
+        <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} onAction={runMessageAction} />
       </div>
-      <footer className="cortex-panel-foot">
+      {chatJob ? <div className="cortex-agent-pin"><AgentChatCard state={agentState} onOpen={openAgents} /></div> : <footer className="cortex-panel-foot">
         <span>{sample ? "Sample workspace" : testMode ? "Test mode · eval archive" : "Your memory"}</span>
         <button type="button" onClick={openHistory}><CortexChatMark /> All chats</button>
-      </footer>
+      </footer>}
+      {agent && !chatJob && <div className="cortex-browser-choice"><BrowserTarget status={browserStatus} selected={useBrowserTab} onChange={setUseBrowserTab}/></div>}
       {agent && (files.length > 0 || attachError) && <div className="cortex-chips">{files.map((file) => <span key={file.name} className="cortex-chip">{file.name}<button type="button" aria-label={`Remove ${file.name}`} onClick={() => setFiles((old) => old.filter((f) => f !== file))}>×</button></span>)}{attachError && <small className="cortex-agent-error">{attachError}</small>}</div>}
       <form className="cortex-history-form cortex-answer-form" onSubmit={submitBar}>
-        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label="Ask a follow-up" placeholder={agent ? "Describe a job for an agent…" : "Ask a follow-up…"} />
+        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label="Ask a follow-up" placeholder={agentLive ? "Reply to the agent…" : agent ? "Describe a job for an agent…" : "Ask a follow-up…"} />
         {agent && <button type="button" className="cortex-icon cortex-attach" aria-label="Attach files" title={files.length ? `Attached: ${files.map((f) => f.name).join(", ")}` : "Attach text files for the agent"} onClick={pickFiles}><Paperclip size={13} />{files.length > 0 && <b>{files.length}</b>}</button>}
         <button type="submit" className="cortex-enter" aria-label="Send follow-up" title="Enter" disabled={!input.trim() || busy}><CornerDownLeft size={13} /></button>
       </form>
@@ -536,11 +601,12 @@ export default function NotchApp() {
           {activeSession && <span className="cortex-pill">{sessionTime(activeSession.updatedAt)}</span>}
         </header>
         <div className="cortex-thread-scroll" ref={historyScrollRef}>
-          {activeSession ? <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} onAction={runMessageAction} onOpenAgent={openAgents} />
+          {activeSession ? <CortexThread session={activeSession} busy={busy && busySessionId === activeSession.id} onAction={runMessageAction} />
             : <div className="cortex-history-empty"><CortexMark /><h2>New chat</h2><p>Ask about what you have seen, or pick a chat on the left.</p></div>}
         </div>
+        {chatJob && <div className="cortex-agent-pin"><AgentChatCard state={agentState} onOpen={openAgents} /></div>}
         <form className="cortex-history-form" onSubmit={submitHistory}>
-          <input ref={historyInputRef} value={historyInput} onChange={(event) => setHistoryInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label={activeSession ? "Ask a follow-up" : "Ask Cortex"} placeholder={activeSession ? "Ask a follow-up…" : "Ask Cortex…"} />
+          <input ref={historyInputRef} value={historyInput} onChange={(event) => setHistoryInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label={activeSession ? "Ask a follow-up" : "Ask Cortex"} placeholder={agentLive ? "Reply to the agent…" : activeSession ? "Ask a follow-up…" : "Ask Cortex…"} />
           <button type="submit" className="cortex-enter" aria-label="Send" title="Enter" disabled={!historyInput.trim() || busy}><CornerDownLeft size={13} /></button>
         </form>
       </div>

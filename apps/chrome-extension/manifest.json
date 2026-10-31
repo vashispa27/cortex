@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Cortex",
+  "version": "0.2.0",
+  "description": "Lets a Cortex agent work in your current Chrome tab when you ask it to. You approve final actions.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2OoDd2stzzWt341s1c+tJG89j7W4eMe8QOk09VE5GLjQ1I8a97srhfFhPmBpYDVRMaGB9bNQaG0UC49D+IHK8Sm9PuieTsIeF/+BnEfc8v5NhbWPL+Qmqywz3ncMoWLDx5b1MfroAJLCa1cBnTFB4r1z1RRPWj9iPLFN7sTznySKtx/BIw5pp2gYjN1HDwLHvywKVzMAwoVe2/nMCFAPYwqIWUtwBMI9I6eJMOSlyEXDQ5ayphamjC31jAzlVIoHoLg+49S3uJtED5JILODQgi49rikARWxNY/1LNir3IrEXddg/cM4U/+3wxmoQlv5nOJh77PnEihlsHsegVJ41swIDAQAB",
+  "permissions": ["debugger", "tabs", "tabGroups", "storage", "alarms"],
+  "background": {"service_worker": "background.js", "type": "module"},
+  "action": {"default_popup": "popup.html", "default_title": "Cortex"}
+}

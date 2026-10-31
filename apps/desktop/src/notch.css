@@ -165,7 +165,15 @@ html[data-window="notch"] .cortex-history-form input:focus-visible { outline: no
 .cortex-agent-title { font-size: 11px; font-weight: 600; overflow-wrap: anywhere; }
 .cortex-agent-error { color: #f0a595; }
 .cortex-agent-ask { display: grid; gap: 6px; }
-.cortex-agent-ask input { width: 100%; box-sizing: border-box; padding: 6px 8px; border-radius: 7px; border: 1px solid rgba(255,255,255,.18); background: rgba(0,0,0,.15); color: inherit; font: inherit; font-size: 11px; }
+.cortex-agent-pin { flex: none; padding: 0 0 6px; }
+.cortex-history-thread .cortex-agent-pin { padding: 0 14px 8px; }
+.cortex-agent-pin .cortex-agent-card { margin-top: 0; }
+.cortex-agent-question { max-height: 120px; overflow-y: auto; scrollbar-width: thin; }
+.cortex-agent-hint { opacity: .75; }
+.cortex-agent-stop { margin-left: auto; padding: 2px 8px; border-radius: 99px; border: 1px solid rgba(255,120,100,.45); background: transparent; color: #ffb3a6; font: inherit; font-size: 10px; cursor: pointer; }
+.cortex-agent-stop:hover:not(:disabled) { background: rgba(255,120,100,.15); }
+.cortex-agent-stop:disabled { opacity: .45; cursor: default; }
+.cortex-agent-stop + .cortex-agent-open { margin-left: 0; }
 .cortex-agent-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
 .cortex-agent-buttons button { padding: 4px 10px; border-radius: 99px; border: 1px solid rgba(255,255,255,.2); background: transparent; color: inherit; font: inherit; font-size: 10px; cursor: pointer; }
 .cortex-agent-buttons button:disabled { opacity: .45; cursor: default; }

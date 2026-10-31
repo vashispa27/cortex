@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cortex tab actions v1",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "snapshot"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "click"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "action",
+        "snapshot_id",
+        "ref"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "type"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 4000
+        },
+        "clear": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "action",
+        "snapshot_id",
+        "ref",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "select"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "option": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      },
+      "required": [
+        "action",
+        "snapshot_id",
+        "ref",
+        "option"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "set_checked"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "checked": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "action",
+        "snapshot_id",
+        "ref",
+        "checked"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "scroll"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "direction": {
+          "enum": [
+            "up",
+            "down"
+          ]
+        }
+      },
+      "required": [
+        "action",
+        "snapshot_id"
+      ],
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "ref"
+          ]
+        },
+        {
+          "required": [
+            "direction"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "wait"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "milliseconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3000
+        }
+      },
+      "required": [
+        "action",
+        "snapshot_id",
+        "milliseconds"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "navigate"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000,
+          "pattern": "^https?://"
+        }
+      },
+      "required": [
+        "action",
+        "snapshot_id",
+        "url"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "action": {
+          "const": "back"
+        },
+        "snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "action",
+        "snapshot_id"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Cortex local agent API
 
-This is a local agent service with HTTP and terminal clients, durable workflows, and human review. It does not read the Cortex archive, mount a home directory, send LinkedIn messages, or expose a browser UI.
+This is a local agent service with HTTP and terminal clients, durable workflows, and human review. It does not read the Cortex archive, mount a home directory, send LinkedIn messages, or mount a host browser profile. It can optionally act in one explicitly shared Chrome tab.
 
 ## Interactive terminal client
 
@@ -94,6 +94,22 @@ The control plane is the authority for status transitions, approvals, artifacts,
 
 The worker is isolated for accidental-containment and least-access purposes, not a hardened hostile-code sandbox. It requires outbound networking for configured search. DNS rebinding and every redirect target are checked by the public-page fetch wrapper, but Docker's default bridge network is not a complete egress policy. Never treat this as safe for model-generated executable code; that needs a separate credential-free code sandbox.
 
+## Shared Chrome tab agents
+
+A browser job is a [Browser Use](https://github.com/browser-use/browser-use) agent working in the
+user's own Chrome tab. Load the unpacked Chrome extension once; it connects to this service by
+itself. Start an agent from Cortex while on the page (the **Using Chrome** chip names it).
+
+These jobs run inside this service, not the Docker worker (`browser_agent.py`). The extension
+attaches `chrome.debugger` to the tab and relays Chrome DevTools Protocol through
+`/v1/browser/cdp` (`browser.py`), which Browser Use connects to as a one-page browser. The agent's
+`ask_user` action becomes the job's pending question, answered from the notch or the Agents page;
+messages typed while it works are added to its task. Stop cancels it. Jobs use the OpenRouter key
+saved in Cortex (or `OPENROUTER_API_KEY`) and the model sent with each job; Claude models go
+through OpenRouter's Anthropic-compatible API. A restart fails any browser job that was running.
+
+See [setup and test commands](../../docs/browser-tab-setup.md).
+
 ## Quick start
 
 Requirements: Python 3.11+, [uv](https://docs.astral.sh/uv/), Docker Desktop running on macOS, and Docker Compose.
@@ -130,7 +146,7 @@ running → failed → queued (explicit retry)
 
 `POST /v1/tasks` and interaction responses are committed before they are dispatched. Every state-changing call needs an expected task version and an idempotency key where it can have externally observable effect. Reusing an idempotency key with a different body is a conflict. An approval is tied to an immutable input revision and exact artifact hashes; changing inputs invalidates pending approvals and schedules.
 
-LangGraph `interrupt()` checkpoints the graph by stable `thread_id`. Nodes replay from their start when an interrupt is resumed, so graph nodes do not perform observable writes. The worker persists sources, artifacts, interactions, and timers afterwards using idempotent unique keys. This is at-least-once execution with reconciliation, not a universal exactly-once claim. If a worker dies, expired segment leases are requeued on manager restart; late responses cannot revive a cancelled task.
+LangGraph `interrupt()` checkpoints the graph by stable `thread_id`. Nodes replay from their start when an interrupt is resumed, so artifact writes remain outside replay-sensitive nodes. Browser nodes call the trusted manager with durable action keys; its journal reserves before dispatch and reconciles completed or uncertain effects on replay. The worker persists sources, artifacts, interactions, and timers afterwards using idempotent unique keys. This is at-least-once execution with reconciliation, not a universal exactly-once claim. If a worker dies, expired segment leases are requeued on manager restart; late responses cannot revive a cancelled task.
 
 ## Demonstration
 

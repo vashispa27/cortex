@@ -21,7 +21,7 @@ const NOTCH_COMPOSE_HEIGHT: f64 = 64.0;
 const NOTCH_THINKING_WIDTH: f64 = 440.0;
 const NOTCH_THINKING_HEIGHT: f64 = 96.0;
 const NOTCH_ANSWER_WIDTH: f64 = 500.0;
-const NOTCH_ANSWER_HEIGHT: f64 = 320.0;
+const NOTCH_ANSWER_HEIGHT: f64 = 380.0;
 const NOTCH_HISTORY_WIDTH: f64 = 620.0;
 const NOTCH_HISTORY_HEIGHT: f64 = 400.0;
 
@@ -470,6 +470,25 @@ fn notch_context_menu(window: tauri::WebviewWindow, x: f64, y: f64) -> Result<()
         .map_err(|error| error.to_string())
 }
 
+/// Whether this notch is on the display under the pointer: the one that should speak up for a waiting agent.
+#[tauri::command]
+fn notch_is_pointer_display(app: tauri::AppHandle, window: tauri::WebviewWindow) -> bool {
+    preferred_notch(&app).is_some_and(|preferred| preferred.label() == window.label())
+}
+
+/// Whether the user was in Chrome when they opened Cortex, so an agent can default to their current tab.
+#[tauri::command]
+fn previous_app_is_chrome() -> bool {
+    #[cfg(target_os = "macos")]
+    {
+        cortex_hotkey::previous_app_is_chrome()
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        false
+    }
+}
+
 #[tauri::command]
 fn restore_previous_app(app: tauri::AppHandle) -> Result<(), String> {
     #[cfg(target_os = "macos")]
@@ -630,6 +649,17 @@ mod cortex_hotkey {
             let pid = frontmost.processIdentifier();
             if pid != std::process::id() as i32 { PREVIOUS_APP_PID.store(pid, Ordering::SeqCst); }
         }
+    }
+
+    pub fn previous_app_is_chrome() -> bool {
+        const CHROMES: [&str; 4] = ["com.google.Chrome", "com.google.Chrome.beta", "com.google.Chrome.canary", "org.chromium.Chromium"];
+        let is_chrome = |app: Option<objc2::rc::Retained<NSRunningApplication>>| {
+            app.and_then(|app| app.bundleIdentifier()).is_some_and(|id| CHROMES.contains(&id.to_string().as_str()))
+        };
+        // The notch doesn't take focus, so Chrome may still be frontmost; otherwise it is the remembered app.
+        let pid = PREVIOUS_APP_PID.load(Ordering::SeqCst);
+        is_chrome(NSWorkspace::sharedWorkspace().frontmostApplication())
+            || (pid > 0 && is_chrome(NSRunningApplication::runningApplicationWithProcessIdentifier(pid)))
     }
 
     pub fn restore_previous_app(app: &tauri::AppHandle) -> Result<(), String> {
@@ -904,13 +934,14 @@ async fn daemon_request(method: String, path: String, body: Option<Value>) -> Re
     daemon_call(method, path, body).await.map(|data| serde_json::json!({"data":data}))
 }
 
-const AGENT_MAX_BODY: usize = 262_144;
+const AGENT_MAX_BODY: usize = 16_000_000;
 const AGENT_MAX_RESPONSE: usize = 2_000_000;
 
 /// Routes of the local agent service (`services/agent-api`) that the Agents page may call.
 fn valid_agent_route(method: &str, path: &str) -> bool {
     if path.contains("..") || path.contains('\\') || path.contains("//") || path.contains('#') { return false; }
     if path == "/ready" { return method == "GET"; }
+    if path == "/v1/browser/status" { return method == "GET"; }
     let Some(rest) = path.strip_prefix("/v1/tasks") else { return false };
     let (rest, query) = rest.split_once('?').map_or((rest, ""), |(a, b)| (a, b));
     if !query.is_empty() && !query.split('&').all(|part| {
@@ -927,7 +958,7 @@ fn valid_agent_route(method: &str, path: &str) -> bool {
         ("GET", [_, "events" | "interactions" | "artifacts"]) => true,
         ("GET", [_, "artifacts", _]) => true,
         ("POST", [_, "interactions", _, "responses"]) => true,
-        ("POST", [_, "pause" | "resume" | "cancel" | "retry"]) => true,
+        ("POST", [_, "pause" | "resume" | "cancel" | "retry" | "messages"]) => true,
         _ => false,
     }
 }
@@ -1289,11 +1320,11 @@ impl tools::Chat for Provider {
 mod tests {
     #[test]
     fn agent_routes_are_allow_listed() {
-        for (method, path) in [("GET", "/v1/tasks"), ("POST", "/v1/tasks"), ("GET", "/v1/tasks/abc-1"), ("GET", "/v1/tasks/abc/events?after_id=3&limit=200"),
-            ("POST", "/v1/tasks/abc/interactions/abc%3Aapprove_plan%3A1/responses"), ("POST", "/v1/tasks/abc/cancel"), ("GET", "/v1/tasks/abc/artifacts/def")] {
+        for (method, path) in [("GET", "/v1/browser/status"), ("GET", "/v1/tasks"), ("POST", "/v1/tasks"), ("GET", "/v1/tasks/abc-1"), ("GET", "/v1/tasks/abc/events?after_id=3&limit=200"),
+            ("POST", "/v1/tasks/abc/interactions/abc%3Aapprove_plan%3A1/responses"), ("POST", "/v1/tasks/abc/cancel"), ("POST", "/v1/tasks/abc/messages"), ("GET", "/v1/tasks/abc/artifacts/def")] {
             assert!(valid_agent_route(method, path), "{method} {path}");
         }
-        for (method, path) in [("GET", "/v1/tasks/../status"), ("POST", "/v1/tasks/abc"), ("GET", "/v1/status"), ("POST", "/v1/tasks/abc/events"),
+        for (method, path) in [("POST", "/v1/browser/actions"), ("POST", "/v1/browser/pair"), ("GET", "/v1/browser/extension"), ("POST", "/v1/browser/status"), ("GET", "/v1/tasks/../status"), ("POST", "/v1/tasks/abc"), ("GET", "/v1/status"), ("POST", "/v1/tasks/abc/events"),
             ("GET", "/v1/tasks/abc/events?x=1"), ("GET", "/v1/tasksabc"), ("POST", "/ready"), ("GET", "/v1/tasks/a b")] {
             assert!(!valid_agent_route(method, path), "{method} {path}");
         }
@@ -1524,7 +1555,7 @@ pub fn run() {
                 }
             }
         })
-        .invoke_handler(tauri::generate_handler![mcp_connection_info, daemon_request, agent_request, notch_set_mode, notch_set_visible, notch_preview, open_main, set_cortex_trigger, set_notch_display, set_test_mode, notch_focus, ai_test, restore_previous_app, quit_cortex, notch_context_menu, openrouter_save_key, openrouter_has_key, openrouter_delete_key, openrouter_chat, openrouter_search_query, decide_intent, open_external_link, reveal_cortex_app, open_accessibility_settings])
+        .invoke_handler(tauri::generate_handler![mcp_connection_info, daemon_request, agent_request, notch_set_mode, notch_set_visible, notch_preview, open_main, set_cortex_trigger, set_notch_display, set_test_mode, notch_focus, ai_test, restore_previous_app, previous_app_is_chrome, notch_is_pointer_display, quit_cortex, notch_context_menu, openrouter_save_key, openrouter_has_key, openrouter_delete_key, openrouter_chat, openrouter_search_query, decide_intent, open_external_link, reveal_cortex_app, open_accessibility_settings])
         .build(tauri::generate_context!())
         .expect("failed to run desktop shell");
     app.run(move |handle, event| match event {
