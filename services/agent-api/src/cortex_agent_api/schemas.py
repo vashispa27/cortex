@@ -23,6 +23,10 @@ class SupportingDocument(BaseModel):
 
 class CreateTaskRequest(BaseModel):
     workflow: Literal["recruiter", "agent"] = "recruiter"
+    # Work in the Chrome tab the user is on when the job starts (agent workflow only).
+    use_browser_tab: bool = False
+    # OpenRouter model chosen in Cortex's settings; overrides OPENROUTER_MODEL for this job.
+    model: str | None = Field(default=None, max_length=200, pattern=r"^[A-Za-z0-9._:/@-]+$")
     conversation: str = Field(default="", max_length=100_000)
     task: str = Field(min_length=1, max_length=20_000)
     master_resume: str | None = Field(default=None, max_length=200_000)
@@ -97,3 +101,8 @@ class ErrorResponse(BaseModel):
 
 class ControlRequest(BaseModel):
     expected_version: int
+
+
+class TaskMessage(BaseModel):
+    expected_version: int
+    text: str = Field(min_length=1, max_length=4_000)

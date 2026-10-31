@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlparse, urlunparse
 
-from .database import Database
+from .database import ConflictError, Database
 from .settings import Settings
 
 
@@ -42,7 +42,14 @@ class LocalDockerBackend:
             return urlunparse(parsed._replace(netloc=netloc))
         return self.settings.database_url
 
-    def launch(self, task_id: str, segment_id: str, lease_token: str, workspace: Path) -> str:
+    def launch(
+        self,
+        task_id: str,
+        segment_id: str,
+        lease_token: str,
+        workspace: Path,
+        browser_environment=None,
+    ) -> str:
         self.assert_available()
         name = f"cortex-agent-{task_id[:8]}-{segment_id[:8]}"
         command = [
@@ -80,6 +87,8 @@ class LocalDockerBackend:
             "--env",
             f"CORTEX_AGENT_TRACE_MODE={self.settings.trace_mode}",
         ]
+        for key, value in (browser_environment or {}).items():
+            command += ["--env", f"{key}={value}"]
         if self.settings.openai_api_key:
             command += ["--env", f"CORTEX_AGENT_OPENAI_API_KEY={self.settings.openai_api_key}"]
         if self.settings.tavily_api_key:
@@ -116,7 +125,8 @@ class LocalDockerBackend:
 
 
 class Dispatcher:
-    def __init__(self, database: Database, settings: Settings) -> None:
+    def __init__(self, database: Database, settings: Settings, browser=None) -> None:
+        self.browser = browser
         self.database = database
         self.settings = settings
         self.docker = LocalDockerBackend(settings)
@@ -166,9 +176,17 @@ class Dispatcher:
         try:
             workspace = self.settings.workspace_root / task_id
             workspace.mkdir(parents=True, exist_ok=True)
-            container_id = await asyncio.to_thread(
-                self.docker.launch, task_id, segment_id, token, workspace
+            browser_environment = (
+                await self.browser.issue(task_id, segment_id, token) if self.browser else None
             )
+            if browser_environment:
+                container_id = await asyncio.to_thread(
+                    self.docker.launch, task_id, segment_id, token, workspace, browser_environment
+                )
+            else:
+                container_id = await asyncio.to_thread(
+                    self.docker.launch, task_id, segment_id, token, workspace
+                )
             await self.database.execute(
                 "UPDATE execution_segments SET container_id=$2 WHERE id=$1",
                 __import__("uuid").UUID(segment_id),
@@ -177,6 +195,8 @@ class Dispatcher:
             await self.database.append_event(
                 task_id, "worker_started", {"segment_id": segment_id, "container_id": container_id}
             )
+        except ConflictError:
+            await self.database.complete_segment(segment_id, token)
         except DockerUnavailable as exc:
             await self.database.complete_segment(
                 segment_id, token, {"code": "docker_unavailable", "message": str(exc)}

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import os
 import signal
 import threading
 from typing import Any
@@ -10,8 +11,9 @@ from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.types import Command
 
 from .adapters import DisabledSearchAdapter, FakeSearchAdapter, TavilySearchAdapter
-from .agent_graph import FakePromptModel, PromptModel, build_prompt_graph
+from .agent_graph import FakeBrowserModel, FakePromptModel, PromptModel, build_prompt_graph
 from .artifacts import ArtifactStore
+from .browser import BrowserClient
 from .database import Database, canonical_json
 from .settings import Settings
 from .tracing import trace_scope
@@ -96,6 +98,11 @@ async def persist_drafts(
 
 async def execute(task_id: str, segment_id: str, lease_token: str) -> None:
     settings = Settings()
+    browser = (
+        BrowserClient(os.environ["CORTEX_BROWSER_ENDPOINT"], os.environ["CORTEX_BROWSER_TOKEN"])
+        if os.getenv("CORTEX_BROWSER_ENDPOINT")
+        else None
+    )
     db = Database(settings.database_url)
     await db.open()
     heartbeat_stop = threading.Event()
@@ -127,7 +134,14 @@ async def execute(task_id: str, segment_id: str, lease_token: str) -> None:
         )
         heartbeat.start()
         is_prompt = inputs.get("workflow") == "agent"
+        if inputs.get("model"):
+            settings = settings.model_copy(update={"openrouter_model": inputs["model"]})
         model, search = prompt_adapters(settings) if is_prompt else adapters(settings)
+        if inputs.get("_browser"):
+            if not browser:
+                raise ValueError("Browser job has no manager-issued endpoint")
+            if settings.model_mode == "fake":
+                model = FakeBrowserModel()
         config = {"configurable": {"thread_id": task["thread_id"]}, "recursion_limit": 150}
         command = segment["command"]
 
@@ -163,13 +177,17 @@ async def execute(task_id: str, segment_id: str, lease_token: str) -> None:
                             or str(current[2]) != lease_token
                         ):
                             raise WorkerStopped("Task stopped at a safe execution boundary.")
+                        if kind == "browser_boundary":
+                            return
                         connection.execute(
                             "INSERT INTO application_events(task_id,event_type,payload) VALUES(%s,%s,%s::jsonb)",
                             (task_id, kind, canonical_json(payload)),
                         )
 
                 graph = (
-                    build_prompt_graph(checkpointer, search, model, settings.search_mode, on_event)
+                    build_prompt_graph(
+                        checkpointer, search, model, settings.search_mode, on_event, browser
+                    )
                     if is_prompt
                     else build_graph(checkpointer, search, model)
                 )
@@ -184,12 +202,16 @@ async def execute(task_id: str, segment_id: str, lease_token: str) -> None:
                         config,
                     )
                 else:
-                    if command.get("kind") == "reconcile":
+                    reconcile = command.get("kind") == "reconcile"
+                    if reconcile:
                         graph.update_state(
                             config,
                             {"input_revision": segment["input_revision"], "inputs": inputs},
                         )
-                    if command.get("resume", {}).get("control") in {"retry", "resume"}:
+                    # A job paused mid-step (e.g. the browser paused) has no question to answer: just continue.
+                    if command.get("resume", {}).get("control") in {"retry", "resume"} or (
+                        reconcile and not graph.get_state(config).interrupts
+                    ):
                         snapshot = graph.get_state(config)
                         # Continue the failed node; a control command is not a human interrupt answer.
                         result = graph.invoke(
@@ -282,6 +304,8 @@ async def execute(task_id: str, segment_id: str, lease_token: str) -> None:
         await db.append_event(task_id, "worker_failed", {"error": str(exc)})
         raise
     finally:
+        if browser:
+            browser.release()
         heartbeat_stop.set()
         if heartbeat:
             heartbeat.join(timeout=6)

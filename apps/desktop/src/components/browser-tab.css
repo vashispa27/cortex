@@ -1,0 +1,6 @@
+/* Chrome tab chip, shared by the notch and the Agents page. */
+.agent-browser-line { margin: 0 0 14px; font-size: .78rem; line-height: 1.5; }
+.agent-browser-chip { font: inherit; font-size: .78rem; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--cx-line, #8885); background: transparent; color: var(--cx-muted, #a4aab6); cursor: pointer; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.agent-browser-chip.is-on { border-color: #2563eb; color: inherit; background: #2563eb22; }
+.cortex-browser-choice { padding: 7px 16px; font-size: 12px; }
+.cortex-browser-choice p { margin: 0; }

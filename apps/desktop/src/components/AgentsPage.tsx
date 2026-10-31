@@ -6,6 +6,7 @@ import {
 } from '../lib/agents';
 import { AnswerContent } from './AnswerContent';
 import Modal from './Modal';
+import { BrowserConnection, BrowserTarget, useBrowserStatus } from './BrowserTabControls';
 import './agents.css';
 
 const ago = (iso: string) => {
@@ -76,6 +77,7 @@ export function AgentsPage({ service = agentService }: { service?: AgentService 
         <button type="button" className="button button-primary" onClick={() => setSpawning('')}><Plus size={16}/> New agent</button>
       </div>
     </header>
+    <BrowserConnection service={service} />
     {error && <div role="alert" className="callout warning agents-callout">{error}</div>}
     {!error && waiting > 0 && <div role="status" className="callout neutral agents-callout">{waiting === 1 ? '1 agent needs you.' : `${waiting} agents need you.`}</div>}
     <div className="agents-layout">
@@ -116,8 +118,10 @@ function AgentDetail({ job, events, service, busy, act }: { job: AgentJob; event
       <div className="agent-controls">{controlsFor(job.status).map(action => <button type="button" key={action} className={`button ${action === 'cancel' ? 'button-quiet' : 'button-secondary'}`} disabled={busy} onClick={() => void act(() => service.control(job, action))}>{action[0].toUpperCase() + action.slice(1)}</button>)}</div>
     </header>
 
+    {job.plan?.markdown && <details><summary>Plan</summary><AnswerContent text={job.plan.markdown}/></details>}
+    {!!job.progress?.browser_reason && <p role="status" className="callout neutral">Browser paused: {String(job.progress.browser_reason).replace(/_/g, ' ')}. Inspect the tab, then resume explicitly.</p>}
     {pending && needsYou(job.status) && <section className="agent-ask" aria-label={pending.kind === 'approval' ? 'Review' : 'Question'}>
-      <span className="eyebrow">{pending.kind === 'approval' ? 'Review the plan' : 'The agent has a question'}</span>
+      <span className="eyebrow">{pending.kind === 'approval' ? pending.operation === 'browser_action' ? 'Review the browser action' : 'Review' : 'The agent has a question'}</span>
       {pending.preview.markdown && <AnswerContent text={pending.preview.markdown}/>}
       {pending.kind === 'approval' ? <form onSubmit={submit('text')}>
         <textarea aria-label="Feedback" placeholder="Want something different? Say what to change." value={text} onChange={e => setText(e.target.value)} />
@@ -153,6 +157,8 @@ function AgentDetail({ job, events, service, busy, act }: { job: AgentJob; event
 function SpawnDialog({ initial, service, onClose, onStarted }: { initial: string; service: AgentService; onClose: () => void; onStarted: (id: string) => void }) {
   const [task, setTask] = useState(initial);
   const [calls, setCalls] = useState(16);
+  const { status: browser } = useBrowserStatus(service);
+  const [useBrowserTab, setUseBrowserTab] = useState(false);
   const [documents, setDocuments] = useState<AgentDocument[]>([]);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -168,7 +174,9 @@ function SpawnDialog({ initial, service, onClose, onStarted }: { initial: string
   const start = async (event: FormEvent) => {
     event.preventDefault();
     setBusy(true); setError('');
-    try { onStarted((await service.spawn({ task, maxModelCalls: calls, documents })).task_id); }
+    try {
+      onStarted((await service.spawn({ task, maxModelCalls: calls, documents, useBrowserTab: useBrowserTab && !!browser?.current_tab })).task_id);
+    }
     catch (e) { setError(e instanceof Error ? e.message : String(e)); setBusy(false); }
   };
 
@@ -177,6 +185,7 @@ function SpawnDialog({ initial, service, onClose, onStarted }: { initial: string
       <label className="cx-field">What should it do?
         <textarea autoFocus required rows={6} maxLength={maxPromptLength} value={task} onChange={e => setTask(e.target.value)} placeholder="Research the tradeoffs between Postgres and SQLite for a desktop app, and write me a one-page summary." />
       </label>
+      <BrowserTarget status={browser} selected={useBrowserTab} onChange={on => { setUseBrowserTab(on); setCalls(on ? 24 : 16); }} />
       <div className="cx-field">Files it can read (text only)
         <div className="agent-attach">
           <label className="button button-secondary"><Paperclip size={14}/> Attach<input type="file" multiple hidden accept=".txt,.md,.csv,.json,.log,text/*" onChange={e => void attach(e)} /></label>

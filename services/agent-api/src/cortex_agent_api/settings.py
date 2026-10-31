@@ -4,13 +4,16 @@ import hashlib
 import json
 from pathlib import Path
 
-from pydantic import AliasChoices, Field, field_validator
+from pydantic import AliasChoices, Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore", hide_input_in_errors=True)
 
+    browser_worker_url: str = Field(
+        default="http://host.docker.internal:8790", validation_alias="CORTEX_BROWSER_WORKER_URL"
+    )
     database_url: str = Field(
         default="postgresql://cortex:cortex@127.0.0.1:54329/cortex_agent",
         validation_alias=AliasChoices("CORTEX_AGENT_DATABASE_URL", "DATABASE_URL"),
@@ -34,6 +37,11 @@ class Settings(BaseSettings):
     openai_model: str = Field(default="gpt-4.1-mini", validation_alias="CORTEX_AGENT_OPENAI_MODEL")
     openrouter_api_key: str | None = Field(default=None, validation_alias="OPENROUTER_API_KEY")
     openrouter_model: str | None = Field(default=None, validation_alias="OPENROUTER_MODEL")
+    # The key saved in Cortex's settings; used when OPENROUTER_API_KEY isn't set.
+    desktop_key_file: Path = Field(
+        default=Path.home() / "Library/Application Support/Cortex/openrouter.key",
+        validation_alias="CORTEX_DESKTOP_OPENROUTER_KEY_FILE",
+    )
     search_mode: str = Field(
         default="fake", validation_alias="CORTEX_AGENT_SEARCH_MODE"
     )  # fake | tavily
@@ -65,6 +73,12 @@ class Settings(BaseSettings):
                 "Provider API key contains whitespace, a control character, or non-ASCII text. Export only the key, without a Bearer prefix or line breaks."
             )
         return value
+
+    @model_validator(mode="after")
+    def desktop_key(self) -> Settings:
+        if self.openrouter_api_key is None and self.desktop_key_file.is_file():
+            self.openrouter_api_key = self.valid_provider_key(self.desktop_key_file.read_text())
+        return self
 
     @field_validator("openrouter_model", "openai_model")
     @classmethod

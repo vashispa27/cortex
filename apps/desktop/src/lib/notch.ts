@@ -89,6 +89,26 @@ export async function showNotchContextMenu(x: number, y: number): Promise<void> 
   }
 }
 
+/** True when the user opened Cortex from Chrome, so an agent should default to their current tab. */
+/** Each display has its own notch; only the one under the pointer should open for a waiting agent. */
+export async function notchIsPointerDisplay(): Promise<boolean> {
+  if (!isTauri()) return true;
+  try {
+    return await invoke<boolean>("notch_is_pointer_display");
+  } catch {
+    return false;
+  }
+}
+
+export async function previousAppIsChrome(): Promise<boolean> {
+  if (!isTauri()) return false;
+  try {
+    return await invoke<boolean>("previous_app_is_chrome");
+  } catch {
+    return false;
+  }
+}
+
 export async function restorePreviousApp(): Promise<void> {
   if (!isTauri()) return;
   try {

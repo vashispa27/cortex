@@ -1,0 +1,15 @@
+[project]
+name = "cortex-browser-tab-spike"
+version = "0.0.1"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "browser-use==0.13.14",
+  "aiohttp==3.14.5",
+  "playwright==1.64.1",
+  "pytest==9.2.0",
+  "pytest-asyncio==1.4.1",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

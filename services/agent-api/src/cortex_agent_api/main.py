@@ -14,6 +14,8 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 
 from .artifacts import ArtifactStore
+from .browser import BrowserRelay
+from .browser_agent import BrowserAgents
 from .database import ConflictError, Database, NotFoundError
 from .dispatcher import Dispatcher, DockerUnavailable, LocalDockerBackend
 from .migrate import migrate
@@ -22,6 +24,7 @@ from .schemas import (
     CreateTaskRequest,
     InputPatch,
     InteractionResponse,
+    TaskMessage,
 )
 from .settings import Settings
 
@@ -66,17 +69,30 @@ def require_idempotency(key: str | None) -> str:
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or Settings()
     db = Database(settings.database_url)
-    dispatcher = Dispatcher(db, settings)
+    browser = BrowserRelay(settings, db)
+    agents = BrowserAgents(settings, db, browser, port=8790)
+    dispatcher = Dispatcher(db, settings, browser)
 
     @asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:
         await migrate(settings.database_url)
         await db.open()
+        # Browser jobs live in this process; any left unfinished by a restart cannot continue.
+        await db.execute(
+            """UPDATE tasks SET status='failed',version=version+1,updated_at=now(),
+                 error='{"code":"browser_agent","message":"Cortex restarted while this browser job ran. Retry it."}'::jsonb
+               WHERE status NOT IN ('completed','failed','cancelled') AND id IN
+                 (SELECT task_id FROM task_input_versions WHERE payload->>'_runner'='browser_use')"""
+        )
         await dispatcher.startup_recovery()
         runner = asyncio.create_task(dispatcher.run(), name="cortex-agent-db-dispatcher")
+        browser_runner = asyncio.create_task(browser.monitor(), name="cortex-browser-relay")
         try:
             yield
         finally:
+            browser.stopped.set()
+            await browser.disconnect("manager_stopped")
+            await browser_runner
             dispatcher.stop()
             await runner
             await db.close()
@@ -85,6 +101,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.db = db
     app.state.settings = settings
     app.state.dispatcher = dispatcher
+    app.state.browser = browser
+    app.state.browser_agents = agents
 
     async def local_auth(authorization: str | None = Header(default=None)) -> None:
         expected = f"Bearer {settings.api_token}"
@@ -129,11 +147,25 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         stored, _ = await db.idempotent_response("create_task", key, payload)
         if stored:
             return JSONResponse(stored, status_code=202)
+        if body.use_browser_tab:
+            # Browser Use drives the tab from this process; see browser_agent.py.
+            payload["_tab"] = await browser.claim_current()
+            payload["_runner"] = "browser_use"
+            if "max_model_calls" not in body.limits.model_fields_set:
+                payload["limits"]["max_model_calls"] = 40
         task_id = str(uuid.uuid4())
         payload["_execution_profile"] = settings.execution_profile
         workspace = settings.workspace_root / task_id
         workspace.mkdir(parents=True, exist_ok=False)
-        task = await db.create_task(task_id, payload, str(workspace))
+        try:
+            task = await db.create_task(
+                task_id, payload, str(workspace), queue=not body.use_browser_tab
+            )
+        except ConflictError:
+            workspace.rmdir()
+            raise
+        if body.use_browser_tab:
+            agents.start(task_id, payload)
         result = wire_task(task)
         result = {
             "task_id": task_id,
@@ -214,6 +246,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     ) -> Response:
         key = require_idempotency(idempotency_key)
         request_body = body.model_dump(mode="json")
+        if agents.owns(task_id):
+            response_data = {
+                k: v for k, v in request_body.items() if k != "expected_version" and v is not None
+            }
+            return JSONResponse(
+                await agents.respond(task_id, interaction_id, response_data), status_code=202
+            )
         scope = f"interaction:{task_id}:{interaction_id}"
         stored, _ = await db.idempotent_response(scope, key, request_body)
         if stored:
@@ -262,6 +301,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
         if stored:
             return JSONResponse(stored, status_code=202)
+        result = await revise_inputs(task_id, expected_version, patch)
+        await db.finish_idempotency(scope, key, 202, result)
+        return JSONResponse(result, status_code=202)
+
+    async def revise_inputs(task_id: str, expected_version: int, patch: dict[str, Any]):
         task = await db.edit_inputs(task_id, expected_version, patch)
         segment_id = await db.enqueue(
             task_id,
@@ -274,18 +318,63 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 },
             },
         )
-        result = {
+        return {
             "task_id": task_id,
             "version": task["version"],
             "input_revision": task["input_revision"],
             "invalidated": True,
             "queued_segment_id": segment_id,
         }
-        await db.finish_idempotency(scope, key, 202, result)
+
+    @app.post(
+        "/v1/tasks/{task_id}/messages",
+        status_code=status.HTTP_202_ACCEPTED,
+        dependencies=[Depends(local_auth)],
+    )
+    async def add_message(task_id: str, body: TaskMessage) -> Response:
+        """A follow-up typed in the chat while the agent is paused joins its task, and the agent continues."""
+        if agents.owns(task_id):
+            return JSONResponse(await agents.message(task_id, body.text.strip()), status_code=202)
+        current = await db.task_inputs(task_id)
+        if not current:
+            raise NotFoundError(task_id)
+        task = f"{current['payload']['task']}\n\nThe user added: {body.text.strip()}"
+        if len(task) > 20_000:
+            raise ConflictError("The job description is full. Start a new agent with the details.")
+        await browser.rebind(task_id)
+        result = await revise_inputs(task_id, body.expected_version, {"task": task})
         return JSONResponse(result, status_code=202)
 
     async def control(task_id: str, action: str, body: ControlRequest) -> Response:
+        if agents.owns(task_id):
+            return JSONResponse(
+                await agents.control(task_id, action, body.expected_version), status_code=202
+            )
+        current = await db.get_task(task_id)
+        if not current:
+            raise NotFoundError(task_id)
+        if current["version"] != body.expected_version:
+            raise ConflictError("task version is stale")
+        if action in {"resume", "retry"}:
+            if await db.fetchrow(
+                "SELECT id FROM execution_segments WHERE task_id=$1 AND state='leased'",
+                uuid.UUID(task_id),
+            ):
+                raise ConflictError(
+                    "The previous worker is still stopping. Try again after it reaches a safe boundary."
+                )
+            await browser.rebind(task_id)
         task = await db.pause_or_control(task_id, body.expected_version, action)
+        await browser.revoke_job(task_id)
+        if action == "pause" and task["progress"].get("paused_from") == "running":
+            binding = await db.fetchrow(
+                "SELECT task_id FROM browser_jobs WHERE task_id=$1", uuid.UUID(task_id)
+            )
+            if binding:
+                await db.execute(
+                    "UPDATE tasks SET progress=jsonb_set(progress,'{paused_from}','\"queued\"') WHERE id=$1",
+                    uuid.UUID(task_id),
+                )
         # A plain resume of an approval/input/event wait only restores its prior status; it cannot
         # fabricate a LangGraph interrupt value. Typed interaction responses are the only resume path.
         if action == "retry" or (action == "resume" and task["status"] == "queued"):
@@ -334,6 +423,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise NotFoundError(artifact_id)
         return FileResponse(path, media_type=item["media_type"], filename=item["logical_name"])
 
+    app.include_router(browser.router(local_auth))
     return app
 
 
@@ -341,6 +431,18 @@ app = create_app()
 
 
 def run() -> None:
+    import os
+
     import uvicorn
 
-    uvicorn.run("cortex_agent_api.main:app", host="127.0.0.1", port=8790, reload=False)
+    # Started next to Cortex with no configuration: use the real model with Cortex's saved key, not fakes.
+    settings = Settings()
+    if settings.openrouter_api_key and "model_mode" not in settings.model_fields_set:
+        os.environ["CORTEX_AGENT_MODEL_MODE"] = "openrouter"
+        if "search_mode" not in settings.model_fields_set:
+            os.environ["CORTEX_AGENT_SEARCH_MODE"] = "disabled"
+    uvicorn.run(create_app(), host="127.0.0.1", port=8790)
+
+
+if __name__ == "__main__":
+    run()

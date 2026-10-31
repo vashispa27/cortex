@@ -125,8 +125,9 @@ class Database:
         )
 
     async def create_task(
-        self, task_id: str, payload: dict[str, Any], workspace: str
+        self, task_id: str, payload: dict[str, Any], workspace: str, queue: bool = True
     ) -> dict[str, Any]:
+        """Store a new job. queue=False is for jobs the service runs itself (browser jobs)."""
         task_uuid = uuid.UUID(task_id)
         async with self.transaction() as conn:
             await conn.execute(
@@ -145,12 +146,30 @@ class Database:
                 canonical_json(payload),
                 digest(payload),
             )
-            await conn.execute(
-                "INSERT INTO execution_segments(id,task_id,input_revision,command,state) VALUES($1,$2,1,$3::jsonb,'queued')",
-                uuid.uuid4(),
-                task_uuid,
-                canonical_json({"kind": "start"}),
-            )
+            if browser := payload.get("_browser"):
+                await conn.execute(
+                    "UPDATE browser_jobs SET active=FALSE WHERE task_id IN (SELECT id FROM tasks WHERE status IN ('completed','cancelled','failed'))"
+                )
+                try:
+                    await conn.execute(
+                        "INSERT INTO browser_jobs(task_id,share_id,tab_id,site,browser_instance) VALUES($1,$2,$3,$4,$5)",
+                        task_uuid,
+                        browser["id"],
+                        browser["tab_id"],
+                        browser["site"],
+                        browser.get("browser_instance", ""),
+                    )
+                except asyncpg.UniqueViolationError as exc:
+                    raise ConflictError(
+                        "Another agent is still using this tab. Stop it from its chat or the Agents page first."
+                    ) from exc
+            if queue:
+                await conn.execute(
+                    "INSERT INTO execution_segments(id,task_id,input_revision,command,state) VALUES($1,$2,1,$3::jsonb,'queued')",
+                    uuid.uuid4(),
+                    task_uuid,
+                    canonical_json({"kind": "start"}),
+                )
         await self.append_event(task_id, "task_created", {"input_revision": 1})
         return (await self.get_task(task_id)) or {}
 
@@ -551,6 +570,7 @@ class Database:
                 target = "paused"
             elif action == "resume":
                 target = progress.pop("paused_from", "queued")
+                progress.pop("browser_reason", None)
             else:
                 target = {"cancel": "cancelled", "retry": "queued"}[action]
             item = await conn.fetchrow(

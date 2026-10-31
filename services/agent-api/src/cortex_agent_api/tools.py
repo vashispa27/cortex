@@ -32,7 +32,7 @@ def run_async_tool(function: Callable, *args):
 
 
 def registered_tools(
-    adapter: SearchAdapter, supplied_documents: dict[str, str], max_fetched_bytes: int
+    adapter: SearchAdapter, supplied_documents: dict[str, str], max_fetched_bytes: int, browser=None
 ) -> list[BaseTool]:
     async def search_web(query: str, max_results: int = 3) -> list[dict[str, Any]]:
         """Search public web information using the configured provider; do not include personal data."""
@@ -64,7 +64,7 @@ def registered_tools(
         return {"wake_at": wake_at, "timezone": timezone}
 
     # Rendering returns data only; the idempotent control-plane artifact writer performs the observable write.
-    return [
+    result = [
         StructuredTool.from_function(
             func=search_web_sync,
             coroutine=search_web,
@@ -81,3 +81,16 @@ def registered_tools(
         render_markdown_document,
         propose_scheduled_reminder,
     ]
+
+    if browser is not None:
+
+        def browse_tab(action: dict, action_key: str) -> dict:
+            """Act only on the explicitly shared tab using snapshot-bound typed actions."""
+            return browser.action(action, action_key)
+
+        result.append(
+            StructuredTool.from_function(
+                func=browse_tab, name="browse_tab", description=browse_tab.__doc__
+            )
+        )
+    return result

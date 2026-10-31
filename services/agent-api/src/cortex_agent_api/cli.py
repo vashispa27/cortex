@@ -77,6 +77,7 @@ def source_hash(root: Path):
         root / "pyproject.toml",
         root / "uv.lock",
         *sorted((root / "src").rglob("*.py")),
+        *sorted((root / "src").rglob("*.json")),
     ]
     for path in files:
         digest.update(str(path.relative_to(root)).encode())
