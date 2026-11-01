@@ -6,6 +6,16 @@ It is also a shared task and memory space for your agents. Start a task in Codex
 
 <p align="center"><img src="apps/desktop/src/assets/cortex-mark.svg" width="120" alt="Cortex logo"></p>
 
+## See Cortex in action
+
+[![Cortex demo: screen memory and multi-agent workflows](docs/assets/cortex-demo.gif)](docs/assets/cortex-demo.mp4)
+
+Cortex remembers everything you see on screen. Ask it anything about you. It all stays local.
+
+Launch long-running multi-agent workflows with integrated browsers, right from your notch.
+
+[Watch the full demo (19 seconds, MP4)](docs/assets/cortex-demo.mp4)
+
 
 ## How it works
 
