@@ -19,6 +19,7 @@ from .browser_agent import BrowserAgents
 from .database import ConflictError, Database, NotFoundError
 from .dispatcher import Dispatcher, DockerUnavailable, LocalDockerBackend
 from .migrate import migrate
+from .native_agent import NativeAgents
 from .schemas import (
     ControlRequest,
     CreateTaskRequest,
@@ -71,6 +72,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     db = Database(settings.database_url)
     browser = BrowserRelay(settings, db)
     agents = BrowserAgents(settings, db, browser, port=8790)
+    native = NativeAgents(settings, db)
     dispatcher = Dispatcher(db, settings, browser)
 
     @asynccontextmanager
@@ -82,7 +84,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             """UPDATE tasks SET status='failed',version=version+1,updated_at=now(),
                  error='{"code":"browser_agent","message":"Cortex restarted while this browser job ran. Retry it."}'::jsonb
                WHERE status NOT IN ('completed','failed','cancelled') AND id IN
-                 (SELECT task_id FROM task_input_versions WHERE payload->>'_runner'='browser_use')"""
+                 (SELECT task_id FROM task_input_versions WHERE payload->>'_runner' IN ('browser_use','sentient_native'))"""
         )
         await dispatcher.startup_recovery()
         runner = asyncio.create_task(dispatcher.run(), name="cortex-agent-db-dispatcher")
@@ -90,6 +92,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         try:
             yield
         finally:
+            await native.close()
             browser.stopped.set()
             await browser.disconnect("manager_stopped")
             await browser_runner
@@ -147,6 +150,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         stored, _ = await db.idempotent_response("create_task", key, payload)
         if stored:
             return JSONResponse(stored, status_code=202)
+        use_native = body.use_native_window
+        if use_native:
+            if body.origin_target is None:
+                raise ConflictError("Open Cortex from the intended window first; this request has no captured target.")
+            native.assert_available()
+            payload["use_native_window"] = True
+            payload["_runner"] = "sentient_native"
         if body.use_browser_tab:
             # Browser Use drives the tab from this process; see browser_agent.py.
             payload["_tab"] = await browser.claim_current()
@@ -159,16 +169,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         workspace.mkdir(parents=True, exist_ok=False)
         try:
             task = await db.create_task(
-                task_id, payload, str(workspace), queue=not body.use_browser_tab
+                task_id, payload, str(workspace), queue=not (body.use_browser_tab or use_native)
             )
         except ConflictError:
             workspace.rmdir()
             raise
-        if body.use_browser_tab:
+        if use_native:
+            native.start(task_id, payload)
+        elif body.use_browser_tab:
             agents.start(task_id, payload)
         result = wire_task(task)
         result = {
             "task_id": task_id,
+            "runner": payload.get("_runner", "langgraph"),
             "version": task["version"],
             "status": task["status"],
             "urls": result["urls"],
@@ -246,12 +259,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     ) -> Response:
         key = require_idempotency(idempotency_key)
         request_body = body.model_dump(mode="json")
-        if agents.owns(task_id):
+        runner = native if native.owns(task_id) else agents
+        if runner.owns(task_id):
             response_data = {
                 k: v for k, v in request_body.items() if k != "expected_version" and v is not None
             }
             return JSONResponse(
-                await agents.respond(task_id, interaction_id, response_data), status_code=202
+                await runner.respond(task_id, interaction_id, response_data), status_code=202
             )
         scope = f"interaction:{task_id}:{interaction_id}"
         stored, _ = await db.idempotent_response(scope, key, request_body)
@@ -333,8 +347,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     async def add_message(task_id: str, body: TaskMessage) -> Response:
         """A follow-up typed in the chat while the agent is paused joins its task, and the agent continues."""
-        if agents.owns(task_id):
-            return JSONResponse(await agents.message(task_id, body.text.strip()), status_code=202)
+        runner = native if native.owns(task_id) else agents
+        if runner.owns(task_id):
+            return JSONResponse(await runner.message(task_id, body.text.strip()), status_code=202)
         current = await db.task_inputs(task_id)
         if not current:
             raise NotFoundError(task_id)
@@ -346,9 +361,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return JSONResponse(result, status_code=202)
 
     async def control(task_id: str, action: str, body: ControlRequest) -> Response:
-        if agents.owns(task_id):
+        runner = native if native.owns(task_id) else agents
+        if runner.owns(task_id):
             return JSONResponse(
-                await agents.control(task_id, action, body.expected_version), status_code=202
+                await runner.control(task_id, action, body.expected_version), status_code=202
             )
         current = await db.get_task(task_id)
         if not current:

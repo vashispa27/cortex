@@ -115,7 +115,7 @@ function AgentDetail({ job, events, service, busy, act }: { job: AgentJob; event
   return <article className="agent-detail">
     <header>
       <div><span className={`agent-pill ${job.status}`}>{statusLabel(job.status)}</span><h2>{jobTitle(job)}</h2></div>
-      <div className="agent-controls">{controlsFor(job.status).map(action => <button type="button" key={action} className={`button ${action === 'cancel' ? 'button-quiet' : 'button-secondary'}`} disabled={busy} onClick={() => void act(() => service.control(job, action))}>{action[0].toUpperCase() + action.slice(1)}</button>)}</div>
+      <div className="agent-controls">{controlsFor(job.status, job.progress?.runner).map(action => <button type="button" key={action} className={`button ${action === 'cancel' ? 'button-quiet' : 'button-secondary'}`} disabled={busy} onClick={() => void act(() => service.control(job, action))}>{action[0].toUpperCase() + action.slice(1)}</button>)}</div>
     </header>
 
     {job.plan?.markdown && <details><summary>Plan</summary><AnswerContent text={job.plan.markdown}/></details>}

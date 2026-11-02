@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any, Literal
 from zoneinfo import ZoneInfo
 
-from pydantic import BaseModel, Field, HttpUrl, field_validator
+from pydantic import BaseModel, Field, HttpUrl, field_validator, model_validator
 
 
 class ExecutionLimits(BaseModel):
@@ -21,10 +21,23 @@ class SupportingDocument(BaseModel):
     media_type: str = Field(default="text/plain", max_length=100)
 
 
+class OriginTarget(BaseModel):
+    model_config = {"extra": "forbid", "allow_inf_nan": False}
+    app_path: str = Field(min_length=1, max_length=2000, pattern=r"^/.*\.app$")
+    pid: int = Field(gt=0)
+    launch_timestamp: float = Field(gt=0)
+    window_id: int = Field(gt=0, le=4_294_967_295)
+    window_title: str = Field(max_length=4096)
+    tab_hash: int | None = Field(default=None, ge=0, le=9_007_199_254_740_991)
+    captured_at: float = Field(gt=0)
+
+
 class CreateTaskRequest(BaseModel):
     workflow: Literal["recruiter", "agent"] = "recruiter"
     # Work in the Chrome tab the user is on when the job starts (agent workflow only).
     use_browser_tab: bool = False
+    use_native_window: bool = False
+    origin_target: OriginTarget | None = None
     # OpenRouter model chosen in Cortex's settings; overrides OPENROUTER_MODEL for this job.
     model: str | None = Field(default=None, max_length=200, pattern=r"^[A-Za-z0-9._:/@-]+$")
     conversation: str = Field(default="", max_length=100_000)
@@ -36,6 +49,14 @@ class CreateTaskRequest(BaseModel):
     reminder_at: datetime | None = None
     limits: ExecutionLimits = Field(default_factory=ExecutionLimits)
     supporting_documents: list[SupportingDocument] = Field(default_factory=list, max_length=20)
+
+    @model_validator(mode="after")
+    def native_target_required(self):
+        if self.use_native_window and (self.origin_target is None or self.workflow != "agent"):
+            raise ValueError("A native agent needs the window captured when Cortex was invoked")
+        if self.use_native_window and self.use_browser_tab:
+            raise ValueError("Choose one computer-control runner")
+        return self
 
     @field_validator("timezone")
     @classmethod

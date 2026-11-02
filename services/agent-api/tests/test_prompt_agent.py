@@ -180,7 +180,8 @@ def test_openrouter_uses_explicit_endpoint_and_never_adds_key_to_context(monkeyp
             observed.update(kwargs)
 
         def with_structured_output(self, schema, **kwargs):
-            assert schema is Decision
+            from cortex_agent_api.agent_graph import BackgroundDecision
+            assert schema in (Decision, BackgroundDecision)
             assert kwargs["method"] == "function_calling"
             return self
 
@@ -246,3 +247,25 @@ def test_connection_diagnostic_keeps_cause_category_without_printing_secrets():
     assert "DNS lookup failed" in str(caught.value)
     assert "ConnectError" in str(caught.value)
     assert "private-diagnostic-key" not in str(caught.value)
+
+
+def test_background_capability_schema_excludes_browser():
+    import pytest
+    from pydantic import ValidationError
+
+    from cortex_agent_api.agent_graph import BackgroundDecision
+    with pytest.raises(ValidationError):
+        BackgroundDecision(action='tool', text='Open Gmail', tool='browse_tab')
+
+
+def test_unavailable_browser_request_is_feedback_not_a_worker_crash():
+    model = ScriptedModel(
+        Decision(action='plan', text='Read a browser tab'),
+        Decision(action='tool', text='Read current tab', tool='browse_tab', browser_action={'action': 'snapshot'}),
+        Decision(action='finish', text='This background task cannot access the browser. Start a window task from that window.'),
+    )
+    graph = build_prompt_graph(InMemorySaver(), FakeSearchAdapter(), model, 'fake')
+    graph.invoke(state(), CONFIG)
+    result = graph.invoke(Command(resume={'decision': 'approve'}), CONFIG)
+    assert pending(result)['operation'] == 'approve_result'
+    assert model.contexts[-1]['history'][-1]['result']['status'] == 'unavailable'

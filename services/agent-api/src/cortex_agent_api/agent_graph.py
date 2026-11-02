@@ -43,6 +43,11 @@ class Decision(BaseModel):
     )
 
 
+class BackgroundDecision(Decision):
+    tool: Literal["search_web", "fetch_bounded_public_page", "read_supplied_document"] | None = None
+    browser_action: None = None
+
+
 class PromptState(TypedDict, total=False):
     task_id: str
     inputs: dict[str, Any]
@@ -85,6 +90,10 @@ The application, not you, grants approvals and determines whether your answer is
 Read execution_budget on every call. When synthesize_now is true, use the evidence already collected
 to finish the requested document now, explicitly marking unknown facts and placeholders; avoid more tools.
 Do not keep gathering pages when you already have enough information. Reuse previous tool results.
+When browser_protocol is absent, this task has NO browser/window capability. Never offer to enable
+it through a clarification answer or plan approval; neither changes the task's capabilities.
+For work needing a logged-in app/window, explain that a new window task must be invoked from that
+window. Never claim that public search or fetching can access private email or an authenticated UI.
 """
 
 
@@ -198,10 +207,12 @@ class PromptModel:
             )
         # Function calling works across OpenRouter models that support tools, without requiring JSON-schema mode.
         self.structured = model.with_structured_output(Decision, method="function_calling")
+        self.background_structured = model.with_structured_output(BackgroundDecision, method="function_calling")
 
     def decide(self, context: dict[str, Any]) -> Decision:
         try:
-            return self.structured.invoke(
+            structured = self.structured if context.get("browser_protocol") else getattr(self, "background_structured", self.structured)
+            return structured.invoke(
                 [
                     SystemMessage(
                         content=SYSTEM
@@ -450,7 +461,15 @@ def build_prompt_graph(
         }
         name = choice.get("tool")
         if name == "browse_tab":
-            if browser is None or state.get("phase") != "executing":
+            if browser is None:
+                return {
+                    "history": [*state.get("history", []), {"tool": "browse_tab", "result": {
+                        "status": "unavailable",
+                        "reason": "This background task has no browser capability. Start a new window task from the intended window; answers and plan approval cannot enable it.",
+                    }}],
+                    "tool_calls": state.get("tool_calls", 0) + 1,
+                }
+            if state.get("phase") != "executing":
                 raise ValueError("Browser tools require a shared tab and an approved plan")
             action = choice.get("browser_action") or {}
             previous = state.get("history", [])[-1:] or [{}]
