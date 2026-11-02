@@ -7,6 +7,34 @@ use std::{io::Write, os::unix::fs::{MetadataExt, OpenOptionsExt, PermissionsExt}
 mod tap;
 mod mcp_setup;
 
+/// Capture before the notch takes typing focus. The descriptor is returned once and
+/// travels with the task; submission must never resolve a new foreground window.
+#[tauri::command]
+fn capture_origin_target() -> Result<Value, String> {
+    #[cfg(target_os = "macos")]
+    {
+        use objc2_app_kit::NSWorkspace;
+        let app = NSWorkspace::sharedWorkspace().frontmostApplication()
+            .ok_or("No originating application is available")?;
+        let pid = app.processIdentifier();
+        if pid == std::process::id() as i32 {
+            return Err("Open Cortex from the window you want it to use".into());
+        }
+        let binary = env::var_os("CORTEX_NATIVE_TRIAL_BINARY").map(PathBuf::from)
+            .unwrap_or_else(|| PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("../../../../cortex-sentient-trial/CortexTrial/.build/sentient-native-trial"));
+        let result = std::process::Command::new(binary)
+            .args(["--capture-origin", &pid.to_string()]).output()
+            .map_err(|_| "Native window targeting is unavailable. Build the Sentient native trial first.".to_string())?;
+        if !result.status.success() {
+            return Err(String::from_utf8_lossy(&result.stderr).chars().take(500).collect());
+        }
+        serde_json::from_slice(&result.stdout).map_err(|_| "Could not identify the originating window".into())
+    }
+    #[cfg(not(target_os = "macos"))]
+    Err("Native window targeting is currently available on macOS".into())
+}
+
 #[tauri::command]
 fn mcp_connection_info() -> Result<Value, String> {
     mcp_setup::connection_info(&state_dir()?)
@@ -1555,7 +1583,7 @@ pub fn run() {
                 }
             }
         })
-        .invoke_handler(tauri::generate_handler![mcp_connection_info, daemon_request, agent_request, notch_set_mode, notch_set_visible, notch_preview, open_main, set_cortex_trigger, set_notch_display, set_test_mode, notch_focus, ai_test, restore_previous_app, previous_app_is_chrome, notch_is_pointer_display, quit_cortex, notch_context_menu, openrouter_save_key, openrouter_has_key, openrouter_delete_key, openrouter_chat, openrouter_search_query, decide_intent, open_external_link, reveal_cortex_app, open_accessibility_settings])
+        .invoke_handler(tauri::generate_handler![capture_origin_target, mcp_connection_info, daemon_request, agent_request, notch_set_mode, notch_set_visible, notch_preview, open_main, set_cortex_trigger, set_notch_display, set_test_mode, notch_focus, ai_test, restore_previous_app, previous_app_is_chrome, notch_is_pointer_display, quit_cortex, notch_context_menu, openrouter_save_key, openrouter_has_key, openrouter_delete_key, openrouter_chat, openrouter_search_query, decide_intent, open_external_link, reveal_cortex_app, open_accessibility_settings])
         .build(tauri::generate_context!())
         .expect("failed to run desktop shell");
     app.run(move |handle, event| match event {

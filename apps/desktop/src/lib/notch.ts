@@ -2,6 +2,12 @@ import { invoke, isTauri } from "@tauri-apps/api/core";
 
 export type NotchMode = "collapsed" | "compose" | "thinking" | "answer" | "history";
 
+/** Resolve once, before opening compose. Never use submission-time focus as the task target. */
+export async function captureOriginTarget(): Promise<import("./agents").OriginTarget> {
+  if (!isTauri()) throw new Error("Window targeting requires Cortex desktop.");
+  return invoke("capture_origin_target");
+}
+
 export type MainPage = import("./types").Page;
 
 const activeSessionKey = "cortex.cortex.active-session.v1";

@@ -7,12 +7,12 @@ import { demoSearch } from "./lib/demo";
 import { answerCortex, runAction } from "./lib/answer";
 import type { ChatAction } from "./lib/intent";
 import ChatActions from "./components/ChatActions";
-import { agentService, documentFrom, followUpAgent, needsYou, terminal, type AgentDocument } from "./lib/agents";
+import { agentService, documentFrom, followUpAgent, needsYou, terminal, type AgentDocument, type OriginTarget } from "./lib/agents";
 import { loadNotchDraft, saveNotchDraft } from "./lib/notch-draft";
 import AgentChatCard, { useAgentJob } from "./components/AgentChatCard";
-import { BrowserTarget, useBrowserStatus } from "./components/BrowserTabControls";
+import "./components/browser-tab.css";
 import { loadPreferences } from "./lib/storage";
-import { configureNotchDisplay, configureCortexTrigger, configureTestMode, focusNotch, notchIsPointerDisplay, openMain, restorePreviousApp, setNotchMode, setNotchVisible, showNotchContextMenu, writeActiveSession, type NotchMode } from "./lib/notch";
+import { captureOriginTarget, configureNotchDisplay, configureCortexTrigger, configureTestMode, focusNotch, notchIsPointerDisplay, openMain, restorePreviousApp, setNotchMode, setNotchVisible, showNotchContextMenu, writeActiveSession, type NotchMode } from "./lib/notch";
 import {
   appendMessage, commitSession, composeAnswer, finishAction, loadSessions, newSession, sessionsStorageKey, sessionTime, triggerSymbol,
   type CortexSession,
@@ -74,11 +74,11 @@ export default function NotchApp() {
   const [busy, setBusy] = useState(false);
   const [busySessionId, setBusySessionId] = useState<string | null>(null);
   const [tapCount, setTapCount] = useState(0);
-  // Agent mode: the next message starts a long-running agent instead of asking memory.
+  // Agent mode controls the captured originating window; no prompt routing for now.
   const [agentMode, setAgentMode] = useState(initialDraft.agent);
-  const { status: browserStatus } = useBrowserStatus(agentService, agentMode);
-  // Whether the agent works in the Chrome tab you are on. On by default whenever Chrome has a page open.
-  const [useBrowserTab, setUseBrowserTab] = useState(true);
+  const [originTarget, setOriginTarget] = useState<OriginTarget | null>(null);
+  const [originError, setOriginError] = useState("");
+  const originGeneration = useRef(0);
   // Test mode (Settings): searches use the separate eval archive and this button records into it.
   const [testMode, setTestMode] = useState(false);
   const [evalRecording, setEvalRecording] = useState(false);
@@ -103,7 +103,6 @@ export default function NotchApp() {
   const chatJob = activeSession ? chatAgentJob(activeSession) : undefined;
   const agentState = useAgentJob(chatJob);
   const agentLive = !!chatJob && !(agentState.job && terminal(agentState.job.status));
-  useEffect(() => { if (agentMode && effectiveMode === "compose") setUseBrowserTab(true); }, [agentMode, effectiveMode]);
   // The bigger chat view is for conversation; agent mode (and its attachments) lives in the bar and answer panel.
   const agent = agentMode && effectiveMode !== "history";
   useEffect(() => { saveNotchDraft({ input, historyInput, agent: agentMode, files }); }, [input, historyInput, agentMode, files]);
@@ -113,6 +112,7 @@ export default function NotchApp() {
   };
 
   const collapseOnly = () => {
+    ++originGeneration.current;
     hotkeyRef.current = false;
     setMode("collapsed");
     setActiveSessionId(null);
@@ -125,8 +125,18 @@ export default function NotchApp() {
     if (preferences.hideDrop) window.setTimeout(() => { void setNotchVisible(false); }, 180);
   };
 
-  const startNewCortex = (source: "mouse" | "hotkey" = "mouse") => {
+  const startNewCortex = async (source: "mouse" | "hotkey" = "mouse") => {
     if (busyRef.current) return;
+    const generation = ++originGeneration.current;
+    setOriginTarget(null); setOriginError("");
+    try {
+      const target = await captureOriginTarget();
+      if (generation !== originGeneration.current) return;
+      setOriginTarget(target);
+    } catch (error) {
+      if (generation !== originGeneration.current) return;
+      setOriginError(error instanceof Error ? error.message : String(error));
+    }
     hotkeyRef.current = source === "hotkey";
     setTapCount(0);
     setActiveSessionId(null);
@@ -256,9 +266,9 @@ export default function NotchApp() {
     if (target === "bar") setMode((current) => current === "compose" ? "answer" : current);
     busyRef.current = true; setBusy(true); setBusySessionId(session.id);
     try {
-      const job = await agentService.spawn({ task: question, documents, useBrowserTab: useBrowserTab && !!browserStatus?.current_tab });
-      const startedInTab = useBrowserTab && !!browserStatus?.current_tab;
-      commit(appendMessage(session, { role: "assistant", body: startedInTab ? `Working in your Chrome tab: ${browserStatus?.current_tab?.title ?? ""}. Questions show up here.` : "Agent started. It will plan first and wait for your approval before using tools.", agentJobId: job.task_id }));
+      if (!originTarget) throw new Error(originError || "Open Cortex from the window you want it to control.");
+      const job = await agentService.spawn({ task: question, documents, useNativeWindow: true, originTarget });
+      commit(appendMessage(session, { role: "assistant", body: `Working in the window you invoked Cortex from: ${originTarget.window_title}.`, agentJobId: job.task_id }));
     } catch (reason) {
       commit(appendMessage(session, { role: "assistant", body: `Could not start an agent: ${reason instanceof Error ? reason.message : String(reason)}` }));
       // Nothing was sent, so give the text and files back.
@@ -523,8 +533,8 @@ export default function NotchApp() {
       </button>
 
       {effectiveMode === "compose" && <form className="cortex-compose" onSubmit={submitBar}>
-        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} aria-label="Ask Cortex" placeholder={agent ? "Describe a job for an agent…" : sample ? "Ask Cortex in sample memory…" : "Ask Cortex…"} />
-        <button type="button" className="cortex-agent-btn" data-on={agentMode} aria-pressed={agentMode} aria-label="Agent mode" title="Agent mode: start a long-running agent" onClick={() => setAgentMode((on) => !on)}><Bot size={12} /></button>
+        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} aria-label="Ask Cortex" placeholder={agent ? "What should I do in this window?" : sample ? "Ask Cortex in sample memory…" : "Ask Cortex…"} />
+        <button type="button" className="cortex-agent-btn" data-on={agentMode} aria-pressed={agentMode} aria-label="Agent mode" title="Agent mode: control this window" onClick={() => setAgentMode((on) => !on)}><Bot size={12} /></button>
         {agent && <button type="button" className="cortex-icon cortex-attach" aria-label="Attach files" title={files.length ? `Attached: ${files.map((f) => f.name).join(", ")}` : "Attach text files for the agent"} onClick={pickFiles}><Paperclip size={13} />{files.length > 0 && <b>{files.length}</b>}</button>}
         <button type="submit" className="cortex-enter" aria-label="Send to Cortex" title="Enter" disabled={!input.trim() || busy}><CornerDownLeft size={13} /></button>
       </form>}
@@ -559,12 +569,12 @@ export default function NotchApp() {
       <small>Searching your memory</small>
     </div>}
 
-    {agent && effectiveMode === "compose" && <div className="cortex-browser-choice"><BrowserTarget status={browserStatus} selected={useBrowserTab} onChange={setUseBrowserTab}/></div>}
+    {agent && effectiveMode === "compose" && <div className="cortex-browser-choice"><small className="agent-browser-chip is-on" title={originTarget?.app_path ?? originError}>{originTarget ? `Using this window: ${originTarget.window_title}` : originError || "No originating window captured"}</small></div>}
     {effectiveMode === "answer" && activeSession && <section className="cortex-answer-panel">
       <header className="cortex-panel-head">
         <div><span className="cortex-eyebrow">Cortex answer</span><h2>{activeSession.title}</h2></div>
         <div className="cortex-actions">
-          <button type="button" className="cortex-agent-btn" data-on={agentMode} aria-pressed={agentMode} aria-label="Agent mode" title={agentMode ? "Agent mode on: your next message starts a long-running agent" : "Turn on agent mode to start a long-running agent"} onClick={() => setAgentMode((on) => !on)}><Bot size={12} /> Agent</button>
+          <button type="button" className="cortex-agent-btn" data-on={agentMode} aria-pressed={agentMode} aria-label="Agent mode" title={agentMode ? "Agent mode on: your next message controls this window" : "Turn on agent mode to control this window"} onClick={() => setAgentMode((on) => !on)}><Bot size={12} /> Agent</button>
           <button type="button" className="cortex-icon" aria-label="Expand chat" title="Open in full window" onClick={undock}><Maximize2 size={13} /></button>
           <button type="button" className="cortex-icon" aria-label="Close Cortex" title="Close" onClick={closeDrop}><X size={13} /></button>
         </div>
@@ -576,10 +586,10 @@ export default function NotchApp() {
         <span>{sample ? "Sample workspace" : testMode ? "Test mode · eval archive" : "Your memory"}</span>
         <button type="button" onClick={openHistory}><CortexChatMark /> All chats</button>
       </footer>}
-      {agent && !chatJob && <div className="cortex-browser-choice"><BrowserTarget status={browserStatus} selected={useBrowserTab} onChange={setUseBrowserTab}/></div>}
+      {agent && !agentLive && <div className="cortex-browser-choice"><small className="agent-browser-chip is-on" title={originTarget?.app_path ?? originError}>{originTarget ? `Using this window: ${originTarget.window_title}` : originError || "No originating window captured"}</small></div>}
       {agent && (files.length > 0 || attachError) && <div className="cortex-chips">{files.map((file) => <span key={file.name} className="cortex-chip">{file.name}<button type="button" aria-label={`Remove ${file.name}`} onClick={() => setFiles((old) => old.filter((f) => f !== file))}>×</button></span>)}{attachError && <small className="cortex-agent-error">{attachError}</small>}</div>}
       <form className="cortex-history-form cortex-answer-form" onSubmit={submitBar}>
-        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label="Ask a follow-up" placeholder={agentLive ? "Reply to the agent…" : agent ? "Describe a job for an agent…" : "Ask a follow-up…"} />
+        <input ref={inputRef} value={input} onChange={(event) => setInput(event.target.value)} onMouseDown={() => { void focusNotch(); }} aria-label="Ask a follow-up" placeholder={agentLive ? "Reply to the agent…" : agent ? "What should I do in this window?" : "Ask a follow-up…"} />
         {agent && <button type="button" className="cortex-icon cortex-attach" aria-label="Attach files" title={files.length ? `Attached: ${files.map((f) => f.name).join(", ")}` : "Attach text files for the agent"} onClick={pickFiles}><Paperclip size={13} />{files.length > 0 && <b>{files.length}</b>}</button>}
         <button type="submit" className="cortex-enter" aria-label="Send follow-up" title="Enter" disabled={!input.trim() || busy}><CornerDownLeft size={13} /></button>
       </form>

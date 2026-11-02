@@ -32,7 +32,8 @@ export type AgentEvent = { id: number; event_type: string; payload: Record<strin
 export type AgentDocument = { name: string; content: string; media_type: string };
 export type BrowserTab = { tab_id: number; title: string; url: string; site: string };
 export type BrowserStatus = { connected: boolean; current_tab: BrowserTab | null; shared_tab: (BrowserTab & { id: string }) | null };
-export type SpawnRequest = { task: string; maxModelCalls?: number; documents?: AgentDocument[]; useBrowserTab?: boolean };
+export type OriginTarget = { app_path: string; pid: number; launch_timestamp: number; window_id: number; window_title: string; tab_hash?: number | null; captured_at: number };
+export type SpawnRequest = { task: string; maxModelCalls?: number; documents?: AgentDocument[]; useBrowserTab?: boolean; originTarget?: OriginTarget; useNativeWindow?: boolean };
 
 /** Agents use the OpenRouter model chosen for answers in Settings (they run in the cloud, never on the local model). */
 export function agentModel(): string {
@@ -55,7 +56,8 @@ const labels: Record<AgentStatus, string> = {
 export const statusLabel = (status: AgentStatus) => labels[status] ?? status;
 
 /** Which controls make sense for a state; the service still enforces the real rules. */
-export function controlsFor(status: AgentStatus): ("pause" | "resume" | "cancel" | "retry")[] {
+export function controlsFor(status: AgentStatus, runner?: unknown): ("pause" | "resume" | "cancel" | "retry")[] {
+  if (runner === "sentient_native" && !terminal(status)) return ["cancel"];
   if (status === "paused") return ["resume", "cancel"];
   if (status === "failed") return ["retry"];
   if (terminal(status)) return [];
@@ -143,14 +145,16 @@ export function createAgentService() {
       const task = request.task.trim();
       if (!task) throw new Error("Describe what the agent should do.");
       if (task.length > maxPromptLength) throw new Error(`Keep the request under ${maxPromptLength / 1000},000 characters.`);
-      return call<{ task_id: string; status: AgentStatus }>("POST", "/v1/tasks", {
+      return call<{ task_id: string; status: AgentStatus; runner?: string }>("POST", "/v1/tasks", {
         workflow: "agent",
         task,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
         supporting_documents: request.documents ?? [],
         ...(request.useBrowserTab ? { use_browser_tab: true } : {}),
+        ...(request.originTarget ? { origin_target: request.originTarget } : {}),
+        ...(request.useNativeWindow ? { use_native_window: true } : {}),
         ...(agentModel() ? { model: agentModel() } : {}),
-        limits: { max_model_calls: request.maxModelCalls ?? (request.useBrowserTab ? 24 : 16) },
+        limits: { max_model_calls: request.maxModelCalls ?? (request.useBrowserTab ? 24 : 16), ...(request.useNativeWindow ? { max_active_seconds: 300 } : {}) },
       }, key());
     },
     respond: (job: AgentJob, response: AgentResponse) => {
